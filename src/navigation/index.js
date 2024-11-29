@@ -45,7 +45,7 @@ const Tab = createBottomTabNavigator();
 
 const AuthStack = () => {
     return (
-        <Stack.Navigator initialRouteName="Auth" headerMode={false}>
+        <Stack.Navigator initialRouteName="SignUp" headerMode={false}>
             <Stack.Screen options={{ headerShown: false }} name="Auth" component={SplashScreen} />
             <Stack.Screen options={{ headerShown: false }} name="SignUp" component={SignUpScreen} />
             <Stack.Screen options={{ headerShown: false }} name="SignIn" component={SignInScreen} />
@@ -227,7 +227,7 @@ function Navigation (props) {
     return (
         <NavigationContainer options={{ headerShown: false }}>
                 <Stack.Navigator initialRouteName={"MainStack"} headerMode={false}>
-                    <Stack.Screen options={{ headerShown: false }} name="MainStack" component={BottomTabStack} />
+                    <Stack.Screen options={{ headerShown: false }} name="MainStack" component={AuthStack} />
                 </Stack.Navigator>
         </NavigationContainer >
     );
