@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { THEME_TEXT_COLOR } from "../res/colors";
+import { GRAY_COLOR } from "../res/colors";
+import { WHITE_COLOR } from "../res/colors";
+
 
 const InputField = ({
   label,
@@ -9,8 +13,8 @@ const InputField = ({
   value,
   onChangeText,
   style,
-  keyboardType = "default", // Allows custom keyboard type if necessary
-  autoCapitalize = "none", // Customize text capitalization
+  keyboardType = "default", 
+  autoCapitalize = "none", 
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [labelColor, setLabelColor] = useState("#3C2E6B");
@@ -21,15 +25,15 @@ const InputField = ({
 
   const handleTextChange = (text) => {
     onChangeText(text);
-    setLabelColor(text ? "#dddddd" : "#371F76");
+    setLabelColor(text ? GRAY_COLOR : THEME_TEXT_COLOR);
   };
 
   const handleFocus = () => {
-    setLabelColor("#dddddd");
+    setLabelColor(GRAY_COLOR);
   };
 
   const handleBlur = () => {
-    setLabelColor(value ? "#dddddd" : "#371F76");
+    setLabelColor(value ? GRAY_COLOR : THEME_TEXT_COLOR);
   };
 
   return (
@@ -52,7 +56,7 @@ const InputField = ({
             <MaterialCommunityIcons
               name={showPassword ? "eye-off" : "eye"}
               size={24}
-              color="#3C2E6B"
+              color= {THEME_TEXT_COLOR}
             />
           </TouchableOpacity>
         )}
@@ -70,7 +74,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    borderColor: "#ddd",
+    borderColor: GRAY_COLOR,
     borderWidth: 1,
     borderRadius: 10,
     width: "100%",
@@ -80,7 +84,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontWeight: "bold",
     position: "absolute",
-    backgroundColor: "white",
+    backgroundColor: WHITE_COLOR,
     top: -12,
     left: 20,
     zIndex: 9,
@@ -88,7 +92,7 @@ const styles = StyleSheet.create({
   input: {
     height: 75,
     flex: 1,
-    color: "#3C2E6B",
+    color: THEME_TEXT_COLOR,
     fontSize: 15,
     padding: 15,
     borderRadius: 10,

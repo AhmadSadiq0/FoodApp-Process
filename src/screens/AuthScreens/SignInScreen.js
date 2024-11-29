@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import InputField from '../../components/CustomInput';
 import { Google_Icon } from '../../res/drawables';
+import { THEME_TEXT_COLOR } from '../../res/colors';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState("");
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
     fontWeight: 'bold',
-    color: '#000',
+    color: THEME_TEXT_COLOR,
   },
   box1: {
     flexDirection: 'row',
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
   text2: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#000',
+    color:THEME_TEXT_COLOR,
   },
   text3: {
     fontSize: 14,
