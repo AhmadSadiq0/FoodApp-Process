@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
-  StyleSheet, View, KeyboardAvoidingView, Platform, ScrollView,
+  StyleSheet, View,Platform, ScrollView,
   Text, Image, TouchableOpacity, Pressable, Keyboard,
 } from 'react-native';
 import InputField from '../../components/CustomInput';
 import { Google_Icon } from '../../res/drawables';
 
-const SignUpScreen = ({ navigation }) => {
+const SignUpScreen = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,12 +28,8 @@ const SignUpScreen = ({ navigation }) => {
     };
   }, []);
 
-  const navigateToLogin = () => {
-    navigation.navigate('Login'); // Assuming you're using React Navigation
-  };
-
   return (
-    <KeyboardAvoidingView
+    <View
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
@@ -51,14 +47,14 @@ const SignUpScreen = ({ navigation }) => {
             <Text style={styles.text1}>Create your free account</Text>
             <View style={styles.box1}>
               <Text style={styles.text2}>Already have an account?</Text>
-              <Pressable onPress={() => { alert('login is pressed') }}>
-                <Text style={styles.text3}>Log in</Text>
+              <Pressable onPress={() => { alert('Sign In is pressed'); }}>
+                <Text style={styles.text3}>Sign In</Text>
               </Pressable>
             </View>
             {!isKeyboardVisible ? (
               <TouchableOpacity
                 style={styles.touchable1} 
-                onPress={() => { alert('Go to Google') }}
+                onPress={() => { alert('Go to Google'); }}
               >
                 <Image
                   source={Google_Icon}
@@ -77,29 +73,28 @@ const SignUpScreen = ({ navigation }) => {
 
           <InputField
             label="Full Name"
-            placeholder="User's full name here"
+            placeholder="User 's full name here"
             value={username}
             onChangeText={setUsername}
           />
           <InputField
             label="Email"
-            placeholder="User's email here"
+            placeholder="User 's email here"
             value={email}
             onChangeText={setEmail}
           />
           <InputField
             label="Password"
-            placeholder="User's password here"
+            placeholder="User 's password here"
             secureTextEntry={true}
             value={password}
             onChangeText={setPassword}
           />
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -112,6 +107,7 @@ const styles = StyleSheet.create({
   redContainer: {
     flex: 3,
     backgroundColor: "red",
+     justifyContent:'center'
   },
   container2: {
     flex: 1,
@@ -146,8 +142,7 @@ const styles = StyleSheet.create({
   text3: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#3399ff',
-    textDecorationLine: 'underline',
+    color: '#F63440',
     marginLeft: 10,
   },
   touchable1: {
