@@ -1,23 +1,12 @@
+import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { 
-    StyleSheet, 
-    Text, 
-    View 
-} from 'react-native'
 
 const SignInScreen = () => {
   return (
-    <View style={styles.container}>
+    <View>
       <Text>SignInScreen</Text>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container:{
-    flex:1,
-    alignItems:'center',
-    justifyContent:'center'
-}
-})
-export default SignInScreen;
+export default SignInScreen
+const styles = StyleSheet.create({})

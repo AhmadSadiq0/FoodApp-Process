@@ -41,11 +41,9 @@ import { SplashScreen } from '../screens/SplashScreen/index';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
-
 const AuthStack = () => {
     return (
-        <Stack.Navigator initialRouteName="SignUp" headerMode={false}>
+        <Stack.Navigator initialRouteName="ForgetPassword" headerMode={false}>
             <Stack.Screen options={{ headerShown: false }} name="Auth" component={SplashScreen} />
             <Stack.Screen options={{ headerShown: false }} name="SignUp" component={SignUpScreen} />
             <Stack.Screen options={{ headerShown: false }} name="SignIn" component={SignInScreen} />

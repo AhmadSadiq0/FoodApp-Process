@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 const InputField = ({ label, placeholder, secureTextEntry, value, onChangeText }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [labelColor, setLabelColor] = useState("#3C2E6B"); 
-
+ 
   const toggleShowPassword = () => {
     setShowPassword((prevState) => !prevState);
   };
@@ -32,7 +32,7 @@ const InputField = ({ label, placeholder, secureTextEntry, value, onChangeText }
           secureTextEntry={secureTextEntry && !showPassword}
           value={value}
           onChangeText={handleTextChange} 
-          onFocus={handleFocus} // Change label color on focus
+          onFocus={handleFocus}
           onBlur={handleBlur} 
         />
         {secureTextEntry && (
