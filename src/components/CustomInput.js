@@ -50,6 +50,7 @@ const InputField = ({
           onBlur={handleBlur}
           keyboardType={keyboardType} 
           autoCapitalize={autoCapitalize} 
+          underlineColorAndroid="transparent"
         />
         {secureTextEntry && (
           <TouchableOpacity onPress={toggleShowPassword} style={styles.icon}>
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     padding: 15,
     borderRadius: 10,
-    fontWeight: "bold",
+    // fontWeight: "bold",
   },
   icon: {
     justifyContent: "center",
