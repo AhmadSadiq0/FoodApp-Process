@@ -45,10 +45,11 @@ const Tab = createBottomTabNavigator();
 
 const AuthStack = () => {
     return (
-        <Stack.Navigator initialRouteName="SignIn" headerMode={false}>
+        <Stack.Navigator initialRouteName="Home" headerMode={false}>
             <Stack.Screen options={{ headerShown: false }} name="Auth" component={SplashScreen} />
             <Stack.Screen options={{ headerShown: false }} name="SignUp" component={SignUpScreen} />
             <Stack.Screen options={{ headerShown: false }} name="SignIn" component={SignInScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen}/>
             <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPasswordScreen} />
         </Stack.Navigator>
     )
