@@ -67,7 +67,8 @@ const InputField = ({
 
 const styles = StyleSheet.create({
   inputContainer: {
-    marginBottom: 20,
+    marginTop:10,
+    marginBottom:10,
     width: "100%",
   },
   inputWrapper: {

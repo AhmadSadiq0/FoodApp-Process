@@ -1,21 +1,20 @@
 import React from 'react'
 import { 
     StyleSheet, 
-    Text, 
     View 
 } from 'react-native'
+import Header1 from '../../components/Header1'
 
 const  DiscountsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>DiscountsScreen</Text>
+      <Header1/>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container:{
-    flex:1,
     alignItems:'center',
     justifyContent:'center'
 }

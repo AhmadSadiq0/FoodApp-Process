@@ -1,11 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import {
-  StyleSheet, View,Platform, ScrollView,
+  StyleSheet, View, Platform, ScrollView,
   Text, Image, TouchableOpacity, Pressable, Keyboard,
 } from 'react-native';
 import InputField from '../../components/CustomInput';
 import { Google_Icon } from '../../res/drawables';
 import { THEME_TEXT_COLOR } from '../../res/colors';
+import CustomButton from '../../components/CustomButtom';
+import { Formik } from "formik";
+import * as Yup from "yup";
+
+
+// Validation schema using Yup
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email("Invalid email address").required("Email is required"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+});
+
+
 
 const SignInScreen = () => {
   const [email, setEmail] = useState("");
@@ -36,7 +50,7 @@ const SignInScreen = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
         <View style={styles.redContainer}>
           <Image
-            source={require('../../../assets/image.png')} 
+            source={require('../../../assets/image.png')}
             style={styles.image}
             resizeMode="contain"
           />
@@ -53,7 +67,7 @@ const SignInScreen = () => {
             </View>
             {!isKeyboardVisible ? (
               <TouchableOpacity
-                style={styles.touchable1} 
+                style={styles.touchable1}
                 onPress={() => { alert('Go to Google'); }}
               >
                 <Image
@@ -71,19 +85,49 @@ const SignInScreen = () => {
             <View style={styles.divider} />
           </View>
 
-          <InputField
-            label="Email"
-            placeholder="User 's email here"
-            value={email}
-            onChangeText={setEmail}
-          />
-          <InputField
-            label="Password"
-            placeholder="User 's password here"
-            secureTextEntry={true}
-            value={password}
-            onChangeText={setPassword}
-          />
+
+          <Formik initialValues={{ email: "", password: "" }}
+            validationSchema={validationSchema}
+            onSubmit={(values) => {
+              alert(`Signed Up with: ${JSON.stringify(values)}`);
+            }}>
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+            }) => (
+              <>
+                <InputField
+                  label="Email"
+                  placeholder="User 's email here"
+                  value={values.email}
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                />
+                {touched.email && errors.email && (
+                  <Text style={styles.errorText}>{errors.email}</Text>
+                )}
+                <InputField
+                  label="Password"
+                  placeholder="User 's password here"
+                  secureTextEntry={true}
+                  value={values.password}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                />
+                {touched.password && errors.password && (
+                  <Text style={styles.errorText}>{errors.password}</Text>
+                )}
+                <CustomButton
+                  title={"SignIn"}
+                  onPress={handleSubmit}
+                />
+                </>
+                 )}
+              </Formik>
         </View>
       </ScrollView>
     </View>
@@ -101,7 +145,7 @@ const styles = StyleSheet.create({
   redContainer: {
     flex: 3,
     backgroundColor: "red",
-    justifyContent:'center'
+    justifyContent: 'center'
   },
   container2: {
     flex: 3,
@@ -131,7 +175,7 @@ const styles = StyleSheet.create({
   text2: {
     fontSize: 14,
     fontWeight: 'bold',
-    color:THEME_TEXT_COLOR,
+    color: THEME_TEXT_COLOR,
   },
   text3: {
     fontSize: 14,
@@ -179,6 +223,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 30,
   },
+    errorText: {
+    fontSize: 12,
+    color: "red",
+    marginBottom: 10,
+    alignSelf: "flex-start", 
+  }
 });
 
 export default SignInScreen;

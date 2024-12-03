@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text, TextInput } from 'react-native';
 import { THEME_COLOR, WHITE_COLOR, Green_Color, THEME_TEXT_COLOR } from '../res/colors';
-import { Profie_Image } from '../res/drawables';
-import { Bell_ICON, Search_Icon } from '../res/drawables';
+import { Profie_Image, Bell_ICON, Search_Icon } from '../res/drawables';
 
+// SearchBar Component
 const SearchBar = ({ placeholder }) => (
     <View style={styles.searchContainer}>
         <TextInput
@@ -11,29 +11,41 @@ const SearchBar = ({ placeholder }) => (
             placeholder={placeholder}
             placeholderTextColor={THEME_TEXT_COLOR}
         />
-        <Image
-            source={Search_Icon}
-            style={styles.searchIcon}
-        />
+        <Image source={Search_Icon} style={styles.searchIcon} />
     </View>
 );
 
-const Header = () => {
+// Header Component
+const Header = ({
+    username = "Huzaifa Saddique", 
+    title = "Ahmad Kitchen",
+    Welcomermsg = "Welcome to",
+    containerStyle = {},
+    textContainer = {},
+    showSearch = true,  
+    showShadow = false, 
+}) => {
     return (
-        <View style={styles.container}>
+        <View 
+            style={[
+                styles.container, 
+                containerStyle, 
+                showShadow && styles.shadowContainer 
+            ]}
+        >
             <View style={styles.profileContainer}>
                 <Image source={Profie_Image} style={styles.image} />
-                <Text style={styles.usernameText}>Huzaifa Saddique</Text> 
+                <Text style={styles.usernameText}>{username}</Text>
                 <View style={styles.bellContainer}>
                     <Image source={Bell_ICON} style={styles.bellIcon} />
                     <View style={styles.notificationBadge} />
                 </View>
             </View>
-            <View style={styles.textContainer}>
-                <Text style={styles.welcomeText}>Welcome to</Text>
-                <Text style={styles.kitchenText}>Ahmad Kitchen</Text>
+            <View style={[styles.textContainer, textContainer]}>
+                <Text style={styles.welcomeText}>{Welcomermsg}</Text>
+                <Text style={styles.kitchenText}>{title}</Text>
             </View>
-            <SearchBar placeholder="Search Your Favourite Food Item" />
+            {showSearch && <SearchBar placeholder="Search Your Favourite Food Item" />}
         </View>
     );
 };
@@ -47,6 +59,13 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 50,
         backgroundColor: THEME_COLOR,
         alignItems: 'center',
+    },
+    shadowContainer: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 20,  
     },
     profileContainer: {
         flexDirection: 'row',

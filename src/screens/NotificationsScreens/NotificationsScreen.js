@@ -4,18 +4,21 @@ import {
     Text, 
     View 
 } from 'react-native'
+import Header1 from '../../components/Header1'
 
 const NotificationsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>NotificationsScreen</Text>
+      <Header1
+      discountIcon = "none"
+      title='Notifications'
+      />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
     container:{
-        flex:1,
         alignItems:'center',
         justifyContent:'center'
     }

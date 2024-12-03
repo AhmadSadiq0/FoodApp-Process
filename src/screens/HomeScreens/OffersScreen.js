@@ -1,23 +1,24 @@
-import React from 'react'
-import { 
-    StyleSheet, 
-    Text, 
-    View 
-} from 'react-native'
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import Header1 from '../../components/Header1';
+import { OFFER_ICON} from '../../res/drawables';  
 
-const OffersScreen = () => {
+const DealsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>OffersScreen</Text>
+      <Header1 
+        title="Featured Offers"
+        discountIcon={OFFER_ICON}  
+      />
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
-  container:{
-    flex:1,
-    alignItems:'center',
-    justifyContent:'center'
-}
-})
-export default OffersScreen;
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
+export default DealsScreen;

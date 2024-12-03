@@ -1,23 +1,32 @@
 import React from 'react'
 import { 
     StyleSheet, 
-    Text, 
     View 
 } from 'react-native'
+import Header from '../../components/Header'
 
-const OrdersScreen = () => {
+const CartScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>OrdersScreen</Text>
-    </View>
+    <Header 
+    title='My Orders'
+    Welcomermsg = ''
+    showSearch={false}
+    showShadow={true}
+    containerStyle={{
+      height: 160,
+  }} 
+  textContainer={{
+    marginTop:0
+  }}
+  />
+  </View>
   )
 }
-
 const styles = StyleSheet.create({
     container:{
-        flex:1,
         alignItems:'center',
         justifyContent:'center'
     }
 })
-export default OrdersScreen;
+export default CartScreen;
