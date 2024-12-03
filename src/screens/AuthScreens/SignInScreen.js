@@ -1,15 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import {
-  StyleSheet, View,Platform, ScrollView,
-  Text, Image, TouchableOpacity, Pressable, Keyboard,
+  StyleSheet,
+  View,
+  Platform,
+  ScrollView,
+  Text,
+  Image,
+  TouchableOpacity,
+  Pressable,
+  Keyboard,
 } from 'react-native';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import CustomButton from '../../components/CustomButton';
 import InputField from '../../components/CustomInput';
 import { Google_Icon } from '../../res/drawables';
 import { THEME_TEXT_COLOR } from '../../res/colors';
-
-const SignInScreen = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const validationSchema = Yup.object({
+  email: Yup.string()
+    .email('Invalid email format')
+    .required('Email is required'),
+  password: Yup.string()
+    .min(6, 'Password must be at least 6 characters')
+    .required('Password is required'),
+});
+const SignInScreen = ({ title, textStyle }) => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
@@ -21,25 +36,22 @@ const SignInScreen = () => {
       'keyboardDidHide',
       () => setKeyboardVisible(false)
     );
-
     return () => {
       keyboardDidHideListener.remove();
       keyboardDidShowListener.remove();
     };
   }, []);
 
+  const handleSignIn = (values) => {
+    console.log('Sign In Values:', values);
+    alert('Form Submitted!');
+  };
+
   return (
-    <View
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
+    <View behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
         <View style={styles.redContainer}>
-          <Image
-            source={require('../../../assets/image.png')} 
-            style={styles.image}
-            resizeMode="contain"
-          />
+          <Image source={require('../../../assets/image.png')} style={styles.image} resizeMode="contain" />
         </View>
 
         <View style={styles.container2}>
@@ -52,14 +64,8 @@ const SignInScreen = () => {
               </Pressable>
             </View>
             {!isKeyboardVisible ? (
-              <TouchableOpacity
-                style={styles.touchable1} 
-                onPress={() => { alert('Go to Google'); }}
-              >
-                <Image
-                  source={Google_Icon}
-                  style={styles.Googleimage}
-                />
+              <TouchableOpacity style={styles.touchable1} onPress={() => { alert('Go to Google'); }}>
+                <Image source={Google_Icon} style={styles.Googleimage} />
                 <Text style={styles.text2}>Sign in with Google</Text>
               </TouchableOpacity>
             ) : null}
@@ -71,24 +77,52 @@ const SignInScreen = () => {
             <View style={styles.divider} />
           </View>
 
-          <InputField
-            label="Email"
-            placeholder="User 's email here"
-            value={email}
-            onChangeText={setEmail}
-          />
-          <InputField
-            label="Password"
-            placeholder="User 's password here"
-            secureTextEntry={true}
-            value={password}
-            onChangeText={setPassword}
-          />
+          <Formik
+            initialValues={{ email: '', password: '' }}
+            validationSchema={validationSchema}
+            onSubmit={handleSignIn}
+          >
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+              <>
+                <InputField
+                  label="Email"
+                  placeholder="User's email here"
+                  value={values.email}
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  error={touched.email && errors.email}
+                />
+                {touched.email && errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+
+                <InputField
+                  label="Password"
+                  placeholder="User's password here"
+                  secureTextEntry
+                  value={values.password}
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  error={touched.password && errors.password}
+                />
+                {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+
+                <View style={styles.buttonContainer}>
+                  <CustomButton
+                    title="SignIn"
+                    backgroundColor="#F63440"
+                    onPress={handleSubmit}
+                    style={{ marginVertical: 10 }}
+                    textStyle={{ fontSize: 16 }}
+                  />
+                </View>
+              </>
+            )}
+          </Formik>
         </View>
       </ScrollView>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -100,8 +134,8 @@ const styles = StyleSheet.create({
   },
   redContainer: {
     flex: 3,
-    backgroundColor: "red",
-    justifyContent:'center'
+    backgroundColor: 'red',
+    justifyContent: 'center',
   },
   container2: {
     flex: 3,
@@ -131,7 +165,7 @@ const styles = StyleSheet.create({
   text2: {
     fontSize: 14,
     fontWeight: 'bold',
-    color:THEME_TEXT_COLOR,
+    color: THEME_TEXT_COLOR,
   },
   text3: {
     fontSize: 14,
@@ -147,8 +181,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 25,
     marginVertical: 15,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   Googleimage: {
     width: 20,
@@ -178,6 +212,11 @@ const styles = StyleSheet.create({
     width: 100,
     alignSelf: 'center',
     marginTop: 30,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 5,
   },
 });
 

@@ -17,7 +17,7 @@ const InputField = ({
   autoCapitalize = "none", 
 }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [labelColor, setLabelColor] = useState("#3C2E6B");
+  const [labelColor, setLabelColor] = useState(THEME_TEXT_COLOR);
 
   const toggleShowPassword = () => {
     setShowPassword((prevState) => !prevState);
@@ -67,7 +67,7 @@ const InputField = ({
 
 const styles = StyleSheet.create({
   inputContainer: {
-    marginBottom: 20,
+    marginBottom:10,
     width: "100%",
   },
   inputWrapper: {
@@ -95,8 +95,9 @@ const styles = StyleSheet.create({
     color: THEME_TEXT_COLOR,
     fontSize: 15,
     padding: 15,
+    borderBottomWidth: 0,
     borderRadius: 10,
-    fontWeight: "bold",
+    // fontWeight: "bold",
   },
   icon: {
     justifyContent: "center",
