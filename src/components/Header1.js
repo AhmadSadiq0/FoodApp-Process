@@ -3,17 +3,25 @@ import { StyleSheet, View, Image, Text } from 'react-native';
 import { THEME_COLOR, WHITE_COLOR } from '../res/colors';
 import { DISCOUNT_ICON, ARROW_ICON } from '../res/drawables';
 
-const Header1 = ({ title = "Featured Discounts", arrowIcon = ARROW_ICON, discountIcon = DISCOUNT_ICON }) => {
+const Header1 = ({
+    title = "Featured Discounts",
+    arrowIcon = ARROW_ICON,
+    discountIcon = DISCOUNT_ICON,
+    headerTextStyle = {},
+    containerStyle = {},
+}) => {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, containerStyle]}>
             <View style={styles.profileContainer}>
-                <Image source={arrowIcon} style={styles.ArrowIcon} />
-                <View style={styles.DiscountContainer}>
-                    <Image source={discountIcon} style={styles.DiscountIcon} />
-                </View>
+                <Image source={arrowIcon} style={styles.arrowIcon} />
+                {discountIcon && (
+                    <View style={styles.discountContainer}>
+                        <Image source={discountIcon} style={styles.discountIcon} />
+                    </View>
+                )}
             </View>
             <View style={styles.textContainer}>
-                <Text style={styles.HeaderText}>{title}</Text>
+                <Text style={[styles.headerText, headerTextStyle]}>{title}</Text>
             </View>
         </View>
     );
@@ -39,7 +47,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
     },
-    ArrowIcon: {
+    arrowIcon: {
         width: 40,
         height: 40,
     },
@@ -47,18 +55,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginVertical: 10,
     },
-    HeaderText: {
+    headerText: {
         fontSize: 27,
         fontWeight: 'bold',
         color: WHITE_COLOR,
         textAlign: 'center',
     },
-    DiscountContainer: {
+    discountContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginLeft: 80, 
+        marginLeft: 80,
     },
-    DiscountIcon: {
+    discountIcon: {
         width: 40,
         height: 40,
     },
