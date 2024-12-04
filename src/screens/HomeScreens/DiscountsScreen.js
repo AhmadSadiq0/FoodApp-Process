@@ -1,58 +1,80 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import Datalist from '../../components/Datalist';
-import { BURGERIMG } from '../../res/drawables';
+import React from "react";
+import { View, StyleSheet,ScrollView } from "react-native";
+import Datalist from "../../components/Datalist";
+import { BURGERIMG } from "../../res/drawables";
+import AddCard from "../../components/AddCard";
 const DiscountsScreen = () => {
   const burgerData = [
     {
       id: 1,
-      name: 'Double Cheese Burger',
-      price: 599, 
+      name: "Double Cheese Burger",
+      price: 599,
       image: BURGERIMG,
     },
     {
       id: 2,
-      name: 'Cheese Burger',
+      name: "Cheese Burger",
       price: 499,
-      image: BURGERIMG, 
+      image: BURGERIMG,
     },
     {
       id: 3,
-      name: 'Chicken Burger',
+      name: "Chicken Burger",
       price: 399,
-      image: BURGERIMG, 
+      image: BURGERIMG,
+    },
+    {
+      id: 4,
+      name: "Chicken Burger",
+      price: 399,
+      image: BURGERIMG,
     },
   ];
+  const addCardData = {
+    name: "2 Double Cheese Burger",
+    description: "Double Delight",
+    image: BURGERIMG,
+    price: 849,
+  };
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <Datalist
         title="Discounts"
         seeMoreText="See All"
-        onSeeMorePress={() => console.log('See All pressed!')}
-        data={burgerData}
+        onSeeMorePress={() => console.log("See All pressed!")}
+        data={burgerData} 
       />
-        <Datalist
+      <Datalist
         title="Deals"
         seeMoreText="See All"
-        onSeeMorePress={() => console.log('See All pressed!')}
+        onSeeMorePress={() => console.log("See All pressed!")}
         data={burgerData}
       />
-        <Datalist
+      <Datalist
         title="LoyaltyBurgers"
-        seeMoreText="See All" 
-        onSeeMorePress={() => console.log('See All pressed!')}
+        seeMoreText="See All"
+        onSeeMorePress={() => console.log("See All pressed!")}
         data={burgerData}
+       
       />
-    </View>
+<View style={styles.addCardContainer}>
+        <AddCard
+          name={addCardData.name}
+          description={addCardData.description}
+          image={addCardData.image}
+          price={addCardData.price}
+          onAddToCart={() => console.log(`${addCardData.name} added to cart`)}
+        />
+      </View>
+
+
+    </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    padding: 10,
+    backgroundColor: "#fff",
+    padding: 7,
   },
 });
-
 export default DiscountsScreen;
