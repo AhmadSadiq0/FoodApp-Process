@@ -15,16 +15,18 @@ import * as Yup from "yup";
 import InputField from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButtom";
 import { Google_Icon } from "../../res/drawables";
+import CustomButton from '../../components/CustomButton';
 
-// Validation schema using Yup
-const validationSchema = Yup.object().shape({
+const validationSchema = Yup.object({
   username: Yup.string()
-    .min(3, "Name must be at least 3 characters")
-    .required("Full Name is required"),
-  email: Yup.string().email("Invalid email address").required("Email is required"),
+    .min(3, 'Name must be at least 3 characters long')
+    .required('Full Name is required'),
+  email: Yup.string()
+    .email('Invalid email format')
+    .required('Email is required'),
   password: Yup.string()
-    .min(6, "Password must be at least 6 characters")
-    .required("Password is required"),
+    .min(6, 'Password must be at least 6 characters')
+    .required('Password is required'),
 });
 
 const SignUpScreen = () => {
@@ -46,6 +48,11 @@ const SignUpScreen = () => {
     };
   }, []);
 
+  const handleSignUp = (values) => {
+    console.log('Sign Up Values:', values);
+    alert('Form Submitted!');
+  };
+
   return (
     <View
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -62,7 +69,6 @@ const SignUpScreen = () => {
             resizeMode="contain"
           />
         </View>
-
         <View style={styles.container2}>
           <View style={styles.cardTier1}>
             <Text style={styles.text1}>Create your free account</Text>
@@ -88,14 +94,10 @@ const SignUpScreen = () => {
             <Text style={styles.orText}>or</Text>
             <View style={styles.divider} />
           </View>
-
-          {/* Formik for form handling */}
           <Formik
-            initialValues={{ username: "", email: "", password: "" }}
+            initialValues={{ username: '', email: '', password: '' }}
             validationSchema={validationSchema}
-            onSubmit={(values) => {
-              alert(`Signed Up with: ${JSON.stringify(values)}`);
-            }}
+            onSubmit={handleSignUp}
           >
             {({
               handleChange,
@@ -110,19 +112,20 @@ const SignUpScreen = () => {
                   label="Full Name"
                   placeholder="User's full name here"
                   value={values.username}
-                  onChangeText={handleChange("username")}
-                  onBlur={handleBlur("username")}
+                  onChangeText={handleChange('username')}
+                  onBlur={handleBlur('username')}
+                  error={touched.username && errors.username}
                 />
                 {touched.username && errors.username && (
                   <Text style={styles.errorText}>{errors.username}</Text>
                 )}
-
                 <InputField
                   label="Email"
                   placeholder="User's email here"
                   value={values.email}
-                  onChangeText={handleChange("email")}
-                  onBlur={handleBlur("email")}
+                  onChangeText={handleChange('email ')}
+                  onBlur={handleBlur('email')}
+                  error={touched.email && errors.email}
                 />
                 {touched.email && errors.email && (
                   <Text style={styles.errorText}>{errors.email}</Text>
@@ -143,6 +146,7 @@ const SignUpScreen = () => {
                   title="Sign Up"
                   onPress={handleSubmit}
                 />
+                
               </>
             )}
           </Formik>
@@ -210,8 +214,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderRadius: 25,
     marginVertical: 15,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   Googleimage: {
     width: 20,
@@ -243,11 +247,11 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   errorText: {
+    color: 'red',
     fontSize: 12,
-    color: "red",
-    marginBottom: 10,
-    alignSelf: "flex-start", 
-  }
+    marginBottom: 12,
+    alignSelf :"start",
+  },
 });
 
 export default SignUpScreen;

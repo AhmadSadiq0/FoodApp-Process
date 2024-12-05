@@ -41,11 +41,10 @@ import { SplashScreen } from '../screens/SplashScreen/index';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
-
 const AuthStack = () => {
     return (
-        <Stack.Navigator initialRouteName="Settings" headerMode={false}>
+            <Stack.Navigator initialRouteName="Settings" headerMode={false}>
+            <Stack.Navigator initialRouteName="Discounts" headerMode={false}>
             <Stack.Screen options={{ headerShown: false }} name="Auth" component={SplashScreen} />
             <Stack.Screen options={{ headerShown: false }} name="SignUp" component={SignUpScreen} />
             <Stack.Screen options={{ headerShown: false }} name="SignIn" component={SignInScreen} />
@@ -62,6 +61,7 @@ const AuthStack = () => {
             <Stack.Screen options={{ headerShown: false }} name="Profile" component={ProfileScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Notifications" component={NotificationsScreen} />
             <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPasswordScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Discounts" component={DiscountsScreen} />
         </Stack.Navigator>
     )
 }
@@ -70,7 +70,6 @@ const HomeStack = () => {
         <Stack.Navigator initialRouteName="Home" headerMode={false}>
             <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Deals" component={DealsScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Discounts" component={DiscountsScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Offers" component={OffersScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
         </Stack.Navigator>

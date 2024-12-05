@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import {
-  StyleSheet, View, Platform, ScrollView,
-  Text, Image, TouchableOpacity, Pressable, Keyboard,
+  StyleSheet,
+  View,
+  Platform,
+  ScrollView,
+  Text,
+  Image,
+  TouchableOpacity,
+  Pressable,
+  Keyboard,y
 } from 'react-native';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import CustomButton from '../../components/CustomButton';
 import InputField from '../../components/CustomInput';
 import { Google_Icon } from '../../res/drawables';
 import { THEME_TEXT_COLOR } from '../../res/colors';
@@ -35,18 +45,19 @@ const SignInScreen = () => {
       'keyboardDidHide',
       () => setKeyboardVisible(false)
     );
-
     return () => {
       keyboardDidHideListener.remove();
       keyboardDidShowListener.remove();
     };
   }, []);
 
+  const handleSignIn = (values) => {
+    console.log('Sign In Values:', values);
+    alert('Form Submitted!');
+  };
+
   return (
-    <View
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
+    <View behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
         <View style={styles.redContainer}>
           <Image
@@ -84,7 +95,6 @@ const SignInScreen = () => {
             <Text style={styles.orText}>or</Text>
             <View style={styles.divider} />
           </View>
-
 
           <Formik initialValues={{ email: "", password: "" }}
             validationSchema={validationSchema}
@@ -133,6 +143,7 @@ const SignInScreen = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -191,8 +202,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 25,
     marginVertical: 15,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   Googleimage: {
     width: 20,
@@ -229,6 +240,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: "flex-start", 
   }
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 5,
+  },
 });
 
 export default SignInScreen;
