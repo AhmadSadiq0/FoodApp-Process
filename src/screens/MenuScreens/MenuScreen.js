@@ -4,18 +4,27 @@ import {
     Text, 
     View 
 } from 'react-native'
+import Header from '../../components/Header'
 
 const MenuScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>MenuScreen</Text>
+      <Header 
+      title='Menu'
+      Welcomermsg = ''
+      containerStyle={{
+        height: 188,
+    }} 
+    textContainer={{
+      marginTop:-7
+    }}
+      />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
     container:{
-        flex:1,
         alignItems:'center',
         justifyContent:'center'
     }

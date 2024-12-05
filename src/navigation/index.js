@@ -43,10 +43,23 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const AuthStack = () => {
     return (
-        <Stack.Navigator initialRouteName="Discounts" headerMode={false}>
+            <Stack.Navigator initialRouteName="Settings" headerMode={false}>
+            <Stack.Navigator initialRouteName="Discounts" headerMode={false}>
             <Stack.Screen options={{ headerShown: false }} name="Auth" component={SplashScreen} />
             <Stack.Screen options={{ headerShown: false }} name="SignUp" component={SignUpScreen} />
             <Stack.Screen options={{ headerShown: false }} name="SignIn" component={SignInScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen}/>
+            <Stack.Screen options={{ headerShown: false }} name="Discounts" component={DiscountsScreen}/>
+            <Stack.Screen options={{ headerShown: false }} name="Deals" component={DealsScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Menu" component={MenuScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Offers" component={OffersScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="CheckOut" component={CheckOutScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Cart" component={CartScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="ConfirmOrder" component={OrderConfirmationScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Orders" component={OrdersScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Profile" component={ProfileScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Notifications" component={NotificationsScreen} />
             <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPasswordScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Discounts" component={DiscountsScreen} />
         </Stack.Navigator>
