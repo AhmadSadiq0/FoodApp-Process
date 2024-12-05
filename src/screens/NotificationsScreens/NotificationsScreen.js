@@ -1,23 +1,28 @@
-import React from 'react'
+import React from 'react';
 import { 
     StyleSheet, 
-    Text, 
     View 
-} from 'react-native'
+} from 'react-native';
+import Header1 from '../../components/Header1';
 
 const NotificationsScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text>NotificationsScreen</Text>
-    </View>
-  )
-}
+    return (
+        <View style={styles.container}>
+            <Header1
+                discountIcon={null} 
+                title="Notifications"
+                containerStyle={{ backgroundColor: 'red', height: 150 }}
+                headerTextStyle={{ marginBottom: 10 }} 
+            />
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        alignItems:'center',
-        justifyContent:'center'
-    }
-})
+    container: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+});
+
 export default NotificationsScreen;
