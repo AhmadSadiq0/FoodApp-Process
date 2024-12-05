@@ -15,7 +15,6 @@ import * as Yup from "yup";
 import InputField from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButtom";
 import { Google_Icon } from "../../res/drawables";
-import CustomButton from '../../components/CustomButton';
 
 const validationSchema = Yup.object({
   username: Yup.string()

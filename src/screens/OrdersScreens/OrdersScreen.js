@@ -3,23 +3,10 @@ import {
     StyleSheet, 
     View 
 } from 'react-native'
-import Header from '../../components/Header'
 
 const CartScreen = () => {
   return (
     <View style={styles.container}>
-    <Header 
-    title='My Orders'
-    Welcomermsg = ''
-    showSearch={false}
-    showShadow={true}
-    containerStyle={{
-      height: 160,
-  }} 
-  textContainer={{
-    marginTop:0
-  }}
-  />
   </View>
   )
 }

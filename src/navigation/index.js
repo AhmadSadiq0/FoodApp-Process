@@ -12,7 +12,7 @@ import {
 } from '../res/drawables';
 import { THEME_COLOR, WHITE_COLOR } from '../res/colors';
 //Screen Components
-import { 
+import {
     SignInScreen,
     SignUpScreen,
     ForgetPasswordScreen
@@ -38,33 +38,148 @@ import { MenuScreen } from '../screens/MenuScreens/index';
 import { NotificationsScreen } from '../screens/NotificationsScreens/index';
 import { OrdersScreen } from '../screens/OrdersScreens/index';
 import { SplashScreen } from '../screens/SplashScreen/index';
+import Header1 from '../components/Header1';
+import ProfileHeader from '../components/ProfileHeader';
+import Header from '../components/Header';
+import { ARROW_ICON, DOTS_ICON, DEAL_ICON , Confirm_Order , OFFER_ICON } from '../res/drawables';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const AuthStack = () => {
     return (
-            <Stack.Navigator initialRouteName="Settings" headerMode={false}>
-            <Stack.Navigator initialRouteName="Discounts" headerMode={false}>
-            <Stack.Screen options={{ headerShown: false }} name="Auth" component={SplashScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="SignUp" component={SignUpScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="SignIn" component={SignInScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen}/>
-            <Stack.Screen options={{ headerShown: false }} name="Discounts" component={DiscountsScreen}/>
-            <Stack.Screen options={{ headerShown: false }} name="Deals" component={DealsScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Menu" component={MenuScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Offers" component={OffersScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="CheckOut" component={CheckOutScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Cart" component={CartScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="ConfirmOrder" component={OrderConfirmationScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Orders" component={OrdersScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Profile" component={ProfileScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Notifications" component={NotificationsScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPasswordScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Discounts" component={DiscountsScreen} />
+        <Stack.Navigator initialRouteName="Discounts" headerMode={false}>
+            <Stack.Screen 
+                options={{ headerShown: false }} 
+                name="Auth" 
+                component={SplashScreen} 
+            />
+            <Stack.Screen 
+                options={{ headerShown: false }} 
+                name="SignUp" 
+                component={SignUpScreen} 
+            />
+            <Stack.Screen 
+                options={{ headerShown: false }} 
+                name="SignIn" 
+                component={SignInScreen} 
+            />
+            <Stack.Screen 
+                options={{ header: () => <Header />, headerShown: true }} 
+                name="Home" 
+                component={HomeScreen} 
+            />
+            <Stack.Screen 
+                options={{ 
+                    header: () => <Header1 discountIcon={DEAL_ICON} title="Featured Deals" />, 
+                    headerShown: true 
+                }} 
+                name="Deals" 
+                component={DealsScreen} 
+            />
+            <Stack.Screen 
+                options={{ 
+                    header: () => <ProfileHeader 
+                        showTabsEnabled={false} 
+                        DOTSICON={ARROW_ICON} 
+                        icon={{ height: 40, width: 40 }} 
+                        Cameraicon={{ top: "88%" }} 
+                    />, 
+                    headerShown: true 
+                }} 
+                name="Settings" 
+                component={SettingsScreen} 
+            />
+            <Stack.Screen 
+                options={{ 
+                    header: () => <Header 
+                        title='Menu' 
+                        Welcomermsg={false} 
+                        containerStyle={{ height: 188 }} 
+                        textContainer={{ marginTop: -7 }} 
+                    />, 
+                    headerShown: true 
+                }} 
+                name="Menu" 
+                component={MenuScreen} 
+            />
+            <Stack.Screen 
+                options={{ 
+                    header: () => <Header1 title="Featured Offers" discountIcon={OFFER_ICON} />, 
+                    headerShown: true 
+                }} 
+                name="Offers" 
+                component={OffersScreen} 
+            />
+            <Stack.Screen 
+                options={{ 
+                    header: () => <Header1 title='CheckOut' discountIcon={CART_ICON} />, 
+                    headerShown: true 
+                }} 
+                name="CheckOut" 
+                component={CheckOutScreen} 
+            />
+            <Stack.Screen 
+                options={{ 
+                    header: () => <Header 
+                        title='Cart' 
+                        Welcomermsg='' 
+                        showSearch={false} 
+                        showShadow={true} 
+                        containerStyle={{ height: 160 }} 
+                        textContainer={{ marginTop: 0 }} 
+                    />, 
+                    headerShown: true 
+                }} 
+                name="Cart" 
+                component={CartScreen} 
+            />
+            <Stack.Screen 
+                options={{ 
+                    header: () => <Header1 title='Confirm Order' discountIcon={Confirm_Order} />, 
+                    headerShown: true 
+                }} 
+                name="ConfirmOrder" 
+                component={OrderConfirmationScreen} 
+            />
+            <Stack.Screen 
+                options={{ 
+                    header: () => <Header 
+                        title='My Orders' 
+                        Welcomermsg='' 
+                        showSearch={false} 
+                        showShadow={true} 
+                        containerStyle={{ height: 160 }} 
+                        textContainer={{ marginTop: 0 }} 
+                    />, 
+                    headerShown: true 
+                }} 
+                name="Orders" 
+                component={OrdersScreen} 
+            />
+            <Stack.Screen 
+                options={{ header: () => <ProfileHeader DOTSICON={DOTS_ICON} />, headerShown: true }} 
+                name="Profile" 
+                component={ProfileScreen} 
+            />
+            <Stack.Screen 
+                options={{ header: () => <Header1 discountIcon={null} title="Notifications" />, headerShown: true }} 
+                name="Notifications" 
+                component={NotificationsScreen} 
+            />
+            <Stack.Screen 
+                options={{ headerShown: false }} 
+                name="ForgetPassword" 
+                component={ForgetPasswordScreen} 
+            />
+            <Stack.Screen 
+                options={{ header: () => <Header1 />, headerShown: true }} 
+                name="Discounts" 
+                component={DiscountsScreen} 
+            />
         </Stack.Navigator>
-    )
+    );
 }
+
 const HomeStack = () => {
     return (
         <Stack.Navigator initialRouteName="Home" headerMode={false}>
@@ -118,127 +233,127 @@ const ProfileStack = () => {
 }
 
 function BottomTabStack() {
-        return (
-            <Tab.Navigator
-                initialRouteName="Home"
-                screenOptions={{
-                    tabBarStyle: {
-                        backgroundColor: '#F63440',
-                        height: 50,
-                        borderTopLeftRadius: 20,
-                        borderTopRightRadius: 20,
-                    },
-                    tabBarLabelStyle: {
-                        fontSize: 12,
-                        fontWeight: 'bold',
-                    },
+    return (
+        <Tab.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+                tabBarStyle: {
+                    backgroundColor: '#F63440',
+                    height: 50,
+                    borderTopLeftRadius: 20,
+                    borderTopRightRadius: 20,
+                },
+                tabBarLabelStyle: {
+                    fontSize: 12,
+                    fontWeight: 'bold',
+                },
+            }}
+        >
+            <Tab.Screen
+                name="Home"
+                component={HomeStack}
+                options={{
+                    tabBarLabel: ({ focused }) => (
+                        focused ? <Text style={styles.text}>Home</Text> : null
+                    ),
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => (
+                        <View style={focused ? styles.activeTab : styles.inactiveTab}>
+                            <Image
+                                style={styles.image}
+                                source={HOME_ICON}
+                            />
+                        </View>
+                    ),
                 }}
-            >
-                <Tab.Screen
-                    name= "Home"
-                    component={HomeStack}
-                    options={{
-                        tabBarLabel: ({ focused }) => (
-                            focused ? <Text style={styles.text}>Home</Text> : null
-                        ),
-                        headerShown: false,
-                        tabBarIcon: ({ focused }) => (
-                            <View style={focused ? styles.activeTab : styles.inactiveTab}>
-                                <Image 
-                                    style={styles.image}
-                                    source={HOME_ICON} 
-                                />
-                            </View>
-                        ),
-                    }}
-    
-                />
-                <Tab.Screen
-                    name="Menu"
-                    component={MenuStack}
-                    options={{
-                        tabBarLabel: ({ focused }) => (
-                            focused ? <Text style={styles.text}>Menu</Text> : null
-                        ),
-                        headerShown: false,
-                        tabBarIcon: ({ focused }) => (
-                            <View style={focused ? styles.activeTab : styles.inactiveTab}>
-                                <Image 
-                                    style={styles.image}
-                                    source={MENU_ICON} 
-                                />
-                            </View>
-                        ),
-                    }}
-    
-                /> 
-                <Tab.Screen
-                    name="Cart"
-                    component={CartStack}
-                    options={{
-                        tabBarLabel: ({ focused }) => (
-                            focused ? <Text style={styles.text}>Cart</Text> : null
-                        ),
-                        headerShown: false,
-                        tabBarIcon: ({ focused }) => (
-                            <View style={focused ? styles.activeTab : styles.inactiveTab}>
-                                <Image 
-                                    style={styles.image}
-                                    source={CART_ICON} 
-                                />
-                            </View>
-                        ),
-                    }}
-    
-                />
-                <Tab.Screen
-                    name="Orders"
-                    component={OrdersStack}
-                    options={{
-                        tabBarLabel: ({ focused }) => (
-                            focused ? <Text style={styles.text}>Orders</Text> : null
-                        ),
-                        headerShown: false,
-                        tabBarIcon: ({ focused }) => (
-                            <View style={focused ? styles.activeTab : styles.inactiveTab}>
-                                <Image 
-                                    style={styles.image}
-                                    source={ORDERS_ICON} 
-                                />
-                            </View>
-                        ),
-                    }}
-    
-                />
-                <Tab.Screen
-                    name="Profile"
-                    component={ProfileStack}
-                    options={{
-                        tabBarLabel: ({ focused }) => (
-                            focused ? <Text style={styles.text}>Profile</Text> : null
-                        ),
-                        headerShown: false,
-                        tabBarIcon: ({ focused }) => (
-                            <View style={focused ? styles.activeTab : styles.inactiveTab}>
-                                <Image 
-                                    style={styles.image}
-                                    source={PROFILE_ICON} 
-                                />
-                            </View>
-                        ),
-                    }}
-    
-                />
-            </Tab.Navigator>
-        );
+
+            />
+            <Tab.Screen
+                name="Menu"
+                component={MenuStack}
+                options={{
+                    tabBarLabel: ({ focused }) => (
+                        focused ? <Text style={styles.text}>Menu</Text> : null
+                    ),
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => (
+                        <View style={focused ? styles.activeTab : styles.inactiveTab}>
+                            <Image
+                                style={styles.image}
+                                source={MENU_ICON}
+                            />
+                        </View>
+                    ),
+                }}
+
+            />
+            <Tab.Screen
+                name="Cart"
+                component={CartStack}
+                options={{
+                    tabBarLabel: ({ focused }) => (
+                        focused ? <Text style={styles.text}>Cart</Text> : null
+                    ),
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => (
+                        <View style={focused ? styles.activeTab : styles.inactiveTab}>
+                            <Image
+                                style={styles.image}
+                                source={CART_ICON}
+                            />
+                        </View>
+                    ),
+                }}
+
+            />
+            <Tab.Screen
+                name="Orders"
+                component={OrdersStack}
+                options={{
+                    tabBarLabel: ({ focused }) => (
+                        focused ? <Text style={styles.text}>Orders</Text> : null
+                    ),
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => (
+                        <View style={focused ? styles.activeTab : styles.inactiveTab}>
+                            <Image
+                                style={styles.image}
+                                source={ORDERS_ICON}
+                            />
+                        </View>
+                    ),
+                }}
+
+            />
+            <Tab.Screen
+                name="Profile"
+                component={ProfileStack}
+                options={{
+                    tabBarLabel: ({ focused }) => (
+                        focused ? <Text style={styles.text}>Profile</Text> : null
+                    ),
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => (
+                        <View style={focused ? styles.activeTab : styles.inactiveTab}>
+                            <Image
+                                style={styles.image}
+                                source={PROFILE_ICON}
+                            />
+                        </View>
+                    ),
+                }}
+
+            />
+        </Tab.Navigator>
+    );
 }
 
-function Navigation (props) {
+function Navigation(props) {
     return (
         <NavigationContainer options={{ headerShown: false }}>
-                <Stack.Navigator initialRouteName={"MainStack"} headerMode={false}>
-                    <Stack.Screen options={{ headerShown: false }} name="MainStack" component={AuthStack} />
-                </Stack.Navigator>
+            <Stack.Navigator initialRouteName={"MainStack"} headerMode={false}>
+                <Stack.Screen options={{ headerShown: false }} name="MainStack" component={AuthStack} />
+            </Stack.Navigator>
         </NavigationContainer >
     );
 }
@@ -248,29 +363,29 @@ const styles = StyleSheet.create({
     activeTab: {
         height: 40,
         width: 40,
-        borderRadius:20,
-        backgroundColor:THEME_COLOR,
-        alignItems:'center',
-        justifyContent:'center',
-        marginBottom:20
+        borderRadius: 20,
+        backgroundColor: THEME_COLOR,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20
     },
     inactiveTab: {
         height: 40,
         width: 40,
-        borderRadius:20,
-        backgroundColor:THEME_COLOR,
-        alignItems:'center',
-        justifyContent:'center',
-        marginTop:10
+        borderRadius: 20,
+        backgroundColor: THEME_COLOR,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 10
     },
-    image:{
-        width:20,
-        height:20,
-        resizeMode:'contain'
+    image: {
+        width: 20,
+        height: 20,
+        resizeMode: 'contain'
     },
-    text:{
-        fontSize:12,
-        color:WHITE_COLOR
+    text: {
+        fontSize: 12,
+        color: WHITE_COLOR
     }
 })
 

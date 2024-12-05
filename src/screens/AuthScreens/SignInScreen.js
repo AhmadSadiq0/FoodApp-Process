@@ -16,9 +16,6 @@ import CustomButton from '../../components/CustomButton';
 import InputField from '../../components/CustomInput';
 import { Google_Icon } from '../../res/drawables';
 import { THEME_TEXT_COLOR } from '../../res/colors';
-import CustomButton from '../../components/CustomButtom';
-import { Formik } from "formik";
-import * as Yup from "yup";
 
 
 // Validation schema using Yup
@@ -239,7 +236,7 @@ const styles = StyleSheet.create({
     color: "red",
     marginBottom: 10,
     alignSelf: "flex-start", 
-  }
+  },
   errorText: {
     color: 'red',
     fontSize: 12,

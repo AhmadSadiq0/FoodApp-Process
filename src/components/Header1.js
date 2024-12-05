@@ -11,6 +11,7 @@ const Header1 = ({
     containerStyle = {},
 }) => {
     return (
+        <View style = {[styles.maincontainer]}>
         <View style={[styles.container, containerStyle]}>
             <View style={styles.profileContainer}>
                 <Image source={arrowIcon} style={styles.arrowIcon} />
@@ -24,10 +25,14 @@ const Header1 = ({
                 <Text style={[styles.headerText, headerTextStyle]}>{title}</Text>
             </View>
         </View>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
+    maincontainer:{
+        backgroundColor:WHITE_COLOR
+    },
     container: {
         height: 150,
         width: '100%',
