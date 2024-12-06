@@ -40,7 +40,6 @@ const DiscountsScreen = () => {
   };
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-     <Header1/>
       <Datalist
         title="Discounts"
         seeMoreText="See All"
@@ -76,7 +75,7 @@ const DiscountsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
-    padding: 7,
+    padding : 7
   },
 });
 export default DiscountsScreen;

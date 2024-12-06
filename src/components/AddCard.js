@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
       width: 200,
       padding: 10,
       borderRadius: 12,
-      backgroundColor: WHITE_COLOR, // Theme color
-      shadowColor: BLACK_COLOR, // Theme color
+      backgroundColor: WHITE_COLOR, 
+      shadowColor: BLACK_COLOR, 
       shadowOpacity: 0.1,
       shadowRadius: 5,
       elevation: 4,
@@ -45,13 +45,13 @@ const styles = StyleSheet.create({
     name: {
       fontSize: 16,
       fontWeight: "bold",
-      color: THEME_TEXT_COLOR, // Theme color
+      color: THEME_TEXT_COLOR, 
       textAlign: "center",
       marginBottom: 4,
     },
     description: {
       fontSize: 14,
-      color: THEME_COLOR, // Theme color
+      color: THEME_COLOR, 
       textAlign: "center",
       marginBottom: 10,
     },
@@ -71,22 +71,22 @@ const styles = StyleSheet.create({
     priceLabel: {
       fontSize: 14,
       fontWeight: "600",
-      color: GRAY_COLOR, // Theme color
+      color: GRAY_COLOR, 
     },
     price: {
       fontSize: 16,
       fontWeight: "bold",
-      color: THEME_COLOR, // Theme color
+      color: THEME_COLOR, 
     },
     button: {
       width: "90%",
       paddingVertical: 10,
-      backgroundColor: THEME_COLOR, // Theme color
+      backgroundColor: THEME_COLOR, 
       borderRadius: 8,
       alignItems: "center",
     },
     buttonText: {
-      color: WHITE_COLOR, // Theme color
+      color: WHITE_COLOR,
       fontSize: 16,
       fontWeight: "bold",
     },

@@ -1,7 +1,6 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import Header from '../../components/Header';
-import { THEME_COLOR , THEME_TEXT_COLOR} from '../../res/colors';
-
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import Header from "../../components/Header";
+import { THEME_COLOR, THEME_TEXT_COLOR } from "../../res/colors";
 const HomeScreen = () => {
   return (
     <View style={styles.container}>
@@ -9,11 +8,8 @@ const HomeScreen = () => {
       <View style={styles.rowContainer}>
         <Text style={styles.text}>Discount</Text>
         <TouchableOpacity>
-        <Text style={styles.text1}>See All</Text>
+          <Text style={styles.text1}>See All</Text>
         </TouchableOpacity>
-      </View>
-      <View style={styles.content}>
-        {/* Other content */}
       </View>
     </View>
   );
@@ -24,26 +20,26 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   rowContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
     marginTop: 50,
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   text: {
     fontSize: 24,
     color: THEME_COLOR,
-    fontWeight:'bold',
+    fontWeight: "bold",
   },
   text1: {
-    fontSize:16 ,
-    color:THEME_TEXT_COLOR,
-    }
+    fontSize: 16,
+    color: THEME_TEXT_COLOR,
+  },
 });

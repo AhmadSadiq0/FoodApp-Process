@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 50,
         backgroundColor: THEME_COLOR,
         alignItems: 'center',
-        shadowColor: '#000',
+        shadowColor: '#000', 
         shadowOffset: { width: 0, height: 30 },
         shadowOpacity: 0.1,
         shadowRadius: 10,

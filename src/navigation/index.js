@@ -38,18 +38,16 @@ import { MenuScreen } from '../screens/MenuScreens/index';
 import { NotificationsScreen } from '../screens/NotificationsScreens/index';
 import { OrdersScreen } from '../screens/OrdersScreens/index';
 import { SplashScreen } from '../screens/SplashScreen/index';
-
+import Header1 from '../components/Header1';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const AuthStack = () => {
     return (
-            <Stack.Navigator initialRouteName="Settings" headerMode={false}>
-            <Stack.Navigator initialRouteName="Discounts" headerMode={false}>
+        <Stack.Navigator initialRouteName="Menu" >
             <Stack.Screen options={{ headerShown: false }} name="Auth" component={SplashScreen} />
             <Stack.Screen options={{ headerShown: false }} name="SignUp" component={SignUpScreen} />
             <Stack.Screen options={{ headerShown: false }} name="SignIn" component={SignInScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen}/>
-            <Stack.Screen options={{ headerShown: false }} name="Discounts" component={DiscountsScreen}/>
             <Stack.Screen options={{ headerShown: false }} name="Deals" component={DealsScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Menu" component={MenuScreen} />
@@ -61,7 +59,7 @@ const AuthStack = () => {
             <Stack.Screen options={{ headerShown: false }} name="Profile" component={ProfileScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Notifications" component={NotificationsScreen} />
             <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPasswordScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Discounts" component={DiscountsScreen} />
+            <Stack.Screen options={{ header : () => <Header1/>, headerShown : true }} name="Discounts" component={DiscountsScreen} />
         </Stack.Navigator>
     )
 }
@@ -170,7 +168,6 @@ function BottomTabStack() {
                             </View>
                         ),
                     }}
-    
                 /> 
                 <Tab.Screen
                     name="Cart"
@@ -243,7 +240,6 @@ function Navigation (props) {
     );
 }
 export default Navigation;
-
 const styles = StyleSheet.create({
     activeTab: {
         height: 40,
