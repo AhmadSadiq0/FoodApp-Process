@@ -47,7 +47,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const AuthStack = () => {
     return (
-        <Stack.Navigator initialRouteName="Discounts" headerMode={false}>
+        <Stack.Navigator initialRouteName="Cart" headerMode={false}>
             <Stack.Screen 
                 options={{ headerShown: false }} 
                 name="Auth" 
