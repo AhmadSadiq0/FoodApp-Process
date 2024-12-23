@@ -24,4 +24,10 @@ export const BURGERIMG = require(`${PATH}/Burgerimg.png`);
 export const IMAGE16 = require(`${PATH}/icons/image16.png`);
 export const IMAGE17 = require(`${PATH}/icons/image17.png`);
 export const IMAGE18 = require(`${PATH}/icons/image18.png`);
+export const IMAGE25 = require(`${PATH}/icons/image25.png`);
+export const IMAGE26 = require(`${PATH}/icons/image26.png`);
+export const IMAGE27 = require(`${PATH}/icons/image27.png`);
+export const IMAGE28 = require(`${PATH}/icons/image28.png`)
+export const IMAGE29 = require(`${PATH}/icons/image29.png`)
+
 

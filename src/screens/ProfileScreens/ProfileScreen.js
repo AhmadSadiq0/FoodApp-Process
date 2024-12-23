@@ -4,11 +4,13 @@ import {
     View 
 } from 'react-native'
 import ProfileHeader from '../../components/ProfileHeader'
+import TextInputProfile from '../../components/TextInputProfile'
 
 const ProfileScreen = () => {
   return (
     <View style={styles.container}>
       <ProfileHeader/>
+      <TextInputProfile/>
     </View>
   )
 }

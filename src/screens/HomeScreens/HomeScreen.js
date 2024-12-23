@@ -1,16 +1,92 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import React, { useRef, useState } from "react"; // Added useState to manage selected burger data
+import { StyleSheet, Text, View, FlatList } from "react-native";
 import Header from "../../components/Header";
+import Datalist from "../../components/Datalist";
+import AddCard from "../../components/AddCard";
+import RBSheet from "react-native-raw-bottom-sheet";
 import { THEME_COLOR, THEME_TEXT_COLOR } from "../../res/colors";
-const HomeScreen = () => {
+import { BURGERIMG } from "../../res/drawables";
+
+const HomeScreen = ({ navigation }) => {
+  const refRBSheet = useRef();
+  const [selectedBurger, setSelectedBurger] = useState(null); 
+
+  const burgerData = [
+    {
+      id: 1,
+      name: "Double Cheese Burger",
+      price: 599,
+      image: BURGERIMG,
+    },
+    {
+      id: 2,
+      name: "Cheese Burger",
+      price: 499,
+      image: BURGERIMG,
+    },
+    {
+      id: 3,
+      name: "Chicken Burger",
+      price: 399,
+      image: BURGERIMG,
+    },
+    {
+      id: 4,
+      name: "Chicken Burger",
+      price: 399,
+      image: BURGERIMG,
+    },
+  ];
+
+  const handleAddToCart = (burger) => {
+    setSelectedBurger(burger); 
+    refRBSheet.current.open(); 
+  };
+
+  const renderDatalist = ({ item }) => (
+    <Datalist
+      title={item.title}
+      seeMoreText="See All"
+      onSeeMorePress={() => console.log(`${item.title} See All pressed!`)}
+      data={burgerData}
+      onAddToCart={handleAddToCart} 
+    />
+  );
+
+  const datalistSections = [
+    { id: 1, title: "Discounts" },
+    { id: 2, title: "Deals" },
+    { id: 3, title: "Loyalty Burgers" },
+  ];
+
   return (
     <View style={styles.container}>
       <Header />
-      <View style={styles.rowContainer}>
-        <Text style={styles.text}>Discount</Text>
-        <TouchableOpacity>
-          <Text style={styles.text1}>See All</Text>
-        </TouchableOpacity>
-      </View>
+      <FlatList
+        data={datalistSections}
+        renderItem={renderDatalist}
+        keyExtractor={(item) => item.id.toString()}
+      />
+      <RBSheet
+        ref={refRBSheet}
+        height={300}
+        openDuration={250}
+        closeOnDragDown={true}
+        customStyles={{
+          container: { borderTopLeftRadius: 20, borderTopRightRadius: 20 },
+        }}
+      >
+        
+        {selectedBurger && (
+          <AddCard
+            name={selectedBurger.name}
+            description="A delicious choice!" 
+            image={selectedBurger.image}
+            price={selectedBurger.price}
+            onAddToCart={() => console.log(`${selectedBurger.name} added to cart!`)}
+          />
+        )}
+      </RBSheet>
     </View>
   );
 };
@@ -21,25 +97,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-  },
-  rowContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-    marginTop: 50,
-  },
-  content: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  text: {
-    fontSize: 24,
-    color: THEME_COLOR,
-    fontWeight: "bold",
-  },
-  text1: {
-    fontSize: 16,
-    color: THEME_TEXT_COLOR,
   },
 });

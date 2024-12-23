@@ -6,13 +6,13 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
-  ScrollView,
 } from "react-native";
+import { WHITE_COLOR,BLACK_COLOR,THEME_COLOR } from "../../res/colors";
 import Datalist from "../../components/Datalist";
 import Header from "../../components/Header";
 import { BURGERIMG, IMAGE16, IMAGE17, IMAGE18 } from "../../res/drawables";
 const MenuScreen = () => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState();
   const burgerData = [
     {
       id: 1,
@@ -61,31 +61,39 @@ const MenuScreen = () => {
     const isSelected = selectedCategory === item.id;
     return (
       <TouchableOpacity
+      style={[
+        styles.categoryCard,
+        {
+          backgroundColor: isSelected ? THEME_COLOR : WHITE_COLOR,
+          marginTop: 30,
+        },
+      ]}
+      onPress={() => setSelectedCategory(item.id)}
+    >
+      <Image 
+        source={item.image} 
         style={[
-          styles.categoryCard,
-          {
-            backgroundColor: isSelected ? "#EF4444" : "#FFFFFF",
-          },
+          styles.image,
+          { tintColor: isSelected ? WHITE_COLOR : THEME_COLOR },
         ]}
-        onPress={() => setSelectedCategory(item.id)}
+        resizeMode="contain" 
+      />
+      <Text
+        style={[
+          styles.categoryText,
+          { color: isSelected ? WHITE_COLOR : THEME_COLOR },
+        ]}
       >
-        <Image source={item.image} style={styles.image} resizeMode="contain"/>
-        <Text
-          style={[
-            styles.categoryText,
-            { color: isSelected ? "#FFFFFF" : "#EF4444" },
-          ]}
-        >
-          {item.name}
-        </Text>
-      </TouchableOpacity>
+        {item.name}
+      </Text>
+    </TouchableOpacity>
     );
   };
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-    >
+    <FlatList
+    data={burgerData} 
+      ListHeaderComponent={
+        <>
       <View style={styles.header}>
         <Header
           title="Menu"
@@ -108,26 +116,29 @@ const MenuScreen = () => {
       />
       <View>
         <Datalist
-          title="Discounts"
-          seeMoreText="See All"
-          onSeeMorePress={() => console.log("See All pressed!")}
+          title="Discount" 
+          seeMoreText="" 
           data={burgerData}
         />
       </View>
       <View>
         <Datalist
           title="Discounts"
-          seeMoreText="See All"
+          seeMoreText=""
           onSeeMorePress={() => console.log("See All pressed!")}
           data={burgerData}
         />
       </View>
-    </ScrollView>
+      </>
+      }
+      keyExtractor={(item) => item.id.toString()}
+      />
   );
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: WHITE_COLOR,
+
   },
   header: {
     alignItems: "center",
@@ -147,15 +158,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     margin: 8,
-    shadowColor: "#000",
+    shadowColor: BLACK_COLOR,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
     elevation: 2,
   },
   image: {
-    width: 40,
-    height: 40,
+    width: 51,
+    height: 50,
     marginBottom: 8,
   },
   categoryText: {
