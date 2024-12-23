@@ -12,8 +12,8 @@ import {
 } from '../res/drawables';
 import { THEME_COLOR, WHITE_COLOR } from '../res/colors';
 //Screen Components
-import { 
-    SignInScreen,
+import {
+    SignInScreen, 
     SignUpScreen,
     ForgetPasswordScreen
 } from '../screens/AuthScreens/index';
@@ -42,6 +42,7 @@ import { NotificationsScreen } from '../screens/NotificationsScreens/index';
 import { OrdersScreen } from '../screens/OrdersScreens/index';
 import { SplashScreen } from '../screens/SplashScreen/index';
 import Header1 from '../components/Header1';
+import Header from '../components/Header';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const AuthStack = () => {
@@ -65,7 +66,7 @@ const AuthStack = () => {
             {/* <Stack.Screen options={{ header : () => <Header1/>, headerShown : true }} name="Discounts" component={DiscountsScreen} /> */}
         </Stack.Navigator>
     )
-} 
+}  
 const HomeStack = () => {
     return (
         <Stack.Navigator initialRouteName="Home" headerMode={false}>
@@ -77,8 +78,7 @@ const HomeStack = () => {
             <Stack.Screen options={{ header : () => <Header1/>, headerShown : true }} name="Discounts" component={DiscountsScreen} />
         </Stack.Navigator>
     )
-}
-
+} 
 const MenuStack = () => {
     return (
         <Stack.Navigator initialRouteName="Menu" headerMode={false}>
@@ -89,7 +89,8 @@ const MenuStack = () => {
 }
 const CartStack = () => {
     return (
-        <Stack.Navigator initialRouteName="ConfirmOrder" headerMode={false}>
+        <Stack.Navigator initialRouteName="Cart" headerMode={false}>
+             <Stack.Screen options={{ header : () => <Header/>, headerShown : true }}name="Cart" component={CartScreen} />
             <Stack.Screen options={{ headerShown: false }} name="CheckOut" component={CheckOutScreen} />
             <Stack.Screen options={{ headerShown: false }} name="ConfirmOrder" component={OrderConfirmationScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
@@ -97,7 +98,6 @@ const CartStack = () => {
         </Stack.Navigator>
     )
 }
-
 const OrdersStack = () => {
     return (
         <Stack.Navigator initialRouteName="Orders" headerMode={false}>
@@ -120,23 +120,41 @@ const ProfileStack = () => {
 }
 
 function BottomTabStack() {
-        return (
-            <Tab.Navigator
-                initialRouteName="Home"
-                screenOptions={{
-                    tabBarStyle: {
-                        backgroundColor: '#F63440',
-                        height: 50,
-                        borderTopLeftRadius: 20,
-                        borderTopRightRadius: 20,
-                    },
-                    tabBarLabelStyle: {
-                        fontSize: 12,
-                        fontWeight: 'bold',
-                    },
+    return (
+        <Tab.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+                tabBarStyle: {
+                    backgroundColor: '#F63440',
+                    height: 50,
+                    borderTopLeftRadius: 20,
+                    borderTopRightRadius: 20,
+                },
+                tabBarLabelStyle: {
+                    fontSize: 12,
+                    fontWeight: 'bold',
+                },
+            }}
+        >
+            <Tab.Screen 
+                name="Home"
+                component={HomeStack}
+                options={{
+                    tabBarLabel: ({ focused }) => (
+                        focused ? <Text style={styles.text}>Home</Text> : null
+                    ),
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => (
+                        <View style={focused ? styles.activeTab : styles.inactiveTab}>
+                            <Image
+                                style={styles.image}
+                                source={HOME_ICON}
+                            />
+                        </View>
+                    ),
                 }}
-            >
-                <Tab.Screen
+            />
+                {/* <Tab.Screen
                     name= "Home"
                     component={HomeStack}
                     options={{
@@ -154,7 +172,7 @@ function BottomTabStack() {
                         ),
                     }}
     
-                />
+                /> */}
                 <Tab.Screen
                     name="Menu"
                     component={MenuStack}
@@ -232,8 +250,7 @@ function BottomTabStack() {
             </Tab.Navigator>
         );
 }
-
-function Navigation (props) {
+function Navigation(props) {
     return (
         <NavigationContainer options={{ headerShown: false }}>
                 <Stack.Navigator initialRouteName={"MainStack"} headerMode={false}>
@@ -247,29 +264,29 @@ const styles = StyleSheet.create({
     activeTab: {
         height: 40,
         width: 40,
-        borderRadius:20,
-        backgroundColor:THEME_COLOR,
-        alignItems:'center',
-        justifyContent:'center',
-        marginBottom:20
+        borderRadius: 20,
+        backgroundColor: THEME_COLOR,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20
     },
     inactiveTab: {
         height: 40,
         width: 40,
-        borderRadius:20,
-        backgroundColor:THEME_COLOR,
-        alignItems:'center',
-        justifyContent:'center',
-        marginTop:10
+        borderRadius: 20,
+        backgroundColor: THEME_COLOR,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 10
     },
-    image:{
-        width:20,
-        height:20,
-        resizeMode:'contain'
+    image: {
+        width: 20,
+        height: 20,
+        resizeMode: 'contain'
     },
-    text:{
-        fontSize:12,
-        color:WHITE_COLOR
+    text: {
+        fontSize: 12,
+        color: WHITE_COLOR
     }
 })
 

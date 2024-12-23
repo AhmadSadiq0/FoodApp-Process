@@ -26,6 +26,7 @@ const Header = ({
     showShadow = false, 
 }) => {
     return (
+        <View style= {styles.mainContainer}>
         <View 
             style={[
                 styles.container, 
@@ -47,10 +48,14 @@ const Header = ({
             </View>
             {showSearch && <SearchBar placeholder="Search Your Favourite Food Item" />}
         </View>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
+    mainContainer:{
+        backgroundColor:WHITE_COLOR
+    },
     container: {
         height: 200,
         width: '100%',

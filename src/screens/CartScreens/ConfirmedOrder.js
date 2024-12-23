@@ -29,7 +29,7 @@ const ConfirmedOrder = () => {
           textColor="#FFFFFF"
           style={styles.customButton}
           onPress={() => {
-            navigation.navigate("ConfirmOrder");
+            navigation.navigate("Cart");
           }}
         />
       </View>

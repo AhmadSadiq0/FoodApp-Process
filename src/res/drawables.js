@@ -10,6 +10,7 @@ export const CART_ICON = require(`${PATH}/icons/cartIcon.png`);
 export const OFFER_ICON = require(`${PATH}/icons/OfferIcon.png`);
 export const DEAL_ICON = require(`${PATH}/icons/DealIcon.png`);
 export const CAMERA_ICON = require(`${PATH}/icons/cameraIcon.png`);
+export const DELETE_ICON = require(`${PATH}/icons/DeleteIcon.png`);
 export const DOTS_ICON = require(`${PATH}/icons/DotsIcon.png`);
 export const Confirm_Order = require(`${PATH}/icons/ConfirmOrder.png`);
 export const ARROW_ICON = require(`${PATH}/icons/ArrowIcon.png`);

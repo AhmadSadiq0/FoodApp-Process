@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Image, Text } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; 
 import { THEME_COLOR, WHITE_COLOR } from '../res/colors';
 import { DISCOUNT_ICON, ARROW_ICON } from '../res/drawables';
 
@@ -10,10 +11,15 @@ const Header1 = ({
     headerTextStyle = {},
     containerStyle = {},
 }) => {
+    const navigation = useNavigation();
     return (
+        <View style = {[styles.maincontainer]}>
         <View style={[styles.container, containerStyle]}>
             <View style={styles.profileContainer}>
-                <Image source={arrowIcon} style={styles.arrowIcon} />
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+                        {/* Wrap arrowIcon with TouchableOpacity */}
+                        <Image source={arrowIcon} style={styles.arrowIcon} />
+                    </TouchableOpacity>
                 {discountIcon && (
                     <View style={styles.discountContainer}>
                         <Image source={discountIcon} style={styles.discountIcon} />
@@ -24,16 +30,20 @@ const Header1 = ({
                 <Text style={[styles.headerText, headerTextStyle]}>{title}</Text>
             </View>
         </View>
+        </View>
     );
 };
-
+ 
 const styles = StyleSheet.create({
-    container: {
-        height: 150,
+    maincontainer:{
         width: '100%',
-        padding: 30,
+        backgroundColor:WHITE_COLOR
+    },
+    container: {
         borderBottomLeftRadius: 50,
         borderBottomRightRadius: 50,
+        padding : 30,
+        marginTop : 30,
         backgroundColor: THEME_COLOR,
         alignItems: 'center',
         shadowColor: '#000', 

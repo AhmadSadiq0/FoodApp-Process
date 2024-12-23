@@ -7,7 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { WHITE_COLOR,BLACK_COLOR,THEME_COLOR } from "../../res/colors";
+import { WHITE_COLOR, BLACK_COLOR, THEME_COLOR } from "../../res/colors";
 import Datalist from "../../components/Datalist";
 import Header from "../../components/Header";
 import { BURGERIMG, IMAGE16, IMAGE17, IMAGE18 } from "../../res/drawables";
@@ -61,88 +61,83 @@ const MenuScreen = () => {
     const isSelected = selectedCategory === item.id;
     return (
       <TouchableOpacity
-      style={[
-        styles.categoryCard,
-        {
-          backgroundColor: isSelected ? THEME_COLOR : WHITE_COLOR,
-          marginTop: 30,
-        },
-      ]}
-      onPress={() => setSelectedCategory(item.id)}
-    >
-      <Image 
-        source={item.image} 
         style={[
-          styles.image,
-          { tintColor: isSelected ? WHITE_COLOR : THEME_COLOR },
+          styles.categoryCard,
+          {
+            backgroundColor: isSelected ? THEME_COLOR : WHITE_COLOR,
+            marginTop: 30,
+          },
         ]}
-        resizeMode="contain" 
-      />
-      <Text
-        style={[
-          styles.categoryText,
-          { color: isSelected ? WHITE_COLOR : THEME_COLOR },
-        ]}
+        onPress={() => setSelectedCategory(item.id)}
       >
-        {item.name}
-      </Text>
-    </TouchableOpacity>
+        <Image
+          source={item.image}
+          style={[
+            styles.image,
+            { tintColor: isSelected ? WHITE_COLOR : THEME_COLOR },
+          ]}
+          resizeMode="contain"
+        />
+        <Text
+          style={[
+            styles.categoryText,
+            { color: isSelected ? WHITE_COLOR : THEME_COLOR },
+          ]}
+        >
+          {item.name}
+        </Text>
+      </TouchableOpacity>
     );
   };
   return (
     <FlatList
-    data={burgerData} 
+      data={burgerData}
       ListHeaderComponent={
         <>
-      <View style={styles.header}>
-        <Header
-          title="Menu"
-          Welcomermsg=""
-          containerStyle={{
-            height: 188,
-          }}
-          textContainer={{
-            marginTop: -7,
-          }}
-        />
-      </View>
-      <FlatList
-        data={categories}
-        renderItem={renderCategory}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.scrollContainer}
-        numColumns={3}
-        showsVerticalScrollIndicator={false}
-      />
-      <View>
-        <Datalist
-          title="Discount" 
-          seeMoreText="" 
-          data={burgerData}
-        />
-      </View>
-      <View>
-        <Datalist
-          title="Discounts"
-          seeMoreText=""
-          onSeeMorePress={() => console.log("See All pressed!")}
-          data={burgerData}
-        />
-      </View>
-      </>
+          <View style={styles.header}>
+            <Header
+              title="Menu"
+              Welcomermsg=""
+              containerStyle={{
+                height: 188,
+              }}
+              textContainer={{
+                marginTop: -7,
+              }}
+            />
+          </View>
+          <FlatList
+            data={categories}
+            renderItem={renderCategory}
+            keyExtractor={(item) => item.id.toString()}
+            contentContainerStyle={styles.scrollContainer}
+            numColumns={3}
+            showsVerticalScrollIndicator={false}
+          />
+          <View>
+            <Datalist title="Discount" seeMoreText="" data={burgerData} />
+          </View>
+          <View>
+            <Datalist
+              title="Discounts"
+              seeMoreText=""
+              onSeeMorePress={() => console.log("See All pressed!")}
+              data={burgerData}
+            />
+          </View>
+        </>
       }
       keyExtractor={(item) => item.id.toString()}
-      />
+    />
   );
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: WHITE_COLOR,
-
-  },
-  header: {
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: WHITE_COLOR,
+  },
+  header: {
     width: "100%",
     paddingVertical: 16,
   },

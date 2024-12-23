@@ -1,6 +1,5 @@
 import React from 'react'
 import { View, StyleSheet,ScrollView } from "react-native";
-import Header1 from '../../components/Header1'
 import Datalist from "../../components/Datalist";
 import { BURGERIMG } from "../../res/drawables";
 import AddCard from "../../components/AddCard";

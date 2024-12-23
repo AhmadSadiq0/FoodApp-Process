@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"; // Added useState to manage selected burger data
+import React, { useRef, useState } from "react";
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import Header from "../../components/Header";
 import Datalist from "../../components/Datalist";
@@ -52,13 +52,11 @@ const HomeScreen = ({ navigation }) => {
       onAddToCart={handleAddToCart} 
     />
   );
-
   const datalistSections = [
     { id: 1, title: "Discounts" },
     { id: 2, title: "Deals" },
     { id: 3, title: "Loyalty Burgers" },
   ];
-
   return (
     <View style={styles.container}>
       <Header />
@@ -72,9 +70,9 @@ const HomeScreen = ({ navigation }) => {
         height={300}
         openDuration={250}
         closeOnDragDown={true}
-        customStyles={{
-          container: { borderTopLeftRadius: 20, borderTopRightRadius: 20 },
-        }}
+        // customStyles={{
+        //   container: { borderTopLeftRadius: 20, borderTopRightRadius: 20 },
+        // }}
       >
         
         {selectedBurger && (
@@ -90,12 +88,10 @@ const HomeScreen = ({ navigation }) => {
     </View>
   );
 };
-
 export default HomeScreen;
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "white",
+    marginBottom:10,
   },
 });
