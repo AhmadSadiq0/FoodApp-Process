@@ -1,6 +1,8 @@
 import React from 'react';
 import { Text, View, Image, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import 'react-native-gesture-handler';
+import 'react-native-reanimated';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
@@ -47,7 +49,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const AuthStack = () => {
     return (
-        <Stack.Navigator initialRouteName="Cart" headerMode={false}>
+        <Stack.Navigator initialRouteName="Notifications" headerMode={false}>
             <Stack.Screen 
                 options={{ headerShown: false }} 
                 name="Auth" 
@@ -157,7 +159,7 @@ const AuthStack = () => {
                 component={OrdersScreen} 
             />
             <Stack.Screen 
-                options={{ header: () => <ProfileHeader DOTSICON={DOTS_ICON} />, headerShown: true }} 
+                options={{ header: () => <ProfileHeader DOTSICON={DOTS_ICON} showTabsProp={true} />, headerShown: true}} 
                 name="Profile" 
                 component={ProfileScreen} 
             />

@@ -22,5 +22,6 @@ export const PROFILE_ICON = require(`${PATH}/icons/profileIcon.png`);
 export const Google_Icon = require(`${PATH}/googleIcon.png`);
 export const Profie_Image = require(`${PATH}/image2.png`)
 export const BURGERIMG = require(`${PATH}/Burgerimg.png`);
+export const PIZZAIMAGE = require(`${PATH}/redpizza.png`);
 
 

@@ -12,7 +12,6 @@ import {
   WHITE_COLOR,
   THEME_COLOR,
   GRAY_COLOR,
-  RED_COLOR,
   BLACK_COLOR,
 } from '../../res/colors';
 import { BURGERIMG, DELETE_ICON } from '../../res/drawables';
