@@ -61,7 +61,7 @@ const TextInputProfile = () => {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    backgroundColor: "#f3f4f6",
+    backgroundColor: GRAY_COLOR,
     width: "100%",
     marginTop: 20,
     padding: 16,
@@ -71,40 +71,36 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   card: {
-    backgroundColor: "#ffffff",
+    backgroundColor: WHITE_COLOR,
     padding: 16,
     borderRadius: 8,
     marginBottom: 28,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
+    justifyContent: "space-between",  },
   label: {
-    color: "#9ca3af",
+    color: GRAY_COLOR,
+
     fontSize: 12,
     marginBottom: 4,
   },
   value: {
-    color: "#4f46e5",
+    color: THEME_TEXT_COLOR,
+
     fontSize: 16,
     fontWeight: "600",
   },
   input: {
     borderBottomWidth: 1,
-    borderColor: "#d1d5db",
-    color: "#4f46e5",
-    fontSize: 16,
+    borderColor: GRAY_COLOR,
+    color: THEME_TEXT_COLOR,
     paddingVertical: 4,
   },
   icon: {
     width: 30,
     height: 30,
-    tintColor: "#ef4444",
+    tintColor: THEME_COLOR,
+
   },
 });
 

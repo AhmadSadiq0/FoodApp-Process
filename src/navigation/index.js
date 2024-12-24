@@ -45,7 +45,7 @@ import Header1 from '../components/Header1';
 import Header from '../components/Header';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-const AuthStack = () => {
+const AuthStack = () => { 
     return (
         <Stack.Navigator initialRouteName="Discount">
             <Stack.Screen options={{ headerShown: false }} name="Auth" component={SplashScreen} />
@@ -74,14 +74,14 @@ const HomeStack = () => {
             <Stack.Screen options={{ headerShown: false }} name="Cart" component={CartScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Deals" component={DealsScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Offers" component={OffersScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Notifications" component={NotificationsScreen} />
             <Stack.Screen options={{ header : () => <Header1/>, headerShown : true }} name="Discounts" component={DiscountsScreen} />
         </Stack.Navigator>
     )
 } 
 const MenuStack = () => {
     return (
-        <Stack.Navigator initialRouteName="Menu" headerMode={false}>
+        <Stack.Navigator i nitialRouteName="Menu" headerMode={false}>
             <Stack.Screen options={{ headerShown: false }} name="Menu" component={MenuScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
         </Stack.Navigator>
@@ -171,7 +171,6 @@ function BottomTabStack() {
                             </View>
                         ),
                     }}
-    
                 /> */}
                 <Tab.Screen
                     name="Menu"

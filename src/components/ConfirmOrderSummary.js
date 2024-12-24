@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import CustomButton from "./CustomButton";
+import CustomButton from "./CustomButtom";
 import {
   THEME_COLOR,
   THEME_TEXT_COLOR,
@@ -20,12 +20,10 @@ const ConfirmOrderSummary = ({ onButtonPressed }) => {
           <Text style={styles.label}>Sub Total:</Text>
           <Text style={styles.value}>Rs. 599</Text>
         </View>
-
         <View style={styles.row}>
           <Text style={styles.label}>Delivery Charges:</Text>
           <Text style={styles.value}>Rs. 0.00</Text>
         </View>
-
         <View style={[styles.row, styles.totalRow]}>
           <Text style={styles.label}>Total:</Text>
           <Text style={styles.value}>Rs. 599</Text>
@@ -50,7 +48,7 @@ const styles = StyleSheet.create({
     // backgroundColor: GRAY_COLOR,
   },
   card: {
-    width: 320,
+    width: 320, 
     padding: 16,
     borderColor: THEME_COLOR,
     borderRadius: 8,

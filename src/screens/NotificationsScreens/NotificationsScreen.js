@@ -1,17 +1,14 @@
-import React from 'react';
-import { 
-    StyleSheet, 
-    View 
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+
 const NotificationsScreen = () => {
-    return (
-        <View style={styles.container}>
-        </View>
-    );
-};
+  return (
+    <View>
+      <Text>NotificationsScreen</Text>
+    </View>
+  )
+}
 
-const styles = StyleSheet.create({
+export default NotificationsScreen
 
-});
-
-export default NotificationsScreen;
+const styles = StyleSheet.create({})

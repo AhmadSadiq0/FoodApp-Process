@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import CustomButton from '../../components/CustomButton';
+import CustomButton from '../../components/CustomButtom';
 import InputField from '../../components/CustomInput';
 import { Google_Icon } from '../../res/drawables';
 import { THEME_TEXT_COLOR } from '../../res/colors';

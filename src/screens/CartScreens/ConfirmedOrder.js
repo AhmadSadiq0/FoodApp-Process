@@ -1,14 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
 import { IMAGE29 } from "../../res/drawables";
-import CustomButton from "../../components/CustomButton";
+import CustomButton from "../../components/CustomButtom";
 import { useNavigation } from '@react-navigation/native'; 
 import { THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR } from "../../res/colors";
-
-
 const ConfirmedOrder = () => {
   const navigation = useNavigation(); 
-
   return (
     <View style={styles.container}>
       <Image source={IMAGE29} style={styles.image} />
@@ -16,7 +13,7 @@ const ConfirmedOrder = () => {
       <Text style={styles.subtitleText}>Can not be canceled now!</Text>
       <CustomButton
         title="Back To Menu"
-        textColor="red"
+        textStyle={{ color: THEME_COLOR }}
         style={styles.Button}
         onPress={() => {
           navigation.goBack(); 
@@ -31,13 +28,12 @@ const ConfirmedOrder = () => {
           onPress={() => {
             navigation.navigate("Cart");
           }}
-        />
+        />  
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ 
   container: {
     flex : 1,
     width: "100%",
@@ -71,7 +67,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   givemargin: {
-    marginTop: 10,
+    marginTop:-27,
   },
   Button: {
     paddingHorizontal: 90,

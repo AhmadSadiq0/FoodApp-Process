@@ -6,7 +6,7 @@ import AddCard from "../../components/AddCard";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { THEME_COLOR, THEME_TEXT_COLOR } from "../../res/colors";
 import { BURGERIMG } from "../../res/drawables";
-
+import { NotificationsScreen } from "../NotificationsScreens";
 const HomeScreen = ({ navigation }) => {
   const refRBSheet = useRef();
   const [selectedBurger, setSelectedBurger] = useState(null); 
@@ -59,7 +59,7 @@ const HomeScreen = ({ navigation }) => {
   ];
   return (
     <View style={styles.container}>
-      <Header />
+      <Header  onNotificationPressed={() => {navigation.navigate("Notifications")}} />
       <FlatList
         data={datalistSections}
         renderItem={renderDatalist}

@@ -16,7 +16,7 @@ import {
   BLACK_COLOR,
 } from '../../res/colors';
 import { BURGERIMG, DELETE_ICON } from '../../res/drawables';
-import CustomButton from '../../components/CustomButton';
+import CustomButton from '../../components/CustomButtom';
 
 const { width: deviceWidth } = Dimensions.get('window');
 
@@ -75,7 +75,7 @@ const CartScreen = ({navigation}) => {
             Sub Total: <Text style={styles.highlightText}>Rs. {calculateSubtotal()}</Text>
           </Text>
           <View style={styles.customButton}>
-            <CustomButton title={'CheckOut'} navigation={navigation}/>
+            <CustomButton title={'CheckOut'} onPress={() => {navigation.navigate("ConfirmOrder")}}/>
           </View>
         </View>
       )}
