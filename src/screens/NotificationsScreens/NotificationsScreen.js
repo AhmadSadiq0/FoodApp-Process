@@ -5,7 +5,6 @@ import {
     Text,
     Image,
     TouchableOpacity,
-    Dimensions,
 } from 'react-native';
 import {
     THEME_TEXT_COLOR,
@@ -74,7 +73,7 @@ const CartScreen = () => {
 
             <RBSheet
                 ref={refRBSheet}
-                height={300}
+                height={400}
                 draggable={true}
                 customStyles={{
                     container: { borderTopLeftRadius: 20, borderTopRightRadius: 20, backgroundColor: WHITE_COLOR },
@@ -98,7 +97,7 @@ const CartScreen = () => {
                         </View>
                         <Text style={styles.messageText}>{activeItem.message}</Text>
                         <View style={styles.customButton}>
-                            <CustomButton title={'Go Back'} />
+                            <CustomButton title={'Go Back'}  />
                         </View>
                     </View>
                 )}
@@ -163,7 +162,7 @@ const styles = StyleSheet.create({
     },
     OrderId: {
         flexDirection: 'row',
-        alignItems: 'center',
+        justifyContent:'center',
     },
     DateTime: {
         flexDirection: 'row',
@@ -183,6 +182,7 @@ const styles = StyleSheet.create({
     codeText: {
         fontSize: 12,
         color: THEME_COLOR,
+        paddingHorizontal:10,
     },
     dateText: {
         fontSize: 11,
@@ -207,6 +207,7 @@ const styles = StyleSheet.create({
         color: THEME_TEXT_COLOR,
         fontWeight: 'bold',
         textAlign: 'center',
+        paddingTop:30,
     },
     summaryText2: {
         fontSize: 14,
@@ -227,7 +228,8 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     customButton: {
-        marginTop: 80,
+        marginTop: 150,
+     
     },
 });
 

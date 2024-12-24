@@ -49,7 +49,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const AuthStack = () => {
     return (
-        <Stack.Navigator initialRouteName="Notifications" headerMode={false}>
+        <Stack.Navigator initialRouteName="ConfirmOrder" headerMode={false}>
             <Stack.Screen 
                 options={{ headerShown: false }} 
                 name="Auth" 
