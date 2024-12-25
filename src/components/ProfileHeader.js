@@ -1,5 +1,5 @@
 import React, { useState, useCallback, memo } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { THEME_COLOR, WHITE_COLOR, Green_Color, THEME_TEXT_COLOR } from '../res/colors';
 import { Profie_Image, Bell_ICON, DOTS_ICON, CAMERA_ICON } from '../res/drawables';
 
@@ -28,15 +28,16 @@ const Tabs = memo(({ tabs, activeTab, onTabPress, position }) => (
   </View>
 ));
 
-const ProfileHeader = memo(({ 
-  title = "Muhammad Naveed Aslam", 
-  containerStyle = {}, 
-  DOTSICON = {DOTS_ICON},
-  textContainerStyle = {}, 
+const ProfileHeader = memo(({
+  title = "Huzaifa Saddique",
+  containerStyle = {},
+  DOTSICON = { DOTS_ICON },
+  textContainerStyle = {},
   icon = {},
   Cameraicon = {},
   showShadow = false,
   showTabsEnabled = true,
+  showTabsProp = true // Prop to control visibility of tabs and dot icon
 }) => {
   const [showTabs, setShowTabs] = useState(false);
   const [activeTab, setActiveTab] = useState(null);
@@ -57,31 +58,42 @@ const ProfileHeader = memo(({
     setDotsPosition(layout);
   }, []);
 
+  const handleOutsideTouch = () => {
+    setShowTabs(false);
+  };
+
   return (
-    <View style={[styles.container, containerStyle, showShadow && styles.shadow]}>
-      <View style={styles.profileContainer}>
-        <TouchableOpacity onPress={toggleTabs} onLayout={onDotsLayout}>
-          <Image source={DOTSICON} style={[styles.icon ,icon]} />
-        </TouchableOpacity>
-        <View style={styles.bellContainer}>
-          <Image source={Bell_ICON} style={styles.icon} />
-          <View style={styles.notificationBadge} />
+    <TouchableWithoutFeedback onPress={handleOutsideTouch}>
+      <View style={[styles.container, containerStyle, showShadow && styles.shadow]}>
+        <View style={[styles.profileContainer]}>
+          <View style={styles.iconContainer}>
+            {showTabsEnabled && showTabsProp && (
+              <TouchableOpacity onPress={toggleTabs} onLayout={onDotsLayout}>
+                <Image source={DOTSICON} style={[styles.icon, icon]} />
+              </TouchableOpacity>
+            )}
+          </View>
+          <View style={styles.bellContainer}>
+            <Image source={Bell_ICON} style={styles.icon} />
+            <View style={styles.notificationBadge} />
+          </View>
+        </View>
+
+        {showTabsEnabled && showTabsProp && showTabs && (
+          <Tabs
+            tabs={tabsData}
+            activeTab={activeTab}
+            onTabPress={handleTabPress}
+            position={{ top: dotsPosition.y + dotsPosition.height, left: dotsPosition.x }}
+          />
+        )}
+        <Image source={Profie_Image} style={styles.profileImage} />
+        <Image source={CAMERA_ICON} style={[styles.cameraIcon, Cameraicon]} />
+        <View style={[styles.textContainer, textContainerStyle]}>
+          <Text style={styles.title}>{title}</Text>
         </View>
       </View>
-      {showTabsEnabled && showTabs && (
-        <Tabs 
-          tabs={tabsData} 
-          activeTab={activeTab} 
-          onTabPress={handleTabPress} 
-          position={{ top: dotsPosition.y + dotsPosition.height, left: dotsPosition.x }} 
-        />
-      )}
-      <Image source={Profie_Image} style={styles.profileImage} />
-      <Image source={CAMERA_ICON} style={[styles.cameraIcon , Cameraicon]} />
-      <View style={[styles.textContainer, textContainerStyle]}>
-        <Text style={styles.title}>{title}</Text>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 });
 
@@ -106,6 +118,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+  },
+  iconContainer: {
+    flexDirection: 'row',
   },
   icon: {
     width: 30,

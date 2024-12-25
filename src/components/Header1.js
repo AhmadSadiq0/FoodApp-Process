@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; 
 import { THEME_COLOR, WHITE_COLOR } from '../res/colors';
 import { DISCOUNT_ICON, ARROW_ICON } from '../res/drawables';
+import { useNavigation } from '@react-navigation/native';
 
 const Header1 = ({
     title = "Featured Discounts",
@@ -12,41 +12,44 @@ const Header1 = ({
     containerStyle = {},
 }) => {
     const navigation = useNavigation();
+
     return (
-        <View style = {[styles.maincontainer]}>
-        <View style={[styles.container, containerStyle]}>
-            <View style={styles.profileContainer}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-                        {/* Wrap arrowIcon with TouchableOpacity */}
+        <View style={[styles.maincontainer]}>
+            <View style={[styles.container, containerStyle]}>
+                <View style={styles.profileContainer}>
+                    {/* Make the arrow icon clickable to go back */}
+                    <TouchableOpacity onPress={() => navigation.navigate("Cart")}>
                         <Image source={arrowIcon} style={styles.arrowIcon} />
                     </TouchableOpacity>
-                {discountIcon && (
-                    <View style={styles.discountContainer}>
-                        <Image source={discountIcon} style={styles.discountIcon} />
-                    </View>
-                )}
+
+                    {discountIcon && (
+                        <View style={styles.discountContainer}>
+                            <Image source={discountIcon} style={styles.discountIcon} />
+                        </View>
+                    )}
+                </View>
+
+                <View style={styles.textContainer}>
+                    <Text style={[styles.headerText, headerTextStyle]}>{title}</Text>
+                </View>
             </View>
-            <View style={styles.textContainer}>
-                <Text style={[styles.headerText, headerTextStyle]}>{title}</Text>
-            </View>
-        </View>
         </View>
     );
 };
- 
+
 const styles = StyleSheet.create({
-    maincontainer:{
-        width: '100%',
-        backgroundColor:WHITE_COLOR
+    maincontainer: {
+        backgroundColor: WHITE_COLOR
     },
     container: {
+        height: 150,
+        width: '100%',
+        padding: 30,
         borderBottomLeftRadius: 50,
         borderBottomRightRadius: 50,
-        padding : 30,
-        marginTop : 30,
         backgroundColor: THEME_COLOR,
         alignItems: 'center',
-        shadowColor: '#000', 
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 30 },
         shadowOpacity: 0.1,
         shadowRadius: 10,
@@ -81,4 +84,5 @@ const styles = StyleSheet.create({
         height: 40,
     },
 });
+
 export default Header1;
