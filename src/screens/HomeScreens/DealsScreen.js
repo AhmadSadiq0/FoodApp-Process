@@ -15,5 +15,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
 export default DealsScreen;

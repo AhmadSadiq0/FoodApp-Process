@@ -21,7 +21,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 
 const { width: deviceWidth } = Dimensions.get('window');
 
-const CartScreen = () => {
+const CartScreen = ({navigation}) => {
   const [cartItems, setCartItems] = useState([
     { id: 1, name: 'Double Cheese Burger', price: 599, serving: 'Single Serving', image: BURGERIMG, active: false },
     { id: 2, name: 'Cheese Burger', price: 449, serving: 'Single Serving', image: BURGERIMG, active: false },

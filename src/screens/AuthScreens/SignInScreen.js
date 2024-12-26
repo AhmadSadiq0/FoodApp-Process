@@ -8,7 +8,7 @@ import {
   Image,
   TouchableOpacity,
   Pressable,
-  Keyboard,y
+  Keyboard,
 } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -16,21 +16,13 @@ import CustomButton from '../../components/CustomButton';
 import InputField from '../../components/CustomInput';
 import { Google_Icon } from '../../res/drawables';
 import { THEME_TEXT_COLOR } from '../../res/colors';
-
-
-// Validation schema using Yup
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email address").required("Email is required"),
   password: Yup.string()
     .min(6, "Password must be at least 6 characters")
     .required("Password is required"),
 });
-
-
-
 const SignInScreen = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
@@ -47,7 +39,6 @@ const SignInScreen = () => {
       keyboardDidShowListener.remove();
     };
   }, []);
-
   const handleSignIn = (values) => {
     console.log('Sign In Values:', values);
     alert('Form Submitted!');
@@ -243,5 +234,4 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 });
-
 export default SignInScreen;

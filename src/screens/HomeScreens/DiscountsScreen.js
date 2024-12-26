@@ -74,7 +74,7 @@ const DiscountsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
-    padding: 7,
+    padding : 7
   },
 });
 export default DiscountsScreen;

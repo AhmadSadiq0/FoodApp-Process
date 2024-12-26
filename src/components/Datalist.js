@@ -5,12 +5,13 @@ import { THEME_TEXT_COLOR,THEME_COLOR } from "../res/colors";
 const { width } = Dimensions.get("window");
 const ITEM_WIDTH = 150 + 14; 
 const SPACING = (width - ITEM_WIDTH) / 2;
-const Datalist = ({ title, seeMoreText, onSeeMorePress, data }) => {  
+const Datalist = ({ title, seeMoreText, onSeeMorePress, data, onAddToCart }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={[styles.title, { color: "#EF4444" }]}>{title}</Text>
         <Text style={styles.seeMore} onPress={onSeeMorePress}>
           {seeMoreText}
         </Text>
@@ -35,17 +36,16 @@ const Datalist = ({ title, seeMoreText, onSeeMorePress, data }) => {
           ];
           const scale = scrollX.interpolate({
             inputRange,
-            outputRange: [0.9, 1, 0.9], 
+            outputRange: [0.9, 1, 0.9],
             extrapolate: "clamp",
           });
-
           return (
             <Animated.View style={[styles.cardContainer, { transform: [{ scale }] }]}>
               <BurgerCard
                 name={item.name}
                 price={item.price}
                 image={item.image}
-                onAdd={() => console.log(`${item.name} added to cart!`)}
+                onAdd={() => onAddToCart(item)} // Pass burger data
               />
             </Animated.View>
           );
@@ -57,8 +57,8 @@ const Datalist = ({ title, seeMoreText, onSeeMorePress, data }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 8,
-    // backgroundColor: "#f8f8f8",
+    // marginTop:40,
+    marginVertical:8,
   },
   header: {
     flexDirection: "row",

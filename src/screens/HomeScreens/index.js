@@ -10,5 +10,6 @@ export {
     DealsScreen,
     DiscountsScreen,
     HomeScreen,
-    OffersScreen
+    OffersScreen,
+    
 };

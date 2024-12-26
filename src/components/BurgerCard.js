@@ -6,7 +6,7 @@ import { THEME_COLOR,
   GRAY_COLOR,
   BLACK_COLOR,
   WHITE_COLOR, } from "../res/colors";
-const BurgerCard = ({ name, price, image, onAdd }) => {
+const BurgerCard = ({ name, price, image, onAdd,navigation }) => {
   return (
     <View style={styles.card}>
        <Text style={styles.name}>{name}</Text>
@@ -14,7 +14,12 @@ const BurgerCard = ({ name, price, image, onAdd }) => {
       <Text style={styles.price}>{`Rs. ${price}/-`}</Text>
       <Text style={styles.serving}>Single Serving</Text>
       <View style={styles.addmargin}>
-        <TouchableOpacity style={styles.addButton} onPress={onAdd}>
+        <TouchableOpacity style={styles.addButton}
+        onPress={() => {
+          onAdd();
+          // navigation.navigate("Cart", { name, price, image });
+        }}
+      >
           <Text style={styles.addText}>+</Text>
         </TouchableOpacity>
       </View>

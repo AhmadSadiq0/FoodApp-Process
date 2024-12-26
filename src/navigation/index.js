@@ -15,7 +15,7 @@ import {
 import { THEME_COLOR, WHITE_COLOR } from '../res/colors';
 //Screen Components
 import {
-    SignInScreen,
+    SignInScreen, 
     SignUpScreen,
     ForgetPasswordScreen
 } from '../screens/AuthScreens/index';
@@ -23,13 +23,16 @@ import {
     HomeScreen,
     DealsScreen,
     DiscountsScreen,
-    OffersScreen
+    OffersScreen,
+    CartsScreen
 } from '../screens/HomeScreens/index';
 import {
     CartScreen,
     CheckOutScreen,
-    OrderConfirmationScreen
+    OrderConfirmationScreen,
+    ConfirmedOrder
 } from '../screens/CartScreens/index';
+
 import {
     LanguageSettingsScreen,
     ProfileScreen,
@@ -41,10 +44,7 @@ import { NotificationsScreen } from '../screens/NotificationsScreens/index';
 import { OrdersScreen } from '../screens/OrdersScreens/index';
 import { SplashScreen } from '../screens/SplashScreen/index';
 import Header1 from '../components/Header1';
-import ProfileHeader from '../components/ProfileHeader';
 import Header from '../components/Header';
-import { ARROW_ICON, DOTS_ICON, DEAL_ICON , Confirm_Order , OFFER_ICON } from '../res/drawables';
-
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const AuthStack = () => {
@@ -179,20 +179,20 @@ const AuthStack = () => {
                 component={DiscountsScreen} 
             />
         </Stack.Navigator>
-    );
-}
-
+    )
+}  
 const HomeStack = () => {
     return (
         <Stack.Navigator initialRouteName="Home" headerMode={false}>
             <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Cart" component={CartScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Deals" component={DealsScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Offers" component={OffersScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
+            <Stack.Screen options={{ header : () => <Header1/>, headerShown : true }} name="Discounts" component={DiscountsScreen} />
         </Stack.Navigator>
     )
-}
-
+} 
 const MenuStack = () => {
     return (
         <Stack.Navigator initialRouteName="Menu" headerMode={false}>
@@ -201,18 +201,17 @@ const MenuStack = () => {
         </Stack.Navigator>
     )
 }
-
 const CartStack = () => {
     return (
         <Stack.Navigator initialRouteName="Cart" headerMode={false}>
-            <Stack.Screen options={{ headerShown: false }} name="Cart" component={CartScreen} />
+             <Stack.Screen options={{ header : () => <Header/>, headerShown : true }}name="Cart" component={CartScreen} />
             <Stack.Screen options={{ headerShown: false }} name="CheckOut" component={CheckOutScreen} />
             <Stack.Screen options={{ headerShown: false }} name="ConfirmOrder" component={OrderConfirmationScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="ConfirmedOrder" component={ConfirmedOrder} />
         </Stack.Navigator>
     )
 }
-
 const OrdersStack = () => {
     return (
         <Stack.Navigator initialRouteName="Orders" headerMode={false}>
@@ -230,7 +229,7 @@ const ProfileStack = () => {
             <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsScreen} />
             <Stack.Screen options={{ headerShown: false }} name="LanguageSettings" component={LanguageSettingsScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
-        </Stack.Navigator>
+        </Stack.Navigator> 
     )
 }
 
@@ -251,7 +250,7 @@ function BottomTabStack() {
                 },
             }}
         >
-            <Tab.Screen
+            <Tab.Screen 
                 name="Home"
                 component={HomeStack}
                 options={{
@@ -268,99 +267,113 @@ function BottomTabStack() {
                         </View>
                     ),
                 }}
-
             />
-            <Tab.Screen
-                name="Menu"
-                component={MenuStack}
-                options={{
-                    tabBarLabel: ({ focused }) => (
-                        focused ? <Text style={styles.text}>Menu</Text> : null
-                    ),
-                    headerShown: false,
-                    tabBarIcon: ({ focused }) => (
-                        <View style={focused ? styles.activeTab : styles.inactiveTab}>
-                            <Image
-                                style={styles.image}
-                                source={MENU_ICON}
-                            />
-                        </View>
-                    ),
-                }}
-
-            />
-            <Tab.Screen
-                name="Cart"
-                component={CartStack}
-                options={{
-                    tabBarLabel: ({ focused }) => (
-                        focused ? <Text style={styles.text}>Cart</Text> : null
-                    ),
-                    headerShown: false,
-                    tabBarIcon: ({ focused }) => (
-                        <View style={focused ? styles.activeTab : styles.inactiveTab}>
-                            <Image
-                                style={styles.image}
-                                source={CART_ICON}
-                            />
-                        </View>
-                    ),
-                }}
-
-            />
-            <Tab.Screen
-                name="Orders"
-                component={OrdersStack}
-                options={{
-                    tabBarLabel: ({ focused }) => (
-                        focused ? <Text style={styles.text}>Orders</Text> : null
-                    ),
-                    headerShown: false,
-                    tabBarIcon: ({ focused }) => (
-                        <View style={focused ? styles.activeTab : styles.inactiveTab}>
-                            <Image
-                                style={styles.image}
-                                source={ORDERS_ICON}
-                            />
-                        </View>
-                    ),
-                }}
-
-            />
-            <Tab.Screen
-                name="Profile"
-                component={ProfileStack}
-                options={{
-                    tabBarLabel: ({ focused }) => (
-                        focused ? <Text style={styles.text}>Profile</Text> : null
-                    ),
-                    headerShown: false,
-                    tabBarIcon: ({ focused }) => (
-                        <View style={focused ? styles.activeTab : styles.inactiveTab}>
-                            <Image
-                                style={styles.image}
-                                source={PROFILE_ICON}
-                            />
-                        </View>
-                    ),
-                }}
-
-            />
-        </Tab.Navigator>
-    );
+                {/* <Tab.Screen
+                    name= "Home"
+                    component={HomeStack}
+                    options={{
+                        tabBarLabel: ({ focused }) => (
+                            focused ? <Text style={styles.text}>Home</Text> : null
+                        ),
+                        headerShown: false,
+                        tabBarIcon: ({ focused }) => (
+                            <View style={focused ? styles.activeTab : styles.inactiveTab}>
+                                <Image 
+                                    style={styles.image}
+                                    source={HOME_ICON} 
+                                />
+                            </View>
+                        ),
+                    }}
+    
+                /> */}
+                <Tab.Screen
+                    name="Menu"
+                    component={MenuStack}
+                    options={{
+                        tabBarLabel: ({ focused }) => (
+                            focused ? <Text style={styles.text}>Menu</Text> : null
+                        ),
+                        headerShown: false,
+                        tabBarIcon: ({ focused }) => (
+                            <View style={focused ? styles.activeTab : styles.inactiveTab}>
+                                <Image 
+                                    style={styles.image}
+                                    source={MENU_ICON} 
+                                />
+                            </View>
+                        ),
+                    }}
+                /> 
+                <Tab.Screen
+                    name="Cart"
+                    component={CartStack}
+                    options={{
+                        tabBarLabel: ({ focused }) => (
+                            focused ? <Text style={styles.text}>Cart</Text> : null
+                        ),
+                        headerShown: false,
+                        tabBarIcon: ({ focused }) => (
+                            <View style={focused ? styles.activeTab : styles.inactiveTab}>
+                                <Image 
+                                    style={styles.image}
+                                    source={CART_ICON} 
+                                />
+                            </View>
+                        ),
+                    }}
+                />
+                <Tab.Screen
+                    name="Orders"
+                    component={OrdersStack}
+                    options={{
+                        tabBarLabel: ({ focused }) => (
+                            focused ? <Text style={styles.text}>Orders</Text> : null
+                        ),
+                        headerShown: false,
+                        tabBarIcon: ({ focused }) => (
+                            <View style={focused ? styles.activeTab : styles.inactiveTab}>
+                                <Image 
+                                    style={styles.image}
+                                    source={ORDERS_ICON} 
+                                />
+                            </View>
+                        ),
+                    }}
+    
+                />
+                <Tab.Screen
+                    name="Profile"
+                    component={ProfileStack}
+                    options={{
+                        tabBarLabel: ({ focused }) => (
+                            focused ? <Text style={styles.text}>Profile</Text> : null
+                        ),
+                        headerShown: false,
+                        tabBarIcon: ({ focused }) => (
+                            <View style={focused ? styles.activeTab : styles.inactiveTab}>
+                                <Image 
+                                    style={styles.image}
+                                    source={PROFILE_ICON} 
+                                />
+                            </View>
+                        ),
+                    }}
+    
+                />
+            </Tab.Navigator>
+        );
 }
-
 function Navigation(props) {
     return (
         <NavigationContainer options={{ headerShown: false }}>
-            <Stack.Navigator initialRouteName={"MainStack"} headerMode={false}>
-                <Stack.Screen options={{ headerShown: false }} name="MainStack" component={AuthStack} />
-            </Stack.Navigator>
+                <Stack.Navigator initialRouteName={"MainStack"} headerMode={false}>
+                    <Stack.Screen options={{ headerShown: false }} name="MainStack" component={BottomTabStack} />
+                </Stack.Navigator>
         </NavigationContainer >
     );
 }
 export default Navigation;
-
 const styles = StyleSheet.create({
     activeTab: {
         height: 40,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, Text } from 'react-native';
 import { THEME_COLOR, WHITE_COLOR } from '../res/colors';
 import { DISCOUNT_ICON, ARROW_ICON } from '../res/drawables';
 import { useNavigation } from '@react-navigation/native';
@@ -36,20 +36,19 @@ const Header1 = ({
         </View>
     );
 };
-
+ 
 const styles = StyleSheet.create({
     maincontainer: {
         backgroundColor: WHITE_COLOR
     },
     container: {
-        height: 150,
-        width: '100%',
-        padding: 30,
         borderBottomLeftRadius: 50,
         borderBottomRightRadius: 50,
+        padding : 30,
+        marginTop : 30,
         backgroundColor: THEME_COLOR,
         alignItems: 'center',
-        shadowColor: '#000',
+        shadowColor: '#000', 
         shadowOffset: { width: 0, height: 30 },
         shadowOpacity: 0.1,
         shadowRadius: 10,
@@ -84,5 +83,4 @@ const styles = StyleSheet.create({
         height: 40,
     },
 });
-
 export default Header1;
