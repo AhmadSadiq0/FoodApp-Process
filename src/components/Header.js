@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text, TextInput } from 'react-native';
-import { THEME_COLOR, WHITE_COLOR, Green_Color, THEME_TEXT_COLOR } from '../res/colors';
+import { THEME_COLOR, WHITE_COLOR, Green_Color, THEME_TEXT_COLOR,Back_Ground} from '../res/colors';
 import { Profie_Image, Bell_ICON, Search_Icon } from '../res/drawables';
 
 // SearchBar Component
@@ -54,7 +54,7 @@ const Header = ({
 
 const styles = StyleSheet.create({
     mainContainer:{
-        backgroundColor:WHITE_COLOR
+        backgroundColor:Back_Ground
     },
     container: {
         height: 200,

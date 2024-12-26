@@ -1,11 +1,12 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { BURGERIMG } from "../res/drawables";
-import { THEME_COLOR,
-    THEME_TEXT_COLOR,
-    GRAY_COLOR,
-    BLACK_COLOR,
-    WHITE_COLOR, } from "../res/colors";
+import { 
+  THEME_COLOR, 
+  THEME_TEXT_COLOR, 
+  WHITE_COLOR 
+} from "../res/colors";
+
 const AddCard = ({
   name,
   description,
@@ -17,7 +18,7 @@ const AddCard = ({
   return (
     <View style={styles.card}>
       <Text style={styles.name}>{name}</Text>
-      <Text style={styles.description}>{description}</Text>      
+      <Text style={styles.description}>{description}</Text>
       <Image source={BURGERIMG} style={styles.image} />
       <View style={styles.priceContainer}>
         <Text style={styles.priceLabel}>Total Price :</Text>
@@ -29,67 +30,67 @@ const AddCard = ({
     </View>
   );
 };
+
 const styles = StyleSheet.create({
-    card: {
-      width: 200,
-      padding: 10,
-      borderRadius: 12,
-      backgroundColor: WHITE_COLOR, 
-      shadowColor: BLACK_COLOR, 
-      shadowOpacity: 0.1,
-      shadowRadius: 5,
-      elevation: 4,
-      alignItems: "center",
-      margin: 10,
-    },
-    name: {
-      fontSize: 16,
-      fontWeight: "bold",
-      color: THEME_TEXT_COLOR, 
-      textAlign: "center",
-      marginBottom: 4,
-    },
-    description: {
-      fontSize: 14,
-      color: THEME_COLOR, 
-      textAlign: "center",
-      marginBottom: 10,
-    },
-    image: {
-      width: 120,
-      height: 80,
-      resizeMode: "contain",
-      marginVertical: 8,
-    },
-    priceContainer: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginTop: 8,
-      marginBottom: 12,
-    },
-    priceLabel: {
-      fontSize: 14,
-      fontWeight: "600",
-      color: GRAY_COLOR, 
-    },
-    price: {
-      fontSize: 16,
-      fontWeight: "bold",
-      color: THEME_COLOR, 
-    },
-    button: {
-      width: "90%",
-      paddingVertical: 10,
-      backgroundColor: THEME_COLOR, 
-      borderRadius: 8,
-      alignItems: "center",
-    },
-    buttonText: {
-      color: WHITE_COLOR,
-      fontSize: 16,
-      fontWeight: "bold",
-    },
-  });
-  
-  export default AddCard;
+  card: {
+    width: '100%',
+    padding: 20,
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
+    backgroundColor: WHITE_COLOR,
+    alignItems: "center",
+  },
+  name: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: THEME_TEXT_COLOR,
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  description: {
+    fontSize: 16,
+    color: THEME_COLOR,
+    textAlign: "center",
+    marginBottom: 10,
+    fontWeight: "bold",
+  },
+  image: {
+    width: 120,
+    height: 120,
+    resizeMode: "contain",
+    marginVertical: 15,
+  },
+  priceContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: 10,
+    width: '100%',
+    paddingHorizontal: 20,
+  },
+  priceLabel: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: THEME_TEXT_COLOR,
+  },
+  price: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: THEME_COLOR,
+  },
+  button: {
+    width: "95%",
+    paddingVertical: 12,
+    backgroundColor: THEME_COLOR,
+    borderRadius: 25,
+    alignItems: "center",
+    marginTop: 20,
+  },
+  buttonText: {
+    color: WHITE_COLOR,
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+});
+
+export default AddCard;

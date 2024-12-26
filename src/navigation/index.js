@@ -10,7 +10,8 @@ import {
     MENU_ICON,
     CART_ICON,
     ORDERS_ICON,
-    PROFILE_ICON
+    PROFILE_ICON,
+    DOTS_ICON
 } from '../res/drawables';
 import { THEME_COLOR, WHITE_COLOR } from '../res/colors';
 //Screen Components
@@ -159,7 +160,7 @@ const AuthStack = () => {
                 component={OrdersScreen} 
             />
             <Stack.Screen 
-                options={{ header: () => <ProfileHeader DOTSICON={DOTS_ICON} showTabsProp={true} />, headerShown: true}} 
+                options={{ header: () => <ProfileHeader DOTSICON={ DOTS_ICON } showTabsProp={false} />, headerShown: true}} 
                 name="Profile" 
                 component={ProfileScreen} 
             />

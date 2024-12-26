@@ -1,15 +1,15 @@
 import React, { useRef, useState } from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import Header from "../../components/Header";
 import Datalist from "../../components/Datalist";
 import AddCard from "../../components/AddCard";
+import { WHITE_COLOR, Back_Ground } from "../../res/colors";
 import RBSheet from "react-native-raw-bottom-sheet";
-import { THEME_COLOR, THEME_TEXT_COLOR } from "../../res/colors";
 import { BURGERIMG } from "../../res/drawables";
 
 const HomeScreen = ({ navigation }) => {
   const refRBSheet = useRef();
-  const [selectedBurger, setSelectedBurger] = useState(null); 
+  const [selectedBurger, setSelectedBurger] = useState(null);
 
   const burgerData = [
     {
@@ -39,8 +39,8 @@ const HomeScreen = ({ navigation }) => {
   ];
 
   const handleAddToCart = (burger) => {
-    setSelectedBurger(burger); 
-    refRBSheet.current.open(); 
+    setSelectedBurger(burger);
+    refRBSheet.current.open();
   };
 
   const renderDatalist = ({ item }) => (
@@ -49,7 +49,7 @@ const HomeScreen = ({ navigation }) => {
       seeMoreText="See All"
       onSeeMorePress={() => console.log(`${item.title} See All pressed!`)}
       data={burgerData}
-      onAddToCart={handleAddToCart} 
+      onAddToCart={handleAddToCart}
     />
   );
   const datalistSections = [
@@ -67,18 +67,25 @@ const HomeScreen = ({ navigation }) => {
       />
       <RBSheet
         ref={refRBSheet}
-        height={300}
-        openDuration={250}
-        closeOnDragDown={true}
-        // customStyles={{
-        //   container: { borderTopLeftRadius: 20, borderTopRightRadius: 20 },
-        // }}
+        height={420}
+        draggable={true}
+        customStyles={{
+          container: { borderTopLeftRadius: 20, borderTopRightRadius: 20,  alignItems: 'center', backgroundColor: WHITE_COLOR },
+          wrapper: { backgroundColor: 'transparent' },
+          draggableIcon: { backgroundColor: '#d3d3d3' },
+        }}
+        customModalProps={{
+          animationType: 'slide',
+          statusBarTranslucent: true,
+        }}
+        customAvoidingViewProps={{
+          enabled: false,
+        }}
       >
-        
         {selectedBurger && (
           <AddCard
             name={selectedBurger.name}
-            description="A delicious choice!" 
+            description="A delicious choice!"
             image={selectedBurger.image}
             price={selectedBurger.price}
             onAddToCart={() => console.log(`${selectedBurger.name} added to cart!`)}
@@ -88,10 +95,12 @@ const HomeScreen = ({ navigation }) => {
     </View>
   );
 };
+
 export default HomeScreen;
+
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
-    marginBottom:10,
+    backgroundColor: Back_Ground,
+    marginBottom: 10,
   },
 });

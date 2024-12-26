@@ -31,13 +31,13 @@ const Tabs = memo(({ tabs, activeTab, onTabPress, position }) => (
 const ProfileHeader = memo(({
   title = "Huzaifa Saddique",
   containerStyle = {},
-  DOTSICON = { DOTS_ICON },
+  DOTSICON = DOTS_ICON,
   textContainerStyle = {},
   icon = {},
   Cameraicon = {},
   showShadow = false,
   showTabsEnabled = true,
-  showTabsProp = true // Prop to control visibility of tabs and dot icon
+  showTabsProp = true 
 }) => {
   const [showTabs, setShowTabs] = useState(false);
   const [activeTab, setActiveTab] = useState(null);

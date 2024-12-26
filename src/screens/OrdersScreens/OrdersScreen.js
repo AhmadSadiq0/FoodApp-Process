@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, View, SectionList, Text } from "react-native";
 import Header from "../../components/Header";
 import InProgressOrder from "../../components/InProgressOrder";
+import { Back_Ground } from "../../res/colors";
 
 const OrdersScreen = () => {
   const allOrders = [
@@ -70,7 +71,7 @@ const OrdersScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F3F4F6",
+    backgroundColor: Back_Ground,
   },
 });
 
