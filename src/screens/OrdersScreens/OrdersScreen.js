@@ -11,30 +11,41 @@ const OrdersScreen = () => {
       itemName: "Double Cheese Burger",
       price: "Rs. 590/-",
       status: "Preparing",
+      deliveredOn: "14/11/2024 11:08 PM"
     },
     {
       orderId: "AK-121124-DCB07",
       itemName: "Double Cheese Burger",
       price: "Rs. 590/-",
       status: "Preparing",
+      deliveredOn: "14/11/2024 11:08 PM"
     },
     {
       orderId: "AK-111124-DCB07",
       itemName: "Double Cheese Burger",
       price: "Rs. 590/-",
       status: "Delivered",
+      deliveredBy: "Harry K.",
+      deliveredOn: "November 14, 2024 11:39 PM",
+      orderDetails: "Double Cheese Burger",
     },
     {
       orderId: "AK-061124-DCB07",
       itemName: "Double Cheese Burger",
       price: "Rs. 590/-",
       status: "Delivered",
+      deliveredBy: "Sarah J.",
+      deliveredOn: "November 13, 2024 10:15 AM",
+      orderDetails: "Double Cheese Burger",
     },
     {
       orderId: "AK-281024-DCB07",
       itemName: "Double Cheese Burger",
       price: "Rs. 590/-",
       status: "Delivered",
+      deliveredBy: "Huzaifa Saddique",
+      deliveredOn: "November 12, 2024 3:45 PM",
+      orderDetails: "Double Cheese Burger",
     },
   ];
 

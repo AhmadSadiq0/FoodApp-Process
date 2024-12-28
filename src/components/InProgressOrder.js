@@ -15,19 +15,35 @@ import {
   THEME_TEXT_COLOR,
   WHITE_COLOR,
 } from "../res/colors";
-import RBSheet from "react-native-raw-bottom-sheet";
+import RBOrderSheet from "./RBOrderSheet";
+import RBDelivered from "./RBDelivered";
 
 const InProgressOrder = ({ sections }) => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const sheetRef = useRef();
+  const deliveredSheetRef = useRef();
 
   const openSheet = (order) => {
-    setSelectedOrder(order);
-    sheetRef.current.open();
+    if (order.status === "Preparing" || order.status === "Pending") {
+      setSelectedOrder(order);
+      sheetRef.current.open();
+    }
+  };
+
+  const openDeliveredSheet = (order) => {
+    if (order.status === "Delivered") {
+      setSelectedOrder(order);
+      deliveredSheetRef.current.open();
+    }
   };
 
   const renderOrderItem = ({ item }) => (
-    <OrderCard order={item} onPress={() => openSheet(item)} />
+    <OrderCard
+      order={item}
+      onPress={() =>
+        item.status === "Delivered" ? openDeliveredSheet(item) : openSheet(item)
+      }
+    />
   );
 
   const renderSectionHeader = ({ section: { title } }) => (
@@ -43,51 +59,10 @@ const InProgressOrder = ({ sections }) => {
         renderSectionHeader={renderSectionHeader}
         contentContainerStyle={styles.sectionListContainer}
       />
-      <RBSheet
-        ref={sheetRef}
-        height={400}
-        draggable={true}
-        customStyles={{
-          container: {
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
-            backgroundColor: WHITE_COLOR,
-          },
-          wrapper: {
-            backgroundColor: "transparent",
-          },
-          draggableIcon: {
-            backgroundColor: GRAY_COLOR,
-          },
-        }}
-        animationType="slide"
-      >
-        {selectedOrder && (
-          <View style={styles.sheetContent}>
-            <Text style={styles.OrderIdText}>Order Details</Text>
-            <Text style={styles.sheetLabel}>
-              Item(s): <Text style={styles.sheetValue}>1</Text>
-            </Text>
-            <Text style={styles.sheetLabel}>
-              Details: <Text>{selectedOrder.itemName}</Text> (<Text style={styles.sheetValue}>1</Text>)
-            </Text>
-            <View style={styles.totalBillContainer}>
-              <Text style={styles.sheetLabel}>
-                Total Bill: <Text style={styles.sheetValue}>Rs. {selectedOrder.price}</Text>
-              </Text>
-            </View>
-            {/* Add Button Below */}
-            <View style={styles.buttonContainer}>
-              <Pressable style={styles.ScrollButton}>
-                <Text style={styles.ScrollButtonText}>Scroll Down For Tracking</Text>
-              </Pressable>
-              <View style={styles.buttonContainer}>
-                <Text style={styles.OrderIdText}>{selectedOrder.orderId}</Text>
-              </View>
-            </View>
-          </View>
-        )}
-      </RBSheet>
+      {/* Integrating RBOrderSheet component */}
+      <RBOrderSheet sheetRef={sheetRef} selectedOrder={selectedOrder} />
+      {/* Integrating RBDelivered component */}
+      <RBDelivered sheetRef={deliveredSheetRef} selectedOrder={selectedOrder} />
     </View>
   );
 };
@@ -134,108 +109,60 @@ const styles = StyleSheet.create({
   },
   sectionListContainer: {
     paddingHorizontal: 16,
-    paddingBottom: 16,
   },
   sectionHeader: {
-    color: "#EF4444",
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
-    marginVertical: 8,
-    marginLeft: 16,
+    color: THEME_COLOR,
+    marginBottom: 10,
   },
   orderCard: {
     backgroundColor: WHITE_COLOR,
-    padding: 16,
+    marginBottom: 15,
+    padding: 15,
     borderRadius: 8,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16,
-    width: "100%",
+    shadowColor: GRAY_COLOR,
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 5,
   },
   textContainer: {
     flex: 1,
   },
   orderId: {
+    fontSize: 16,
+    fontWeight: "bold",
     color: THEME_TEXT_COLOR,
-    fontWeight: "800",
   },
   itemName: {
-    fontSize: 12,
+    fontSize: 14,
     color: THEME_TEXT_COLOR,
   },
   price: {
+    fontSize: 16,
     color: THEME_COLOR,
     fontWeight: "bold",
   },
   statusContainer: {
+    justifyContent: "center",
     flexDirection: "row",
     alignItems: "center",
   },
   status: {
-    color: WHITE_COLOR,
-    fontSize: 12,
-    fontWeight: "600",
-    paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 9999,
-    marginRight: 8,
-  },
-  image: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-  },
-  sheetLabel: {
-    fontSize: 14,
-    color: THEME_TEXT_COLOR,
-    marginBottom: 8,
-    fontWeight: 'bold',
-  },
-  sheetValue: {
-    fontSize: 14,
-    color: THEME_COLOR,
-    fontWeight: "bold",
-  },
-  sheetContent: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-  },
-  totalBillContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 8,
-  },
-  OrderIdText: {
-    fontSize: 18,
-    color: THEME_TEXT_COLOR,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    color: WHITE_COLOR,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 16,
   },
-  buttonContainer: {
-    marginTop: 20,
-    alignItems: "center", 
-  },
-  ScrollButton: {
-    backgroundColor: THEME_TEXT_COLOR,       
+  image: {
+    width: 30,
     height: 30,
-    width: 225,
-    borderRadius: 25,            
-    justifyContent: "center",    
-    alignItems: "center",         
-  },
-  ScrollButtonText: {
-    color: WHITE_COLOR,
-    fontWeight: "bold",
-    fontSize: 15,
-    textAlign: "center",         
+    marginLeft: 10,
   },
 });
 
