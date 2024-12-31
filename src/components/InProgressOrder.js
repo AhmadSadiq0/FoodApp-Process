@@ -1,5 +1,12 @@
-import React from "react";
-import { StyleSheet, View, SectionList, Text, Image } from "react-native";
+import React, { useState, useRef } from "react";
+import {
+  StyleSheet,
+  View,
+  SectionList,
+  Text,
+  Image,
+  Pressable,
+} from "react-native";
 import { BURGERIMG } from "../res/drawables";
 import {
   THEME_COLOR,
@@ -15,13 +22,19 @@ const InProgressOrder = (props) => {
     <Text style={styles.sectionHeader}>{title}</Text>
   );
   return (
-    <SectionList
-      sections={sections}
-      keyExtractor={(item, index) => `${item.orderId}-${index}`}
-      renderItem={renderOrderItem}
-      renderSectionHeader={renderSectionHeader}
-      contentContainerStyle={styles.sectionListContainer}
-    />
+    <View style={styles.container}>
+      <SectionList
+        sections={sections}
+        keyExtractor={(item, index) => `${item.orderId}-${index}`}
+        renderItem={renderOrderItem}
+        renderSectionHeader={renderSectionHeader}
+        contentContainerStyle={styles.sectionListContainer}
+      />
+      {/* Integrating RBOrderSheet component */}
+      <RBOrderSheet sheetRef={sheetRef} selectedOrder={selectedOrder} />
+      {/* Integrating RBDelivered component */}
+      <RBDelivered sheetRef={deliveredSheetRef} selectedOrder={selectedOrder} />
+    </View>
   );
 };
 const OrderCard = ({ order }) => {
@@ -37,7 +50,7 @@ const OrderCard = ({ order }) => {
     }
   };
   return (
-    <View style={styles.orderCard}>
+    <Pressable onPress={onPress} style={styles.orderCard}>
       <View style={styles.textContainer}>
         <Text style={styles.orderId}>{order.orderId}</Text>
         <Text style={styles.itemName}>{order.itemName}</Text>
@@ -54,21 +67,23 @@ const OrderCard = ({ order }) => {
         </Text>
         <Image source={BURGERIMG} style={styles.image} />
       </View>
-    </View>
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Back_Ground,
+  },
   sectionListContainer: {
     paddingHorizontal: 16,
-    paddingBottom: 16,
   },
   sectionHeader: {
-    color: "#EF4444",
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
-    marginVertical: 8,
-    marginLeft: 16,
+    color: THEME_COLOR,
+    marginBottom: 10,
   },
   orderCard: {
     backgroundColor: WHITE_COLOR,
@@ -77,8 +92,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16,
-    width: "100%",
+    shadowColor: GRAY_COLOR,
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 5,
   },
   textContainer: {
     flex: 1,
@@ -97,6 +114,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   statusContainer: {
+    justifyContent: "center",
     flexDirection: "row",
     alignItems: "center",
   },
@@ -111,9 +129,10 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   image: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 30,
+    height: 30,
+    marginLeft: 10,
   },
 });
+
 export default InProgressOrder;

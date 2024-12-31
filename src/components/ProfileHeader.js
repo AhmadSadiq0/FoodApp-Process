@@ -34,10 +34,6 @@ const ProfileHeader = memo(({
   Cameraicon = {},
   showShadow = false,
   showTabsEnabled = true,
-  showTabsProp = true,
-  showDotsIcon = true,
-  showArrowIcon = false,
-  navigation
 }) => {
   const [showTabs, setShowTabs] = useState(false);
   const [activeTab, setActiveTab] = useState(null);

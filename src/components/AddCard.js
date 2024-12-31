@@ -19,7 +19,7 @@ const AddCard = (props) => {
   return (
     <View style={styles.card}>
       <Text style={styles.name}>{name}</Text>
-      <Text style={styles.description}>{description}</Text>      
+      <Text style={styles.description}>{description}</Text>
       <Image source={BURGERIMG} style={styles.image} />
       <View style={styles.priceContainer}>
         <Text style={styles.priceLabel}>Total Price :</Text>
@@ -31,6 +31,7 @@ const AddCard = (props) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
     card: {
       width: 200,

@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import Header from "../../components/Header";
 import Datalist from "../../components/Datalist";
 import AddCard from "../../components/AddCard";
+import { WHITE_COLOR, Back_Ground } from "../../res/colors";
 import RBSheet from "react-native-raw-bottom-sheet";
-import { THEME_COLOR, THEME_TEXT_COLOR } from "../../res/colors";
 import { BURGERIMG } from "../../res/drawables";
 import { NotificationsScreen } from "../NotificationsScreens";
 const HomeScreen = (props) => {
@@ -45,8 +45,8 @@ const HomeScreen = (props) => {
   ];
 
   const handleAddToCart = (burger) => {
-    setSelectedBurger(burger); 
-    refRBSheet.current.open(); 
+    setSelectedBurger(burger);
+    refRBSheet.current.open();
   };
 
   const renderDatalist = ({ item }) => (
@@ -55,7 +55,7 @@ const HomeScreen = (props) => {
       seeMoreText="See All"
       onSeeMorePress={() => console.log(`${item.title} See All pressed!`)}
       data={burgerData}
-      onAddToCart={handleAddToCart} 
+      onAddToCart={handleAddToCart}
     />
   );
   const datalistSections = [
@@ -81,7 +81,7 @@ const HomeScreen = (props) => {
         {selectedBurger && (
           <AddCard
             name={selectedBurger.name}
-            description="A delicious choice!" 
+            description="A delicious choice!"
             image={selectedBurger.image}
             price={selectedBurger.price}
             onAddToCart={() => console.log(`${selectedBurger.name} added to cart!`)}
@@ -91,7 +91,9 @@ const HomeScreen = (props) => {
     </View>
   );
 };
+
 export default HomeScreen;
+
 const styles = StyleSheet.create({
   container: {
     marginBottom:250,

@@ -8,7 +8,8 @@ import {
     MENU_ICON,
     CART_ICON,
     ORDERS_ICON,
-    PROFILE_ICON
+    PROFILE_ICON,
+    DOTS_ICON
 } from '../res/drawables';
 import { THEME_COLOR, WHITE_COLOR } from '../res/colors';
 //Screen Components
