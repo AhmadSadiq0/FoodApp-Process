@@ -1,13 +1,19 @@
 import React from "react";
 import { StyleSheet, View, SectionList, Text, Image } from "react-native";
 import { BURGERIMG } from "../res/drawables";
+import {
+  THEME_COLOR,
+  THEME_TEXT_COLOR,
+  WHITE_COLOR,
+  Green_Color,
+} from "../res/colors";
 
-const InProgressOrder = ({ sections }) => {
+const InProgressOrder = (props) => {
+  const { sections } = props;
   const renderOrderItem = ({ item }) => <OrderCard order={item} />;
   const renderSectionHeader = ({ section: { title } }) => (
     <Text style={styles.sectionHeader}>{title}</Text>
   );
-
   return (
     <SectionList
       sections={sections}
@@ -18,20 +24,18 @@ const InProgressOrder = ({ sections }) => {
     />
   );
 };
-
 const OrderCard = ({ order }) => {
   const getStatusColor = (status) => {
     switch (status) {
       case "Preparing":
       case "Pending":
-        return "#EF4444";
+        return THEME_COLOR;
       case "Delivered":
-        return "#10B981";
+        return Green_Color;
       default:
-        return "#4B5563";
+        return THEME_TEXT_COLOR;
     }
   };
-
   return (
     <View style={styles.orderCard}>
       <View style={styles.textContainer}>
@@ -67,13 +71,9 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
   orderCard: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: WHITE_COLOR,
     padding: 16,
     borderRadius: 8,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -84,15 +84,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   orderId: {
-    color: "#1D4ED8",
+    color: THEME_TEXT_COLOR,
+
     fontWeight: "600",
   },
   itemName: {
     fontSize: 12,
-    color: "#4B5563",
+    color: THEME_TEXT_COLOR,
   },
   price: {
-    color: "#EF4444",
+    color: THEME_COLOR,
     fontWeight: "bold",
   },
   statusContainer: {
@@ -100,12 +101,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   status: {
-    color: "#FFFFFF",
+    color: WHITE_COLOR,
+
     fontSize: 12,
     fontWeight: "600",
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 9999,
+    borderRadius: 4,
     marginRight: 8,
   },
   image: {

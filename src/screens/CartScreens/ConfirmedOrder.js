@@ -16,9 +16,9 @@ const ConfirmedOrder = () => {
         textStyle={{ color: THEME_COLOR }}
         style={styles.Button}
         onPress={() => {
-          navigation.goBack(); 
+          navigation.navigate("Menu");
         }}
-      />
+      /> 
       <View style={styles.givemargin}>
         <CustomButton
           title="Back To Cart"

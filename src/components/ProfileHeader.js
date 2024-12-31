@@ -1,8 +1,7 @@
-import React, { useState, useCallback, memo } from 'react';
+ import React, { useState, useCallback, memo } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { THEME_COLOR, WHITE_COLOR, Green_Color, THEME_TEXT_COLOR } from '../res/colors';
-import { Profie_Image, Bell_ICON, DOTS_ICON, CAMERA_ICON } from '../res/drawables';
-
+import { Profie_Image, Bell_ICON, DOTS_ICON, CAMERA_ICON , ARROW_ICON} from '../res/drawables';
 const Tab = memo(({ label, isActive, onPress, customStyle }) => (
   <TouchableOpacity
     style={[styles.tab, isActive ? styles.activeTab : styles.inactiveTab, customStyle]}
@@ -13,7 +12,6 @@ const Tab = memo(({ label, isActive, onPress, customStyle }) => (
     </Text>
   </TouchableOpacity>
 ));
-
 const Tabs = memo(({ tabs, activeTab, onTabPress, position }) => (
   <View style={[styles.tabsContainer, position]}>
     {tabs.map((tab, index) => (
@@ -21,60 +19,78 @@ const Tabs = memo(({ tabs, activeTab, onTabPress, position }) => (
         key={index}
         label={tab.label}
         isActive={activeTab === index}
-        onPress={() => onTabPress(index)}
+        onPress={() => onTabPress(index)} 
         customStyle={tab.style}
       />
     ))}
   </View>
 ));
-
 const ProfileHeader = memo(({
   title = "Huzaifa Saddique",
   containerStyle = {},
-  DOTSICON = { DOTS_ICON },
+  DOTSICON = DOTS_ICON,
   textContainerStyle = {},
   icon = {},
   Cameraicon = {},
   showShadow = false,
   showTabsEnabled = true,
-  showTabsProp = true // Prop to control visibility of tabs and dot icon
+  showTabsProp = true,
+  showDotsIcon = true,
+  showArrowIcon = false,
+  navigation
 }) => {
   const [showTabs, setShowTabs] = useState(false);
   const [activeTab, setActiveTab] = useState(null);
   const [dotsPosition, setDotsPosition] = useState({});
-
   const tabsData = [
-    { label: 'Settings', style: styles.tabRadiusTop },
+    { label: 'Settings', style: styles.tabRadiusTop},
     { label: 'Update Profile' },
     { label: 'Language', style: styles.tabRadiusBottom },
   ];
 
   const toggleTabs = () => setShowTabs(prevState => !prevState);
   const handleTabPress = (index) => {
-    if (activeTab !== index) setActiveTab(index);
+    if (activeTab !== index) {
+      setActiveTab(index);
+      switch (index) {
+        case 0:
+          navigation.navigate('Settings');
+          break;
+        case 1:
+          navigation.navigate('UpdateProfile');
+          break;
+          case 2:
+            navigation.navigate('LanguageSettings');
+            break;
+        default:
+          break;
+      }
+    }
   };
-
   const onDotsLayout = useCallback(({ nativeEvent: { layout } }) => {
     setDotsPosition(layout);
-  }, []);
-
-  const handleOutsideTouch = () => {
-    setShowTabs(false);
-  };
-
+  }, []); 
+  const handleOutsideTouch = useCallback(() => setShowTabs(false), []);
   return (
     <TouchableWithoutFeedback onPress={handleOutsideTouch}>
       <View style={[styles.container, containerStyle, showShadow && styles.shadow]}>
         <View style={[styles.profileContainer]}>
           <View style={styles.iconContainer}>
-            {showTabsEnabled && showTabsProp && (
+            {showDotsIcon && showTabsEnabled && showTabsProp && ( 
               <TouchableOpacity onPress={toggleTabs} onLayout={onDotsLayout}>
                 <Image source={DOTSICON} style={[styles.icon, icon]} />
               </TouchableOpacity>
             )}
+            {showArrowIcon && ( 
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Image source={ARROW_ICON} style={[styles.icon, icon]} />
+              </TouchableOpacity>
+            )}
           </View>
           <View style={styles.bellContainer}>
+            <TouchableOpacity onPress={()=>{navigation.navigate("Notifcations")}}>
             <Image source={Bell_ICON} style={styles.icon} />
+            </TouchableOpacity>
             <View style={styles.notificationBadge} />
           </View>
         </View>

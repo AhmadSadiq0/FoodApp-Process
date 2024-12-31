@@ -8,7 +8,9 @@ import {
   BLACK_COLOR,
   WHITE_COLOR,
 } from "../res/colors";
-const ConfirmOrderSummary = ({ onButtonPressed }) => {
+const ConfirmOrderSummary = (props) => {
+  const { onButtonPressed }=props
+
   return (
     <View style={styles.container}>
       <View style={styles.card}>

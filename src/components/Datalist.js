@@ -5,9 +5,9 @@ import { THEME_TEXT_COLOR,THEME_COLOR } from "../res/colors";
 const { width } = Dimensions.get("window");
 const ITEM_WIDTH = 150 + 14; 
 const SPACING = (width - ITEM_WIDTH) / 2;
-const Datalist = ({ title, seeMoreText, onSeeMorePress, data, onAddToCart }) => {
+const Datalist = (props) => {
+  const { title, seeMoreText, onSeeMorePress, data, onAddToCart } = props;
   const scrollX = useRef(new Animated.Value(0)).current;
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -45,7 +45,7 @@ const Datalist = ({ title, seeMoreText, onSeeMorePress, data, onAddToCart }) => 
                 name={item.name}
                 price={item.price}
                 image={item.image}
-                onAdd={() => onAddToCart(item)} // Pass burger data
+                onAdd={() => onAddToCart(item)}
               />
             </Animated.View>
           );
@@ -57,7 +57,6 @@ const Datalist = ({ title, seeMoreText, onSeeMorePress, data, onAddToCart }) => 
 
 const styles = StyleSheet.create({
   container: {
-    // marginTop:40,
     marginVertical:8,
   },
   header: {

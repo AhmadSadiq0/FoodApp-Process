@@ -1,39 +1,50 @@
 import React from "react";
-import { StyleSheet, View , ScrollView} from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import Header1 from "../../components/Header1";
 import { Confirm_Order } from "../../res/drawables";
 import DeliveryAddress from "../../components/DelivaryComponent";
 import PaymentComponent from "../../components/PaymentComponent";
 import ConfirmOrderSummary from "../../components/ConfirmOrderSummary";
 import { IMAGE25, IMAGE26, IMAGE27 } from "../../res/drawables";
-import ConfirmedOrder from "./ConfirmedOrder";
+
 const paymentMethods = [
   { name: "Debit Card", image: IMAGE25 },
   { name: "App Wallet", image: IMAGE26 },
   { name: "Cash on Delivery", image: IMAGE27 },
 ];
-const OrderConfirmationScreen = ({navigation}) => {
+
+const OrderConfirmationScreen = (props) => {
+  const { navigation } =props
+  const sections = [
+    { key: "DeliveryAddress", component: <DeliveryAddress /> },
+    { key: "PaymentComponent", component: <PaymentComponent paymentMethods={paymentMethods} /> },
+    {
+      key: "ConfirmOrderSummary",
+      component: (
+        <ConfirmOrderSummary
+          onButtonPressed={() => navigation.navigate("ConfirmedOrder")}
+        />
+      ),
+    },
+  ];
   return (
-    <View style={styles.container}> 
+    <View style={styles.container}>
       <Header1 title="Confirm Order" discountIcon={Confirm_Order} />
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <DeliveryAddress/>
-      <PaymentComponent paymentMethods = {paymentMethods}/>
-      <ConfirmOrderSummary  onButtonPressed={() => navigation.navigate("ConfirmedOrder")} />
-      {/* <ConfirmOrderSummary navigation={navigation} /> */}
-      </ScrollView>
+      <FlatList
+        data={sections}
+        keyExtractor={(item) => item.key}
+        renderItem={({ item }) => <View>{item.component}</View>}
+        contentContainerStyle={styles.flatListContainer}
+      />
     </View>
   );
-}; 
-const styles = StyleSheet.create({ 
+};
+
+const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: -30,
+    flex: 1,
   },
-  scrollContainer: {
-    alignItems: "center",
-    // paddingVertical: 20, 
+  flatListContainer: {
     paddingBottom: 60,
   },
 });

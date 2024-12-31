@@ -7,10 +7,10 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { THEME_COLOR, THEME_TEXT_COLOR } from "../../res/colors";
 import { BURGERIMG } from "../../res/drawables";
 import { NotificationsScreen } from "../NotificationsScreens";
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = (props) => {
+  const {navigation}=props
   const refRBSheet = useRef();
   const [selectedBurger, setSelectedBurger] = useState(null); 
-
   const burgerData = [
     {
       id: 1,
@@ -36,6 +36,12 @@ const HomeScreen = ({ navigation }) => {
       price: 399,
       image: BURGERIMG,
     },
+    {
+      id: 5,
+      name: "Chicken Burger",
+      price: 399,
+      image: BURGERIMG,
+    },
   ];
 
   const handleAddToCart = (burger) => {
@@ -56,6 +62,7 @@ const HomeScreen = ({ navigation }) => {
     { id: 1, title: "Discounts" },
     { id: 2, title: "Deals" },
     { id: 3, title: "Loyalty Burgers" },
+    { id: 4, title: "Burgers" },
   ];
   return (
     <View style={styles.container}>
@@ -70,11 +77,7 @@ const HomeScreen = ({ navigation }) => {
         height={300}
         openDuration={250}
         closeOnDragDown={true}
-        // customStyles={{
-        //   container: { borderTopLeftRadius: 20, borderTopRightRadius: 20 },
-        // }}
       >
-        
         {selectedBurger && (
           <AddCard
             name={selectedBurger.name}
@@ -91,7 +94,6 @@ const HomeScreen = ({ navigation }) => {
 export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
-    marginBottom:10,
+    marginBottom:250,
   },
 });

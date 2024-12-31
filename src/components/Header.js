@@ -27,16 +27,17 @@ const SearchBar = ({ placeholder }) => (
 );
 
 // Header Component
-const Header = ({
-  username = "Huzaifa Saddique",
-  title = "Ahmad Kitchen",
-  Welcomermsg = "Welcome to",
-  containerStyle = {},
-  textContainer = {},
-  showSearch = true,
-  showShadow = false,
-  onNotificationPressed,
-}) => {
+const Header = (props) => {
+  const {
+    username = "Huzaifa Saddique",
+    title = "Ahmad Kitchen",
+    Welcomermsg = "Welcome to",
+    containerStyle = {},
+    textContainer = {},
+    showSearch = true,
+    showShadow = false,
+    onNotificationPressed,
+  } = props;
   return (
     <View style={styles.mainContainer}>
       <View
@@ -52,9 +53,7 @@ const Header = ({
           <View style={styles.bellContainer}>
             {onNotificationPressed && (
               <>
-                <TouchableOpacity
-                  onPress={onNotificationPressed}
-                >
+                <TouchableOpacity onPress={onNotificationPressed}>
                   <Image source={Bell_ICON} style={styles.bellIcon} />
                 </TouchableOpacity>
                 <View style={styles.notificationBadge} />

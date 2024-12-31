@@ -30,7 +30,6 @@ import {
     OrderConfirmationScreen,
     ConfirmedOrder
 } from '../screens/CartScreens/index';
-
 import {
     LanguageSettingsScreen,
     ProfileScreen,
@@ -61,7 +60,11 @@ const AuthStack = () => {
             <Stack.Screen options={{ headerShown: false }} name="ConfirmOrder" component={OrderConfirmationScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Orders" component={OrdersScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Profile" component={ProfileScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Notifications" component={NotificationsScreen} />
+            <Stack.Screen 
+                options={{ header: () => <Header1 discountIcon={null} title="Notifications" />, headerShown: true }} 
+                name="Notifications" 
+                component={NotificationsScreen} 
+            />
             <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPasswordScreen} />
             {/* <Stack.Screen options={{ header : () => <Header1/>, headerShown : true }} name="Discounts" component={DiscountsScreen} /> */}
         </Stack.Navigator>
@@ -74,14 +77,15 @@ const HomeStack = () => {
             <Stack.Screen options={{ headerShown: false }} name="Cart" component={CartScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Deals" component={DealsScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Offers" component={OffersScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Notifications" component={NotificationsScreen} />
+            {/* <Stack.Screen options={{ headerShown: false }} name="Notifications" component={NotificationsScreen} /> */}
+            <Stack.Screen    options={{ header: () => <Header1 discountIcon={null} title="Notifications" />, headerShown: true }}  name="Notifications" component={NotificationsScreen} />
             <Stack.Screen options={{ header : () => <Header1/>, headerShown : true }} name="Discounts" component={DiscountsScreen} />
         </Stack.Navigator>
     )
 } 
 const MenuStack = () => {
     return (
-        <Stack.Navigator i nitialRouteName="Menu" headerMode={false}>
+        <Stack.Navigator initialRouteName="Menu" headerMode={false}>
             <Stack.Screen options={{ headerShown: false }} name="Menu" component={MenuScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
         </Stack.Navigator>
@@ -97,7 +101,7 @@ const CartStack = () => {
             <Stack.Screen options={{ headerShown: false }} name="ConfirmedOrder" component={ConfirmedOrder} />
         </Stack.Navigator>
     )
-}
+} 
 const OrdersStack = () => {
     return (
         <Stack.Navigator initialRouteName="Orders" headerMode={false}>
@@ -111,14 +115,13 @@ const ProfileStack = () => {
     return (
         <Stack.Navigator initialRouteName="Profile" headerMode={false}>
             <Stack.Screen options={{ headerShown: false }} name="Profile" component={ProfileScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="UpdateProfile" component={UpdateProfileScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="LanguageSettings" component={LanguageSettingsScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="UpdateProfile" component={UpdateProfileScreen} /> 
+            <Stack.Screen   options={{ header: () => <Header1 discountIcon={null} title="Notifications" />, headerShown: true }} name="Settings" component={SettingsScreen} />
+            <Stack.Screen  options={{ header: () => <Header1 discountIcon={null} title="Notifications" />, headerShown: true }} name="LanguageSettings" component={LanguageSettingsScreen} />
+            <Stack.Screen    options={{ header: () => <Header1 discountIcon={null} title="Notifications" />, headerShown: true }}  name="Notifcations" component={NotificationsScreen} />
         </Stack.Navigator> 
     )
 }
-
 function BottomTabStack() {
     return (
         <Tab.Navigator

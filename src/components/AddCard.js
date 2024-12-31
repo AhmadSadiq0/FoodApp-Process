@@ -6,14 +6,16 @@ import { THEME_COLOR,
     GRAY_COLOR,
     BLACK_COLOR,
     WHITE_COLOR, } from "../res/colors";
-const AddCard = ({
-  name,
-  description,
-  image,
-  price,
-  onAddToCart,
-  buttonText = "Add to Cart",
-}) => {
+const AddCard = (props) => {
+  const{
+    name,
+    description,
+    image,
+    price,
+    onAddToCart,
+    buttonText = "Add to Cart",
+  } = props;
+
   return (
     <View style={styles.card}>
       <Text style={styles.name}>{name}</Text>
@@ -34,11 +36,7 @@ const styles = StyleSheet.create({
       width: 200,
       padding: 10,
       borderRadius: 12,
-      backgroundColor: WHITE_COLOR, 
-      shadowColor: BLACK_COLOR, 
-      shadowOpacity: 0.1,
-      shadowRadius: 5,
-      elevation: 4,
+      backgroundColor: WHITE_COLOR,  
       alignItems: "center",
       margin: 10,
     },

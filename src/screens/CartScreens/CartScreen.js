@@ -16,12 +16,13 @@ import {
   Back_Ground
 } from '../../res/colors';
 import { BURGERIMG, DELETE_ICON } from '../../res/drawables';
-import CustomButton from '../../components/CustomButton';
+import CustomButton from "../../components/CustomButtom";
 import RBSheet from 'react-native-raw-bottom-sheet';
 
 const { width: deviceWidth } = Dimensions.get('window');
 
-const CartScreen = () => {
+const CartScreen = (props) => {
+  const {navigation}=props
   const [cartItems, setCartItems] = useState([
     { id: 1, name: 'Double Cheese Burger', price: 599, serving: 'Single Serving', image: BURGERIMG, active: false },
     { id: 2, name: 'Cheese Burger', price: 449, serving: 'Single Serving', image: BURGERIMG, active: false },
@@ -112,8 +113,12 @@ const CartScreen = () => {
               Sub Total: <Text style={styles.highlightText}>Rs. {calculateSubtotal()}</Text>
             </Text>
             <View style={styles.customButton}>
-              <CustomButton title={'CheckOut'} />
-            </View>
+    <CustomButton
+    title={'CheckOut'}
+    onPress={() => navigation.navigate("ConfirmOrder")}
+  />
+
+</View>
           </View>
         )}
       </RBSheet>
@@ -270,6 +275,7 @@ const styles = StyleSheet.create({
   customButton: {
     marginTop: 20,
     marginBottom: 30,
+    width: '100%',
   },
 });
 

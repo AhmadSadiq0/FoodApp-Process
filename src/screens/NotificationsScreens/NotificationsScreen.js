@@ -11,15 +11,13 @@ import {
     WHITE_COLOR,
     THEME_COLOR,
     GRAY_COLOR,
+    BLACK_COLOR,
     Green_Color,
 } from '../../res/colors';
 import { PIZZAIMAGE } from '../../res/drawables';
-import CustomButton from '../../components/CustomButton';
+import CustomButton from '../../components/CustomButtom';
 import RBSheet from 'react-native-raw-bottom-sheet';
-
-// const { width: deviceWidth } = Dimensions.get('window');
-
-const CartScreen = () => {
+const NotificationsScreen = ({ navigation }) => {
     const [cartItems, setCartItems] = useState([
         {
             id: 1, title: 'Your order has been confirmed!',
@@ -97,7 +95,7 @@ const CartScreen = () => {
                         </View>
                         <Text style={styles.messageText}>{activeItem.message}</Text>
                         <View style={styles.customButton}>
-                            <CustomButton title={'Go Back'}  />
+                            <CustomButton title={'Go Back'} onPress={() => navigation.goBack()} />
                         </View>
                     </View>
                 )}
@@ -232,5 +230,4 @@ const styles = StyleSheet.create({
      
     },
 });
-
-export default CartScreen;
+export default NotificationsScreen;
