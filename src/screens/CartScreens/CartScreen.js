@@ -13,50 +13,48 @@ import {
   THEME_COLOR,
   GRAY_COLOR,
   BLACK_COLOR,
-  Back_Ground
+  Back_Ground,
 } from '../../res/colors';
 import { BURGERIMG, DELETE_ICON } from '../../res/drawables';
-import CustomButton from '../../components/CustomButton';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import CustomButtom from '../../components/CustomButtom';
 
 const { width: deviceWidth } = Dimensions.get('window');
 
-const CartScreen = ({navigation}) => {
+const CartScreen = ({ navigation }) => {
   const [cartItems, setCartItems] = useState([
     { id: 1, name: 'Double Cheese Burger', price: 599, serving: 'Single Serving', image: BURGERIMG, active: false },
     { id: 2, name: 'Cheese Burger', price: 449, serving: 'Single Serving', image: BURGERIMG, active: false },
     { id: 3, name: 'Biryani', price: 599, serving: 'Single Serving', image: BURGERIMG, active: false },
   ]);
+
   const refRBSheet = useRef(null);
 
-  // Function to handle item selection/deselection
-  const handlePressItem = (id) => {
+  const toggleItemActiveState = (id) => {
     const updatedItems = cartItems.map((item) =>
       item.id === id ? { ...item, active: !item.active } : item
     );
-    setCartItems(updatedItems);
 
-    // Open or close the RBSheet based on active items
-    const hasActiveItems = updatedItems.some((item) => item.active);
-    if (hasActiveItems) {
-      refRBSheet.current?.open();
-    } else {
-      refRBSheet.current?.close();
-    }
+    const sortedItems = [
+      ...updatedItems.filter((item) => item.active),
+      ...updatedItems.filter((item) => !item.active),
+    ];
+
+    setCartItems(sortedItems);
+    refRBSheet.current?.[sortedItems.some((item) => item.active) ? 'open' : 'close']();
   };
 
-  // Function to handle item deletion
   const handleDeleteItem = (id) => {
     const updatedCart = cartItems.filter((item) => item.id !== id);
     setCartItems(updatedCart);
 
-    // If no active items are left, close the bottom sheet
-    const hasActiveItems = updatedCart.some((item) => item.active);
-    if (!hasActiveItems) {
-      refRBSheet.current?.close();
-    } else {
-      refRBSheet.current?.open();  // Reopen the bottom sheet if there are active items left
-    }
+    const sortedItems = [
+      ...updatedCart.filter((item) => item.active),
+      ...updatedCart.filter((item) => !item.active),
+    ];
+    setCartItems(sortedItems);
+
+    refRBSheet.current?.[updatedCart.some((item) => item.active) ? 'open' : 'close']();
   };
 
   const calculateSubtotal = () => {
@@ -80,40 +78,34 @@ const CartScreen = ({navigation}) => {
         <CartItem
           key={item.id}
           item={item}
-          onPressItem={handlePressItem}
+          onPressItem={toggleItemActiveState}
           onDeleteItem={handleDeleteItem}
         />
       ))}
       <RBSheet
         ref={refRBSheet}
         height={300}
-        draggable={true}
+        draggable
         customStyles={{
           container: { borderTopLeftRadius: 20, borderTopRightRadius: 20, backgroundColor: WHITE_COLOR },
           wrapper: { backgroundColor: 'transparent' },
-          draggableIcon: { backgroundColor: '#d3d3d3' },
-        }}
-        customModalProps={{
-          animationType: 'slide',
-          statusBarTranslucent: true,
-        }}
-        customAvoidingViewProps={{
-          enabled: false,
+          draggableIcon: { backgroundColor: GRAY_COLOR },
         }}
       >
         {selectedItems.length > 0 && (
           <View style={styles.summaryCard}>
-            <View style={styles.cardTextContainer}>
-              <Text style={styles.summaryText}>
-                Selected Item(s): <Text style={styles.highlightText}>{selectedItems.length}</Text>
-              </Text>
-            </View>
             <Text style={styles.summaryText}>
+              Selected Item(s): <Text style={styles.highlightText}>{selectedItems.length}</Text>{'\n'}
               Sub Total: <Text style={styles.highlightText}>Rs. {calculateSubtotal()}</Text>
             </Text>
-            <View style={styles.customButton}>
-              <CustomButton title={'CheckOut'} />
-            </View>
+            <CustomButtom
+              title={"Check Out"}
+              width={'100%'}
+              height={48}
+              backgroundColor={THEME_COLOR}
+              borderColor={THEME_COLOR}
+              textStyle={{ color: WHITE_COLOR }}
+            />
           </View>
         )}
       </RBSheet>
@@ -121,48 +113,35 @@ const CartScreen = ({navigation}) => {
   );
 };
 
-const CartItem = ({ item, onPressItem, onDeleteItem }) => {
-  return (
-    <TouchableOpacity
-      style={[styles.cartItem, item.active && { borderColor: THEME_COLOR }]}
-      onPress={() => onPressItem(item.id)}
-      accessibilityLabel={`Select ${item.name}`}
-    >
-      {/* Image Section */}
-      <Image style={styles.cartItemImage} source={item.image} />
-
-      {/* Item Details Section */}
-      <View style={styles.cartItemDetails}>
-        <Text style={styles.cartItemName}>{item.name}</Text>
-        <Text style={styles.cartServing}>{item.serving}</Text>
-        <Text style={styles.cartItemPrice}>Rs. {item.price}/-</Text>
-      </View>
-
-      {/* Actions Section */}
-      <View style={styles.cartItemActions}>
-        {/* Circle for active state */}
-        <TouchableOpacity
-          style={styles.circleBorder}
-          onPress={() => onPressItem(item.id)}  // Toggles active state on circle press
-          accessibilityLabel={`Toggle ${item.name}`}
-        >
-          <View
-            style={[styles.circle, item.active && { backgroundColor: THEME_COLOR }]}
-          />
-        </TouchableOpacity>
-
-        {/* Delete Button */}
-        <TouchableOpacity
-          onPress={() => onDeleteItem(item.id)}
-          accessibilityLabel={`Delete ${item.name}`}
-        >
-          <Image style={styles.deleteIcon} source={DELETE_ICON} />
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
+const CartItem = ({ item, onPressItem, onDeleteItem }) => (
+  <TouchableOpacity
+    style={[styles.cartItem, item.active && { borderColor: THEME_COLOR }]}
+    onPress={() => onPressItem(item.id)}
+    accessibilityLabel={`Select ${item.name}`}
+  >
+    <Image style={styles.cartItemImage} source={item.image} />
+    <View style={styles.cartItemDetails}>
+      <Text style={styles.cartItemName}>{item.name}</Text>
+      <Text style={styles.cartServing}>{item.serving}</Text>
+      <Text style={styles.cartItemPrice}>Rs. {item.price}/-</Text>
+    </View>
+    <View style={styles.cartItemActions}>
+      <TouchableOpacity
+        style={styles.circleBorder}
+        onPress={() => onPressItem(item.id)}
+        accessibilityLabel={`Toggle ${item.name}`}
+      >
+        <View style={[styles.circle, item.active && { backgroundColor: THEME_COLOR }]} />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => onDeleteItem(item.id)}
+        accessibilityLabel={`Delete ${item.name}`}
+      >
+        <Image style={styles.deleteIcon} source={DELETE_ICON} />
+      </TouchableOpacity>
+    </View>
+  </TouchableOpacity>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -187,10 +166,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE_COLOR,
     alignItems: 'center',
     shadowColor: BLACK_COLOR,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
@@ -245,8 +221,9 @@ const styles = StyleSheet.create({
     backgroundColor: GRAY_COLOR,
   },
   summaryCard: {
-    paddingHorizontal: 20,
-    paddingVertical: 20,
+    flex: 1,
+    justifyContent: 'space-between',
+    padding: 16,
     width: deviceWidth,
     alignItems: 'center',
   },
@@ -266,10 +243,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: GRAY_COLOR,
     textAlign: 'center',
-  },
-  customButton: {
-    marginTop: 20,
-    marginBottom: 30,
   },
 });
 

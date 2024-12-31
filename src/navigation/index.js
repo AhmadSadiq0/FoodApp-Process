@@ -152,7 +152,7 @@ const AuthStack = () => {
                         showSearch={false} 
                         showShadow={true} 
                         containerStyle={{ height: 160 }} 
-                        textContainer={{ marginTop: 0 }} 
+                        // textContainer={{ marginTop: 0 }} 
                     />, 
                     headerShown: true 
                 }} 

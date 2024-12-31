@@ -11,6 +11,7 @@ import { BURGERIMG } from "../res/drawables";
 import {
   Back_Ground,
   GRAY_COLOR,
+  Green_Color,
   THEME_COLOR,
   THEME_TEXT_COLOR,
   WHITE_COLOR,
@@ -18,31 +19,44 @@ import {
 import RBOrderSheet from "./RBOrderSheet";
 import RBDelivered from "./RBDelivered";
 
-const InProgressOrder = ({ sections }) => {
+const InProgressOrder = ({ sections: initialSections }) => {
+  const [sections, setSections] = useState(initialSections);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const sheetRef = useRef();
   const deliveredSheetRef = useRef();
 
-  const openSheet = (order) => {
-    if (order.status === "Preparing" || order.status === "Pending") {
-      setSelectedOrder(order);
-      sheetRef.current.open();
+  const handleCardPress = (order) => {
+    const isSameOrder = selectedOrder?.orderId === order.orderId;
+    setSelectedOrder(isSameOrder ? null : order);
+
+    if (!isSameOrder) {
+      const sheet = order.status === "Delivered" ? deliveredSheetRef : sheetRef;
+      sheet.current.open();
     }
+
+    setSections((prevSections) => reorderSections(prevSections, order));
   };
 
-  const openDeliveredSheet = (order) => {
-    if (order.status === "Delivered") {
-      setSelectedOrder(order);
-      deliveredSheetRef.current.open();
+  const reorderSections = (sections, order) => {
+    const updatedSections = [...sections];
+    const sectionIndex = updatedSections.findIndex((section) =>
+      section.data.some((item) => item.orderId === order.orderId)
+    );
+
+    if (sectionIndex !== -1) {
+      const [selectedSection] = updatedSections.splice(sectionIndex, 1);
+      selectedSection.data.sort((a, b) => (a.orderId === order.orderId ? -1 : 1));
+      updatedSections.unshift(selectedSection);
     }
+
+    return updatedSections;
   };
 
   const renderOrderItem = ({ item }) => (
     <OrderCard
       order={item}
-      onPress={() =>
-        item.status === "Delivered" ? openDeliveredSheet(item) : openSheet(item)
-      }
+      isSelected={selectedOrder?.orderId === item.orderId}
+      onPress={() => handleCardPress(item)}
     />
   );
 
@@ -59,29 +73,30 @@ const InProgressOrder = ({ sections }) => {
         renderSectionHeader={renderSectionHeader}
         contentContainerStyle={styles.sectionListContainer}
       />
-      {/* Integrating RBOrderSheet component */}
       <RBOrderSheet sheetRef={sheetRef} selectedOrder={selectedOrder} />
-      {/* Integrating RBDelivered component */}
       <RBDelivered sheetRef={deliveredSheetRef} selectedOrder={selectedOrder} />
     </View>
   );
 };
 
-const OrderCard = ({ order, onPress }) => {
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "Preparing":
-      case "Pending":
-        return "#EF4444";
-      case "Delivered":
-        return "#10B981";
-      default:
-        return "#4B5563";
-    }
+const OrderCard = ({ order, onPress, isSelected }) => {
+  const statusColors = {
+    Preparing: THEME_COLOR,
+    Delivered: Green_Color,
+    default: "#4B5563",
   };
 
   return (
-    <Pressable onPress={onPress} style={styles.orderCard}>
+    <Pressable
+      onPress={onPress}
+      style={[
+        styles.orderCard,
+        {
+          borderColor: isSelected ? THEME_COLOR : "transparent",
+          borderWidth: isSelected ? 2 : 0,
+        },
+      ]}
+    >
       <View style={styles.textContainer}>
         <Text style={styles.orderId}>{order.orderId}</Text>
         <Text style={styles.itemName}>{order.itemName}</Text>
@@ -91,7 +106,7 @@ const OrderCard = ({ order, onPress }) => {
         <Text
           style={[
             styles.status,
-            { backgroundColor: getStatusColor(order.status) },
+            { backgroundColor: statusColors[order.status] || statusColors.default },
           ]}
         >
           {order.status}
@@ -120,10 +135,9 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE_COLOR,
     marginBottom: 15,
     padding: 15,
-    borderRadius: 8,
+    borderRadius: 10,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
     shadowColor: GRAY_COLOR,
     shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 2 },
@@ -133,35 +147,35 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   orderId: {
-    fontSize: 16,
+    fontSize: 13,
     fontWeight: "bold",
     color: THEME_TEXT_COLOR,
   },
   itemName: {
-    fontSize: 14,
+    fontSize: 12,
     color: THEME_TEXT_COLOR,
   },
   price: {
-    fontSize: 16,
+    fontSize: 12,
     color: THEME_COLOR,
     fontWeight: "bold",
   },
   statusContainer: {
-    justifyContent: "center",
     flexDirection: "row",
     alignItems: "center",
   },
   status: {
-    paddingVertical: 4,
-    paddingHorizontal: 12,
+    paddingHorizontal: 2,
     borderRadius: 12,
+    width: 80,
+    height: 20,
     color: WHITE_COLOR,
     fontWeight: "bold",
     textAlign: "center",
   },
   image: {
-    width: 30,
-    height: 30,
+    width: 50,
+    height: 50,
     marginLeft: 10,
   },
 });

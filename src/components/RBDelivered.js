@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, View, Pressable } from "react-native";
+import { ScrollView, StyleSheet, Text, View, Pressable, TouchableOpacity } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { GRAY_COLOR, WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, Back_Ground } from "../res/colors";
 import CustomButtom from "./CustomButtom";
@@ -44,9 +44,9 @@ const RBDelivered = ({ sheetRef, selectedOrder }) => {
                                 </Pressable>
                             ))}
                         </View>
-                        <Pressable style={styles.submitButton} onPress={() => console.log("Rating Submitted:", rating)}>
+                        <TouchableOpacity style={styles.submitButton} onPress={() => console.log("Rating Submitted:", rating)}>
                             <Text style={styles.submitButtonText}>Submit</Text>
-                        </Pressable>
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.ButtonsContainer} >
                     <View style={styles.buttonContainer}>

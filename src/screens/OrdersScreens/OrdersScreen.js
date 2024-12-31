@@ -55,11 +55,10 @@ const OrdersScreen = () => {
       data: allOrders.filter((order) => order.status === "Preparing"),
     },
     {
-      title: "Delivered Orders",
+      title: "Orders History",
       data: allOrders.filter((order) => order.status === "Delivered"),
     },
   ];
-
   return (
     <View style={styles.container}>
       <Header
