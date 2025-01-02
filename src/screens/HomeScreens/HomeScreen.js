@@ -3,7 +3,7 @@ import { StyleSheet, View, FlatList } from "react-native";
 import Header from "../../components/Header";
 import Datalist from "../../components/Datalist";
 import AddCard from "../../components/AddCard";
-import { WHITE_COLOR, Back_Ground } from "../../res/colors";
+import { WHITE_COLOR, Back_Ground, GRAY_COLOR, Green_Color} from "../../res/colors";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { BURGERIMG } from "../../res/drawables";
 
@@ -55,7 +55,7 @@ const HomeScreen = ({ navigation }) => {
   const datalistSections = [
     { id: 1, title: "Discounts" },
     { id: 2, title: "Deals" },
-    { id: 3, title: "Loyalty Burgers" },
+    { id: 3, title: "Loyalty Burgers"},
   ];
   return (
     <View style={styles.container}>
@@ -72,7 +72,7 @@ const HomeScreen = ({ navigation }) => {
         customStyles={{
           container: { borderTopLeftRadius: 20, borderTopRightRadius: 20,  alignItems: 'center', backgroundColor: WHITE_COLOR },
           wrapper: { backgroundColor: 'transparent' },
-          draggableIcon: { backgroundColor: '#d3d3d3' },
+          draggableIcon: { backgroundColor: Green_Color },
         }}
         customModalProps={{
           animationType: 'slide',
