@@ -3,12 +3,11 @@ import { StyleSheet, View, FlatList } from "react-native";
 import Header from "../../components/Header";
 import Datalist from "../../components/Datalist";
 import AddCard from "../../components/AddCard";
-import { WHITE_COLOR, Back_Ground } from "../../res/colors";
+import { WHITE_COLOR, Back_Ground, GRAY_COLOR, Green_Color} from "../../res/colors";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { BURGERIMG } from "../../res/drawables";
-import { NotificationsScreen } from "../NotificationsScreens";
-const HomeScreen = (props) => {
-  const {navigation}=props
+
+const HomeScreen = ({ navigation }) => {
   const refRBSheet = useRef();
   const [selectedBurger, setSelectedBurger] = useState(null);
 
@@ -37,23 +36,18 @@ const HomeScreen = (props) => {
       price: 399,
       image: BURGERIMG,
     },
-    {
-      id: 5,
-      name: "Chicken Burger",
-      price: 399,
-      image: BURGERIMG,
-    },
   ];
 
   const handleAddToCart = (burger) => {
     setSelectedBurger(burger);
     refRBSheet.current.open();
-  }; 
+  };
+
   const renderDatalist = ({ item }) => (
     <Datalist
       title={item.title}
       seeMoreText="See All"
-      onSeeMorePress={() => console.log(`${item.title} See All pressed!`)}
+      onSeeMorePress={() => console.log("hi")}
       data={burgerData}
       onAddToCart={handleAddToCart}
     />
@@ -61,12 +55,11 @@ const HomeScreen = (props) => {
   const datalistSections = [
     { id: 1, title: "Discounts" },
     { id: 2, title: "Deals" },
-    { id: 3, title: "Loyalty Burgers" },
-    { id: 4, title: "Burgers" },
+    { id: 3, title: "Loyalty Burgers"},
   ];
   return (
     <View style={styles.container}>
-      <Header  onNotificationPressed={() => {navigation.navigate("Notifications")}} />
+      <Header />
       <FlatList
         data={datalistSections}
         renderItem={renderDatalist}
@@ -76,10 +69,10 @@ const HomeScreen = (props) => {
         ref={refRBSheet}
         height={420}
         draggable={true}
-        customStyles={{ 
+        customStyles={{
           container: { borderTopLeftRadius: 20, borderTopRightRadius: 20,  alignItems: 'center', backgroundColor: WHITE_COLOR },
           wrapper: { backgroundColor: 'transparent' },
-          draggableIcon: { backgroundColor: '#d3d3d3' },
+          draggableIcon: { backgroundColor: Green_Color },
         }}
         customModalProps={{
           animationType: 'slide',
@@ -95,7 +88,7 @@ const HomeScreen = (props) => {
             description="A delicious choice!"
             image={selectedBurger.image}
             price={selectedBurger.price}
-            onAddToCart={() => console.log(`${selectedBurger.name} added to cart!`)}
+            onAddToCart={() => console.log("Added to Cart")}
           />
         )}
       </RBSheet>
@@ -111,4 +104,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
