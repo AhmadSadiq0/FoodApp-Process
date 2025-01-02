@@ -5,7 +5,7 @@ import { TouchableOpacity, Text, StyleSheet } from "react-native";
 const CustomButton = (props) => {
   const { title, onPress, style, textStyle } =props
   return (
-    <TouchableOpacity style={[styles.button,  { backgroundColor}, {borderColor}, style]} onPress={onPress}>
+    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
       <Text style={[styles.buttonText, textStyle]}>{title}</Text>
     </TouchableOpacity>
   );
@@ -28,4 +28,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomButtom;
+export default CustomButton;

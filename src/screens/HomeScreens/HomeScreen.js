@@ -10,7 +10,8 @@ import { NotificationsScreen } from "../NotificationsScreens";
 const HomeScreen = (props) => {
   const {navigation}=props
   const refRBSheet = useRef();
-  const [selectedBurger, setSelectedBurger] = useState(null); 
+  const [selectedBurger, setSelectedBurger] = useState(null);
+
   const burgerData = [
     {
       id: 1,
@@ -47,8 +48,7 @@ const HomeScreen = (props) => {
   const handleAddToCart = (burger) => {
     setSelectedBurger(burger);
     refRBSheet.current.open();
-  };
-
+  }; 
   const renderDatalist = ({ item }) => (
     <Datalist
       title={item.title}
@@ -74,9 +74,20 @@ const HomeScreen = (props) => {
       />
       <RBSheet
         ref={refRBSheet}
-        height={300}
-        openDuration={250}
-        closeOnDragDown={true}
+        height={420}
+        draggable={true}
+        customStyles={{ 
+          container: { borderTopLeftRadius: 20, borderTopRightRadius: 20,  alignItems: 'center', backgroundColor: WHITE_COLOR },
+          wrapper: { backgroundColor: 'transparent' },
+          draggableIcon: { backgroundColor: '#d3d3d3' },
+        }}
+        customModalProps={{
+          animationType: 'slide',
+          statusBarTranslucent: true,
+        }}
+        customAvoidingViewProps={{
+          enabled: false,
+        }}
       >
         {selectedBurger && (
           <AddCard
@@ -96,6 +107,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom:250,
+    backgroundColor: Back_Ground,
+    marginBottom: 10,
   },
 });

@@ -9,18 +9,61 @@ import {
 } from "react-native";
 import { BURGERIMG } from "../res/drawables";
 import {
+  Back_Ground,
+  GRAY_COLOR,
+  Green_Color,
   THEME_COLOR,
   THEME_TEXT_COLOR,
   WHITE_COLOR,
-  Green_Color,
 } from "../res/colors";
+import RBOrderSheet from "./RBOrderSheet";
+import RBDelivered from "./RBDelivered";
 
-const InProgressOrder = (props) => {
-  const { sections } = props;
-  const renderOrderItem = ({ item }) => <OrderCard order={item} />;
+const InProgressOrder = ({ sections: initialSections }) => {
+  const [sections, setSections] = useState(initialSections);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const sheetRef = useRef();
+  const deliveredSheetRef = useRef();
+
+  const handleCardPress = (order) => {
+    const isSameOrder = selectedOrder?.orderId === order.orderId;
+    setSelectedOrder(isSameOrder ? null : order);
+
+    if (!isSameOrder) {
+      const sheet = order.status === "Delivered" ? deliveredSheetRef : sheetRef;
+      sheet.current.open();
+    }
+
+    setSections((prevSections) => reorderSections(prevSections, order));
+  };
+
+  const reorderSections = (sections, order) => {
+    const updatedSections = [...sections];
+    const sectionIndex = updatedSections.findIndex((section) =>
+      section.data.some((item) => item.orderId === order.orderId)
+    );
+
+    if (sectionIndex !== -1) {
+      const [selectedSection] = updatedSections.splice(sectionIndex, 1);
+      selectedSection.data.sort((a, b) => (a.orderId === order.orderId ? -1 : 1));
+      updatedSections.unshift(selectedSection);
+    }
+
+    return updatedSections;
+  };
+
+  const renderOrderItem = ({ item }) => (
+    <OrderCard
+      order={item}
+      isSelected={selectedOrder?.orderId === item.orderId}
+      onPress={() => handleCardPress(item)}
+    />
+  );
+
   const renderSectionHeader = ({ section: { title } }) => (
     <Text style={styles.sectionHeader}>{title}</Text>
   );
+
   return (
     <View style={styles.container}>
       <SectionList
@@ -30,14 +73,13 @@ const InProgressOrder = (props) => {
         renderSectionHeader={renderSectionHeader}
         contentContainerStyle={styles.sectionListContainer}
       />
-      {/* Integrating RBOrderSheet component */}
       <RBOrderSheet sheetRef={sheetRef} selectedOrder={selectedOrder} />
-      {/* Integrating RBDelivered component */}
       <RBDelivered sheetRef={deliveredSheetRef} selectedOrder={selectedOrder} />
     </View>
   );
 };
-const OrderCard = ({ order }) => {
+
+const OrderCard = ({ order, isSelected, onPress }) => {
   const getStatusColor = (status) => {
     switch (status) {
       case "Preparing":
@@ -49,8 +91,18 @@ const OrderCard = ({ order }) => {
         return THEME_TEXT_COLOR;
     }
   };
+
   return (
-    <Pressable onPress={onPress} style={styles.orderCard}>
+    <Pressable
+      onPress={onPress}
+      style={[
+        styles.orderCard,
+        {
+          borderColor: isSelected ? THEME_COLOR : "transparent",
+          borderWidth: isSelected ? 2 : 0,
+        },
+      ]}
+    >
       <View style={styles.textContainer}>
         <Text style={styles.orderId}>{order.orderId}</Text>
         <Text style={styles.itemName}>{order.itemName}</Text>
@@ -91,7 +143,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
     shadowColor: GRAY_COLOR,
     shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 2 },
@@ -102,7 +153,6 @@ const styles = StyleSheet.create({
   },
   orderId: {
     color: THEME_TEXT_COLOR,
-
     fontWeight: "600",
   },
   itemName: {
@@ -114,13 +164,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   statusContainer: {
-    justifyContent: "center",
     flexDirection: "row",
     alignItems: "center",
   },
   status: {
     color: WHITE_COLOR,
-
     fontSize: 12,
     fontWeight: "600",
     paddingHorizontal: 8,
@@ -129,8 +177,8 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   image: {
-    width: 30,
-    height: 30,
+    width: 50,
+    height: 50,
     marginLeft: 10,
   },
 });
