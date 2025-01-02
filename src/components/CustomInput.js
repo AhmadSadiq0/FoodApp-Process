@@ -6,16 +6,17 @@ import { GRAY_COLOR } from "../res/colors";
 import { WHITE_COLOR } from "../res/colors";
 
 
-const InputField = ({
-  label,
-  placeholder,
-  secureTextEntry,
-  value,
-  onChangeText,
-  style,
-  keyboardType = "default", 
-  autoCapitalize = "none", 
-}) => {
+const InputField = (props) => {
+ const  {
+    label,
+    placeholder,
+    secureTextEntry,
+    value,
+    onChangeText,
+    style,
+    keyboardType = "default", 
+    autoCapitalize = "none", 
+  } = props;  
   const [showPassword, setShowPassword] = useState(false);
   const [labelColor, setLabelColor] = useState(THEME_TEXT_COLOR);
 

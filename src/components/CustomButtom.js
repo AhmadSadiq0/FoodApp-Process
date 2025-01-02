@@ -1,10 +1,9 @@
 import React from "react";
 import { THEME_COLOR , WHITE_COLOR} from "../res/colors";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
-
-const CustomButtom = ({ title, onPress, backgroundColor, borderColor , style, textStyle , }) => {
+const CustomButton = ({ title, onPress, backgroundColor, borderColor , style, textStyle , }) => {
   return (
-    <TouchableOpacity style={[styles.button,  { backgroundColor}, {borderColor}, style]} onPress={onPress}>
+    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
       <Text style={[styles.buttonText, textStyle]}>{title}</Text>
     </TouchableOpacity>
   );
@@ -21,10 +20,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    color: WHITE_COLOR,
     fontWeight: "bold",
     fontSize: 24,
   },
 });
 
-export default CustomButtom;
+export default CustomButton;

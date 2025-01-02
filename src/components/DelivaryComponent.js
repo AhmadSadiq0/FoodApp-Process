@@ -6,7 +6,7 @@ import {  WHITE_COLOR,THEME_COLOR } from "../res/colors";
   const [isEditing, setIsEditing] = useState(false);
   const [address, setAddress] = useState("32215 Maplewood Avenue Pine Hills District.");
   const handleEdit = () => { 
-    setIsEditing(true);
+    setIsEditing(true); 
   };
   const handleSave = () => {
     setIsEditing(false);
@@ -55,14 +55,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     flexDirection: "row",
     alignItems: "flex-start",
-    width: "90%",
+    width: "95%",
     maxWidth: 330,
-    alignSelf: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
   },
   addressTitle: {
     marginLeft: 4,
@@ -76,7 +70,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   addressInput: {
-    marginLeft: 20,
     color: "#4b5563",
     marginTop: 4,
     borderWidth: 1,
@@ -85,9 +78,9 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   image: {
-    width: 24, 
-    height: 24, 
-    marginRight: 11,
+    width: 28, 
+    height: 28,
+    marginLeft: 20,
   },
 });
 export default DelivaryComponent;

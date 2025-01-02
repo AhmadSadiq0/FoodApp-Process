@@ -1,9 +1,21 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, FlatList,Image} from "react-native";
-import { GRAY_COLOR,THEME_COLOR,THEME_TEXT_COLOR,WHITE_COLOR,BLACK_COLOR } from "../res/colors";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  Image,
+} from "react-native";
+import {
+  GRAY_COLOR,
+  THEME_COLOR,
+  THEME_TEXT_COLOR,
+  WHITE_COLOR,
+  BLACK_COLOR,
+} from "../res/colors";
 
-const PaymentComponent = (props) => {
-  const {paymentMethods} = props
+const PaymentComponent = ({ paymentMethods }) => {
   const [selectedPayment, setSelectedPayment] = useState();
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -35,24 +47,20 @@ const PaymentComponent = (props) => {
 };
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
-padding: 16,
-    width: "97%",
+    padding: 16,
+    width: "98%",
   },
   title: {
-    color: THEME_COLOR,  
+    color: THEME_COLOR,
     fontWeight: "bold",
     fontSize: 20,
     marginBottom: 16,
-    marginLeft: 7, 
+    marginLeft: 7,
   },
   optionContainer: {
     backgroundColor: WHITE_COLOR,
     padding: 16,
     borderRadius: 8,
-    width: "95%",
-    maxWidth: 300,
   },
   option: {
     flexDirection: "row",
@@ -62,13 +70,13 @@ padding: 16,
   },
   image: {
     marginRight: 8,
-    height:18,
-    width:27,
+    height: 18,
+    width: 27,
   },
   optionText: {
     fontWeight: "600",
     fontSize: 16,
-    color: THEME_TEXT_COLOR, 
+    color: THEME_TEXT_COLOR,
   },
   radioButton: {
     width: 20,

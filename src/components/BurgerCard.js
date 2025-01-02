@@ -6,7 +6,9 @@ import { THEME_COLOR,
   GRAY_COLOR,
   BLACK_COLOR,
   WHITE_COLOR, } from "../res/colors";
-const BurgerCard = ({ name, price, image, onAdd,navigation }) => {
+const BurgerCard = (props) => {
+  const { name, price, image, onAdd,navigation } = props;
+
   return (
     <View style={styles.card}>
        <Text style={styles.name}>{name}</Text>

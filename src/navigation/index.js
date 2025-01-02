@@ -1,8 +1,6 @@
 import React from 'react';
 import { Text, View, Image, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import 'react-native-gesture-handler';
-import 'react-native-reanimated';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
@@ -33,7 +31,6 @@ import {
     OrderConfirmationScreen,
     ConfirmedOrder
 } from '../screens/CartScreens/index';
-
 import {
     LanguageSettingsScreen,
     ProfileScreen,
@@ -48,137 +45,29 @@ import Header1 from '../components/Header1';
 import Header from '../components/Header';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-const AuthStack = () => {
+const AuthStack = () => { 
     return (
-        <Stack.Navigator initialRouteName="ConfirmOrder" headerMode={false}>
-            <Stack.Screen 
-                options={{ headerShown: false }} 
-                name="Auth" 
-                component={SplashScreen} 
-            />
-            <Stack.Screen 
-                options={{ headerShown: false }} 
-                name="SignUp" 
-                component={SignUpScreen} 
-            />
-            <Stack.Screen 
-                options={{ headerShown: false }} 
-                name="SignIn" 
-                component={SignInScreen} 
-            />
-            <Stack.Screen 
-                options={{ header: () => <Header />, headerShown: true }} 
-                name="Home" 
-                component={HomeScreen} 
-            />
-            <Stack.Screen 
-                options={{ 
-                    header: () => <Header1 discountIcon={DEAL_ICON} title="Featured Deals" />, 
-                    headerShown: true 
-                }} 
-                name="Deals" 
-                component={DealsScreen} 
-            />
-            <Stack.Screen 
-                options={{ 
-                    header: () => <ProfileHeader 
-                        showTabsEnabled={false} 
-                        DOTSICON={ARROW_ICON} 
-                        icon={{ height: 40, width: 40 }} 
-                        Cameraicon={{ top: "88%" }} 
-                    />, 
-                    headerShown: true 
-                }} 
-                name="Settings" 
-                component={SettingsScreen} 
-            />
-            <Stack.Screen 
-                options={{ 
-                    header: () => <Header 
-                        title='Menu' 
-                        Welcomermsg={false} 
-                        containerStyle={{ height: 188 }} 
-                        textContainer={{ marginTop: -7 }} 
-                    />, 
-                    headerShown: true 
-                }} 
-                name="Menu" 
-                component={MenuScreen} 
-            />
-            <Stack.Screen 
-                options={{ 
-                    header: () => <Header1 title="Featured Offers" discountIcon={OFFER_ICON} />, 
-                    headerShown: true 
-                }} 
-                name="Offers" 
-                component={OffersScreen} 
-            />
-            <Stack.Screen 
-                options={{ 
-                    header: () => <Header1 title='CheckOut' discountIcon={CART_ICON} />, 
-                    headerShown: true 
-                }} 
-                name="CheckOut" 
-                component={CheckOutScreen} 
-            />
-            <Stack.Screen 
-                options={{ 
-                    header: () => <Header 
-                        title='Cart' 
-                        Welcomermsg='' 
-                        showSearch={false} 
-                        showShadow={true} 
-                        containerStyle={{ height: 160 }} 
-                        textContainer={{ marginTop: 0 }} 
-                    />, 
-                    headerShown: true 
-                }} 
-                name="Cart" 
-                component={CartScreen} 
-            />
-            <Stack.Screen 
-                options={{ 
-                    header: () => <Header1 title='Confirm Order' discountIcon={Confirm_Order} />, 
-                    headerShown: true 
-                }} 
-                name="ConfirmOrder" 
-                component={OrderConfirmationScreen} 
-            />
-            <Stack.Screen 
-                options={{ 
-                    header: () => <Header 
-                        title='My Orders' 
-                        Welcomermsg='' 
-                        showSearch={false} 
-                        showShadow={true} 
-                        containerStyle={{ height: 160 }} 
-                        // textContainer={{ marginTop: 0 }} 
-                    />, 
-                    headerShown: true 
-                }} 
-                name="Orders" 
-                component={OrdersScreen} 
-            />
-            <Stack.Screen 
-                options={{ header: () => <ProfileHeader DOTSICON={ DOTS_ICON } showTabsProp={false} />, headerShown: true}} 
-                name="Profile" 
-                component={ProfileScreen} 
-            />
+        <Stack.Navigator initialRouteName="Discount">
+            <Stack.Screen options={{ headerShown: false }} name="Auth" component={SplashScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="SignUp" component={SignUpScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="SignIn" component={SignInScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen}/>
+            <Stack.Screen options={{ headerShown: false }} name="Deals" component={DealsScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Menu" component={MenuScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Offers" component={OffersScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="CheckOut" component={CheckOutScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Cart" component={CartScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="ConfirmOrder" component={OrderConfirmationScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Orders" component={OrdersScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Profile" component={ProfileScreen} />
             <Stack.Screen 
                 options={{ header: () => <Header1 discountIcon={null} title="Notifications" />, headerShown: true }} 
                 name="Notifications" 
                 component={NotificationsScreen} 
             />
-            <Stack.Screen 
-                options={{ headerShown: false }} 
-                name="ForgetPassword" 
-                component={ForgetPasswordScreen} 
-            />
-            <Stack.Screen 
-                options={{ header: () => <Header1 />, headerShown: true }} 
-                name="Discounts" 
-                component={DiscountsScreen} 
-            />
+            <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPasswordScreen} />
+            {/* <Stack.Screen options={{ header : () => <Header1/>, headerShown : true }} name="Discounts" component={DiscountsScreen} /> */}
         </Stack.Navigator>
     )
 }  
@@ -189,7 +78,8 @@ const HomeStack = () => {
             <Stack.Screen options={{ headerShown: false }} name="Cart" component={CartScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Deals" component={DealsScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Offers" component={OffersScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
+            {/* <Stack.Screen options={{ headerShown: false }} name="Notifications" component={NotificationsScreen} /> */}
+            <Stack.Screen    options={{ header: () => <Header1 discountIcon={null} title="Notifications" />, headerShown: true }}  name="Notifications" component={NotificationsScreen} />
             <Stack.Screen options={{ header : () => <Header1/>, headerShown : true }} name="Discounts" component={DiscountsScreen} />
         </Stack.Navigator>
     )
@@ -212,7 +102,7 @@ const CartStack = () => {
             <Stack.Screen options={{ headerShown: false }} name="ConfirmedOrder" component={ConfirmedOrder} />
         </Stack.Navigator>
     )
-}
+} 
 const OrdersStack = () => {
     return (
         <Stack.Navigator initialRouteName="Orders" headerMode={false}>
@@ -226,14 +116,13 @@ const ProfileStack = () => {
     return (
         <Stack.Navigator initialRouteName="Profile" headerMode={false}>
             <Stack.Screen options={{ headerShown: false }} name="Profile" component={ProfileScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="UpdateProfile" component={UpdateProfileScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="LanguageSettings" component={LanguageSettingsScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="UpdateProfile" component={UpdateProfileScreen} /> 
+            <Stack.Screen   options={{ header: () => <Header1 discountIcon={null} title="Notifications" />, headerShown: true }} name="Settings" component={SettingsScreen} />
+            <Stack.Screen  options={{ header: () => <Header1 discountIcon={null} title="Notifications" />, headerShown: true }} name="LanguageSettings" component={LanguageSettingsScreen} />
+            <Stack.Screen    options={{ header: () => <Header1 discountIcon={null} title="Notifications" />, headerShown: true }}  name="Notifcations" component={NotificationsScreen} />
         </Stack.Navigator> 
     )
 }
-
 function BottomTabStack() {
     return (
         <Tab.Navigator
@@ -286,7 +175,6 @@ function BottomTabStack() {
                             </View>
                         ),
                     }}
-    
                 /> */}
                 <Tab.Screen
                     name="Menu"

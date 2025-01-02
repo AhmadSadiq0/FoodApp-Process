@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "bold",
     color: THEME_TEXT_COLOR,
+    fontWeight: "600",
   },
   itemName: {
     fontSize: 12,
@@ -170,8 +171,12 @@ const styles = StyleSheet.create({
     width: 80,
     height: 20,
     color: WHITE_COLOR,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontSize: 12,
+    fontWeight: "600",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    marginRight: 8,
   },
   image: {
     width: 50,

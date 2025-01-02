@@ -86,26 +86,25 @@ const MenuScreen = () => {
         >
           {item.name}
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> 
     );
   };
   return (
     <FlatList
       data={burgerData}
       ListHeaderComponent={
-        <>
-          <View style={styles.header}>
-            <Header
-              title="Menu"
-              Welcomermsg=""
-              containerStyle={{
-                height: 188,
-              }}
-              textContainer={{
-                marginTop: -7,
-              }}
-            />
-          </View>
+        <View style={styles.header}>
+          <Header
+            title="Menu"
+            Welcomermsg=""
+            containerStyle={{
+              height: 188,
+            }}
+            textContainer={{
+              marginTop: -7,
+            }}
+          />
+
           <FlatList
             data={categories}
             renderItem={renderCategory}
@@ -125,7 +124,7 @@ const MenuScreen = () => {
               data={burgerData}
             />
           </View>
-        </>
+        </View>
       }
       keyExtractor={(item) => item.id.toString()}
     />

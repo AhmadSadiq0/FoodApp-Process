@@ -6,8 +6,9 @@ import AddCard from "../../components/AddCard";
 import { WHITE_COLOR, Back_Ground, GRAY_COLOR, Green_Color} from "../../res/colors";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { BURGERIMG } from "../../res/drawables";
-
-const HomeScreen = ({ navigation }) => {
+import { NotificationsScreen } from "../NotificationsScreens";
+const HomeScreen = (props) => {
+  const {navigation}=props
   const refRBSheet = useRef();
   const [selectedBurger, setSelectedBurger] = useState(null);
 
@@ -36,13 +37,18 @@ const HomeScreen = ({ navigation }) => {
       price: 399,
       image: BURGERIMG,
     },
+    {
+      id: 5,
+      name: "Chicken Burger",
+      price: 399,
+      image: BURGERIMG,
+    },
   ];
 
   const handleAddToCart = (burger) => {
     setSelectedBurger(burger);
     refRBSheet.current.open();
-  };
-
+  }; 
   const renderDatalist = ({ item }) => (
     <Datalist
       title={item.title}
@@ -59,7 +65,7 @@ const HomeScreen = ({ navigation }) => {
   ];
   return (
     <View style={styles.container}>
-      <Header />
+      <Header  onNotificationPressed={() => {navigation.navigate("Notifications")}} />
       <FlatList
         data={datalistSections}
         renderItem={renderDatalist}
@@ -69,7 +75,7 @@ const HomeScreen = ({ navigation }) => {
         ref={refRBSheet}
         height={420}
         draggable={true}
-        customStyles={{
+        customStyles={{ 
           container: { borderTopLeftRadius: 20, borderTopRightRadius: 20,  alignItems: 'center', backgroundColor: WHITE_COLOR },
           wrapper: { backgroundColor: 'transparent' },
           draggableIcon: { backgroundColor: Green_Color },
@@ -104,3 +110,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+
