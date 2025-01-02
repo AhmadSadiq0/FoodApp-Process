@@ -181,8 +181,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   icon: {
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
   },
   bellContainer: {
     flexDirection: "row",

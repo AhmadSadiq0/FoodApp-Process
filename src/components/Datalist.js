@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { View, Text, Animated, StyleSheet, Dimensions, } from "react-native";
 import BurgerCard from "./BurgerCard";
-import { THEME_TEXT_COLOR,THEME_COLOR } from "../res/colors";
+import { THEME_TEXT_COLOR,THEME_COLOR, Back_Ground } from "../res/colors";
 const { width } = Dimensions.get("window");
 const ITEM_WIDTH = 150 + 14; 
 const SPACING = (width - ITEM_WIDTH) / 2;
@@ -58,6 +58,7 @@ const Datalist = (props) => {
 const styles = StyleSheet.create({
   container: {
     marginVertical:8,
+    backgroundColor:Back_Ground
   },
   header: {
     flexDirection: "row",
@@ -65,6 +66,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 27,
     marginBottom: 10,
+    
   },
   title: {
     fontSize: 16,
@@ -80,6 +82,7 @@ const styles = StyleSheet.create({
     width: ITEM_WIDTH,
     justifyContent: "center",
     alignItems: "center",
+    
   },
 });
 

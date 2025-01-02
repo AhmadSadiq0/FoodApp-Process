@@ -59,7 +59,8 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 15,
-    color: BLACK_COLOR,
+    color: THEME_TEXT_COLOR,
+    fontWeight:'bold',
     right: 29,
   },
   serving: {

@@ -6,6 +6,7 @@ import {
 } from 'react-native'
 import ProfileHeader from '../../components/ProfileHeader'
 import TextInputProfile from '../../components/TextInputProfile'
+import { Back_Ground } from '../../res/colors'
 const ProfileScreen = ({navigation,route}) => {
   const showEditIcon = route?.params?.showEditIcon || false;
   return ( 
@@ -20,7 +21,11 @@ const ProfileScreen = ({navigation,route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5', 
+    backgroundColor: Back_Ground, 
+  },
+  scrollContent: {
+    flexGrow: 1,
+    padding: 16,
   },
 })
 export default ProfileScreen; 

@@ -7,12 +7,14 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { WHITE_COLOR, BLACK_COLOR, THEME_COLOR } from "../../res/colors";
+import { WHITE_COLOR, BLACK_COLOR, THEME_COLOR, Back_Ground } from "../../res/colors";
 import Datalist from "../../components/Datalist";
 import Header from "../../components/Header";
 import { BURGERIMG, IMAGE16, IMAGE17, IMAGE18 } from "../../res/drawables";
+
 const MenuScreen = () => {
   const [selectedCategory, setSelectedCategory] = useState();
+
   const burgerData = [
     {
       id: 1,
@@ -39,6 +41,7 @@ const MenuScreen = () => {
       image: BURGERIMG,
     },
   ];
+
   const categories = [
     {
       id: 1,
@@ -86,59 +89,57 @@ const MenuScreen = () => {
         >
           {item.name}
         </Text>
-      </TouchableOpacity> 
+      </TouchableOpacity>
     );
   };
-  return (
-    <FlatList
-      data={burgerData}
-      ListHeaderComponent={
-        <View style={styles.header}>
-          <Header
-            title="Menu"
-            Welcomermsg=""
-            containerStyle={{
-              height: 188,
-            }}
-            textContainer={{
-              marginTop: -7,
-            }}
-          />
 
-          <FlatList
-            data={categories}
-            renderItem={renderCategory}
-            keyExtractor={(item) => item.id.toString()}
-            contentContainerStyle={styles.scrollContainer}
-            numColumns={3}
-            showsVerticalScrollIndicator={false}
-          />
-          <View>
-            <Datalist title="Discount" seeMoreText="" data={burgerData} />
-          </View>
-          <View>
-            <Datalist
-              title="Discounts"
-              seeMoreText=""
-              onSeeMorePress={() => console.log("See All pressed!")}
-              data={burgerData}
+  return (
+    <View style={styles.mainContainer}>
+      <Header/>
+      <FlatList
+        data={burgerData}
+        ListHeaderComponent={
+          <View style={styles.header}>
+            <FlatList
+              data={categories}
+              renderItem={renderCategory}
+              keyExtractor={(item) => item.id.toString()}
+              contentContainerStyle={styles.scrollContainer}
+              numColumns={3}
+              showsVerticalScrollIndicator={false}
             />
+            <View>
+              <Datalist title="Discount" seeMoreText="" data={burgerData} />
+            </View>
+            <View>
+              <Datalist
+                title="Discounts"
+                seeMoreText=""
+                onSeeMorePress={() => console.log("See All pressed!")}
+                data={burgerData}
+              />
+            </View>
           </View>
-        </View>
-      }
-      keyExtractor={(item) => item.id.toString()}
-    />
+        }
+        keyExtractor={(item) => item.id.toString()}
+      />
+    </View>
   );
 };
+
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: Back_Ground,
+  },
   container: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: WHITE_COLOR,
   },
   header: {
     width: "100%",
     paddingVertical: 16,
+    backgroundColor: Back_Ground,
   },
   scrollContainer: {
     paddingVertical: 16,
@@ -168,4 +169,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
+
 export default MenuScreen;

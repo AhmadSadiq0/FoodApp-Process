@@ -12,6 +12,7 @@ import {
   WHITE_COLOR,
   Green_Color,
   THEME_TEXT_COLOR,
+  Back_Ground,
 } from "../res/colors";
 import { Profie_Image, Bell_ICON, Search_Icon } from "../res/drawables";
 // SearchBar Component
@@ -75,7 +76,7 @@ const Header = (props) => {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    backgroundColor: WHITE_COLOR,
+    backgroundColor: Back_Ground,
   },
   container: {
     height: 200,
