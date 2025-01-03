@@ -67,7 +67,7 @@ const HomeScreen = ({ navigation }) => {
       />
       <RBSheet
         ref={refRBSheet}
-        height={450}
+        height={430}
         draggable={true}
         customStyles={{
           container: { borderTopLeftRadius: 20, borderTopRightRadius: 20,  alignItems: 'center', backgroundColor: WHITE_COLOR },

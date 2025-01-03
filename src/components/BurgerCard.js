@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   serving: {
     fontSize: 11,
-    color: GRAY_COLOR,
+    color: THEME_TEXT_COLOR,
     right: 29,
   },
   addButton: {

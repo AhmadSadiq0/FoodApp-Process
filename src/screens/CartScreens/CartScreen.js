@@ -23,9 +23,9 @@ const { width: deviceWidth } = Dimensions.get('window');
 
 const CartScreen = ({ navigation }) => {
   const [cartItems, setCartItems] = useState([
-    { id: 1, name: 'Double Cheese Burger', price: 599, serving: 'Single Serving', image: BURGERIMG, active: false },
-    { id: 2, name: 'Cheese Burger', price: 449, serving: 'Single Serving', image: BURGERIMG, active: false },
-    { id: 3, name: 'Biryani', price: 599, serving: 'Single Serving', image: BURGERIMG, active: false },
+    { id: 1, name: 'Double Cheese Burger', price: 599, serving: 'Single Serving', image: BURGERIMG, active: false, originalIndex: 0 },
+    { id: 2, name: 'Cheese Burger', price: 449, serving: 'Single Serving', image: BURGERIMG, active: false, originalIndex: 1 },
+    { id: 3, name: 'Biryani', price: 599, serving: 'Single Serving', image: BURGERIMG, active: false, originalIndex: 2 },
   ]);
 
   const refRBSheet = useRef(null);
@@ -35,23 +35,35 @@ const CartScreen = ({ navigation }) => {
       item.id === id ? { ...item, active: !item.active } : item
     );
 
-    const sortedItems = [
-      ...updatedItems.filter((item) => item.active),
-      ...updatedItems.filter((item) => !item.active),
-    ];
+    // Separate active and inactive items
+    const activeItems = updatedItems.filter((item) => item.active);
+    const inactiveItems = updatedItems.filter((item) => !item.active);
+
+    // Sort inactive items by their original index
+    inactiveItems.sort((a, b) => a.originalIndex - b.originalIndex);
+
+    // Combine active items (first) and inactive items (in original order)
+    const sortedItems = [...activeItems, ...inactiveItems];
 
     setCartItems(sortedItems);
+
+    // Open or close the bottom sheet based on active items
     refRBSheet.current?.[sortedItems.some((item) => item.active) ? 'open' : 'close']();
   };
 
   const handleDeleteItem = (id) => {
     const updatedCart = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedCart);
 
-    const sortedItems = [
-      ...updatedCart.filter((item) => item.active),
-      ...updatedCart.filter((item) => !item.active),
-    ];
+    // Separate active and inactive items
+    const activeItems = updatedCart.filter((item) => item.active);
+    const inactiveItems = updatedCart.filter((item) => !item.active);
+
+    // Sort inactive items by their original index
+    inactiveItems.sort((a, b) => a.originalIndex - b.originalIndex);
+
+    // Combine active items (first) and inactive items (in original order)
+    const sortedItems = [...activeItems, ...inactiveItems];
+
     setCartItems(sortedItems);
 
     refRBSheet.current?.[updatedCart.some((item) => item.active) ? 'open' : 'close']();
@@ -112,7 +124,6 @@ const CartScreen = ({ navigation }) => {
     </View>
   );
 };
-
 const CartItem = ({ item, onPressItem, onDeleteItem }) => (
   <TouchableOpacity
     style={[styles.cartItem, item.active && { borderColor: THEME_COLOR }]}
