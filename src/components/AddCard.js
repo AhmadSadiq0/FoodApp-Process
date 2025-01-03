@@ -34,7 +34,7 @@ const AddCard = (props) => {
 
 const styles = StyleSheet.create({
     card: {
-      width: 200,
+      width: "100%",
       padding: 10,
       borderRadius: 12,
       backgroundColor: WHITE_COLOR,  
@@ -42,21 +42,22 @@ const styles = StyleSheet.create({
       margin: 10,
     },
     name: {
-      fontSize: 16,
+      fontSize: 24,
       fontWeight: "bold",
       color: THEME_TEXT_COLOR, 
       textAlign: "center",
       marginBottom: 4,
     },
     description: {
-      fontSize: 14,
+      fontSize: 24,
       color: THEME_COLOR, 
       textAlign: "center",
+      fontWeight:'700',
       marginBottom: 10,
     },
     image: {
-      width: 120,
-      height: 80,
+      width: 148,
+      height: 148,
       resizeMode: "contain",
       marginVertical: 8,
     },
@@ -68,26 +69,28 @@ const styles = StyleSheet.create({
       marginBottom: 12,
     },
     priceLabel: {
-      fontSize: 14,
-      fontWeight: "600",
-      color: GRAY_COLOR, 
+      fontSize: 24,
+      fontWeight: "700",
+      color: THEME_TEXT_COLOR, 
     },
     price: {
-      fontSize: 16,
-      fontWeight: "bold",
+      fontSize: 24,
+      fontWeight: "700",
       color: THEME_COLOR, 
     },
     button: {
-      width: "90%",
-      paddingVertical: 10,
+      width: "100%",
+      height:54,
+      justifyContent:'center',
       backgroundColor: THEME_COLOR, 
-      borderRadius: 8,
+      borderRadius: 25,
       alignItems: "center",
+      marginTop:25
     },
     buttonText: {
       color: WHITE_COLOR,
-      fontSize: 16,
-      fontWeight: "bold",
+      fontSize: 24,
+      fontWeight: '700',
     },
   });
   
