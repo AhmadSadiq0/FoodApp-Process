@@ -13,67 +13,46 @@ import {
   THEME_COLOR,
   GRAY_COLOR,
   BLACK_COLOR,
-  Back_Ground,
+  Back_Ground
 } from '../../res/colors';
 import { BURGERIMG, DELETE_ICON } from '../../res/drawables';
+import CustomButton from "../../components/CustomButtom";
 import RBSheet from 'react-native-raw-bottom-sheet';
-import CustomButtom from '../../components/CustomButtom';
 
 const { width: deviceWidth } = Dimensions.get('window');
 
-const CartScreen = ({ navigation }) => {
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: 'Double Cheese Burger', price: 599, serving: 'Single Serving', image: BURGERIMG, active: false, originalIndex: 0 },
-    { id: 2, name: 'Cheese Burger', price: 449, serving: 'Single Serving', image: BURGERIMG, active: false, originalIndex: 1 },
-    { id: 3, name: 'Biryani', price: 599, serving: 'Single Serving', image: BURGERIMG, active: false, originalIndex: 2 },
-  ]);
+const initialCartItems = [
+  { id: 1, name: 'Double Cheese Burger', price: 599, serving: 'Single Serving', image: BURGERIMG, active: false, originalIndex: 0 },
+  { id: 2, name: 'Cheese Burger', price: 449, serving: 'Single Serving', image: BURGERIMG, active: false, originalIndex: 1 },
+  { id: 3, name: 'Biryani', price: 599, serving: 'Single Serving', image: BURGERIMG, active: false, originalIndex: 2 },
+];
 
+const CartScreen = ({ navigation }) => {
+  const [cartItems, setCartItems] = useState(initialCartItems);
   const refRBSheet = useRef(null);
 
-  const toggleItemActiveState = (id) => {
-    const updatedItems = cartItems.map((item) =>
-      item.id === id ? { ...item, active: !item.active } : item
-    );
+  const updateCartItems = (updatedItems) => {
+    const activeItems = updatedItems.filter(item => item.active);
+    const inactiveItems = updatedItems.filter(item => !item.active).sort((a, b) => a.originalIndex - b.originalIndex);
+    setCartItems([...activeItems, ...inactiveItems]);
+    refRBSheet.current?.[activeItems.length > 0 ? 'open' : 'close']();
+  };
 
-    // Separate active and inactive items
-    const activeItems = updatedItems.filter((item) => item.active);
-    const inactiveItems = updatedItems.filter((item) => !item.active);
-
-    // Sort inactive items by their original index
-    inactiveItems.sort((a, b) => a.originalIndex - b.originalIndex);
-
-    // Combine active items (first) and inactive items (in original order)
-    const sortedItems = [...activeItems, ...inactiveItems];
-
-    setCartItems(sortedItems);
-
-    // Open or close the bottom sheet based on active items
-    refRBSheet.current?.[sortedItems.some((item) => item.active) ? 'open' : 'close']();
+  const handlePressItem = (id) => {
+    const updatedItems = cartItems.map(item => item.id === id ? { ...item, active: !item.active } : item);
+    updateCartItems(updatedItems);
   };
 
   const handleDeleteItem = (id) => {
-    const updatedCart = cartItems.filter((item) => item.id !== id);
-
-    // Separate active and inactive items
-    const activeItems = updatedCart.filter((item) => item.active);
-    const inactiveItems = updatedCart.filter((item) => !item.active);
-
-    // Sort inactive items by their original index
-    inactiveItems.sort((a, b) => a.originalIndex - b.originalIndex);
-
-    // Combine active items (first) and inactive items (in original order)
-    const sortedItems = [...activeItems, ...inactiveItems];
-
-    setCartItems(sortedItems);
-
-    refRBSheet.current?.[updatedCart.some((item) => item.active) ? 'open' : 'close']();
+    const updatedCart = cartItems.filter(item => item.id !== id);
+    updateCartItems(updatedCart);
   };
 
   const calculateSubtotal = () => {
-    return cartItems.filter((item) => item.active).reduce((total, item) => total + item.price, 0);
+    return cartItems.filter(item => item.active).reduce((total, item) => total + item.price, 0);
   };
 
-  const selectedItems = cartItems.filter((item) => item.active);
+  const selectedItems = cartItems.filter(item => item.active);
 
   if (cartItems.length === 0) {
     return (
@@ -86,72 +65,87 @@ const CartScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingText}>Check Out</Text>
-      {cartItems.map((item) => (
+      {cartItems.map(item => (
         <CartItem
           key={item.id}
           item={item}
-          onPressItem={toggleItemActiveState}
+          onPressItem={handlePressItem}
           onDeleteItem={handleDeleteItem}
         />
       ))}
       <RBSheet
         ref={refRBSheet}
         height={300}
-        draggable
+        draggable={true}
         customStyles={{
           container: { borderTopLeftRadius: 20, borderTopRightRadius: 20, backgroundColor: WHITE_COLOR },
           wrapper: { backgroundColor: 'transparent' },
-          draggableIcon: { backgroundColor: GRAY_COLOR },
+          draggableIcon: { backgroundColor: '#d3d3d3' },
         }}
       >
         {selectedItems.length > 0 && (
-          <View style={styles.summaryCard}>
-            <Text style={styles.summaryText}>
-              Selected Item(s): <Text style={styles.highlightText}>{selectedItems.length}</Text>{'\n'}
-              Sub Total: <Text style={styles.highlightText}>Rs. {calculateSubtotal()}</Text>
-            </Text>
-            <CustomButtom
-              title={"Check Out"}
-              width={'100%'}
-              height={48}
-              backgroundColor={THEME_COLOR}
-              borderColor={THEME_COLOR}
-              textStyle={{ color: WHITE_COLOR }}
-            />
-          </View>
+          <SummaryCard
+            selectedItems={selectedItems}
+            subtotal={calculateSubtotal()}
+            onCheckout={() => navigation.navigate("ConfirmOrder")}
+          />
         )}
       </RBSheet>
     </View>
   );
 };
+
 const CartItem = ({ item, onPressItem, onDeleteItem }) => (
   <TouchableOpacity
     style={[styles.cartItem, item.active && { borderColor: THEME_COLOR }]}
     onPress={() => onPressItem(item.id)}
-    accessibilityLabel={`Select ${item.name}`}
-  >
+    accessibilityLabel={`Select ${item.name}`}>
     <Image style={styles.cartItemImage} source={item.image} />
-    <View style={styles.cartItemDetails}>
+    <View style={ styles.cartItemDetails}>
       <Text style={styles.cartItemName}>{item.name}</Text>
       <Text style={styles.cartServing}>{item.serving}</Text>
       <Text style={styles.cartItemPrice}>Rs. {item.price}/-</Text>
     </View>
     <View style={styles.cartItemActions}>
-      <TouchableOpacity
-        style={styles.circleBorder}
-        onPress={() => onPressItem(item.id)}
-        accessibilityLabel={`Toggle ${item.name}`}
-      >
-        <View style={[styles.circle, item.active && { backgroundColor: THEME_COLOR }]} />
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => onDeleteItem(item.id)}
-        accessibilityLabel={`Delete ${item.name}`}
-      >
-        <Image style={styles.deleteIcon} source={DELETE_ICON} />
-      </TouchableOpacity>
+      <ToggleButton active={item.active} onPress={() => onPressItem(item.id)} />
+      <DeleteButton onPress={() => onDeleteItem(item.id)} />
     </View>
   </TouchableOpacity>
+);
+
+const ToggleButton = ({ active, onPress }) => (
+  <TouchableOpacity
+    style={styles.circleBorder}
+    onPress={onPress}
+    accessibilityLabel={`Toggle item`}>
+    <View style={[styles.circle, active && { backgroundColor: THEME_COLOR }]} />
+  </TouchableOpacity>
+);
+
+const DeleteButton = ({ onPress }) => (
+  <TouchableOpacity onPress={onPress} accessibilityLabel={`Delete item`}>
+    <Image style={styles.deleteIcon} source={DELETE_ICON} />
+  </TouchableOpacity>
+);
+
+const SummaryCard = ({ selectedItems, subtotal, onCheckout }) => (
+  <View style={styles.summaryCard}>
+    <View style={styles.cardTextContainer}>
+      <Text style={styles.summaryText}>
+        Selected Item(s): <Text style={styles.highlightText}>{selectedItems.length}</Text>
+      </Text>
+    </View>
+    <Text style={styles.summaryText}>
+      Sub Total: <Text style={styles.highlightText}>Rs. {subtotal}</Text>
+    </Text>
+    <View style={styles.customButton}>
+      <CustomButton
+        title={'CheckOut'}
+        textStyle={{ color: WHITE_COLOR }}
+        onPress={onCheckout}
+      />
+    </View>
+  </View>
 );
 
 const styles = StyleSheet.create({
@@ -177,7 +171,10 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE_COLOR,
     alignItems: 'center',
     shadowColor: BLACK_COLOR,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
@@ -232,9 +229,8 @@ const styles = StyleSheet.create({
     backgroundColor: GRAY_COLOR,
   },
   summaryCard: {
-    flex: 1,
-    justifyContent: 'space-between',
-    padding: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
     width: deviceWidth,
     alignItems: 'center',
   },
@@ -255,6 +251,11 @@ const styles = StyleSheet.create({
     color: GRAY_COLOR,
     textAlign: 'center',
   },
+  customButton: {
+    marginTop: 80,
+    marginBottom: 30,
+    width: '100%',
+ },
 });
 
 export default CartScreen;

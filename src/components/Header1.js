@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
-import { THEME_COLOR, WHITE_COLOR } from '../res/colors';
+import { Back_Ground, THEME_COLOR, WHITE_COLOR } from '../res/colors';
 import { DISCOUNT_ICON, ARROW_ICON } from '../res/drawables';
 import { useNavigation } from '@react-navigation/native';
 
@@ -39,7 +39,7 @@ const Header1 = (props) => {
 
 const styles = StyleSheet.create({
     maincontainer: {
-        backgroundColor: WHITE_COLOR
+        backgroundColor: Back_Ground
     },
     container: {
         height: 150,

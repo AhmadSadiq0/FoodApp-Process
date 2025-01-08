@@ -13,14 +13,19 @@ import {
   THEME_TEXT_COLOR,
   WHITE_COLOR,
   BLACK_COLOR,
+  Black_Color,
 } from "../res/colors";
 
-const PaymentComponent = ({ paymentMethods }) => {
+const PaymentComponent = ({ paymentMethods, onSelectPayment }) => {
   const [selectedPayment, setSelectedPayment] = useState();
+
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.option}
-      onPress={() => setSelectedPayment(item.name)}
+      onPress={() => {
+        setSelectedPayment(item.name);
+        onSelectPayment(item); 
+      }}
     >
       <Image source={item.image} style={styles.image} />
       <Text style={styles.optionText}>{item.name}</Text>
@@ -32,6 +37,7 @@ const PaymentComponent = ({ paymentMethods }) => {
       />
     </TouchableOpacity>
   );
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Payment Method</Text>
@@ -45,10 +51,11 @@ const PaymentComponent = ({ paymentMethods }) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    width: "98%",
+    paddingHorizontal: 16,
+    width: "100%",
   },
   title: {
     color: THEME_COLOR,
@@ -61,7 +68,15 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE_COLOR,
     padding: 16,
     borderRadius: 8,
-  },
+    elevation: 3, 
+    shadowColor: Black_Color, 
+    shadowOffset: {
+        width: 0, 
+        height: 2, 
+    },
+    shadowOpacity: 0.25, 
+    shadowRadius: 3.5, 
+},
   option: {
     flexDirection: "row",
     alignItems: "center",
@@ -83,11 +98,13 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: BLACK_COLOR,
+    backgroundColor:GRAY_COLOR,
+    borderColor: THEME_COLOR,
   },
   radioButtonSelected: {
     borderColor: THEME_COLOR,
     backgroundColor: THEME_COLOR,
   },
 });
+
 export default PaymentComponent;

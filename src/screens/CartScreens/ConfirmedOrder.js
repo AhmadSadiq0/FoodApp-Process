@@ -2,47 +2,59 @@ import React from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
 import { IMAGE29 } from "../../res/drawables";
 import CustomButton from "../../components/CustomButtom";
-import { useNavigation } from '@react-navigation/native'; 
+import { useNavigation } from "@react-navigation/native";
 import { THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR } from "../../res/colors";
+
 const ConfirmedOrder = () => {
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
+
+  const navigateToMenu = () => {
+    navigation.navigate("Menu");
+  };
+
+  const navigateToCart = () => {
+    navigation.navigate("Cart");
+  };
+
   return (
     <View style={styles.container}>
-      <Image source={IMAGE29} style={styles.image} />
-      <Text style={styles.titleText}>Order placed successfully!</Text>
-      <Text style={styles.subtitleText}>Can not be canceled now!</Text>
-      <CustomButton
-        title="Back To Menu"
-        textStyle={{ color: THEME_COLOR }}
-        style={styles.Button}
-        onPress={() => {
-          navigation.navigate("Menu");
-        }}
-      /> 
-      <View style={styles.givemargin}>
+      <View style={styles.content}>
+        <Image source={IMAGE29} style={styles.image} />
+        <Text style={styles.titleText}>Order placed successfully!</Text>
+        <Text style={styles.subtitleText}>Cannot be canceled now!</Text>
+      </View>
+      <View style={styles.footer}>
+        <CustomButton
+          title="Back To Menu"
+          textStyle={styles.menuButtonText}
+          style={styles.menuButton}
+          onPress={navigateToMenu}
+        />
         <CustomButton
           title="Back To Cart"
-          backgroundColor="#EF4444"
-          textColor="#FFFFFF"
-          style={styles.customButton}
-          onPress={() => {
-            navigation.navigate("Cart");
-          }}
-        />  
+          textStyle={styles.cartButtonText}
+          style={styles.cartButton}
+          onPress={navigateToCart}
+        />
       </View>
     </View>
   );
 };
-const styles = StyleSheet.create({ 
+
+const styles = StyleSheet.create({
   container: {
-    flex : 1,
+    flex: 1,
     width: "100%",
-    marginTop: 90,
-    borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
+    marginTop: 170,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
     backgroundColor: WHITE_COLOR,
     padding: 16,
+  },
+  content: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   image: {
     width: 150,
@@ -58,24 +70,28 @@ const styles = StyleSheet.create({
   },
   subtitleText: {
     fontSize: 16,
-    color: "#EF4444",
+    color: THEME_COLOR,
     marginBottom: 30,
   },
-  customButton: {
-    paddingHorizontal: 90,
+  footer: {
+    alignItems: "center",
+  },
+  menuButton: {
+    borderColor: THEME_COLOR,
+    backgroundColor: WHITE_COLOR,
+    marginBottom: 10,
+  },
+  menuButtonText: {
+    color: THEME_COLOR,
+  },
+  cartButton: {
+    paddingHorizontal: 85,
     justifyContent: "center",
     alignItems: "center",
   },
-  givemargin: {
-    marginTop:-27,
-  },
-  Button: {
-    paddingHorizontal: 90,
-    borderColor: THEME_COLOR,
-    borderWidth: 2,
-    borderColor: "#EF4444",
-    borderRadius: 999,
-    backgroundColor: WHITE_COLOR,
+  cartButtonText: {
+    color: WHITE_COLOR,
   },
 });
+
 export default ConfirmedOrder;
