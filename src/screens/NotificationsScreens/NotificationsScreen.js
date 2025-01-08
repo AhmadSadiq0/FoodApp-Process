@@ -95,7 +95,7 @@ const NotificationsScreen = ({ navigation }) => {
                         </View>
                         <Text style={styles.messageText}>{activeItem.message}</Text>
                         <View style={styles.customButton}>
-                            <CustomButton title={'Go Back'} onPress={() => navigation.goBack()} />
+                            <CustomButton title={'Go Back'} textStyle={{ color: WHITE_COLOR }} onPress={() => navigation.goBack()} />
                         </View>
                     </View>
                 )}

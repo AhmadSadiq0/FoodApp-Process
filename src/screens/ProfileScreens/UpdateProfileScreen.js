@@ -2,6 +2,7 @@ import { StyleSheet, View, ScrollView } from "react-native";
 import React from "react";
 import TextInputProfile from "../../components/TextInputProfile";
 import ProfileHeader from "../../components/ProfileHeader";
+import {Back_Ground} from "../../res/colors";
 const UpdateProfileScreen = ({ route, navigation }) => {
   const showEditIcon = route?.params?.showEditIcon || true;
   return (
@@ -26,7 +27,7 @@ export default UpdateProfileScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: Back_Ground,
   },
   scrollContent: {
     flexGrow: 1,

@@ -56,7 +56,7 @@ const RBDelivered = ({ sheetRef, selectedOrder }) => {
                             height={48}
                             backgroundColor={Back_Ground}
                             borderColor={THEME_COLOR}
-                            textStyle={{ color: THEME_COLOR }} />
+                            textStyle={{ color: WHITE_COLOR}} />
                     </View>
                     <View style={styles.buttonContainer}>
                         <CustomButtom title={"Go Back"} width={'100%'} height={48}

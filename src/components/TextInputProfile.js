@@ -83,7 +83,7 @@ const TextInputProfile = ({ showEditIcon, showButton }) => {
         value="12345678"
         showEditIcon={showEditIcon}
       />
-      {showButton && <CustomButton title={"UpdateProfile"} />}
+      {showButton && <CustomButton title={"UpdateProfile"} textStyle={{color:WHITE_COLOR}}/>}
     </View>
   );
 };
@@ -93,6 +93,8 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
     marginBottom: 28,
+    borderColor:GRAY_COLOR,
+    borderWidth:1.5,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -108,10 +110,9 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   input: {
-    borderBottomWidth: 1,
-    borderColor: GRAY_COLOR,
     color: THEME_TEXT_COLOR,
     paddingVertical: 4,
+    fontWeight:'600'
   },
   icon: {
     width: 30,

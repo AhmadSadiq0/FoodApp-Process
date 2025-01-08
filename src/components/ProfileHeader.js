@@ -68,6 +68,7 @@ const ProfileHeader = memo(
     showTabsEnabled = true,
   }) => {
     const [showTabs, setShowTabs] = useState(false);
+    
     const [activeTab, setActiveTab] = useState(null);
     const [dotsPosition, setDotsPosition] = useState({});
     const tabsData = [
@@ -181,8 +182,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   icon: {
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
   },
   bellContainer: {
     flexDirection: "row",

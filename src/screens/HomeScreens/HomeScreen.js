@@ -67,12 +67,12 @@ const HomeScreen = ({ navigation }) => {
       />
       <RBSheet
         ref={refRBSheet}
-        height={420}
+        height={350}
         draggable={true}
         customStyles={{
           container: { borderTopLeftRadius: 20, borderTopRightRadius: 20,  alignItems: 'center', backgroundColor: WHITE_COLOR },
           wrapper: { backgroundColor: 'transparent' },
-          draggableIcon: { backgroundColor: Green_Color },
+          draggableIcon: { backgroundColor: GRAY_COLOR },
         }}
         customModalProps={{
           animationType: 'slide',
