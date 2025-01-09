@@ -80,7 +80,7 @@ const CartScreen = ({ navigation }) => {
         customStyles={{
           container: { borderTopLeftRadius: 20, borderTopRightRadius: 20, backgroundColor: WHITE_COLOR },
           wrapper: { backgroundColor: 'transparent' },
-          draggableIcon: { backgroundColor: '#d3d3d3' },
+          draggableIcon: { backgroundColor: GRAY_COLOR },
         }}
       >
         {selectedItems.length > 0 && (

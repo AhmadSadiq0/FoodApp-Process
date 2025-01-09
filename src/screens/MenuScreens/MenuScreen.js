@@ -1,20 +1,17 @@
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
-import { WHITE_COLOR, BLACK_COLOR, THEME_COLOR, Back_Ground } from "../../res/colors";
+import React, { useState, useRef } from "react";
+import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from "react-native";
+import RBSheet from "react-native-raw-bottom-sheet"; // Import RBSheet
+import { WHITE_COLOR, BLACK_COLOR, THEME_COLOR, Back_Ground, GRAY_COLOR } from "../../res/colors";
 import Datalist from "../../components/Datalist";
 import Header from "../../components/Header";
 import { BURGERIMG, IMAGE16, IMAGE17, IMAGE18 } from "../../res/drawables";
+import AddCard from "../../components/AddCard";
 
 const MenuScreen = () => {
   const [selectedCategory, setSelectedCategory] = useState();
-
+  const [selectedItem, setSelectedItem] = useState(null); 
+  const refRBSheet = useRef(); 
+ 
   const burgerData = [
     {
       id: 1,
@@ -27,7 +24,7 @@ const MenuScreen = () => {
       name: "Cheese Burger",
       price: 499,
       image: BURGERIMG,
-    },
+    }, 
     {
       id: 3,
       name: "Cheese Burger",
@@ -60,33 +57,27 @@ const MenuScreen = () => {
     },
   ];
 
+  const handleAddToCart = (item) => {
+    setSelectedItem(item);
+    refRBSheet.current.open(); 
+  };
+
   const renderCategory = ({ item }) => {
     const isSelected = selectedCategory === item.id;
     return (
       <TouchableOpacity
-        style={[
-          styles.categoryCard,
-          {
-            backgroundColor: isSelected ? THEME_COLOR : WHITE_COLOR,
-            marginTop: 30,
-          },
-        ]}
+        style={[styles.categoryCard, {
+          backgroundColor: isSelected ? THEME_COLOR : WHITE_COLOR,
+          marginTop: 30,
+        }]}
         onPress={() => setSelectedCategory(item.id)}
       >
         <Image
           source={item.image}
-          style={[
-            styles.image,
-            { tintColor: isSelected ? WHITE_COLOR : THEME_COLOR },
-          ]}
+          style={[styles.image, { tintColor: isSelected ? WHITE_COLOR : THEME_COLOR }]}
           resizeMode="contain"
         />
-        <Text
-          style={[
-            styles.categoryText,
-            { color: isSelected ? WHITE_COLOR : THEME_COLOR },
-          ]}
-        >
+        <Text style={[styles.categoryText, { color: isSelected ? WHITE_COLOR : THEME_COLOR }]}>
           {item.name}
         </Text>
       </TouchableOpacity>
@@ -95,7 +86,7 @@ const MenuScreen = () => {
 
   return (
     <View style={styles.mainContainer}>
-      <Header/>
+      <Header />
       <FlatList
         data={burgerData}
         ListHeaderComponent={
@@ -109,7 +100,7 @@ const MenuScreen = () => {
               showsVerticalScrollIndicator={false}
             />
             <View>
-              <Datalist title="Discount" seeMoreText="" data={burgerData} />
+              <Datalist title="Discount" seeMoreText="" data={burgerData} onAddToCart={handleAddToCart} />
             </View>
             <View>
               <Datalist
@@ -123,6 +114,39 @@ const MenuScreen = () => {
         }
         keyExtractor={(item) => item.id.toString()}
       />
+      {/* Updated RBSheet Component */}
+      <RBSheet
+        ref={refRBSheet}
+        height={430}
+        draggable={true}
+        customStyles={{
+          container: {
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            alignItems: "center",
+            backgroundColor: WHITE_COLOR,
+          },
+          wrapper: { backgroundColor: "transparent" },
+          draggableIcon: { backgroundColor: GRAY_COLOR },
+        }}
+        customModalProps={{
+          animationType: "slide",
+          statusBarTranslucent: true,
+        }}
+        customAvoidingViewProps={{
+          enabled: false,
+        }}
+      >
+        {selectedItem && (
+          <AddCard
+            name={selectedItem.name}
+            description="A delicious choice!" // Description can be customized
+            image={selectedItem.image}
+            price={selectedItem.price}
+            onAddToCart={() => console.log("Added to Cart")}
+          />
+        )}
+      </RBSheet>
     </View>
   );
 };
@@ -131,10 +155,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: Back_Ground,
-  },
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
   },
   header: {
     width: "100%",
