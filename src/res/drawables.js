@@ -30,5 +30,6 @@ export const IMAGE26 = require(`${PATH}/icons/image26.png`);
 export const IMAGE27 = require(`${PATH}/icons/image27.png`);
 export const IMAGE28 = require(`${PATH}/icons/image28.png`)
 export const IMAGE29 = require(`${PATH}/icons/image29.png`)
+export const Language_Icon = require(`${PATH}/icons/languageicon.png`);
 
 

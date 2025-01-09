@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Switch } from "react-native";
 import CustomButton from "../../components/CustomButtom";
+import { Back_Ground, GRAY_COLOR, THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR } from "../../res/colors";
+
 const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const toggleSwitch = () => setIsDarkMode((previousState) => !previousState);
+
   return (
     <View style={styles.container}>
       <View style={styles.toggleContainer}>
@@ -11,57 +14,58 @@ const App = () => {
           Dark Mode
         </Text>
         <Switch
-          trackColor={{ false: "#E5E5E5", true: "#E5E5E5" }}
-          thumbColor={isDarkMode ? "#4B0082" : "#E5E5E5"}
-          ios_backgroundColor="#E5E5E5"
+          trackColor={{ false: GRAY_COLOR, true: GRAY_COLOR }}
+          thumbColor={isDarkMode ? THEME_TEXT_COLOR : THEME_TEXT_COLOR}
+          ios_backgroundColor={THEME_COLOR}
           onValueChange={toggleSwitch}
           value={isDarkMode}
           style={styles.switch}
         />
       </View>
-      <CustomButton title={"UpdateProfile"} style={styles.button} />
+      <CustomButton title={"Save"} style={styles.button} />
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F5F5F5",
-    alignItems: "center",
+    backgroundColor: Back_Ground,
+    flex: 1,
+    justifyContent: "space-between", 
+    paddingHorizontal: 16,
+    paddingVertical: 20, 
   },
   toggleContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#FFFFFF",
-    padding: 10,
+    backgroundColor: WHITE_COLOR,
+    paddingHorizontal: 15,
     borderRadius: 25,
-    width: "97%",
+    width: "100%",
+    elevation: 5, 
   },
+  
   label: {
     fontSize: 16,
     fontWeight: "500",
-    color: "red",
-    marginRight: 10,
+    color: THEME_COLOR,
   },
   labelActive: {
-    color: "#4B0082",
+    color: THEME_TEXT_COLOR,
   },
   switch: {
     transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }],
   },
   button: {
-    padding: 15,
-    marginBottom: 100,
+    paddingHorizontal: 15,
     borderRadius: 25,
-    marginTop: 450,
-    width: "97%",
+    width: "100%",
     alignItems: "center",
-    backgroundColor: "#4B0082",
-  },
-  buttonText: {
-    color: "#FFFFFF",
-    fontWeight: "bold",
-    fontSize: 16,
+    backgroundColor: THEME_COLOR,
+    height:50
+
   },
 });
+
 export default App;

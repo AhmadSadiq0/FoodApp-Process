@@ -2,10 +2,17 @@ import React from "react";
 import { ScrollView, StyleSheet, Text, Pressable, View } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { GRAY_COLOR, WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, Green_Color } from "../res/colors";
-import CustomButtom from "./CustomButtom";
+import CustomButton from "./CustomButtom";
+import { useNavigation } from "@react-navigation/native";
 
 const RBOrderSheet = (props) => {
   const { sheetRef, selectedOrder } = props;
+  
+  const navigation = useNavigation();
+
+  const goBack = () => {
+    navigation.goBack();
+  };
   return (
     <RBSheet
       ref={sheetRef}
@@ -78,12 +85,14 @@ const RBOrderSheet = (props) => {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <CustomButtom title={"Go Back"}
+            <CustomButton title={"Go Back"}
               width={'100%'}
               height={48}
               backgroundColor={THEME_COLOR}
               borderColor={THEME_COLOR}
-              textStyle={{ color: WHITE_COLOR }} />
+              textStyle={{ color: WHITE_COLOR }}
+              onPress={goBack} />
+              
           </View>
         </ScrollView>
       )}

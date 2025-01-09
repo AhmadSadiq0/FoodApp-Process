@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet"; 
-import { WHITE_COLOR, BLACK_COLOR, THEME_COLOR, Back_Ground, GRAY_COLOR } from "../../res/colors";
+import { WHITE_COLOR,THEME_COLOR, Back_Ground, GRAY_COLOR , Black_Color, BLACK_COLOR} from "../../res/colors";
 import Datalist from "../../components/Datalist";
 import Header from "../../components/Header";
 import { BURGERIMG, IMAGE16, IMAGE17, IMAGE18 } from "../../res/drawables";
@@ -108,6 +108,7 @@ const MenuScreen = () => {
                 seeMoreText=""
                 onSeeMorePress={() => console.log("See All pressed!")}
                 data={burgerData}
+                onAddToCart={handleAddToCart}
               />
             </View>
           </View>
@@ -116,38 +117,33 @@ const MenuScreen = () => {
       />
       {/* Updated RBSheet Component */}
       <RBSheet
-        ref={refRBSheet}
-        height={430}
-        draggable={true}
-        customStyles={{
-          container: {
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
-            alignItems: "center",
-            backgroundColor: WHITE_COLOR,
-          },
-          wrapper: { backgroundColor: "transparent" },
-          draggableIcon: { backgroundColor: GRAY_COLOR },
-        }}
-        customModalProps={{
-          animationType: "slide",
-          statusBarTranslucent: true,
-        }}
-        customAvoidingViewProps={{
-          enabled: false,
-        }}
-      >
-        {selectedItem && (
-          <AddCard
-            name={selectedItem.name}
-            description="A delicious choice!" 
-            image={selectedItem.image}
-            price={selectedItem.price}
-            buttonText="Add to Cart"
-            onAddToCart={() => console.log("Added to Cart")}
-          />
-        )}
-      </RBSheet>
+  ref={refRBSheet}
+  height={430}
+  draggable={true}
+  customStyles={{
+    container: {
+      borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
+      alignItems: "center",
+      backgroundColor: WHITE_COLOR,
+    },
+    wrapper: { backgroundColor: "rgba(0, 0, 0, 0.5)" }, // Semi-transparent background
+    draggableIcon: { backgroundColor: GRAY_COLOR },
+  }}
+>
+  {selectedItem ? (
+    <AddCard
+      name={selectedItem.name}
+      description="A delicious choice!"
+      image={selectedItem.image}
+      price={selectedItem.price}
+      onAddToCart={() => console.log("Added to Cart")}
+    />
+  ) : (
+    <Text style={{ color: BLACK_COLOR }}>No item selected</Text>
+  )}
+</RBSheet>
+
     </View>
   );
 };
