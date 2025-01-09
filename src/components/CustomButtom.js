@@ -18,10 +18,12 @@ const styles = StyleSheet.create({
     borderWidth:2,
     width: "100%",
     alignItems: "center",
+   marginTop:60,
   },
   buttonText: {
     fontWeight: "bold",
     fontSize: 24,
+    color: WHITE_COLOR,
   },
 });
 

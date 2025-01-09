@@ -133,7 +133,7 @@ function BottomTabStack() {
                     height: 50,
                     borderTopLeftRadius: 20,
                     borderTopRightRadius: 20,
-                },
+                }, 
                 tabBarLabelStyle: {
                     fontSize: 12,
                     fontWeight: 'bold',

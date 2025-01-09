@@ -67,11 +67,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   givemargin: {
-    marginTop:-27,
+    marginTop:-47,
   },
   Button: {
-    paddingHorizontal: 90,
-    borderColor: THEME_COLOR,
+    // borderColor: THEME_COLOR,
     borderWidth: 2,
     borderColor: "#EF4444",
     borderRadius: 999,
