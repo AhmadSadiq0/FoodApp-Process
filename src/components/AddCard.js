@@ -21,7 +21,7 @@ const AddCard = (props) => {
         <Text style={styles.price}>{`Rs. ${price}`}</Text>
       </View>
       <TouchableOpacity style={styles.button} onPress={onAddToCart}>
-        <Text style={styles.buttonText}>{buttonText}</Text>
+        <Text style={styles.buttonText}>Add to cart</Text>
       </TouchableOpacity>
     </View>
   );

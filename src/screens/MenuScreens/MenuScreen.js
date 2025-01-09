@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from "react-native";
-import RBSheet from "react-native-raw-bottom-sheet"; // Import RBSheet
+import RBSheet from "react-native-raw-bottom-sheet"; 
 import { WHITE_COLOR, BLACK_COLOR, THEME_COLOR, Back_Ground, GRAY_COLOR } from "../../res/colors";
 import Datalist from "../../components/Datalist";
 import Header from "../../components/Header";
@@ -140,9 +140,10 @@ const MenuScreen = () => {
         {selectedItem && (
           <AddCard
             name={selectedItem.name}
-            description="A delicious choice!" // Description can be customized
+            description="A delicious choice!" 
             image={selectedItem.image}
             price={selectedItem.price}
+            buttonText="Add to Cart"
             onAddToCart={() => console.log("Added to Cart")}
           />
         )}
@@ -173,11 +174,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     margin: 8,
-    shadowColor: BLACK_COLOR,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
   },
   image: {
     width: 51,
