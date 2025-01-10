@@ -4,7 +4,8 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { GRAY_COLOR, WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, Green_Color } from "../res/colors";
 import CustomButtom from "./CustomButtom";
 
-const RBOrderSheet = ({ sheetRef, selectedOrder }) => {
+const RBOrderSheet = (props) => {
+  const { sheetRef, selectedOrder } = props;
   return (
     <RBSheet
       ref={sheetRef}

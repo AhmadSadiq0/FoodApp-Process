@@ -7,7 +7,8 @@ import {
 import ProfileHeader from '../../components/ProfileHeader'
 import TextInputProfile from '../../components/TextInputProfile'
 import { Back_Ground } from '../../res/colors'
-const ProfileScreen = ({navigation,route}) => {
+const ProfileScreen = (props) => {
+  const { navigation, route } = props;
   const showEditIcon = route?.params?.showEditIcon || false;
   return (
     <View style={styles.container}>

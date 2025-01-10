@@ -81,8 +81,8 @@ const CartScreen = ({ navigation }) => {
         customStyles={{
           container: { borderTopLeftRadius: 20, borderTopRightRadius: 20, backgroundColor: WHITE_COLOR },
           wrapper: { backgroundColor: 'transparent' },
-          draggableIcon: { backgroundColor: '#d3d3d3' },
-        }}
+          draggableIcon: { backgroundColor: GRAY_COLOR },
+        }} 
       >
         {selectedItems.length > 0 && (
           <SummaryCard
@@ -142,13 +142,12 @@ const SummaryCard = ({ selectedItems, subtotal, onCheckout }) => (
     <View style={styles.customButton}>
       <CustomButton
         title={'CheckOut'}
-        textStyle={{ color: WHITE_COLOR }}
+        textStyle={styles.textStyle}
         onPress={onCheckout}
       />
     </View>
   </View>
 );
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -253,10 +252,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   customButton: {
-    marginTop: 80,
-    marginBottom: 30,
+    marginTop: 20,
     width: '100%',
  },
+ textStyle: {
+  color: WHITE_COLOR,
+}
 });
 
 export default CartScreen;

@@ -89,7 +89,7 @@ const MenuStack = () => {
         <Stack.Navigator initialRouteName="Menu" headerMode={false}>
             <Stack.Screen options={{ headerShown: false }} name="Menu" component={MenuScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
-        </Stack.Navigator>
+        </Stack.Navigator> 
     )
 }
 const CartStack = () => {

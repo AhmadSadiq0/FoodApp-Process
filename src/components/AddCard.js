@@ -9,14 +9,8 @@ import {
   WHITE_COLOR,
 } from "../res/colors";
 
-const AddCard = ({
-  name,
-  description,
-  image = BURGERIMG,
-  price,
-  onAddToCart,
-  buttonText = "Add to Cart",
-}) => {
+const AddCard = (props) => {
+  const { name, description, image, price, buttonText, onAddToCart } = props;
   return (
     <View style={styles.card}>
       <Text style={styles.name}>{name}</Text>
@@ -27,7 +21,7 @@ const AddCard = ({
         <Text style={styles.price}>{`Rs. ${price}`}</Text>
       </View>
       <TouchableOpacity style={styles.button} onPress={onAddToCart}>
-        <Text style={styles.buttonText}>{buttonText}</Text>
+        <Text style={styles.buttonText}>Add to cart</Text>
       </TouchableOpacity>
     </View>
   );
