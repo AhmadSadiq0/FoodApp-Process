@@ -1,33 +1,35 @@
 import React from 'react'
 import { View, StyleSheet,ScrollView } from "react-native";
-import Datalist from "../../components/Datalist";
+//Images
 import { BURGERIMG } from "../../res/drawables";
-import AddCard from "../../components/AddCard";
-
+//component
+import {AddCard,Datalist} from "../../components/AddCard";
+//colors
+import { WHITE_COLOR } from '../../res/colors';
 const DiscountsScreen = () => {
   const burgerData = [
     {
       id: 1,
       name: "Double Cheese Burger",
-      price: 599,
+      price: 59,
       image: BURGERIMG,
     },
     {
       id: 2,
       name: "Cheese Burger",
-      price: 499,
+      price: 49,
       image: BURGERIMG,
     },
     {
       id: 3,
       name: "Chicken Burger",
-      price: 399,
+      price: 39,
       image: BURGERIMG,
     },
     {
       id: 4,
       name: "Chicken Burger",
-      price: 399,
+      price: 39,
       image: BURGERIMG,
     },
   ];
@@ -35,7 +37,7 @@ const DiscountsScreen = () => {
     name: "2 Double Cheese Burger",
     description: "Double Delight",
     image: BURGERIMG,
-    price: 849,
+    price: 84,
   };
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -47,13 +49,13 @@ const DiscountsScreen = () => {
       />
       <Datalist
         title="Deals"
-        seeMoreText="See All"
+        seeMoreText="See All" 
         onSeeMorePress={() => console.log("See All pressed!")}
         data={burgerData}
       />
       <Datalist
         title="LoyaltyBurgers"
-        seeMoreText="See All"
+        seeMoreText="See"
         onSeeMorePress={() => console.log("See All pressed!")}
         data={burgerData}
        
@@ -73,7 +75,7 @@ const DiscountsScreen = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: WHITE_COLOR,
     padding : 7
   },
 });

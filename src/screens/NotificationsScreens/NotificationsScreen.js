@@ -6,6 +6,7 @@ import {
     Image,
     TouchableOpacity,
 } from 'react-native';
+//colors
 import {
     THEME_TEXT_COLOR,
     WHITE_COLOR,
@@ -14,8 +15,11 @@ import {
     BLACK_COLOR,
     Green_Color,
 } from '../../res/colors';
+//Images
 import { PIZZAIMAGE } from '../../res/drawables';
+//Button
 import CustomButton from '../../components/CustomButtom';
+//RawBottomSheet
 import RBSheet from 'react-native-raw-bottom-sheet';
 const NotificationsScreen = ({ navigation }) => {
     const [cartItems, setCartItems] = useState([

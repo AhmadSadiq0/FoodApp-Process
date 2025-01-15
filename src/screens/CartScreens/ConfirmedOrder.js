@@ -1,21 +1,21 @@
 import React from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
+//Images
 import { IMAGE29 } from "../../res/drawables";
+//CustomButton
 import CustomButton from "../../components/CustomButtom";
+//Navigation
 import { useNavigation } from "@react-navigation/native";
+//Colors
 import { THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR } from "../../res/colors";
-
 const ConfirmedOrder = () => {
   const navigation = useNavigation();
-
-  const navigateToMenu = () => {
+  const navigateToMenu = () => { 
     navigation.navigate("Menu");
   };
-
   const navigateToCart = () => {
     navigation.navigate("Cart");
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.content}>

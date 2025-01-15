@@ -1,7 +1,10 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+//Colors
 import { Back_Ground, THEME_COLOR, WHITE_COLOR } from '../res/colors';
+//Icon
 import { DISCOUNT_ICON, ARROW_ICON } from '../res/drawables';
+//navigation
 import { useNavigation } from '@react-navigation/native';
 
 const Header1 = (props) => {

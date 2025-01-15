@@ -9,3 +9,10 @@ export const WHITE_COLOR = '#FFFFFF';
 export const Green_Color = '#0AEE38';
 export const Black_Color = '#000000';
 export const Back_Ground = '#F8F8FF';
+
+export const DARK_THEME_BACKGROUND = "#1A1A1A"; // Dark background for dark mode
+export const DARK_THEME_TEXT_COLOR = "#E0E0E0"; // Light text for dark mode
+
+
+
+

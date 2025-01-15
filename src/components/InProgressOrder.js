@@ -7,7 +7,9 @@ import {
   Image,
   Pressable,
 } from "react-native";
+//images
 import { BURGERIMG } from "../res/drawables";
+//colors
 import {
   Back_Ground,
   GRAY_COLOR,
@@ -15,11 +17,17 @@ import {
   THEME_COLOR,
   THEME_TEXT_COLOR,
   WHITE_COLOR,
+  DARK_THEME_BACKGROUND,
+  DARK_THEME_TEXT_COLOR,
+  DARK_STATUS_COLOR,
 } from "../res/colors";
+//components 
 import RBOrderSheet from "./RBOrderSheet";
 import RBDelivered from "./RBDelivered";
-
+//zustand
+import useThemeStore from "../../zustand/ThemeStore";
 const InProgressOrder = ({ sections: initialSections }) => {
+  const { darkMode } = useThemeStore();
   const [sections, setSections] = useState(initialSections);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const sheetRef = useRef();
@@ -57,15 +65,18 @@ const InProgressOrder = ({ sections: initialSections }) => {
       order={item}
       isSelected={selectedOrder?.orderId === item.orderId}
       onPress={() => handleCardPress(item)}
+      darkMode={darkMode} // Pass dark mode state to the OrderCard
     />
   );
 
   const renderSectionHeader = ({ section: { title } }) => (
-    <Text style={styles.sectionHeader}>{title}</Text>
+    <Text style={[styles.sectionHeader, { color: darkMode ? DARK_THEME_TEXT_COLOR : THEME_COLOR }]}>
+      {title}
+    </Text>
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: darkMode ? DARK_THEME_BACKGROUND : Back_Ground }]}>
       <SectionList
         sections={sections}
         keyExtractor={(item, index) => `${item.orderId}-${index}`}
@@ -79,7 +90,7 @@ const InProgressOrder = ({ sections: initialSections }) => {
   );
 };
 
-const OrderCard = ({ order, onPress, isSelected }) => {
+const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
   const statusColors = {
     Preparing: THEME_COLOR,
     Delivered: Green_Color,
@@ -94,19 +105,29 @@ const OrderCard = ({ order, onPress, isSelected }) => {
         {
           borderColor: isSelected ? THEME_COLOR : "transparent",
           borderWidth: isSelected ? 2 : 0,
+          backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR, // Apply dark mode background
         },
       ]}
     >
       <View style={styles.textContainer}>
-        <Text style={styles.orderId}>{order.orderId}</Text>
-        <Text style={styles.itemName}>{order.itemName}</Text>
-        <Text style={styles.price}>{order.price}</Text>
+        <Text style={[styles.orderId, { color: darkMode ? DARK_THEME_TEXT_COLOR : THEME_TEXT_COLOR }]}>
+          {order.orderId}
+        </Text>
+        <Text style={[styles.itemName, { color: darkMode ? DARK_THEME_TEXT_COLOR : THEME_TEXT_COLOR }]}>
+          {order.itemName}
+        </Text>
+        <Text style={[styles.price, { color: darkMode ? THEME_COLOR : THEME_COLOR }]}>
+          {order.price}
+        </Text>
       </View>
       <View style={styles.statusContainer}>
         <Text
           style={[
             styles.status,
-            { backgroundColor: statusColors[order.status] || statusColors.default },
+            {
+              backgroundColor: statusColors[order.status] || statusColors.default,
+              color: darkMode ? WHITE_COLOR : WHITE_COLOR, // Text color in status
+            },
           ]}
         >
           {order.status}
@@ -120,7 +141,6 @@ const OrderCard = ({ order, onPress, isSelected }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Back_Ground,
   },
   sectionListContainer: {
     paddingHorizontal: 16,
@@ -128,11 +148,9 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontSize: 20,
     fontWeight: "bold",
-    color: THEME_COLOR,
     marginBottom: 10,
   },
   orderCard: {
-    backgroundColor: WHITE_COLOR,
     marginBottom: 15,
     padding: 15,
     borderRadius: 10,
@@ -149,16 +167,12 @@ const styles = StyleSheet.create({
   orderId: {
     fontSize: 13,
     fontWeight: "bold",
-    color: THEME_TEXT_COLOR,
-    fontWeight: "600",
   },
   itemName: {
     fontSize: 12,
-    color: THEME_TEXT_COLOR,
   },
   price: {
     fontSize: 12,
-    color: THEME_COLOR,
     fontWeight: "bold",
   },
   statusContainer: {
@@ -170,7 +184,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     width: 80,
     height: 20,
-    color: WHITE_COLOR,
     fontWeight: "bold",
     textAlign: "center",
   },

@@ -1,14 +1,16 @@
 // OrderConfirmationScreen.js
 import React, { useState, useRef } from "react";
 import { StyleSheet, View, FlatList, Alert } from "react-native";
-import Header1 from "../../components/Header1";
 import { Confirm_Order } from "../../res/drawables";
-import DeliveryAddress from "../../components/DelivaryComponent";
-import PaymentComponent from "../../components/PaymentComponent";
-import ConfirmOrderSummary from "../../components/ConfirmOrderSummary";
+//component
+import { ConfirmOrderSummary,DeliveryAddress,PaymentComponent,Header1 } from "../../components";
+//images
 import { IMAGE25, IMAGE26, IMAGE27 } from "../../res/drawables";
+//colors
 import { Back_Ground } from "../../res/colors";
+//RawBottomSheet
 import RBSheet from "react-native-raw-bottom-sheet";
+
 
 const paymentMethods = [
   { name: "Debit Card", image: IMAGE25 },
@@ -16,11 +18,11 @@ const paymentMethods = [
   { name: "Cash on Delivery", image: IMAGE27 },
 ];
 
+
 const OrderConfirmationScreen = (props) => {
   const { navigation } = props;
   const [selectedPayment, setSelectedPayment] = useState(null);
   const sheetRef = useRef(null);
-
   const handlePaymentSelection = (paymentMethod) => {
     setSelectedPayment(paymentMethod);
     sheetRef.current.open();
@@ -30,6 +32,7 @@ const OrderConfirmationScreen = (props) => {
     setSelectedPayment(null );
     sheetRef.current.close();
   };
+
 
   return (
     <View style={styles.container}>
@@ -57,6 +60,7 @@ const OrderConfirmationScreen = (props) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

@@ -1,7 +1,8 @@
 import React from "react";
 import { StyleSheet, View, SectionList, Text } from "react-native";
-import Header from "../../components/Header";
-import InProgressOrder from "../../components/InProgressOrder";
+//Components
+import { InProgressOrder, Header } from "../../components";
+//colors
 import { Back_Ground } from "../../res/colors";
 
 const OrdersScreen = () => {
@@ -11,21 +12,21 @@ const OrdersScreen = () => {
       itemName: "Double Cheese Burger",
       price: "Rs. 590/-",
       status: "Preparing",
-      deliveredOn: "14/11/2024 11:08 PM"
+      deliveredOn: "14/11/2024 11:08 PM",
     },
     {
       orderId: "AK-121124-DCB07",
       itemName: "Double Cheese Burger",
       price: "Rs. 590/-",
       status: "Preparing",
-      deliveredOn: "14/11/2024 11:08 PM"
+      deliveredOn: "14/11/2024 11:08 PM",
     },
     {
       orderId: "AK-111124-DCB07",
       itemName: "Double Cheese Burger",
       price: "Rs. 590/-",
       status: "Delivered",
-      deliveredBy: "Harry K.",
+      deliveredBy: "Husnain",
       deliveredOn: "November 14, 2024 11:39 PM",
       orderDetails: "Double Cheese Burger",
     },
@@ -34,7 +35,7 @@ const OrdersScreen = () => {
       itemName: "Double Cheese Burger",
       price: "Rs. 590/-",
       status: "Delivered",
-      deliveredBy: "Sarah J.",
+      deliveredBy: "ZainZaka",
       deliveredOn: "November 13, 2024 10:15 AM",
       orderDetails: "Double Cheese Burger",
     },
@@ -43,7 +44,7 @@ const OrdersScreen = () => {
       itemName: "Double Cheese Burger",
       price: "Rs. 590/-",
       status: "Delivered",
-      deliveredBy: "Huzaifa Saddique",
+      deliveredBy: "ZainZaka",
       deliveredOn: "November 12, 2024 3:45 PM",
       orderDetails: "Double Cheese Burger",
     },
@@ -54,6 +55,7 @@ const OrdersScreen = () => {
       title: "In Progress Orders",
       data: allOrders.filter((order) => order.status === "Preparing"),
     },
+
     {
       title: "Orders History",
       data: allOrders.filter((order) => order.status === "Delivered"),
@@ -73,11 +75,12 @@ const OrdersScreen = () => {
           marginTop: 0,
         }}
       />
+
       <InProgressOrder sections={sections} />
     </View>
   );
 };
- 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

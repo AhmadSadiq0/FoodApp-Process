@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+//colors
 import {
   THEME_COLOR,
   WHITE_COLOR,
@@ -14,6 +15,7 @@ import {
   THEME_TEXT_COLOR,
   Back_Ground,
 } from "../res/colors";
+//icon
 import { Profie_Image, Bell_ICON, Search_Icon } from "../res/drawables";
 // SearchBar Component
 const SearchBar = ({ placeholder }) => (

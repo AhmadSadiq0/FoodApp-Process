@@ -7,12 +7,14 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
+//colrs
 import {
   THEME_COLOR,
   WHITE_COLOR,
   Green_Color,
   THEME_TEXT_COLOR,
 } from "../res/colors";
+//Images
 import {
   Profie_Image,
   Bell_ICON,

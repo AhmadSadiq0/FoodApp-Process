@@ -1,10 +1,12 @@
 import React, { useRef, useState } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
-import Header from "../../components/Header";
-import Datalist from "../../components/Datalist";
-import AddCard from "../../components/AddCard";
+//components
+import { Header, Datalist, AddCard } from "../../components";
+//res
 import { WHITE_COLOR, Back_Ground, GRAY_COLOR, Green_Color} from "../../res/colors";
+//packages
 import RBSheet from "react-native-raw-bottom-sheet";
+//images 
 import { BURGERIMG } from "../../res/drawables";
 
 const HomeScreen = ({ navigation }) => {
@@ -101,6 +103,6 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Back_Ground,
-    marginBottom: 10,
+    marginBottom:240,
   },
 });

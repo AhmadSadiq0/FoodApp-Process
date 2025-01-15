@@ -1,26 +1,35 @@
 import React, { useState } from "react";
-import {
+import { 
   ScrollView,
-  StyleSheet,
+  StyleSheet, 
   Text,
   View,
   Pressable,
   TouchableOpacity,
 } from "react-native";
+//Navigation
 import { useNavigation } from "@react-navigation/native";
+//RawBottomSheet
 import RBSheet from "react-native-raw-bottom-sheet";
-import {
+//Colors
+import { 
   GRAY_COLOR,
   WHITE_COLOR,
   THEME_COLOR,
   THEME_TEXT_COLOR,
-  Back_Ground,
+  DARK_BACKGROUND,
+  DARK_TEXT_COLOR,
+  Back_Ground
 } from "../res/colors";
+//CustomButton
 import CustomButton from "./CustomButtom";
+//State Manage
+import useThemeStore from "../../zustand/ThemeStore";
 
 const RBDelivered = ({ sheetRef, selectedOrder }) => {
   const [rating, setRating] = useState(0);
   const navigation = useNavigation();
+  const { darkMode } = useThemeStore();
 
   const navigateToMenu = () => {
     navigation.navigate("Menu");
@@ -30,6 +39,23 @@ const RBDelivered = ({ sheetRef, selectedOrder }) => {
     navigation.goBack();
   };
 
+  // Dynamic styles based on theme
+  const dynamicStyles = {
+    container: {
+      backgroundColor: darkMode ? "black" : WHITE_COLOR,
+    },
+    text: {
+      color: darkMode ? "white" : THEME_TEXT_COLOR, 
+    },
+    label: {
+      color: darkMode ? "white" : THEME_COLOR, 
+    },
+    button: {
+      backgroundColor: darkMode ? DARK_TEXT_COLOR : THEME_COLOR,
+      borderColor: darkMode ? DARK_TEXT_COLOR : THEME_COLOR,
+    },
+  };
+
   return (
     <RBSheet
       ref={sheetRef}
@@ -37,9 +63,9 @@ const RBDelivered = ({ sheetRef, selectedOrder }) => {
       draggable={true}
       customStyles={{
         container: {
+          ...dynamicStyles.container,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          backgroundColor: WHITE_COLOR,
         },
         wrapper: {
           backgroundColor: "transparent",
@@ -53,33 +79,41 @@ const RBDelivered = ({ sheetRef, selectedOrder }) => {
       {selectedOrder && (
         <ScrollView style={styles.sheetContent}>
           <View style={styles.orderDetails}>
-            <Text style={styles.orderIdText}>{selectedOrder.orderId}</Text>
-            <Text style={styles.sheetLabel}>
+            <Text style={[styles.orderIdText, dynamicStyles.text]}>
+              {selectedOrder.orderId}
+            </Text>
+            <Text style={[styles.sheetLabel, dynamicStyles.label]}>
               Delivered By:{" "}
-              <Text style={styles.deliveredByValue}>
+              <Text style={[styles.deliveredByValue, dynamicStyles.text]}>
                 {selectedOrder.deliveredBy}
               </Text>
             </Text>
-            <Text style={styles.sheetValue}>
+            <Text style={[styles.sheetValue, dynamicStyles.label]}>
               Order Details:{" "}
-              <Text style={styles.deliveredByValue}>
+              <Text style={[styles.deliveredByValue, dynamicStyles.text]}>
                 {selectedOrder.orderDetails}
               </Text>
             </Text>
-            <Text style={styles.sheetLabel}>
+            <Text style={[styles.sheetLabel, dynamicStyles.label]}>
               Delivered On:{" "}
-              <Text style={styles.deliveredByValue}>
+              <Text style={[styles.deliveredByValue, dynamicStyles.text]}>
                 {selectedOrder.deliveredOn}
               </Text>
             </Text>
           </View>
-          <Text style={styles.orderIdText}>Rate Our Service</Text>
+          <Text style={[styles.orderIdText, dynamicStyles.text]}>
+            Rate Our Service
+          </Text>
           <View style={styles.ratingContainer}>
             <View style={styles.stars}>
               {[...Array(5)].map((_, i) => (
                 <Pressable key={i} onPress={() => setRating(i + 1)}>
                   <Text
-                    style={i < rating ? styles.starFilled : styles.starEmpty}
+                    style={
+                      i < rating
+                        ? [styles.starFilled, dynamicStyles.label]
+                        : [styles.starEmpty, dynamicStyles.text]
+                    }
                   >
                     ★
                   </Text>
@@ -87,7 +121,7 @@ const RBDelivered = ({ sheetRef, selectedOrder }) => {
               ))}
             </View>
             <TouchableOpacity
-              style={styles.submitButton}
+              style={[styles.submitButton, dynamicStyles.button]}
               onPress={() => console.log("Rating Submitted:", rating)}
             >
               <Text style={styles.submitButtonText}>Submit</Text>
@@ -99,7 +133,7 @@ const RBDelivered = ({ sheetRef, selectedOrder }) => {
                 title={"Re-Order"}
                 width={"100%"}
                 height={48}
-                backgroundColor={Back_Ground}
+                backgroundColor={darkMode ? DARK_TEXT_COLOR : Back_Ground}
                 borderColor={THEME_COLOR}
                 textStyle={{ color: WHITE_COLOR }}
                 onPress={navigateToMenu}
@@ -110,8 +144,8 @@ const RBDelivered = ({ sheetRef, selectedOrder }) => {
                 title={"Go Back"}
                 width={"100%"}
                 height={48}
-                backgroundColor={THEME_COLOR}
-                borderColor={THEME_COLOR}
+                backgroundColor={dynamicStyles.button.backgroundColor}
+                borderColor={dynamicStyles.button.borderColor}
                 textStyle={{ color: WHITE_COLOR }}
                 onPress={goBack}
               />
@@ -126,20 +160,17 @@ const RBDelivered = ({ sheetRef, selectedOrder }) => {
 const styles = StyleSheet.create({
   sheetLabel: {
     fontSize: 14,
-    color: THEME_COLOR,
     marginBottom: 8,
     fontWeight: "700",
   },
   deliveredByValue: {
     fontSize: 14,
-    color: THEME_TEXT_COLOR,
     marginBottom: 8,
     fontWeight: "400",
   },
   sheetValue: {
     fontSize: 14,
     marginBottom: 8,
-    color: THEME_COLOR,
     fontWeight: "bold",
   },
   sheetContent: {
@@ -151,13 +182,11 @@ const styles = StyleSheet.create({
   },
   orderIdText: {
     fontSize: 18,
-    color: THEME_TEXT_COLOR,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 16,
   },
   ratingContainer: {
-    backgroundColor: Back_Ground,
     borderRadius: 37,
     height: 48,
     width: "100%",
@@ -174,16 +203,13 @@ const styles = StyleSheet.create({
   },
   starFilled: {
     fontSize: 20,
-    color: THEME_COLOR,
     marginHorizontal: 4,
   },
   starEmpty: {
     fontSize: 20,
-    color: GRAY_COLOR,
     marginHorizontal: 4,
   },
   submitButton: {
-    backgroundColor: THEME_TEXT_COLOR,
     height: 30,
     width: 100,
     borderRadius: 24,

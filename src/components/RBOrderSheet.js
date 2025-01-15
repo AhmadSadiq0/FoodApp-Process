@@ -1,18 +1,45 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, Pressable, View } from "react-native";
+//RawBottomSheet
 import RBSheet from "react-native-raw-bottom-sheet";
-import { GRAY_COLOR, WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, Green_Color } from "../res/colors";
+//Colors
+import { GRAY_COLOR, WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, Green_Color, DARK_BACKGROUND, DARK_TEXT_COLOR } from "../res/colors";
+//CustomButton
 import CustomButton from "./CustomButtom";
+//Navigation
 import { useNavigation } from "@react-navigation/native";
+//State Manage
+import useThemeStore from "../../zustand/ThemeStore";
 
 const RBOrderSheet = (props) => {
   const { sheetRef, selectedOrder } = props;
-  
   const navigation = useNavigation();
+  const { darkMode } = useThemeStore(); 
 
   const goBack = () => {
     navigation.goBack();
   };
+
+  // Dynamic styles based on theme
+  const dynamicStyles = {
+    container: {
+      backgroundColor: darkMode ? "black" : WHITE_COLOR, // Dark mode: black background, light mode: white background
+    },
+    text: {
+      color: darkMode ? "white" : THEME_TEXT_COLOR, // Dark mode: white text, light mode: theme text color
+    },
+    label: {
+      color: darkMode ? "white" : THEME_COLOR, // Dark mode: white labels, light mode: theme color
+    },
+    button: {
+      backgroundColor: darkMode ? DARK_TEXT_COLOR : THEME_COLOR,
+      borderColor: darkMode ? DARK_TEXT_COLOR : THEME_COLOR,
+    },
+    totalBillContainer: {
+      backgroundColor: darkMode ? DARK_BACKGROUND : WHITE_COLOR,
+    },
+  };
+
   return (
     <RBSheet
       ref={sheetRef}
@@ -20,12 +47,12 @@ const RBOrderSheet = (props) => {
       draggable={true}
       customStyles={{
         container: {
+          ...dynamicStyles.container,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          backgroundColor: WHITE_COLOR,
         },
         wrapper: {
-          backgroundColor: "transparent",
+          backgroundColor: darkMode ? "rgba(0, 0, 0, 0.5)" : "transparent", // Darken wrapper for dark mode
         },
         draggableIcon: {
           backgroundColor: GRAY_COLOR,
@@ -35,41 +62,41 @@ const RBOrderSheet = (props) => {
     >
       {selectedOrder && (
         <ScrollView style={styles.sheetContent}>
-          <Text style={styles.OrderIdText}>Order Details</Text>
-          <Text style={styles.sheetLabel}>
-            Item(s): <Text style={styles.sheetValue}>1</Text>
+          <Text style={[styles.OrderIdText, dynamicStyles.text]}>Order Details</Text>
+          <Text style={[styles.sheetLabel, dynamicStyles.label]}>
+            Item(s): <Text style={[styles.sheetValue, dynamicStyles.text]}>1</Text>
           </Text>
-          <Text style={styles.sheetLabel}>
-            Details: <Text>{selectedOrder.itemName}</Text> (<Text style={styles.sheetValue}>1</Text>)
+          <Text style={[styles.sheetLabel, dynamicStyles.label]}>
+            Details: <Text style={[styles.sheetValue, dynamicStyles.text]}>{selectedOrder.itemName}</Text> (<Text style={[styles.sheetValue, dynamicStyles.text]}>1</Text>)
           </Text>
-          <View style={styles.totalBillContainer}>
-            <Text style={styles.sheetLabel}>
-              Total Bill: <Text style={styles.sheetValue}>Rs. {selectedOrder.price}</Text>
+          <View style={[styles.totalBillContainer, dynamicStyles.totalBillContainer]}>
+            <Text style={[styles.sheetLabel, dynamicStyles.label]}>
+              Total Bill: <Text style={[styles.sheetValue, dynamicStyles.text]}>Rs. {selectedOrder.price}</Text>
             </Text>
           </View>
           <View style={styles.buttonContainer}>
             <Pressable style={styles.ScrollButton}>
-              <Text style={styles.ScrollButtonText}>Scroll Down For Tracking</Text>
+              <Text style={[styles.ScrollButtonText, dynamicStyles.text]}>Scroll Down For Tracking</Text>
             </Pressable>
-            <Text style={[styles.OrderIdText, { marginTop: 10 , marginBottom:0 }]}>{selectedOrder.orderId}</Text>
-            </View>
+            <Text style={[styles.OrderIdText, dynamicStyles.text]}>{selectedOrder.orderId}</Text>
+          </View>
           <View style={styles.timelineContainer}>
             <View style={styles.timelineItem}>
               <View style={[styles.circle, styles.redCircle]} />
-              <Text style={styles.statusText}>Order Confirmation</Text>
-              <Text style={styles.statusDate}>{selectedOrder.deliveredOn}</Text>
+              <Text style={[styles.statusText, dynamicStyles.text]}>Order Confirmation</Text>
+              <Text style={[styles.statusDate, dynamicStyles.text]}>{selectedOrder.deliveredOn}</Text>
             </View>
             <View style={styles.verticalLine} />
             <View style={styles.timelineItem}>
               <View style={[styles.circle, styles.redCircle]} />
-              <Text style={styles.statusText}>In Preparation</Text>
-              <Text style={styles.statusDate}>{selectedOrder.deliveredOn}</Text>
+              <Text style={[styles.statusText, dynamicStyles.text]}>In Preparation</Text>
+              <Text style={[styles.statusDate, dynamicStyles.text]}>{selectedOrder.deliveredOn}</Text>
             </View>
             <View style={[styles.verticalLine, { borderColor: Green_Color }]} />
             <View style={styles.timelineItem}>
               <View style={[styles.circle, { backgroundColor: Green_Color }]} />
               <Text style={[styles.statusText, { color: Green_Color }]}>Ready To Dispatch</Text>
-              <Text style={styles.statusDate}>{selectedOrder.deliveredOn}</Text>
+              <Text style={[styles.statusDate, dynamicStyles.text]}>{selectedOrder.deliveredOn}</Text>
             </View>
             <View style={[styles.verticalLine, { borderColor: GRAY_COLOR }]} />
             <View style={styles.timelineItem}>
@@ -85,14 +112,15 @@ const RBOrderSheet = (props) => {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <CustomButton title={"Go Back"}
+            <CustomButton
+              title={"Go Back"}
               width={'100%'}
               height={48}
-              backgroundColor={THEME_COLOR}
-              borderColor={THEME_COLOR}
+              backgroundColor={dynamicStyles.button.backgroundColor}
+              borderColor={dynamicStyles.button.borderColor}
               textStyle={{ color: WHITE_COLOR }}
-              onPress={goBack} />
-              
+              onPress={goBack}
+            />
           </View>
         </ScrollView>
       )}
@@ -104,7 +132,6 @@ const styles = StyleSheet.create({
   sheetLabel: {
     fontSize: 14,
     color: THEME_TEXT_COLOR,
-    // marginBottom: 8,
     fontWeight: "bold",
   },
   sheetValue: {
@@ -132,7 +159,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginBottom: 20,
-    marginTop:20,
+    marginTop: 20,
     alignItems: "center",
   },
   ScrollButton: {
@@ -181,8 +208,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: THEME_COLOR,
     alignSelf: "flex-start",
-    marginLeft:10,
-    marginBottom:10,
+    marginLeft: 10,
+    marginBottom: 10,
   },
   redCircle: {
     backgroundColor: "#EF4444",

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
+//Images
 import { IMAGE28 } from "../res/drawables";
+//Colors
 import { WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, Back_Ground, Black_Color } from "../res/colors";
 
 const DeliveryComponent = () => {

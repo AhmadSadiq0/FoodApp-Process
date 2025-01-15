@@ -1,24 +1,37 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, StyleSheet, Switch } from "react-native";
-import CustomButton from "../../components/CustomButtom";
-import { Back_Ground, GRAY_COLOR, THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR } from "../../res/colors";
+//customButton
+import { CustomButton } from "../../components";
+//State Manage
+import useThemeStore from "../../../zustand/ThemeStore";
+//colors
+import { THEME_COLOR, GRAY_COLOR, WHITE_COLOR, THEME_TEXT_COLOR, Back_Ground, BLACK_COLOR } from "../../res/colors";
 
-const App = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const toggleSwitch = () => setIsDarkMode((previousState) => !previousState);
+const SettingScreen = () => {
+  const { darkMode, toggleDarkMode } = useThemeStore(); 
 
   return (
-    <View style={styles.container}>
-      <View style={styles.toggleContainer}>
-        <Text style={[styles.label, isDarkMode && styles.labelActive]}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: darkMode ? BLACK_COLOR : Back_Ground },
+      ]}
+    >
+      <View style={[styles.toggleContainer, darkMode && styles.toggleContainerDark]}>
+        <Text
+          style={[
+            styles.label,
+            { color: darkMode ? WHITE_COLOR : THEME_COLOR },
+          ]}
+        >
           Dark Mode
         </Text>
         <Switch
           trackColor={{ false: GRAY_COLOR, true: GRAY_COLOR }}
-          thumbColor={isDarkMode ? THEME_TEXT_COLOR : THEME_TEXT_COLOR}
-          ios_backgroundColor={THEME_COLOR}
-          onValueChange={toggleSwitch}
-          value={isDarkMode}
+          thumbColor={darkMode ? THEME_COLOR : THEME_TEXT_COLOR}
+          ios_backgroundColor={GRAY_COLOR}
+          onValueChange={toggleDarkMode}
+          value={darkMode}
           style={styles.switch}
         />
       </View>
@@ -29,11 +42,10 @@ const App = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Back_Ground,
     flex: 1,
-    justifyContent: "space-between", 
+    justifyContent: "space-between",
     paddingHorizontal: 16,
-    paddingVertical: 20, 
+    paddingVertical: 20,
   },
   toggleContainer: {
     flexDirection: "row",
@@ -43,16 +55,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 25,
     width: "100%",
-    elevation: 5, 
+    elevation: 5,
   },
-  
+  toggleContainerDark: {
+    backgroundColor: GRAY_COLOR,
+  },
   label: {
     fontSize: 16,
     fontWeight: "500",
-    color: THEME_COLOR,
-  },
-  labelActive: {
-    color: THEME_TEXT_COLOR,
   },
   switch: {
     transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }],
@@ -62,10 +72,9 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     width: "100%",
     alignItems: "center",
+    height: 50,
     backgroundColor: THEME_COLOR,
-    height:50
-
   },
 });
 
-export default App;
+export default SettingScreen;

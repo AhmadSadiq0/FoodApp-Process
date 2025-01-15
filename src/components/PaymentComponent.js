@@ -7,6 +7,7 @@ import {
   FlatList,
   Image,
 } from "react-native";
+//colors
 import {
   GRAY_COLOR,
   THEME_COLOR,

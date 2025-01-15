@@ -1,6 +1,8 @@
 import React, { useRef } from "react";
 import { View, Text, Animated, StyleSheet, Dimensions, } from "react-native";
+//Card
 import BurgerCard from "./BurgerCard";
+//Colors
 import { THEME_TEXT_COLOR,THEME_COLOR, Back_Ground } from "../res/colors";
 const { width } = Dimensions.get("window");
 const ITEM_WIDTH = 150 + 14; 
@@ -11,7 +13,7 @@ const Datalist = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={[styles.title, { color: "#EF4444" }]}>{title}</Text>
+        <Text style={[styles.title, { color: THEME_COLOR }]}>{title}</Text>
         <Text style={styles.seeMore} onPress={onSeeMorePress}>
           {seeMoreText}
         </Text>
@@ -57,8 +59,9 @@ const Datalist = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical:8,
-    backgroundColor:Back_Ground
+    // marginVertical:8,
+    backgroundColor:Back_Ground,
+    marginBottom:10,
   },
   header: {
     flexDirection: "row",
@@ -66,7 +69,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 27,
     marginBottom: 10,
-    
   },
   title: {
     fontSize: 16,

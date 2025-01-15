@@ -1,44 +1,40 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
+import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from "react-native";
+// CustomButton
 import CustomButton from "./CustomButtom";
-import {
-  GRAY_COLOR,
-  WHITE_COLOR,
-  THEME_COLOR,
-  THEME_TEXT_COLOR,
-} from "../res/colors";
+//State Manage
+import useThemeStore from "../../zustand/ThemeStore";
+//Colors
+import { GRAY_COLOR, WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, BLACK_COLOR } from "../res/colors";
+//Images
 import { IMAGE28 } from "../res/drawables";
 const EditableField = (props) => {
   const { label, value, showEditIcon } = props;
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(value);
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-  const handleSave = () => {
-    setIsEditing(false);
-  };
+  const { darkMode } = useThemeStore();
+
+  const handleEdit = () => setIsEditing(true);
+  const handleSave = () => setIsEditing(false);
 
   return (
-    <View style={styles.card}>
+    <View
+      style={[
+        styles.card,
+        { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR, borderColor: darkMode ? THEME_COLOR : GRAY_COLOR },
+      ]}
+    >
       <View style={styles.textContainer}>
-        <Text style={styles.label}>{label}</Text>
+        <Text style={[styles.label, { color: darkMode ? WHITE_COLOR : GRAY_COLOR }]}>{label}</Text>
         {isEditing ? (
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR }]}
             value={text}
             onChangeText={setText}
             autoFocus
           />
         ) : (
-          <Text style={styles.value}>{text}</Text>
+          <Text style={[styles.value, { color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR }]}>{text}</Text>
         )}
       </View>
       {showEditIcon && (
@@ -51,68 +47,46 @@ const EditableField = (props) => {
 };
 
 const TextInputProfile = ({ showEditIcon, showButton }) => {
+  const { darkMode } = useThemeStore();
+
   return (
-    <View styles={styles.container}>
-      <EditableField
-        label="Full Name"
-        value="ZainZaka"
-        showEditIcon={showEditIcon}
-      />
-      <EditableField
-        label="Email"
-        value="xainzaka@gmail.com"
-        showEditIcon={showEditIcon}
-      />
-      <EditableField
-        label="Password"
-        value="12345678"
-        showEditIcon={showEditIcon}
-      />
-      <EditableField
-        label="PhoneNo"
-        value="12345678"
-        showEditIcon={showEditIcon}
-      />
-      <EditableField
-        label="Address"
-        value="12345678"
-        showEditIcon={showEditIcon}
-      />
-      <EditableField
-        label="DebitCardDetail"
-        value="12345678"
-        showEditIcon={showEditIcon}
-      />
-      {showButton && <CustomButton title={"UpdateProfile"} textStyle={{color:WHITE_COLOR}}/>}
+    <View style={[styles.container, { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR }]}>
+      <EditableField label="Full Name" value="ZainZaka" showEditIcon={showEditIcon} />
+      <EditableField label="Email" value="xainzaka@gmail.com" showEditIcon={showEditIcon} />
+      <EditableField label="Password" value="12345678" showEditIcon={showEditIcon} />
+      <EditableField label="PhoneNo" value="12345678" showEditIcon={showEditIcon} />
+      <EditableField label="Address" value="12345678" showEditIcon={showEditIcon} />
+      <EditableField label="DebitCardDetail" value="12345678" showEditIcon={showEditIcon} />
+      {showButton && <CustomButton title={"UpdateProfile"} textStyle={{ color: WHITE_COLOR }} />}
     </View>
   );
 };
+
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
   card: {
-    backgroundColor: WHITE_COLOR,
     padding: 16,
     borderRadius: 8,
     marginBottom: 28,
-    borderColor:GRAY_COLOR,
-    borderWidth:1.5,
+    borderWidth: 1.5,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
   label: {
-    color: GRAY_COLOR,
     fontSize: 12,
     marginBottom: 4,
   },
   value: {
-    color: THEME_TEXT_COLOR,
     fontSize: 16,
     fontWeight: "600",
   },
   input: {
-    color: THEME_TEXT_COLOR,
     paddingVertical: 4,
-    fontWeight:'600'
+    fontWeight: "600",
   },
   icon: {
     width: 30,

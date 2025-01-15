@@ -1,13 +1,23 @@
 import { StyleSheet, View, ScrollView } from "react-native";
 import React from "react";
-import TextInputProfile from "../../components/TextInputProfile";
-import ProfileHeader from "../../components/ProfileHeader";
-import {Back_Ground} from "../../res/colors";
+//component
+import {ProfileHeader,TextInputProfile} from "../../components";
+//colors
+import { Back_Ground, DARK_THEME_BACKGROUND } from "../../res/colors";
+//Global State
+import useThemeStore from "../../../zustand/ThemeStore"; 
+
 const UpdateProfileScreen = (props) => {
   const { navigation, route } = props;
+  const { darkMode } = useThemeStore(); 
+
   const showEditIcon = route?.params?.showEditIcon || true;
+
+
+  const containerStyle = darkMode ? { backgroundColor: DARK_THEME_BACKGROUND } : { backgroundColor: Back_Ground };
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       <ProfileHeader
         navigation={navigation}
         showDotsIcon={false}
@@ -23,12 +33,12 @@ const UpdateProfileScreen = (props) => {
     </View>
   );
 };
+
 export default UpdateProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Back_Ground,
   },
   scrollContent: {
     flexGrow: 1,

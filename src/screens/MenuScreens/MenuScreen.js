@@ -1,12 +1,13 @@
 import React, { useState, useRef } from "react";
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from "react-native";
+//RawBottomSheet
 import RBSheet from "react-native-raw-bottom-sheet"; 
+//Colors
 import { WHITE_COLOR,THEME_COLOR, Back_Ground, GRAY_COLOR , Black_Color, BLACK_COLOR} from "../../res/colors";
-import Datalist from "../../components/Datalist";
-import Header from "../../components/Header";
+//Components
+import { Header,AddCard,Datalist } from "../../components";
+//Images
 import { BURGERIMG, IMAGE16, IMAGE17, IMAGE18 } from "../../res/drawables";
-import AddCard from "../../components/AddCard";
-
 const MenuScreen = () => {
   const [selectedCategory, setSelectedCategory] = useState();
   const [selectedItem, setSelectedItem] = useState(null); 

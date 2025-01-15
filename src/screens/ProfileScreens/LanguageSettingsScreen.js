@@ -1,44 +1,112 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+//CustomButton
 import CustomButton from "../../components/CustomButtom";
+//Icon
 import { Language_Icon } from "../../res/drawables";
+//Colors
 import {
   Back_Ground,
   GRAY_COLOR,
   THEME_COLOR,
   THEME_TEXT_COLOR,
   WHITE_COLOR,
+  DARK_THEME_BACKGROUND,
+  DARK_THEME_TEXT_COLOR,
+  BLACK_COLOR,
 } from "../../res/colors";
+//State Manage
+import useThemeStore from "../../../zustand/ThemeStore";
 
 const LanguageScreen = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("English");
+
+  const { darkMode } = useThemeStore();
 
   const handleLanguageSelect = () => {
     console.log("Language selection dropdown clicked");
   };
 
+  // Dynamically adjust theme color
+  const dynamicThemeColor = darkMode ? WHITE_COLOR : THEME_COLOR;
+
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: darkMode ? DARK_THEME_BACKGROUND : Back_Ground },
+      ]}
+    >
       <View style={styles.contentContainer}>
-        <View style={styles.languageRow}>
-          <Text style={styles.label}>Language</Text>
-          <Text style={styles.value}>{selectedLanguage}</Text>
+        {/* Language Row */}
+        <View
+          style={[
+            styles.languageRow,
+            {
+              backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.label,
+              { color: dynamicThemeColor },
+            ]}
+          >
+            Language
+          </Text>
+          <Text
+            style={[
+              styles.value,
+              { color: darkMode ? DARK_THEME_TEXT_COLOR : THEME_TEXT_COLOR },
+            ]}
+          >
+            {selectedLanguage}
+          </Text>
         </View>
 
-        <TouchableOpacity style={styles.languageRow} onPress={handleLanguageSelect}>
-          <Text style={styles.label}>Select Language</Text>
+        {/* Select Language Button */}
+        <TouchableOpacity
+          style={[
+            styles.languageRow,
+            {
+              backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
+            },
+          ]}
+          onPress={handleLanguageSelect}
+        >
+          <Text
+            style={[
+              styles.label,
+              { color: dynamicThemeColor },
+            ]}
+          >
+            Select Language
+          </Text>
           <Image source={Language_Icon} style={styles.icon} />
         </TouchableOpacity>
       </View>
 
-      <CustomButton title={"Save"} style={styles.button} />
+      {/* Save Button */}
+      <CustomButton
+        title={"Save"}
+        style={[
+          styles.button,
+          {
+            backgroundColor: darkMode ? BLACK_COLOR : THEME_COLOR,
+            borderColor: darkMode ? WHITE_COLOR : THEME_COLOR,
+          },
+        ]}
+        textStyle={{
+          color: darkMode ? WHITE_COLOR : "black",
+        }}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Back_Ground,
     flex: 1,
     paddingHorizontal: 16,
     paddingVertical: 20,
@@ -51,7 +119,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: WHITE_COLOR,
     paddingHorizontal: 15,
     paddingVertical: 12,
     borderRadius: 25,
@@ -62,23 +129,16 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: "500",
-    color: THEME_COLOR,
   },
   value: {
     fontSize: 16,
     fontWeight: "500",
-    color: THEME_TEXT_COLOR,
-  },
-  dropdownIcon: {
-    fontSize: 16,
-    color: THEME_TEXT_COLOR,
   },
   button: {
     paddingHorizontal: 15,
     borderRadius: 25,
     width: "100%",
     alignItems: "center",
-    backgroundColor: THEME_COLOR,
     height: 50,
   },
 });

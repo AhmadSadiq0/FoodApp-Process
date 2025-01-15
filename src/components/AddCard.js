@@ -1,6 +1,8 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+//images
 import { BURGERIMG } from "../res/drawables";
+//colors
 import {
   THEME_COLOR,
   THEME_TEXT_COLOR,

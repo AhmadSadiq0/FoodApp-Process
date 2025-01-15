@@ -1,6 +1,8 @@
 import React from "react";
-import { THEME_COLOR , WHITE_COLOR} from "../res/colors";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
+//colors
+import { THEME_COLOR , WHITE_COLOR} from "../res/colors";
+
 const CustomButton = (props) => {
   const { title, onPress, backgroundColor, borderColor , style, textStyle , }=props;
   return (

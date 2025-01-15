@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+//icon
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { THEME_TEXT_COLOR } from "../res/colors";
-import { GRAY_COLOR } from "../res/colors";
-import { WHITE_COLOR } from "../res/colors";
+//color
+import { THEME_TEXT_COLOR,WHITE_COLOR,GRAY_COLOR } from "../res/colors";
 
 
 const InputField = (props) => {
