@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 //CustomButton
-import CustomButton from "../../components/CustomButtom";
+import { CustomButton } from "../../components";
 //Icon
 import { Language_Icon } from "../../res/drawables";
 //Colors

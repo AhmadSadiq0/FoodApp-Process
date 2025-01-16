@@ -60,7 +60,7 @@ const OrdersScreen = () => {
       title: "Orders History",
       data: allOrders.filter((order) => order.status === "Delivered"),
     },
-  ];
+  ];  
   return (
     <View style={styles.container}>
       <Header
@@ -84,7 +84,7 @@ const OrdersScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Back_Ground,
+    backgroundColor: Back_Ground ,
   },
 });
 export default OrdersScreen;

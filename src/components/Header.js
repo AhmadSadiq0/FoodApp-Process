@@ -14,6 +14,7 @@ import {
   Green_Color,
   THEME_TEXT_COLOR,
   Back_Ground,
+  BLACK_COLOR
 } from "../res/colors";
 //icon
 import { Profie_Image, Bell_ICON, Search_Icon } from "../res/drawables";
@@ -84,18 +85,17 @@ const styles = StyleSheet.create({
     height: 200,
     width: "100%",
     padding: 30,
-    marginBottom: 50,
+    marginBottom: 40,
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
     backgroundColor: THEME_COLOR,
     alignItems: "center",
   },
   shadowContainer: {
-    shadowColor: "#000",
+    shadowColor: BLACK_COLOR,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 20,
   },
   profileContainer: {
     flexDirection: "row",
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 30,
     color: THEME_TEXT_COLOR,
-    shadowColor: "#000",
+    shadowColor: BLACK_COLOR,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 4,

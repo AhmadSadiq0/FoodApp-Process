@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 //Colors
-import { Back_Ground, THEME_COLOR, WHITE_COLOR } from '../res/colors';
+import { Back_Ground, THEME_COLOR, WHITE_COLOR, BLACK_COLOR } from '../res/colors';
 //Icon
 import { DISCOUNT_ICON, ARROW_ICON } from '../res/drawables';
 //navigation
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 50,
         backgroundColor: THEME_COLOR,
         alignItems: 'center',
-        shadowColor: '#000',
+        shadowColor: BLACK_COLOR,
         shadowOffset: { width: 0, height: 30 },
         shadowOpacity: 0.1,
         shadowRadius: 10,

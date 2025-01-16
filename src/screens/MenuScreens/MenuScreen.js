@@ -3,66 +3,25 @@ import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from "react
 //RawBottomSheet
 import RBSheet from "react-native-raw-bottom-sheet"; 
 //Colors
-import { WHITE_COLOR,THEME_COLOR, Back_Ground, GRAY_COLOR , Black_Color, BLACK_COLOR} from "../../res/colors";
+import { WHITE_COLOR,THEME_COLOR, Back_Ground, GRAY_COLOR , BLACK_COLOR, LIGHT_THEME_BACKGROUND} from "../../res/colors";
 //Components
-import { Header,AddCard,Datalist } from "../../components";
-//Images
-import { BURGERIMG, IMAGE16, IMAGE17, IMAGE18 } from "../../res/drawables";
+import { Header,AddCard,Datalist,BurgerItem } from "../../components";
+//data
+import { burgerData } from "../../data/ScreenData";
+import { categories } from "../../data/ScreenData";
+
 const MenuScreen = () => {
   const [selectedCategory, setSelectedCategory] = useState();
   const [selectedItem, setSelectedItem] = useState(null); 
   const refRBSheet = useRef(); 
  
-  const burgerData = [
-    {
-      id: 1,
-      name: "Double Cheese Burger",
-      price: 599,
-      image: BURGERIMG,
-    },
-    {
-      id: 2,
-      name: "Cheese Burger",
-      price: 499,
-      image: BURGERIMG,
-    }, 
-    {
-      id: 3,
-      name: "Cheese Burger",
-      price: 499,
-      image: BURGERIMG,
-    },
-    {
-      id: 4,
-      name: "Cheese Burger",
-      price: 499,
-      image: BURGERIMG,
-    },
-  ];
+  
 
-  const categories = [
-    {
-      id: 1,
-      name: "Burgers",
-      image: IMAGE16,
-    },
-    {
-      id: 2,
-      name: "Pizzas",
-      image: IMAGE18,
-    },
-    {
-      id: 3,
-      name: "Kebabs",
-      image: IMAGE17,
-    },
-  ];
 
   const handleAddToCart = (item) => {
     setSelectedItem(item);
     refRBSheet.current.open(); 
   };
-
   const renderCategory = ({ item }) => {
     const isSelected = selectedCategory === item.id;
     return (
@@ -84,7 +43,6 @@ const MenuScreen = () => {
       </TouchableOpacity>
     );
   };
-
   return (
     <View style={styles.mainContainer}>
       <Header />
@@ -115,8 +73,8 @@ const MenuScreen = () => {
           </View>
         }
         keyExtractor={(item) => item.id.toString()}
+
       />
-      {/* Updated RBSheet Component */}
       <RBSheet
   ref={refRBSheet}
   height={430}
@@ -128,21 +86,11 @@ const MenuScreen = () => {
       alignItems: "center",
       backgroundColor: WHITE_COLOR,
     },
-    wrapper: { backgroundColor: "rgba(0, 0, 0, 0.5)" }, // Semi-transparent background
+    wrapper: { backgroundColor: LIGHT_THEME_BACKGROUND },
     draggableIcon: { backgroundColor: GRAY_COLOR },
   }}
 >
-  {selectedItem ? (
-    <AddCard
-      name={selectedItem.name}
-      description="A delicious choice!"
-      image={selectedItem.image}
-      price={selectedItem.price}
-      onAddToCart={() => console.log("Added to Cart")}
-    />
-  ) : (
-    <Text style={{ color: BLACK_COLOR }}>No item selected</Text>
-  )}
+<BurgerItem selectedItem={selectedItem} />
 </RBSheet>
 
     </View>

@@ -7,7 +7,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 //Initaial Data of Screen
 import { initialCartItems } from '../../data/ScreenData';
 //Colors
-import { THEME_TEXT_COLOR, WHITE_COLOR } from '../../res/colors';
+import { Back_Ground, THEME_TEXT_COLOR, WHITE_COLOR } from '../../res/colors';
 
 const { width: deviceWidth } = Dimensions.get('window');
 const CartScreen = ({ navigation }) => {
@@ -20,6 +20,7 @@ const CartScreen = ({ navigation }) => {
         item.id === id ? { ...item, active: !item.active } : item
       )
     );
+    console.log(id)
   };
   const handleDeleteItem = (id) => {
     setCartItems((prevItems) => prevItems.filter(item => item.id !== id));
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: 'white',
+    backgroundColor: Back_Ground,
   },
   headingText: {
     color: THEME_TEXT_COLOR,

@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   errorText: {
-    color: "red", // Added style for error text
+    color: THEME_TEXT_COLOR,
     fontSize: 12,
     marginTop: 4,
   },

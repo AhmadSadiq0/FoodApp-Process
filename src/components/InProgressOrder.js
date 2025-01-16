@@ -7,9 +7,9 @@ import {
   Image,
   Pressable,
 } from "react-native";
-//images
+//image
 import { BURGERIMG } from "../res/drawables";
-//colors
+//color
 import {
   Back_Ground,
   GRAY_COLOR,
@@ -20,6 +20,7 @@ import {
   DARK_THEME_BACKGROUND,
   DARK_THEME_TEXT_COLOR,
   DARK_STATUS_COLOR,
+  BLACK_COLOR,
 } from "../res/colors";
 //components 
 import RBOrderSheet from "./RBOrderSheet";
@@ -41,10 +42,8 @@ const InProgressOrder = ({ sections: initialSections }) => {
       const sheet = order.status === "Delivered" ? deliveredSheetRef : sheetRef;
       sheet.current.open();
     }
-
     setSections((prevSections) => reorderSections(prevSections, order));
   };
-
   const reorderSections = (sections, order) => {
     const updatedSections = [...sections];
     const sectionIndex = updatedSections.findIndex((section) =>
@@ -56,25 +55,21 @@ const InProgressOrder = ({ sections: initialSections }) => {
       selectedSection.data.sort((a, b) => (a.orderId === order.orderId ? -1 : 1));
       updatedSections.unshift(selectedSection);
     }
-
     return updatedSections;
-  };
-
+  }; 
   const renderOrderItem = ({ item }) => (
     <OrderCard
       order={item}
-      isSelected={selectedOrder?.orderId === item.orderId}
+      isSelected={ selectedOrder && selectedOrder.orderId == item.orderId}
       onPress={() => handleCardPress(item)}
-      darkMode={darkMode} // Pass dark mode state to the OrderCard
+      darkMode={darkMode}
     />
   );
-
   const renderSectionHeader = ({ section: { title } }) => (
     <Text style={[styles.sectionHeader, { color: darkMode ? DARK_THEME_TEXT_COLOR : THEME_COLOR }]}>
       {title}
     </Text>
   );
-
   return (
     <View style={[styles.container, { backgroundColor: darkMode ? DARK_THEME_BACKGROUND : Back_Ground }]}>
       <SectionList
@@ -84,17 +79,16 @@ const InProgressOrder = ({ sections: initialSections }) => {
         renderSectionHeader={renderSectionHeader}
         contentContainerStyle={styles.sectionListContainer}
       />
-      <RBOrderSheet sheetRef={sheetRef} selectedOrder={selectedOrder} />
+      <RBOrderSheet sheetRef={sheetRef} selectedOrder={selectedOrder}  />
       <RBDelivered sheetRef={deliveredSheetRef} selectedOrder={selectedOrder} />
     </View>
   );
 };
-
 const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
   const statusColors = {
     Preparing: THEME_COLOR,
     Delivered: Green_Color,
-    default: "#4B5563",
+    default: GRAY_COLOR,
   };
 
   return (
@@ -105,7 +99,8 @@ const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
         {
           borderColor: isSelected ? THEME_COLOR : "transparent",
           borderWidth: isSelected ? 2 : 0,
-          backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR, // Apply dark mode background
+          backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
+          backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR,
         },
       ]}
     >
@@ -126,7 +121,7 @@ const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
             styles.status,
             {
               backgroundColor: statusColors[order.status] || statusColors.default,
-              color: darkMode ? WHITE_COLOR : WHITE_COLOR, // Text color in status
+              color: darkMode ? WHITE_COLOR : WHITE_COLOR, 
             },
           ]}
         >
@@ -160,7 +155,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 2 },
     elevation: 5,
-  },
+  }, 
   textContainer: {
     flex: 1,
   },

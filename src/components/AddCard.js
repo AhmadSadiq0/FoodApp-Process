@@ -10,6 +10,7 @@ import {
   BLACK_COLOR,
   WHITE_COLOR,
 } from "../res/colors";
+import CustomButton from "./CustomButtom";
 
 const AddCard = (props) => {
   const { name, description, image, price, buttonText, onAddToCart } = props;
@@ -22,13 +23,10 @@ const AddCard = (props) => {
         <Text style={styles.priceLabel}>Total Price :</Text>
         <Text style={styles.price}>{`Rs. ${price}`}</Text>
       </View>
-      <TouchableOpacity style={styles.button} onPress={onAddToCart}>
-        <Text style={styles.buttonText}>Add to cart</Text>
-      </TouchableOpacity>
+      <CustomButton title="Add To Cart"/> 
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   card: {
     width: "100%",

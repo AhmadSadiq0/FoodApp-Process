@@ -56,7 +56,6 @@ const Datalist = (props) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     // marginVertical:8,
@@ -87,5 +86,4 @@ const styles = StyleSheet.create({
     
   },
 });
-
 export default Datalist;

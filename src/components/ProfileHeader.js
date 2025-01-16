@@ -7,12 +7,13 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
-//colrs
+//colors
 import {
   THEME_COLOR,
   WHITE_COLOR,
   Green_Color,
   THEME_TEXT_COLOR,
+  BLACK_COLOR,
 } from "../res/colors";
 //Images
 import {
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   shadow: {
-    shadowColor: "#000",
+    shadowColor: BLACK_COLOR,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 4,

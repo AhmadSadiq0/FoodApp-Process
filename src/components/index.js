@@ -22,9 +22,11 @@ import ConfirmOrderSummary from './ConfirmOrderSummary';
 import Header from './Header';
 import InProgressOrder from './InProgressOrder';
 import ProfileHeader from './ProfileHeader';
+import BurgerItem from './BurgerItem';
 
 
 export { CartItem,
+     BurgerItem,
      SummaryCard,
      AddCard,
      BurgerCard,

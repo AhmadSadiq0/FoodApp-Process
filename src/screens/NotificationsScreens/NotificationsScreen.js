@@ -14,6 +14,7 @@ import {
     GRAY_COLOR,
     BLACK_COLOR,
     Green_Color,
+    Back_Ground,
 } from '../../res/colors';
 //Images
 import { PIZZAIMAGE } from '../../res/drawables';
@@ -80,7 +81,7 @@ const NotificationsScreen = ({ navigation }) => {
                 customStyles={{
                     container: { borderTopLeftRadius: 20, borderTopRightRadius: 20, backgroundColor: WHITE_COLOR },
                     wrapper: { backgroundColor: 'transparent' },
-                    draggableIcon: { backgroundColor: '#d3d3d3' },
+                    draggableIcon: { backgroundColor:BLACK_COLOR },
                 }}
                 customModalProps={{
                     animationType: 'slide',
@@ -135,12 +136,11 @@ const CartItem = ({ item, onPressItem }) => {
         </TouchableOpacity>
     );
 };
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
-        backgroundColor: "#F8F8FF",
+        backgroundColor: Back_Ground,
     },
     cartItem: {
         flexDirection: 'row',

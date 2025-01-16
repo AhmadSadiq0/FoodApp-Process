@@ -3,19 +3,17 @@ import { ScrollView, StyleSheet, Text, Pressable, View } from "react-native";
 //RawBottomSheet
 import RBSheet from "react-native-raw-bottom-sheet";
 //Colors
-import { GRAY_COLOR, WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, Green_Color, DARK_BACKGROUND, DARK_TEXT_COLOR } from "../res/colors";
+import { GRAY_COLOR, WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, Green_Color, DARK_BACKGROUND, DARK_TEXT_COLOR, BLACK_COLOR, LIGHT_THEME_BACKGROUND } from "../res/colors";
 //CustomButton
 import CustomButton from "./CustomButtom";
 //Navigation
 import { useNavigation } from "@react-navigation/native";
 //State Manage
 import useThemeStore from "../../zustand/ThemeStore";
-
 const RBOrderSheet = (props) => {
   const { sheetRef, selectedOrder } = props;
   const navigation = useNavigation();
   const { darkMode } = useThemeStore(); 
-
   const goBack = () => {
     navigation.goBack();
   };
@@ -23,13 +21,13 @@ const RBOrderSheet = (props) => {
   // Dynamic styles based on theme
   const dynamicStyles = {
     container: {
-      backgroundColor: darkMode ? "black" : WHITE_COLOR, // Dark mode: black background, light mode: white background
+      backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR, 
     },
     text: {
-      color: darkMode ? "white" : THEME_TEXT_COLOR, // Dark mode: white text, light mode: theme text color
+      color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR, 
     },
     label: {
-      color: darkMode ? "white" : THEME_COLOR, // Dark mode: white labels, light mode: theme color
+      color: darkMode ? WHITE_COLOR : THEME_COLOR,
     },
     button: {
       backgroundColor: darkMode ? DARK_TEXT_COLOR : THEME_COLOR,
@@ -52,7 +50,7 @@ const RBOrderSheet = (props) => {
           borderTopRightRadius: 20,
         },
         wrapper: {
-          backgroundColor: darkMode ? "rgba(0, 0, 0, 0.5)" : "transparent", // Darken wrapper for dark mode
+          backgroundColor: darkMode ? LIGHT_THEME_BACKGROUND : "transparent",
         },
         draggableIcon: {
           backgroundColor: GRAY_COLOR,
@@ -212,8 +210,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   redCircle: {
-    backgroundColor: "#EF4444",
+    backgroundColor: THEME_TEXT_COLOR,
   },
 });
-
 export default RBOrderSheet;

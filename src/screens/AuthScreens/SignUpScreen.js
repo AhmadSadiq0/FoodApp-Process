@@ -15,6 +15,7 @@ import * as Yup from "yup";
 import InputField from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButtom";
 import { Google_Icon } from "../../res/drawables";
+import { THEME_TEXT_COLOR, GRAY_COLOR, BLACK_COLOR, WHITE_COLOR, THEME_COLOR } from "../../res/colors";
 
 const validationSchema = Yup.object({
   username: Yup.string()
@@ -122,7 +123,7 @@ const SignUpScreen = () => {
                   label="Email"
                   placeholder="User's email here"
                   value={values.email}
-                  onChangeText={handleChange('email ')}
+                  onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
                   error={touched.email && errors.email}
                 />
@@ -145,7 +146,6 @@ const SignUpScreen = () => {
                   title="Sign Up"
                   onPress={handleSubmit}
                 />
-                
               </>
             )}
           </Formik>
@@ -158,7 +158,7 @@ const SignUpScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "red",
+    backgroundColor: WHITE_COLOR, 
   },
   scrollContainer: {
     flexGrow: 1,
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   },
   redContainer: {
     flex: 3,
-    backgroundColor: "red",
+    backgroundColor: THEME_TEXT_COLOR,  
     justifyContent: "center",
   },
   container2: {
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
     paddingHorizontal: 20,
-    backgroundColor: "white",
+    backgroundColor: WHITE_COLOR,  
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
   },
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
     fontWeight: "bold",
-    color: "#000",
+    color: BLACK_COLOR,  
   },
   box1: {
     flexDirection: "row",
@@ -197,19 +197,19 @@ const styles = StyleSheet.create({
   text2: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#000",
+    color: BLACK_COLOR, 
   },
   text3: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#F63440",
+    color: THEME_COLOR,  
     marginLeft: 10,
   },
   touchable1: {
     width: "100%",
     height: 50,
     borderWidth: 1,
-    borderColor: "#d3d3d3",
+    borderColor: GRAY_COLOR,  
     flexDirection: "row",
     borderRadius: 25,
     marginVertical: 15,
@@ -231,12 +231,12 @@ const styles = StyleSheet.create({
   divider: {
     flex: 1,
     height: 1,
-    backgroundColor: "black",
+    backgroundColor: BLACK_COLOR, 
   },
   orText: {
     marginHorizontal: 10,
     fontSize: 16,
-    color: "black",
+    color: BLACK_COLOR,  
     textAlign: "center",
   },
   image: {
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   errorText: {
-    color: 'red',
+    color: THEME_TEXT_COLOR,
     fontSize: 12,
     marginBottom: 12,
     alignSelf :"start",

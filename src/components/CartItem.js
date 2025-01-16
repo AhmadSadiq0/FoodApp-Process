@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 //images
 import { DELETE_ICON } from '../res/drawables';  
 //colors
-import { WHITE_COLOR, THEME_COLOR, GRAY_COLOR } from '../res/colors';  
+import { WHITE_COLOR, THEME_COLOR, GRAY_COLOR, Back_Ground } from '../res/colors';  
 
 const CartItem = ({ item, onPressItem, onDeleteItem }) => (
   <View style={[styles.cartItem, item.active && { borderColor: THEME_COLOR }]}>
@@ -14,7 +14,7 @@ const CartItem = ({ item, onPressItem, onDeleteItem }) => (
       <Text style={styles.cartItemPrice}>Rs. {item.price}/-</Text>
     </View>
     <View style={styles.cartItemActions}>
-      <ToggleButton active={item.active} onPress={() => onPressItem(item.id)} />
+      <ToggleButton active={item.active} onPress={() =>[ onPressItem(item.id), console.log(item.id)]} />
       <DeleteButton onPress={() => onDeleteItem(item.id)} />
     </View>
   </View>
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: WHITE_COLOR,
     alignItems: 'center',
-    shadowColor: 'black',
+    shadowColor: GRAY_COLOR,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,

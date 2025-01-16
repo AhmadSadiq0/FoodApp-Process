@@ -17,9 +17,10 @@ import {
   WHITE_COLOR,
   THEME_COLOR,
   THEME_TEXT_COLOR,
-  DARK_BACKGROUND,
-  DARK_TEXT_COLOR,
-  Back_Ground
+  BLACK_COLOR,
+  Back_Ground,
+  DARK_THEME_BACKGROUND,
+  DARK_THEME_TEXT_COLOR,
 } from "../res/colors";
 //CustomButton
 import CustomButton from "./CustomButtom";
@@ -39,20 +40,19 @@ const RBDelivered = ({ sheetRef, selectedOrder }) => {
     navigation.goBack();
   };
 
-  // Dynamic styles based on theme
   const dynamicStyles = {
     container: {
-      backgroundColor: darkMode ? "black" : WHITE_COLOR,
+      backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR,
     },
     text: {
-      color: darkMode ? "white" : THEME_TEXT_COLOR, 
+      color: darkMode ? DARK_THEME_TEXT_COLOR : THEME_TEXT_COLOR, 
     },
     label: {
-      color: darkMode ? "white" : THEME_COLOR, 
+      color: darkMode ? DARK_THEME_TEXT_COLOR : THEME_COLOR, 
     },
     button: {
-      backgroundColor: darkMode ? DARK_TEXT_COLOR : THEME_COLOR,
-      borderColor: darkMode ? DARK_TEXT_COLOR : THEME_COLOR,
+      backgroundColor: darkMode ? BLACK_COLOR : THEME_COLOR,
+      borderColor: darkMode ? BLACK_COLOR : THEME_COLOR,
     },
   };
 
@@ -133,7 +133,7 @@ const RBDelivered = ({ sheetRef, selectedOrder }) => {
                 title={"Re-Order"}
                 width={"100%"}
                 height={48}
-                backgroundColor={darkMode ? DARK_TEXT_COLOR : Back_Ground}
+                backgroundColor={darkMode ? BLACK_COLOR : Back_Ground}
                 borderColor={THEME_COLOR}
                 textStyle={{ color: WHITE_COLOR }}
                 onPress={navigateToMenu}

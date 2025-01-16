@@ -13,10 +13,10 @@ const BurgerCard = (props) => {
 
   return (
     <View style={styles.card}>
-       <Text style={styles.name}>{name}</Text>
+       <Text style={styles.name}>{name && name.length > 16? name.slice(0,16)+ "..." : name}</Text>
       <Image source={BURGERIMG} style={styles.image} />
       <Text style={styles.price}>{`Rs. ${price}/-`}</Text>
-      <Text style={styles.serving}>Single Serving</Text>
+      <Text style={styles.serving}>Single Servin</Text>
       <View style={styles.addmargin}>
         <TouchableOpacity style={styles.addButton}
         onPress={() => {

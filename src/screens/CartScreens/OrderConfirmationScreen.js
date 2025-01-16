@@ -47,7 +47,7 @@ const OrderConfirmationScreen = (props) => {
           container: {
             borderTopLeftRadius: 40,
             borderTopRightRadius: 40,
-            backgroundColor: "white",
+            backgroundColor: Back_Ground,
           },
         }}
       >

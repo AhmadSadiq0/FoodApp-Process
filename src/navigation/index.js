@@ -129,7 +129,7 @@ function BottomTabStack() {
             initialRouteName="Home"
             screenOptions={{
                 tabBarStyle: {
-                    backgroundColor: '#F63440',
+                    backgroundColor: THEME_COLOR,
                     height: 50,
                     borderTopLeftRadius: 20,
                     borderTopRightRadius: 20,

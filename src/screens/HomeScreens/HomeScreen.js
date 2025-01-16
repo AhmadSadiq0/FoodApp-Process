@@ -4,6 +4,8 @@ import { StyleSheet, View, FlatList } from "react-native";
 import { Header, Datalist, AddCard } from "../../components";
 //res
 import { WHITE_COLOR, Back_Ground, GRAY_COLOR, Green_Color} from "../../res/colors";
+//data
+import { burgerData } from "../../data/ScreenData";
 //packages
 import RBSheet from "react-native-raw-bottom-sheet";
 //images 
@@ -13,32 +15,7 @@ const HomeScreen = ({ navigation }) => {
   const refRBSheet = useRef();
   const [selectedBurger, setSelectedBurger] = useState(null);
 
-  const burgerData = [
-    {
-      id: 1,
-      name: "Double Cheese Burger",
-      price: 599,
-      image: BURGERIMG,
-    },
-    {
-      id: 2,
-      name: "Cheese Burger",
-      price: 499,
-      image: BURGERIMG,
-    },
-    {
-      id: 3,
-      name: "Chicken Burger",
-      price: 399,
-      image: BURGERIMG,
-    },
-    {
-      id: 4,
-      name: "Chicken Burger",
-      price: 399,
-      image: BURGERIMG,
-    },
-  ];
+ 
 
   const handleAddToCart = (burger) => {
     setSelectedBurger(burger);
