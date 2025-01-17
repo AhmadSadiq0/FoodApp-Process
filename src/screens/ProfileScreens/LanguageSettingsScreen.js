@@ -98,7 +98,7 @@ const LanguageScreen = () => {
           },
         ]}
         textStyle={{
-          color: darkMode ? WHITE_COLOR : "black",
+          color: darkMode ? WHITE_COLOR : BLACK_COLOR,
         }}
       />
     </View>

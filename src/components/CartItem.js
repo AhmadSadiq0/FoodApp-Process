@@ -4,21 +4,26 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { DELETE_ICON } from '../res/drawables';  
 //colors
 import { WHITE_COLOR, THEME_COLOR, GRAY_COLOR, Back_Ground } from '../res/colors';  
+import useThemeStore from '../../zustand/ThemeStore';
 
-const CartItem = ({ item, onPressItem, onDeleteItem }) => (
-  <View style={[styles.cartItem, item.active && { borderColor: THEME_COLOR }]}>
-    <Image style={styles.cartItemImage} source={item.image} />
-    <View style={styles.cartItemDetails}>
-      <Text style={styles.cartItemName}>{item.name}</Text>
-      <Text style={styles.cartServing}>{item.serving}</Text>
-      <Text style={styles.cartItemPrice}>Rs. {item.price}/-</Text>
+const CartItem = ({ item, onPressItem, onDeleteItem }) => {
+  const { darkMode } = useThemeStore();
+
+  return (
+    <View style={[styles.cartItem, item.active && { borderColor: THEME_COLOR }, darkMode && styles.cartItemDark]}>
+      <Image style={styles.cartItemImage} source={item.image} />
+      <View style={styles.cartItemDetails}>
+        <Text style={[styles.cartItemName, darkMode && styles.cartItemNameDark]}>{item.name}</Text>
+        <Text style={[styles.cartServing, darkMode && styles.cartItemNameDark]}>{item.serving}</Text>
+        <Text style={[styles.cartItemPrice, darkMode && styles.cartItemNameDark]}>Rs. {item.price}/-</Text>
+      </View>
+      <View style={styles.cartItemActions}>
+        <ToggleButton active={item.active} onPress={() => [onPressItem(item.id), console.log(item.id)]} />
+        <DeleteButton onPress={() => onDeleteItem(item.id)} />
+      </View>
     </View>
-    <View style={styles.cartItemActions}>
-      <ToggleButton active={item.active} onPress={() =>[ onPressItem(item.id), console.log(item.id)]} />
-      <DeleteButton onPress={() => onDeleteItem(item.id)} />
-    </View>
-  </View>
-);
+  );
+};
 
 const ToggleButton = ({ active, onPress }) => (
   <TouchableOpacity style={styles.circleBorder} onPress={onPress} accessibilityLabel="Toggle item">
@@ -48,6 +53,10 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  cartItemDark: {
+    backgroundColor: 'black',
+    borderColor: 'white',
+  },
   cartItemImage: {
     width: 50,
     height: 50,
@@ -61,6 +70,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: THEME_COLOR,
+  },
+  cartItemNameDark: {
+    color: 'white',
   },
   cartItemPrice: {
     fontSize: 12,

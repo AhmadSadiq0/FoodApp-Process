@@ -3,19 +3,19 @@ import { StyleSheet, View, FlatList } from "react-native";
 //components
 import { Header, Datalist, AddCard } from "../../components";
 //res
-import { WHITE_COLOR, Back_Ground, GRAY_COLOR, Green_Color} from "../../res/colors";
+import { WHITE_COLOR, Back_Ground, GRAY_COLOR, Green_Color,DARK_BACKGROUND,BLACK_COLOR} from "../../res/colors";
 //data
 import { burgerData } from "../../data/ScreenData";
 //packages
 import RBSheet from "react-native-raw-bottom-sheet";
 //images 
 import { BURGERIMG } from "../../res/drawables";
+import useThemeStore from "../../../zustand/ThemeStore";
 
 const HomeScreen = ({ navigation }) => {
   const refRBSheet = useRef();
   const [selectedBurger, setSelectedBurger] = useState(null);
-
- 
+  const { darkMode, toggleDarkMode } = useThemeStore();
 
   const handleAddToCart = (burger) => {
     setSelectedBurger(burger);
@@ -31,13 +31,16 @@ const HomeScreen = ({ navigation }) => {
       onAddToCart={handleAddToCart}
     />
   );
+
   const datalistSections = [
     { id: 1, title: "Discounts" },
     { id: 2, title: "Deals" },
-    { id: 3, title: "Loyalty Burgers"},
+    { id: 3, title: "Loyalty Burgers" },
+    { id: 4, title: "Loyalty Burger" },
   ];
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: darkMode ? BLACK_COLOR : Back_Ground }]}>
       <Header />
       <FlatList
         data={datalistSections}
@@ -49,7 +52,7 @@ const HomeScreen = ({ navigation }) => {
         height={430}
         draggable={true}
         customStyles={{
-          container: { borderTopLeftRadius: 20, borderTopRightRadius: 20,  alignItems: 'center', backgroundColor: WHITE_COLOR },
+          container: { borderTopLeftRadius: 20, borderTopRightRadius: 20, alignItems: 'center', backgroundColor: WHITE_COLOR },
           wrapper: { backgroundColor: 'transparent' },
           draggableIcon: { backgroundColor: GRAY_COLOR },
         }}
@@ -77,9 +80,10 @@ const HomeScreen = ({ navigation }) => {
 
 export default HomeScreen;
 
+
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Back_Ground,
-    marginBottom:240,
+    flex: 1,
+    // marginBottom: 230,
   },
 });

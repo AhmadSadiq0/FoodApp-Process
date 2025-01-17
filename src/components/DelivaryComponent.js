@@ -3,9 +3,11 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, ScrollView 
 //Images
 import { IMAGE28 } from "../res/drawables";
 //Colors
-import { WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, Back_Ground, Black_Color } from "../res/colors";
+import { WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, Back_Ground, BLACK_COLOR } from "../res/colors";
+import useThemeStore from "../../zustand/ThemeStore";
 
 const DeliveryComponent = () => {
+  const { darkMode } = useThemeStore();
   const [isEditing, setIsEditing] = useState(false);
   const [address, setAddress] = useState("32215 Maplewood Avenue Pine Hills District.");
 
@@ -18,21 +20,21 @@ const DeliveryComponent = () => {
   };
 
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen, darkMode && styles.screenDark]}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.deliverTo}>Deliver To</Text>
-        <View style={styles.addressContainer}>
+        <Text style={[styles.deliverTo, darkMode && styles.deliverToDark]}>Deliver To</Text>
+        <View style={[styles.addressContainer, darkMode && styles.addressContainerDark]}>
           <View style={styles.addressTextContainer}>
-            <Text style={styles.addressTitle}>My Address</Text>
+            <Text style={[styles.addressTitle, darkMode && styles.addressTitleDark]}>My Address</Text>
             {isEditing ? (
               <TextInput
-                style={styles.addressInput}
+                style={[styles.addressInput, darkMode && styles.addressInputDark]}
                 value={address}
                 onChangeText={setAddress}
                 multiline
               />
             ) : (
-              <Text style={styles.addressDetails}>{address}</Text>
+              <Text style={[styles.addressDetails, darkMode && styles.addressDetailsDark]}>{address}</Text>
             )}
           </View>
           <TouchableOpacity onPress={isEditing ? handleSave : handleEdit}>
@@ -48,6 +50,9 @@ const styles = StyleSheet.create({
   screen: {
     backgroundColor: Back_Ground,
   },
+  screenDark: {
+    backgroundColor: BLACK_COLOR,
+  },
   scrollContainer: {
     padding: 16, 
   },
@@ -57,6 +62,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 18,
   },
+  deliverToDark: {
+    color: WHITE_COLOR,
+  },
   addressContainer: {
     backgroundColor: WHITE_COLOR,
     padding: 16,
@@ -64,14 +72,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     maxWidth: "100%",
-  elevation: 3, 
-      shadowColor: Black_Color, 
-      shadowOffset: {
-          width: 0, 
-          height: 2, 
-      },
-      shadowOpacity: 0.25, 
-      shadowRadius: 3.5, 
+    elevation: 3, 
+    shadowColor: BLACK_COLOR, 
+    shadowOffset: {
+        width: 0, 
+        height: 2, 
+    },
+    shadowOpacity: 0.25, 
+    shadowRadius: 3.5, 
+  },
+  addressContainerDark: {
+    backgroundColor: BLACK_COLOR,
   },
   addressTextContainer: {
     flex: 1, 
@@ -82,9 +93,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 18,
   },
+  addressTitleDark: {
+    color: WHITE_COLOR,
+  },
   addressDetails: {
     color: THEME_TEXT_COLOR,
     marginTop: 4,
+  },
+  addressDetailsDark: {
+    color: WHITE_COLOR,
   },
   addressInput: {
     color: THEME_TEXT_COLOR,
@@ -93,6 +110,10 @@ const styles = StyleSheet.create({
     padding: 8,
     borderWidth: 1,
     borderColor: THEME_COLOR,
+  },
+  addressInputDark: {
+    color: WHITE_COLOR,
+    borderColor: WHITE_COLOR,
   },
   image: {
     width: 28,

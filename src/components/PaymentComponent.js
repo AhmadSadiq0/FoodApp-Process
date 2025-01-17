@@ -16,8 +16,10 @@ import {
   BLACK_COLOR,
   Black_Color,
 } from "../res/colors";
+import useThemeStore from "../../zustand/ThemeStore";
 
 const PaymentComponent = ({ paymentMethods, onSelectPayment }) => {
+  const { darkMode } = useThemeStore();
   const [selectedPayment, setSelectedPayment] = useState();
 
   const renderItem = ({ item }) => (
@@ -29,7 +31,7 @@ const PaymentComponent = ({ paymentMethods, onSelectPayment }) => {
       }}
     >
       <Image source={item.image} style={styles.image} />
-      <Text style={styles.optionText}>{item.name}</Text>
+      <Text style={[styles.optionText, darkMode && styles.optionTextDark]}>{item.name}</Text>
       <View
         style={[
           styles.radioButton,
@@ -40,9 +42,9 @@ const PaymentComponent = ({ paymentMethods, onSelectPayment }) => {
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Payment Method</Text>
-      <View style={styles.optionContainer}>
+    <View style={[styles.container, darkMode && styles.containerDark]}>
+      <Text style={[styles.title, darkMode && styles.titleDark]}>Payment Method</Text>
+      <View style={[styles.optionContainer, darkMode && styles.optionContainerDark]}>
         <FlatList
           data={paymentMethods}
           renderItem={renderItem}
@@ -58,12 +60,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     width: "100%",
   },
+  containerDark: {
+    backgroundColor: BLACK_COLOR,
+  },
   title: {
     color: THEME_COLOR,
     fontWeight: "bold",
     fontSize: 20,
     marginBottom: 16,
     marginLeft: 7,
+  },
+  titleDark: {
+    color: WHITE_COLOR,
   },
   optionContainer: {
     backgroundColor: WHITE_COLOR,
@@ -77,7 +85,10 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25, 
     shadowRadius: 3.5, 
-},
+  },
+  optionContainerDark: {
+    backgroundColor: BLACK_COLOR,
+  },
   option: {
     flexDirection: "row",
     alignItems: "center",
@@ -94,12 +105,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: THEME_TEXT_COLOR,
   },
+  optionTextDark: {
+    color: WHITE_COLOR,
+  },
   radioButton: {
     width: 20,
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    backgroundColor:GRAY_COLOR,
+    backgroundColor: GRAY_COLOR,
     borderColor: THEME_COLOR,
   },
   radioButtonSelected: {

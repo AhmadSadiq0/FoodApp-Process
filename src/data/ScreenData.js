@@ -37,25 +37,25 @@ export const initialCartItems = [
 export const burgerData = [
   {
     id: 1,
-    name: "Double Cheese Burge",
+    name: "Double Cheese Burger",
     price: 59,
    image: BURGERIMG,
   },
   {
     id: 2,
-    name: "Cheese Burge",
+    name: "Cheese Burger",
     price: 49,
     image: BURGERIMG,
   },
   {
     id: 3,
-    name: "Chicken Burge",
+    name: "Chicken Burger",
     price: 39,
    image: BURGERIMG,
   },
   {
     id: 4,
-    name: "Chicken Burge is available here in our resturent and how you can access it",
+    name: "Chicken Burger is available here in our resturent and how you can access it",
     price: 39,
     image: BURGERIMG,
   },

@@ -11,19 +11,38 @@ import {
   WHITE_COLOR,
 } from "../res/colors";
 import CustomButton from "./CustomButtom";
+import useThemeStore from "../../zustand/ThemeStore";
+
+
 
 const AddCard = (props) => {
   const { name, description, image, price, buttonText, onAddToCart } = props;
+  const { darkMode } = useThemeStore();
+
   return (
-    <View style={styles.card}>
-      <Text style={styles.name}>{name}</Text>
+    <View
+      style={{
+        ...styles.card,
+        backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
+      }}
+    >
+      <Text style={styles.name} numberOfLines={name.length > 16 ? 2 : 1}>
+        {name}
+      </Text>
       <Text style={styles.description}>{description}</Text>
       <Image source={image} style={styles.image} />
       <View style={styles.priceContainer}>
         <Text style={styles.priceLabel}>Total Price :</Text>
         <Text style={styles.price}>{`Rs. ${price}`}</Text>
       </View>
-      <CustomButton title="Add To Cart"/> 
+      <CustomButton
+      title="Add To Cart"
+        style={{
+          ...styles.buttonText,
+          color: darkMode ? WHITE_COLOR : BLACK_COLOR,
+        }}
+        onPress={onAddToCart}
+      />
     </View>
   );
 };
@@ -37,8 +56,8 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   name: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 17,
+ 
     color: THEME_TEXT_COLOR,
     textAlign: "center",
     marginBottom: 4,
@@ -73,19 +92,12 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: THEME_COLOR,
   },
-  button: {
-    width: "100%",
-    height: 54,
-    justifyContent: "center",
-    backgroundColor: THEME_COLOR,
-    borderRadius: 25,
-    alignItems: "center",
-    marginTop: 25,
-  },
+ 
   buttonText: {
     color: WHITE_COLOR,
     fontSize: 24,
     fontWeight: "700",
+    paddingHorizontal:100,
   },
 });
 

@@ -1,20 +1,25 @@
 import React, { useRef } from "react";
-import { View, Text, Animated, StyleSheet, Dimensions, } from "react-native";
+import { View, Text, Animated, StyleSheet, Dimensions } from "react-native";
 //Card
 import BurgerCard from "./BurgerCard";
 //Colors
-import { THEME_TEXT_COLOR,THEME_COLOR, Back_Ground } from "../res/colors";
+import { THEME_TEXT_COLOR, THEME_COLOR, Back_Ground, WHITE_COLOR, BLACK_COLOR } from "../res/colors";
+import useThemeStore from "../../zustand/ThemeStore";
+
 const { width } = Dimensions.get("window");
 const ITEM_WIDTH = 150 + 14; 
 const SPACING = (width - ITEM_WIDTH) / 2;
+
 const Datalist = (props) => {
   const { title, seeMoreText, onSeeMorePress, data, onAddToCart } = props;
   const scrollX = useRef(new Animated.Value(0)).current;
+  const { darkMode } = useThemeStore();
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, darkMode && styles.containerDark]}>
       <View style={styles.header}>
-        <Text style={[styles.title, { color: THEME_COLOR }]}>{title}</Text>
-        <Text style={styles.seeMore} onPress={onSeeMorePress}>
+        <Text style={[styles.title, { color: darkMode ? WHITE_COLOR : THEME_COLOR }]}>{title}</Text>
+        <Text style={[styles.seeMore, { color: darkMode ? WHITE_COLOR : THEME_COLOR }]} onPress={onSeeMorePress}>
           {seeMoreText}
         </Text>
       </View>
@@ -56,11 +61,14 @@ const Datalist = (props) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
-    // marginVertical:8,
-    backgroundColor:Back_Ground,
-    marginBottom:10,
+    backgroundColor: Back_Ground,
+    marginBottom: 10,
+  },
+  containerDark: {
+    backgroundColor: BLACK_COLOR,
   },
   header: {
     flexDirection: "row",
@@ -72,18 +80,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: "bold",
-    color: THEME_TEXT_COLOR,
   },
   seeMore: {
     fontSize: 14,
     fontWeight: "600",
-    color: THEME_COLOR,
   },
   cardContainer: {
     width: ITEM_WIDTH,
     justifyContent: "center",
     alignItems: "center",
-    
   },
 });
+
 export default Datalist;

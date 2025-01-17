@@ -1,19 +1,22 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import React, { useState, useRef } from 'react';
-import { StyleSheet, View, Text, Dimensions,FlatList } from 'react-native';
-//component
+import { StyleSheet, View, Text, Dimensions, FlatList } from 'react-native';
 import { CartItem, SummaryCard } from '../../components'; 
-//RawBottomSheet
 import RBSheet from 'react-native-raw-bottom-sheet';
-//Initaial Data of Screen
 import { initialCartItems } from '../../data/ScreenData';
-//Colors
-import { Back_Ground, THEME_TEXT_COLOR, WHITE_COLOR } from '../../res/colors';
+import { Back_Ground, THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR } from '../../res/colors';
+import useThemeStore from "../../../zustand/ThemeStore";
 
 const { width: deviceWidth } = Dimensions.get('window');
+
 const CartScreen = ({ navigation }) => {
   const [cartItems, setCartItems] = useState(initialCartItems);
   const [selectedItems, setSelectedItems] = useState([]);
   const refRBSheet = useRef(null);
+  const { darkMode, toggleDarkMode } = useThemeStore();
+
   const handlePressItem = (id) => {
     setCartItems((prevItems) =>
       prevItems.map(item =>
@@ -28,6 +31,7 @@ const CartScreen = ({ navigation }) => {
   const calculateSubtotal = () => {
     return selectedItems.reduce((total, item) => total + item.price, 0);
   };
+
   React.useEffect(() => {
     const updatedSelectedItems = cartItems.filter(item => item.active);
     setSelectedItems(updatedSelectedItems);
@@ -39,8 +43,8 @@ const CartScreen = ({ navigation }) => {
   }, [cartItems]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.headingText}>Check Out</Text>
+    <View style={[styles.container, darkMode && styles.containerDark]}>
+      <Text style={[styles.headingText, darkMode && styles.headingTextDark]}>Check Out</Text>
 
       <FlatList
         data={cartItems}
@@ -59,7 +63,11 @@ const CartScreen = ({ navigation }) => {
         height={300}
         draggable={true}
         customStyles={{
-          container: { borderTopLeftRadius: 20, borderTopRightRadius: 20, backgroundColor: WHITE_COLOR },
+          container: { 
+            borderTopLeftRadius: 20, 
+            borderTopRightRadius: 20, 
+            backgroundColor: darkMode ? 'black' : WHITE_COLOR 
+          },
           wrapper: { backgroundColor: 'transparent' },
           draggableIcon: { backgroundColor: 'gray' },
         }}
@@ -82,6 +90,9 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: Back_Ground,
   },
+  containerDark: {
+    backgroundColor: 'black',
+  },
   headingText: {
     color: THEME_TEXT_COLOR,
     fontWeight: 'bold',
@@ -89,11 +100,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'right',
   },
+  headingTextDark: {
+    color: THEME_COLOR,
+  },
   flatList: {
     flex: 1,
   },
 });
-
-
 
 export default CartScreen;

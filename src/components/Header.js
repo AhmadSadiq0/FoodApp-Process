@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     height: 65,
-    backgroundColor: WHITE_COLOR,
+    backgroundColor: Back_Ground,
     borderRadius: 50,
     paddingLeft: 50,
     width: "100%",

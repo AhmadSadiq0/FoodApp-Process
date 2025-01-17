@@ -33,10 +33,12 @@ const RBDelivered = ({ sheetRef, selectedOrder }) => {
   const { darkMode } = useThemeStore();
 
   const navigateToMenu = () => {
+    sheetRef.current.close();
     navigation.navigate("Menu");
   };
-
+  
   const goBack = () => {
+    sheetRef.current.close();
     navigation.goBack();
   };
 
@@ -230,5 +232,4 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
 });
-
 export default RBDelivered;

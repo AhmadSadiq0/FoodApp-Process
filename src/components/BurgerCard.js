@@ -7,24 +7,41 @@ import { THEME_COLOR,
   THEME_TEXT_COLOR,
   GRAY_COLOR,
   BLACK_COLOR,
-  WHITE_COLOR, } from "../res/colors";
+  WHITE_COLOR,
+  Back_Ground, } from "../res/colors";
+
+import useThemeStore from "../../zustand/ThemeStore";
+
 const BurgerCard = (props) => {
-  const { name, price, image, onAdd,navigation } = props;
+  const { darkMode } = useThemeStore();
+
+  const { name, price, image, onAdd, navigation } = props;
 
   return (
-    <View style={styles.card}>
-       <Text style={styles.name}>{name && name.length > 16? name.slice(0,16)+ "..." : name}</Text>
+    <View
+      style={[styles.card, { backgroundColor: darkMode ? BLACK_COLOR : Back_Ground }]}
+    >
+      <Text style={[styles.name, { color: darkMode ? THEME_COLOR : THEME_TEXT_COLOR }]}>
+        {name && name.length > 16 ? name.slice(0, 16) + "..." : name}
+      </Text>
       <Image source={BURGERIMG} style={styles.image} />
-      <Text style={styles.price}>{`Rs. ${price}/-`}</Text>
-      <Text style={styles.serving}>Single Servin</Text>
-      <View style={styles.addmargin}>
-        <TouchableOpacity style={styles.addButton}
-        onPress={() => {
-          onAdd();
-          // navigation.navigate("Cart", { name, price, image });
-        }}
+      <Text style={[styles.price, { color: darkMode ? THEME_COLOR : THEME_TEXT_COLOR }]}>
+        {`Rs. ${price}/-`}
+      </Text>
+      <Text
+        style={[styles.serving, { color: darkMode ? THEME_COLOR : THEME_TEXT_COLOR }]}
       >
-          <Text style={styles.addText}>+</Text>
+        Single Serving
+      </Text>
+      <View style={styles.addmargin}>
+        <TouchableOpacity
+          style={[styles.addButton, { backgroundColor: darkMode ? THEME_COLOR : THEME_COLOR }]}
+          onPress={() => {
+            onAdd();
+            // navigation.navigate("Cart", { name, price, image });
+          }}
+        >
+          <Text style={[styles.addText, { color: darkMode ? BLACK_COLOR : WHITE_COLOR }]}>+</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -36,7 +53,7 @@ const styles = StyleSheet.create({
     height: 230,
     padding:3,
     borderRadius: 10,
-    backgroundColor: WHITE_COLOR, 
+    backgroundColor: Back_Ground, 
     shadowColor: BLACK_COLOR,
     shadowOpacity: 0.1,
     shadowRadius: 5,
@@ -82,7 +99,7 @@ const styles = StyleSheet.create({
     bottom: 30,
   },
   addText: {
-    color: WHITE_COLOR,
+    color: THEME_COLOR,
     fontSize: 18,
     fontWeight: "bold",
   },

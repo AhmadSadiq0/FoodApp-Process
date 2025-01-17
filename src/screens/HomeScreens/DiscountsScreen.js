@@ -2,9 +2,12 @@ import React from 'react';
 import { StyleSheet, View } from "react-native";
 import DealsScreen from "./DealsScreen";
 import { burgerData } from "../../data/ScreenData"; 
-import { WHITE_COLOR } from '../../res/colors'; 
+import { Back_Ground, } from '../../res/colors'; 
+import useThemeStore from '../../../zustand/ThemeStore';
 
 const DiscountsScreen = () => {
+  const { darkMode } = useThemeStore();
+
   const data = [
     { id: 1, title: "Discounts", data: burgerData },
     { id: 2, title: "Deals", data: burgerData },
@@ -12,8 +15,8 @@ const DiscountsScreen = () => {
   ];
 
   return (
-    <View style={styles.container}>
-      <DealsScreen data={data} /> 
+    <View style={[styles.container, { backgroundColor: darkMode ? BLACK_COLOR : Back_Ground}]}>
+      <DealsScreen data={data} />
     </View>
   );
 };
@@ -23,6 +26,5 @@ export default DiscountsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: WHITE_COLOR,
   },
 });

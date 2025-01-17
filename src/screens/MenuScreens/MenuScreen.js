@@ -3,33 +3,30 @@ import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from "react
 //RawBottomSheet
 import RBSheet from "react-native-raw-bottom-sheet"; 
 //Colors
-import { WHITE_COLOR,THEME_COLOR, Back_Ground, GRAY_COLOR , BLACK_COLOR, LIGHT_THEME_BACKGROUND} from "../../res/colors";
+import { WHITE_COLOR, THEME_COLOR, Back_Ground, GRAY_COLOR, BLACK_COLOR, LIGHT_THEME_BACKGROUND } from "../../res/colors";
+import useThemeStore from "../../../zustand/ThemeStore";
 //Components
-import { Header,AddCard,Datalist,BurgerItem } from "../../components";
+import { Header, AddCard, Datalist, BurgerItem } from "../../components";
 //data
 import { burgerData } from "../../data/ScreenData";
 import { categories } from "../../data/ScreenData";
 
 const MenuScreen = () => {
+  const { darkMode } = useThemeStore();
   const [selectedCategory, setSelectedCategory] = useState();
   const [selectedItem, setSelectedItem] = useState(null); 
   const refRBSheet = useRef(); 
- 
-  
-
 
   const handleAddToCart = (item) => {
     setSelectedItem(item);
     refRBSheet.current.open(); 
   };
+
   const renderCategory = ({ item }) => {
     const isSelected = selectedCategory === item.id;
     return (
       <TouchableOpacity
-        style={[styles.categoryCard, {
-          backgroundColor: isSelected ? THEME_COLOR : WHITE_COLOR,
-          marginTop: 30,
-        }]}
+        style={[styles.categoryCard, { backgroundColor: isSelected ? THEME_COLOR : darkMode ? BLACK_COLOR : WHITE_COLOR, marginTop: 30 }]}
         onPress={() => setSelectedCategory(item.id)}
       >
         <Image
@@ -43,13 +40,14 @@ const MenuScreen = () => {
       </TouchableOpacity>
     );
   };
+
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer, darkMode && styles.mainContainerDark]}>
       <Header />
       <FlatList
         data={burgerData}
         ListHeaderComponent={
-          <View style={styles.header}>
+          <View style={[styles.header, darkMode && styles.headerDark]}>
             <FlatList
               data={categories}
               renderItem={renderCategory}
@@ -73,26 +71,24 @@ const MenuScreen = () => {
           </View>
         }
         keyExtractor={(item) => item.id.toString()}
-
       />
       <RBSheet
-  ref={refRBSheet}
-  height={430}
-  draggable={true}
-  customStyles={{
-    container: {
-      borderTopLeftRadius: 20,
-      borderTopRightRadius: 20,
-      alignItems: "center",
-      backgroundColor: WHITE_COLOR,
-    },
-    wrapper: { backgroundColor: LIGHT_THEME_BACKGROUND },
-    draggableIcon: { backgroundColor: GRAY_COLOR },
-  }}
->
-<BurgerItem selectedItem={selectedItem} />
-</RBSheet>
-
+        ref={refRBSheet}
+        height={430}
+        draggable={true}
+        customStyles={{
+          container: {
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            alignItems: "center",
+            backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
+          },
+          wrapper: { backgroundColor: darkMode ? BLACK_COLOR : LIGHT_THEME_BACKGROUND },
+          draggableIcon: { backgroundColor: GRAY_COLOR },
+        }}
+      >
+        <BurgerItem selectedItem={selectedItem} />
+      </RBSheet>
     </View>
   );
 };
@@ -102,10 +98,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Back_Ground,
   },
+  mainContainerDark: {
+    backgroundColor: BLACK_COLOR,
+  },
   header: {
     width: "100%",
     paddingVertical: 16,
     backgroundColor: Back_Ground,
+  },
+  headerDark: {
+    backgroundColor: BLACK_COLOR,
   },
   scrollContainer: {
     paddingVertical: 16,

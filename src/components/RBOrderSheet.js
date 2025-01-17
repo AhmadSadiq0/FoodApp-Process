@@ -15,9 +15,10 @@ const RBOrderSheet = (props) => {
   const navigation = useNavigation();
   const { darkMode } = useThemeStore(); 
   const goBack = () => {
+    sheetRef.current.close();
     navigation.goBack();
-  };
 
+  };
   // Dynamic styles based on theme
   const dynamicStyles = {
     container: {

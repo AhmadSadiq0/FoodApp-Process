@@ -7,30 +7,33 @@ import {
   THEME_COLOR,
   THEME_TEXT_COLOR,
   WHITE_COLOR,
+  BLACK_COLOR,
 } from "../res/colors";
+import useThemeStore from "../../zustand/ThemeStore";
 
 const ConfirmOrderSummary = (props) => {
   const { onButtonPressed, selectedOrder } = props;
+  const { darkMode } = useThemeStore();
 
   return (
     <View style={styles.container}>
       {selectedOrder ? (
-        <View style={styles.card}>
+        <View style={[styles.card, darkMode && styles.cardDark]}>
           <View style={styles.row}>
-            <Text style={styles.label}>Selected Item(s):</Text>
-            <Text style={styles.value}>1</Text>
+            <Text style={[styles.label, darkMode && styles.labelDark]}>Selected Item(s):</Text>
+            <Text style={[styles.value, darkMode && styles.valueDark]}>1</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Sub Total:</Text>
-            <Text style={styles.value}>Rs. 599</Text>
+            <Text style={[styles.label, darkMode && styles.labelDark]}>Sub Total:</Text>
+            <Text style={[styles.value, darkMode && styles.valueDark]}>Rs. 599</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Delivery Charges:</Text>
-            <Text style={styles.value}>Rs. 0.00</Text>
+            <Text style={[styles.label, darkMode && styles.labelDark]}>Delivery Charges:</Text>
+            <Text style={[styles.value, darkMode && styles.valueDark]}>Rs. 0.00</Text>
           </View>
           <View style={[styles.row, styles.totalRow]}>
-            <Text style={styles.label}>Total:</Text>
-            <Text style={styles.value}>Rs. 599</Text>
+            <Text style={[styles.label, darkMode && styles.labelDark]}>Total:</Text>
+            <Text style={[styles.value, darkMode && styles.valueDark]}>Rs. 599</Text>
           </View>
           <View style={styles.margin}>
             <CustomButton
@@ -41,7 +44,7 @@ const ConfirmOrderSummary = (props) => {
           </View>
         </View>
       ) : (
-        <Text>No payment method selected.</Text>
+        <Text style={[styles.noPaymentText, darkMode && styles.noPaymentTextDark]}>No payment method selected.</Text>
       )}
     </View>
   );
@@ -54,10 +57,13 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '100%',
-    paddingTop:30,
-    paddingHorizontal:16,
+    paddingTop: 30,
+    paddingHorizontal: 16,
     borderColor: THEME_COLOR,
     backgroundColor: WHITE_COLOR,
+  },
+  cardDark: {
+    backgroundColor: BLACK_COLOR,
   },
   row: {
     marginBottom: 10,
@@ -67,18 +73,31 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: "bold",
-    fontSize:24,
-    lineHeight:25,
+    fontSize: 24,
+    lineHeight: 25,
     color: THEME_TEXT_COLOR,
   },
+  labelDark: {
+    color: WHITE_COLOR,
+  },
   value: {
-    fontSize:24,
-    lineHeight:25,
+    fontSize: 24,
+    lineHeight: 25,
     fontWeight: 'bold',
     color: THEME_COLOR,
   },
+  valueDark: {
+    color: WHITE_COLOR,
+  },
   margin: {
-    paddingTop:60,
+    paddingTop: 60,
+  },
+  noPaymentText: {
+    fontSize: 16,
+    color: THEME_COLOR,
+  },
+  noPaymentTextDark: {
+    color: WHITE_COLOR,
   },
 });
 
