@@ -7,19 +7,18 @@ import { Back_Ground, DARK_THEME_BACKGROUND } from "../../res/colors";
 //Global State
 import useThemeStore from "../../../zustand/ThemeStore"; 
 
+
 const UpdateProfileScreen = (props) => {
   const { navigation, route } = props;
   const { darkMode } = useThemeStore(); 
-
   const showEditIcon = route?.params?.showEditIcon || true;
 
 
   const containerStyle = darkMode ? { backgroundColor: DARK_THEME_BACKGROUND } : { backgroundColor: Back_Ground };
-
   return (
     <View style={[styles.container, containerStyle]}>
       <ProfileHeader
-        navigation={navigation}
+        navigation={navigation} 
         showDotsIcon={false}
         showArrowIcon={true}
       />
@@ -33,7 +32,6 @@ const UpdateProfileScreen = (props) => {
     </View>
   );
 };
-
 export default UpdateProfileScreen;
 
 const styles = StyleSheet.create({

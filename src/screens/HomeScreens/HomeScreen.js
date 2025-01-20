@@ -10,9 +10,11 @@ import { burgerData } from "../../data/ScreenData";
 import RBSheet from "react-native-raw-bottom-sheet";
 //images 
 import { BURGERIMG } from "../../res/drawables";
+//store
 import useThemeStore from "../../../zustand/ThemeStore";
 
 const HomeScreen = ({ navigation }) => {
+  
   const refRBSheet = useRef();
   const [selectedBurger, setSelectedBurger] = useState(null);
   const { darkMode, toggleDarkMode } = useThemeStore();
@@ -52,7 +54,7 @@ const HomeScreen = ({ navigation }) => {
         height={430}
         draggable={true}
         customStyles={{
-          container: { borderTopLeftRadius: 20, borderTopRightRadius: 20, alignItems: 'center', backgroundColor: WHITE_COLOR },
+          container: { borderTopLeftRadius: 20, borderTopRightRadius: 20, alignItems: 'center',  backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR, },
           wrapper: { backgroundColor: 'transparent' },
           draggableIcon: { backgroundColor: GRAY_COLOR },
         }}

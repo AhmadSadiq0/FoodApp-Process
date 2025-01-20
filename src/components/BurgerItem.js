@@ -40,5 +40,4 @@ const styles = StyleSheet.create({
     color: WHITE_COLOR,
   },
 });
-
 export default BurgerItem;

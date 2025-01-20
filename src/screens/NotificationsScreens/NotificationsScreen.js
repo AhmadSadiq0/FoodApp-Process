@@ -66,14 +66,13 @@ const NotificationsScreen = ({ navigation }) => {
                 <Text style={styles.emptyCartText}>Your cart is empty</Text>
             </View>
         );
-    }
+    } 
 
     return (
         <View style={styles.container}>
             {cartItems.map((item) => (
                 <CartItem key={item.id} item={item} onPressItem={handlePressItem} />
-            ))}
-
+            ))} 
             <RBSheet
                 ref={refRBSheet}
                 height={400}

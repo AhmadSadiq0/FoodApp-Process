@@ -3,57 +3,82 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 //images
 import { BURGERIMG } from "../res/drawables";
 //colors
-import { THEME_COLOR,
+import {
+  THEME_COLOR,
   THEME_TEXT_COLOR,
-  GRAY_COLOR,
   BLACK_COLOR,
   WHITE_COLOR,
-  Back_Ground, } from "../res/colors";
-
+  Back_Ground,
+} from "../res/colors";
+//Store
 import useThemeStore from "../../zustand/ThemeStore";
 
 const BurgerCard = (props) => {
+
   const { darkMode } = useThemeStore();
 
-  const { name, price, image, onAdd, navigation } = props;
+  const { name, price, image, onAdd } = props;
 
   return (
     <View
-      style={[styles.card, { backgroundColor: darkMode ? BLACK_COLOR : Back_Ground }]}
+      style={[
+        styles.card,
+        { backgroundColor: darkMode ? BLACK_COLOR : Back_Ground },
+      ]}
     >
-      <Text style={[styles.name, { color: darkMode ? THEME_COLOR : THEME_TEXT_COLOR }]}>
+      <Text
+        style={[
+          styles.name,
+          { color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR },
+        ]}
+      >
         {name && name.length > 16 ? name.slice(0, 16) + "..." : name}
       </Text>
       <Image source={BURGERIMG} style={styles.image} />
-      <Text style={[styles.price, { color: darkMode ? THEME_COLOR : THEME_TEXT_COLOR }]}>
+      <Text
+        style={[
+          styles.price,
+          { color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR },
+        ]}
+      >
         {`Rs. ${price}/-`}
       </Text>
       <Text
-        style={[styles.serving, { color: darkMode ? THEME_COLOR : THEME_TEXT_COLOR }]}
+        style={[
+          styles.serving,
+          { color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR },
+        ]}
       >
         Single Serving
       </Text>
       <View style={styles.addmargin}>
         <TouchableOpacity
-          style={[styles.addButton, { backgroundColor: darkMode ? THEME_COLOR : THEME_COLOR }]}
+          style={[styles.addButton, { backgroundColor: THEME_COLOR }]}
           onPress={() => {
             onAdd();
-            // navigation.navigate("Cart", { name, price, image });
           }}
         >
-          <Text style={[styles.addText, { color: darkMode ? BLACK_COLOR : WHITE_COLOR }]}>+</Text>
+          <Text
+            style={[
+              styles.addText,
+              { color: darkMode ? BLACK_COLOR : WHITE_COLOR },
+            ]}
+          >
+            +
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   card: {
     width: 150,
     height: 230,
-    padding:3,
+    padding: 3,
     borderRadius: 10,
-    backgroundColor: Back_Ground, 
+    backgroundColor: Back_Ground,
     shadowColor: BLACK_COLOR,
     shadowOpacity: 0.1,
     shadowRadius: 5,
@@ -73,18 +98,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     marginRight: 5,
-   marginTop:5,
-   color: THEME_TEXT_COLOR,
+    marginTop: 5,
   },
   price: {
     fontSize: 15,
-    color: THEME_TEXT_COLOR,
-    fontWeight:'bold',
+    fontWeight: "bold",
     right: 29,
   },
   serving: {
     fontSize: 11,
-    color: THEME_TEXT_COLOR,
     right: 29,
   },
   addButton: {
@@ -99,13 +121,13 @@ const styles = StyleSheet.create({
     bottom: 30,
   },
   addText: {
-    color: THEME_COLOR,
     fontSize: 18,
     fontWeight: "bold",
   },
-  addmargin: { 
+  addmargin: {
     justifyContent: "flex-end",
-    alignItems: "flex-end", 
+    alignItems: "flex-end",
   },
 });
+
 export default BurgerCard;

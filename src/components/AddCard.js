@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 //images
 import { BURGERIMG } from "../res/drawables";
 //colors
@@ -13,8 +13,6 @@ import {
 import CustomButton from "./CustomButtom";
 import useThemeStore from "../../zustand/ThemeStore";
 
-
-
 const AddCard = (props) => {
   const { name, description, image, price, buttonText, onAddToCart } = props;
   const { darkMode } = useThemeStore();
@@ -26,17 +24,44 @@ const AddCard = (props) => {
         backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
       }}
     >
-      <Text style={styles.name} numberOfLines={name.length > 16 ? 2 : 1}>
+      <Text
+        style={{
+          ...styles.name,
+          color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR,
+        }}
+        numberOfLines={name.length > 16 ? 2 : 1}
+      >
         {name}
       </Text>
-      <Text style={styles.description}>{description}</Text>
+      <Text
+        style={{
+          ...styles.description,
+          color: darkMode ? THEME_COLOR : THEME_COLOR,
+        }}
+      >
+        {description}
+      </Text>
       <Image source={image} style={styles.image} />
       <View style={styles.priceContainer}>
-        <Text style={styles.priceLabel}>Total Price :</Text>
-        <Text style={styles.price}>{`Rs. ${price}`}</Text>
+        <Text
+          style={{
+            ...styles.priceLabel,
+            color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR,
+          }}
+        >
+          Total Price :
+        </Text>
+        <Text
+          style={{
+            ...styles.price,
+            color: darkMode ? THEME_COLOR : THEME_COLOR,
+          }}
+        >
+          {`Rs. ${price}`}
+        </Text>
       </View>
       <CustomButton
-      title="Add To Cart"
+        title={buttonText || "Add To Cart"}
         style={{
           ...styles.buttonText,
           color: darkMode ? WHITE_COLOR : BLACK_COLOR,
@@ -46,25 +71,22 @@ const AddCard = (props) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   card: {
     width: "100%",
     padding: 10,
     borderRadius: 12,
-    backgroundColor: WHITE_COLOR,
     alignItems: "center",
     margin: 10,
   },
   name: {
     fontSize: 17,
- 
-    color: THEME_TEXT_COLOR,
     textAlign: "center",
     marginBottom: 4,
   },
   description: {
     fontSize: 24,
-    color: THEME_COLOR,
     textAlign: "center",
     fontWeight: "700",
     marginBottom: 10,
@@ -85,19 +107,15 @@ const styles = StyleSheet.create({
   priceLabel: {
     fontSize: 24,
     fontWeight: "700",
-    color: THEME_TEXT_COLOR,
   },
   price: {
     fontSize: 24,
     fontWeight: "700",
-    color: THEME_COLOR,
   },
- 
   buttonText: {
-    color: WHITE_COLOR,
     fontSize: 24,
     fontWeight: "700",
-    paddingHorizontal:100,
+    paddingHorizontal: 100,
   },
 });
 

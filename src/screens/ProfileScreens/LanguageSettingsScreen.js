@@ -7,7 +7,6 @@ import { Language_Icon } from "../../res/drawables";
 //Colors
 import {
   Back_Ground,
-  GRAY_COLOR,
   THEME_COLOR,
   THEME_TEXT_COLOR,
   WHITE_COLOR,

@@ -15,7 +15,7 @@ useEffect(() => {
 
   return (
     <View style={styles.container}>
-      <Text>SplashScree</Text>
+      <Text>SplashScreen</Text>
     </View>
   )
 }

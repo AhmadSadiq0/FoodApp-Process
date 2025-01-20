@@ -83,7 +83,7 @@ const MenuScreen = () => {
             alignItems: "center",
             backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
           },
-          wrapper: { backgroundColor: darkMode ? BLACK_COLOR : LIGHT_THEME_BACKGROUND },
+          wrapper: { backgroundColor: "transparent" },
           draggableIcon: { backgroundColor: GRAY_COLOR },
         }}
       >

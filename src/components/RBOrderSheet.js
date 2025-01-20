@@ -51,7 +51,7 @@ const RBOrderSheet = (props) => {
           borderTopRightRadius: 20,
         },
         wrapper: {
-          backgroundColor: darkMode ? LIGHT_THEME_BACKGROUND : "transparent",
+          backgroundColor: "transparent",
         },
         draggableIcon: {
           backgroundColor: GRAY_COLOR,
