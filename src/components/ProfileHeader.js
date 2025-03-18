@@ -57,7 +57,7 @@ const Tabs = memo(({ tabs, activeTab, onTabPress, position }) => (
 ));
 const ProfileHeader = memo(
   ({
-    title = "Huzaifa Saddique",
+    title = "Huzaifa",
     containerStyle = {},
     DOTSICON = DOTS_ICON,
     textContainerStyle = {},
@@ -184,8 +184,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   icon: {
-    width: 40,
-    height: 40,
+    width: 37,
+    height: 37,
   },
   bellContainer: {
     flexDirection: "row",

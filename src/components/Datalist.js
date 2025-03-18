@@ -11,7 +11,7 @@ const ITEM_WIDTH = 150 + 14;
 const SPACING = (width - ITEM_WIDTH) / 2;
 
 const Datalist = (props) => {
-  const { title, seeMoreText, onSeeMorePress, data, onAddToCart } = props;
+  const { title, seeMoreText, onSeeMorePress, data, onAddToCart,onToggleFavorite } = props;
   const scrollX = useRef(new Animated.Value(0)).current;
   const { darkMode } = useThemeStore();
 
@@ -25,7 +25,8 @@ const Datalist = (props) => {
       </View>
       <Animated.FlatList
         data={data}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item, index) => (item._id ? item._id.toString() : index.toString())}
+
         horizontal
         contentContainerStyle={styles.list}
         showsHorizontalScrollIndicator={false}
@@ -52,6 +53,7 @@ const Datalist = (props) => {
                 name={item.name}
                 price={item.price}
                 image={item.image}
+                description={item.description}
                 onAdd={() => onAddToCart(item)}
               />
             </Animated.View>
@@ -64,6 +66,7 @@ const Datalist = (props) => {
 
 const styles = StyleSheet.create({
   container: {
+    // paddingTop:6,
     backgroundColor: Back_Ground,
     marginBottom: 10,
   },
@@ -74,11 +77,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginHorizontal: 27,
+    paddingHorizontal:17,
     marginBottom: 10,
   },
   title: {
-    fontSize: 16,
+    fontSize: 19,
     fontWeight: "bold",
   },
   seeMore: {

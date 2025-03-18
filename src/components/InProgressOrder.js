@@ -72,7 +72,9 @@ const InProgressOrder = ({ sections: initialSections }) => {
   );
   return (
     <View style={[styles.container, { backgroundColor: darkMode ? DARK_THEME_BACKGROUND : Back_Ground }]}>
+
       <SectionList
+        showsVerticalScrollIndicator={false}
         sections={sections}
         keyExtractor={(item, index) => `${item.orderId}-${index}`}
         renderItem={renderOrderItem}
@@ -128,7 +130,10 @@ const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
           {order.status}
         </Text>
         <Image source={BURGERIMG} style={styles.image} />
+
       </View>
+      
+
     </Pressable>
   );
 };

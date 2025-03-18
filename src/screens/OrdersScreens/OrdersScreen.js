@@ -4,8 +4,10 @@ import { StyleSheet, View, SectionList, Text } from "react-native";
 import { InProgressOrder, Header } from "../../components";
 //colors
 import { Back_Ground } from "../../res/colors";
+import useAuthStore from "../../store/AuthStore";
 
 const OrdersScreen = () => {
+  const { user } = useAuthStore();
   const allOrders = [
     {
       orderId: "AK-141124-DCB07",
@@ -63,6 +65,8 @@ const OrdersScreen = () => {
   ];  
   return (
     <View style={styles.container}>
+    
+
       <Header
         title="My Orders"
         Welcomermsg=""
@@ -73,7 +77,8 @@ const OrdersScreen = () => {
         }}
         textContainer={{
           marginTop: 0,
-        }}
+        }}  username={user.username}
+        showBellIcon={false}
       />
 
       <InProgressOrder sections={sections} />

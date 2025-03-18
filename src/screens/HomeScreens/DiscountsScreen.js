@@ -1,30 +1,26 @@
-import React from 'react';
-import { StyleSheet, View } from "react-native";
-import DealsScreen from "./DealsScreen";
-import { burgerData } from "../../data/ScreenData"; 
-import { Back_Ground, } from '../../res/colors'; 
-import useThemeStore from '../../../zustand/ThemeStore';
+import { StyleSheet, Text, View } from 'react-native'
+import { Header } from '../../components'
+import React from 'react'
 
 const DiscountsScreen = () => {
-  const { darkMode } = useThemeStore();
-
-  const data = [
-    { id: 1, title: "Discounts", data: burgerData },
-    { id: 2, title: "Deals", data: burgerData },
-    { id: 3, title: "Loyalty Burgers", data: burgerData },
-  ];
-
   return (
-    <View style={[styles.container, { backgroundColor: darkMode ? BLACK_COLOR : Back_Ground}]}>
-      <DealsScreen data={data} />
+    <View>
+      <Header
+        title="Featured Screen"
+        Welcomermsg=""
+        showSearch={false}
+        showShadow={true}
+        containerStyle={{
+          height: 160,
+        }}
+        textContainer={{
+          marginTop: 0,
+        }}
+      />
     </View>
-  );
-};
+  )
+}
 
-export default DiscountsScreen;
+export default DiscountsScreen
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+const styles = StyleSheet.create({})

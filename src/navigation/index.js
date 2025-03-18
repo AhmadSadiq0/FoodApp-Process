@@ -1,15 +1,15 @@
-import React from 'react';
-import { Text, View, Image, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { Text, View, Image, StyleSheet , Pressable  } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
     HOME_ICON,
     MENU_ICON,
-    CART_ICON,
+    CART_ICON, 
     ORDERS_ICON,
     PROFILE_ICON,
-    DOTS_ICON
+    DOTS_ICON,
 } from '../res/drawables';
 import { THEME_COLOR, WHITE_COLOR } from '../res/colors';
 //Screen Components
@@ -43,12 +43,14 @@ import { OrdersScreen } from '../screens/OrdersScreens/index';
 import { SplashScreen } from '../screens/SplashScreen/index';
 import Header1 from '../components/Header1';
 import Header from '../components/Header';
+import authStore from '../store/AuthStore';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const AuthStack = () => { 
+    
     return (
-        <Stack.Navigator initialRouteName="Discount">
-            <Stack.Screen options={{ headerShown: false }} name="Auth" component={SplashScreen} />
+        <Stack.Navigator initialRouteName="SignUp">
+            {/* <Stack.Screen options={{ headerShown: false }} name="Auth" component={SplashScreen} /> */}
             <Stack.Screen options={{ headerShown: false }} name="SignUp" component={SignUpScreen} />
             <Stack.Screen options={{ headerShown: false }} name="SignIn" component={SignInScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen}/>
@@ -72,9 +74,16 @@ const AuthStack = () => {
     )
 }  
 const HomeStack = () => {
+    const {user} = authStore()
     return (
         <Stack.Navigator initialRouteName="Home" headerMode={false}>
-            <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
+           <Stack.Screen   name="Home" 
+        component={HomeScreen} 
+        options={({ navigation }) => ({ 
+          header: () => <Header navigation={navigation} username = {user.username} showSearch={true} />,
+          headerShown: true
+        })} 
+      />  
             <Stack.Screen options={{ headerShown: false }} name="Cart" component={CartScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Deals" component={DealsScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Offers" component={OffersScreen} />
@@ -85,24 +94,49 @@ const HomeStack = () => {
     )
 } 
 const MenuStack = () => {
+    const {user} = authStore()
     return (
         <Stack.Navigator initialRouteName="Menu" headerMode={false}>
-            <Stack.Screen options={{ headerShown: false }} name="Menu" component={MenuScreen} />
+            {/* <Stack.Screen options={{ headerShown: false }} name="Menu" component={MenuScreen} /> */}
+            <Stack.Screen
+                name="Menu"
+                component={MenuScreen}
+                options={{
+                    header: () => <Header username={user.username} showBellIcon={false} />,
+                }}
+            />
             <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
         </Stack.Navigator>
     )
 }
-const CartStack = () => {
+  const CartStack = ({navigation}) => {
+    const {user} = authStore()
     return (
         <Stack.Navigator initialRouteName="Cart" headerMode={false}>
-             <Stack.Screen options={{ header : () => <Header/>, headerShown : true }}name="Cart" component={CartScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="CheckOut" component={CheckOutScreen} />
-            <Stack.Screen options={{ headerShown: false }} name="ConfirmOrder" component={OrderConfirmationScreen} />
+               <Stack.Screen
+                name="Cart" 
+                component={CartScreen}
+                options={{
+                    header: () => <Header navigation={navigation} username={user.username} showBellIcon={false} />,
+                }}
+            />
+           {/* <Stack.Screen options={{  headerShown : false }}name="Cart" component={CartScreen} /> */}
+           {/* <Stack.Screen options={{ header : () => <Header />, headerShown : true }}name="Cart" component={CartScreen} /> */}
+            <Stack.Screen options={{ headerShown: false }} name="CheckOut" component={CheckOutScreen} />       
+            {/* <Stack.Screen options={{ headerShown: false }} name="ConfirmOrder" component={OrderConfirmationScreen} /> */}
+            <Stack.Screen 
+  name="ConfirmOrder" 
+  component={OrderConfirmationScreen} 
+  options={{
+    header: () => <Header1 title="Order Confirmation" discountIcon={false} style={styles.header} />
+  }} 
+/>
+
             <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
             <Stack.Screen options={{ headerShown: false }} name="ConfirmedOrder" component={ConfirmedOrder} />
         </Stack.Navigator>
     )
-} 
+}  
 const OrdersStack = () => {
     return (
         <Stack.Navigator initialRouteName="Orders" headerMode={false}>
@@ -138,6 +172,17 @@ function BottomTabStack() {
                     fontSize: 12,
                     fontWeight: 'bold',
                 },
+                headerPressColor : 'transparent',
+                tabBarButton: (props) => (
+                    <Pressable
+                        {...props}
+                        android_ripple={{ borderless: false, color: 'transparent' }}
+                        style={({ pressed }) => [
+                            props.style,
+                            { opacity: pressed ? 0.7 : 1 },
+                        ]}
+                    />
+                ),
             }}
         >
             <Tab.Screen 
@@ -254,11 +299,18 @@ function BottomTabStack() {
         );
 }
 function Navigation(props) {
+    const {user} = authStore()
+    
     return (
         <NavigationContainer options={{ headerShown: false }}>
-                <Stack.Navigator initialRouteName={"MainStack"} headerMode={false}>
-                    <Stack.Screen options={{ headerShown: false }} name="MainStack" component={BottomTabStack} />
-                </Stack.Navigator>
+                {
+                    user ?
+                    <BottomTabStack /> :
+                    <AuthStack/>
+                }
+                {/* <Stack.Navigator initialRouteName={"MainStack"} headerMode={false}>
+                    <Stack.Screen options={{ headerShown: false }} name="MainStack" component={AuthStack} />
+                </Stack.Navigator> */}
         </NavigationContainer >
     );
 }

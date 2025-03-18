@@ -17,7 +17,7 @@ const BurgerCard = (props) => {
 
   const { darkMode } = useThemeStore();
 
-  const { name, price, image, onAdd } = props;
+  const { name, price, image, onAdd , description } = props;
 
   return (
     <View
@@ -34,7 +34,7 @@ const BurgerCard = (props) => {
       >
         {name && name.length > 16 ? name.slice(0, 16) + "..." : name}
       </Text>
-      <Image source={BURGERIMG} style={styles.image} />
+      <Image source={image ? {uri : image} : BURGERIMG} style={styles.image} />
       <Text
         style={[
           styles.price,
@@ -48,8 +48,9 @@ const BurgerCard = (props) => {
           styles.serving,
           { color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR },
         ]}
+        numberOfLines={2}
       >
-        Single Serving
+        {description && description.length > 30 ? description.slice(0, 30) + "..." : description}
       </Text>
       <View style={styles.addmargin}>
         <TouchableOpacity
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
-    margin: 7,
+    margin: 1,
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: 5,
@@ -92,22 +93,25 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 100,
     borderRadius: 10,
-    marginVertical: 18,
+    marginVertical: 15,
   },
   name: {
     fontSize: 14,
     fontWeight: "bold",
-    marginRight: 5,
+    //marginRight: 1,
     marginTop: 5,
   },
   price: {
     fontSize: 15,
     fontWeight: "bold",
-    right: 29,
+    alignSelf : "flex-start",
+    left: 5,
   },
   serving: {
+    width : '60%',
     fontSize: 11,
-    right: 29,
+    alignSelf : "flex-start",
+    left: 5,
   },
   addButton: {
     alignSelf: "flex-end",

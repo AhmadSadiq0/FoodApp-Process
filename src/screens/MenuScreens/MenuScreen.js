@@ -1,40 +1,56 @@
 import React, { useState, useRef } from "react";
-import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from "react-native";
-//RawBottomSheet
-import RBSheet from "react-native-raw-bottom-sheet"; 
-//Colors
-import { WHITE_COLOR, THEME_COLOR, Back_Ground, GRAY_COLOR, BLACK_COLOR, LIGHT_THEME_BACKGROUND } from "../../res/colors";
+import { ScrollView, StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from "react-native";
+import RBSheet from "react-native-raw-bottom-sheet";
+import { WHITE_COLOR, THEME_COLOR, Back_Ground, GRAY_COLOR, BLACK_COLOR } from "../../res/colors";
 import useThemeStore from "../../../zustand/ThemeStore";
-//Components
 import { Header, AddCard, Datalist, BurgerItem } from "../../components";
-//data
 import { burgerData } from "../../data/ScreenData";
 import { categories } from "../../data/ScreenData";
+import useAuthStore from "../../store/AuthStore";
 
 const MenuScreen = () => {
+  const { user } = useAuthStore();
   const { darkMode } = useThemeStore();
   const [selectedCategory, setSelectedCategory] = useState();
-  const [selectedItem, setSelectedItem] = useState(null); 
-  const refRBSheet = useRef(); 
+  const [selectedItem, setSelectedItem] = useState(null);
+  const refRBSheet = useRef();
 
   const handleAddToCart = (item) => {
     setSelectedItem(item);
-    refRBSheet.current.open(); 
+    refRBSheet.current.open();
   };
 
   const renderCategory = ({ item }) => {
     const isSelected = selectedCategory === item.id;
     return (
       <TouchableOpacity
-        style={[styles.categoryCard, { backgroundColor: isSelected ? THEME_COLOR : darkMode ? BLACK_COLOR : WHITE_COLOR, marginTop: 30 }]}
+        style={[
+          styles.categoryCard,
+          {
+            backgroundColor: isSelected ? THEME_COLOR : darkMode ? BLACK_COLOR : WHITE_COLOR,
+            marginTop: 30,
+          },
+        ]}
         onPress={() => setSelectedCategory(item.id)}
       >
         <Image
           source={item.image}
-          style={[styles.image, { tintColor: isSelected ? WHITE_COLOR : THEME_COLOR }]}
+          style={[
+            styles.image,
+            {
+              tintColor: isSelected ? WHITE_COLOR : darkMode ? WHITE_COLOR : THEME_COLOR,
+            },
+          ]}
           resizeMode="contain"
         />
-        <Text style={[styles.categoryText, { color: isSelected ? WHITE_COLOR : THEME_COLOR }]}>
+        <Text
+          style={[
+            styles.categoryText,
+            {
+              color: isSelected ? WHITE_COLOR : darkMode ? WHITE_COLOR : THEME_COLOR,
+            },
+          ]}
+        >
           {item.name}
         </Text>
       </TouchableOpacity>
@@ -43,38 +59,44 @@ const MenuScreen = () => {
 
   return (
     <View style={[styles.mainContainer, darkMode && styles.mainContainerDark]}>
-      <Header />
-      <FlatList
-        data={burgerData}
-        ListHeaderComponent={
-          <View style={[styles.header, darkMode && styles.headerDark]}>
-            <FlatList
-              data={categories}
-              renderItem={renderCategory}
-              keyExtractor={(item) => item.id.toString()}
-              contentContainerStyle={styles.scrollContainer}
-              numColumns={3}
-              showsVerticalScrollIndicator={false}
-            />
-            <View>
-              <Datalist title="Discount" seeMoreText="" data={burgerData} onAddToCart={handleAddToCart} />
-            </View>
-            <View>
-              <Datalist
-                title="Discounts"
-                seeMoreText=""
-                onSeeMorePress={() => console.log("See All pressed!")}
-                data={burgerData}
-                onAddToCart={handleAddToCart}
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+        <FlatList
+          data={burgerData}
+          ListHeaderComponent={
+            <View style={[styles.header, darkMode && styles.headerDark]}>
+              <FlatList
+                data={categories}
+                renderItem={renderCategory}
+                keyExtractor={(item) => item.id.toString()}
+                contentContainerStyle={styles.scrollContainer}
+                numColumns={3}
+                showsVerticalScrollIndicator={false}
               />
+              <View>
+                <Datalist
+                  title="Discount"
+                  seeMoreText=""
+                  data={burgerData}
+                  onAddToCart={handleAddToCart}
+                />
+              </View>
+              <View>
+                <Datalist
+                  title="Discounts"
+                  seeMoreText=""
+                  onSeeMorePress={() => console.log("See All pressed!")}
+                  data={burgerData}
+                  onAddToCart={handleAddToCart}
+                />
+              </View>
             </View>
-          </View>
-        }
-        keyExtractor={(item) => item.id.toString()}
-      />
+          }
+          keyExtractor={(item) => item.id.toString()}
+        />
+      </ScrollView>
       <RBSheet
         ref={refRBSheet}
-        height={430}
+        height={"auto"}
         draggable={true}
         customStyles={{
           container: {
@@ -87,7 +109,9 @@ const MenuScreen = () => {
           draggableIcon: { backgroundColor: GRAY_COLOR },
         }}
       >
-        <BurgerItem selectedItem={selectedItem} />
+        <ScrollView>
+          <BurgerItem selectedItem={selectedItem} />
+        </ScrollView>
       </RBSheet>
     </View>
   );

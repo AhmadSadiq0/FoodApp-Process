@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-//CustomButton
+import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, FlatList } from "react-native";
+// CustomButton
 import { CustomButton } from "../../components";
-//Icon
+// Icon
 import { Language_Icon } from "../../res/drawables";
-//Colors
+// Colors
 import {
   Back_Ground,
   THEME_COLOR,
@@ -14,20 +14,23 @@ import {
   DARK_THEME_TEXT_COLOR,
   BLACK_COLOR,
 } from "../../res/colors";
-//State Manage
+// State Manage
 import useThemeStore from "../../../zustand/ThemeStore";
 
 const LanguageScreen = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("English");
-
+  const [modalVisible, setModalVisible] = useState(false);
   const { darkMode } = useThemeStore();
 
-  const handleLanguageSelect = () => {
-    console.log("Language selection dropdown clicked");
-  };
+  const languages = ["English", "Urdu",];
 
-  // Dynamically adjust theme color
+  const handleLanguageSelect = (language) => {
+    setSelectedLanguage(language); 
+    setModalVisible(false); 
+  };
+ 
   const dynamicThemeColor = darkMode ? WHITE_COLOR : THEME_COLOR;
+  const dynamicIconColor = darkMode ? WHITE_COLOR : THEME_COLOR;
 
   return (
     <View
@@ -37,7 +40,6 @@ const LanguageScreen = () => {
       ]}
     >
       <View style={styles.contentContainer}>
-        {/* Language Row */}
         <View
           style={[
             styles.languageRow,
@@ -60,11 +62,10 @@ const LanguageScreen = () => {
               { color: darkMode ? DARK_THEME_TEXT_COLOR : THEME_TEXT_COLOR },
             ]}
           >
-            {selectedLanguage}
+            {selectedLanguage} 
           </Text>
         </View>
 
-        {/* Select Language Button */}
         <TouchableOpacity
           style={[
             styles.languageRow,
@@ -72,7 +73,7 @@ const LanguageScreen = () => {
               backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
             },
           ]}
-          onPress={handleLanguageSelect}
+          onPress={() => setModalVisible(true)} 
         >
           <Text
             style={[
@@ -82,7 +83,7 @@ const LanguageScreen = () => {
           >
             Select Language
           </Text>
-          <Image source={Language_Icon} style={styles.icon} />
+          <Image source={Language_Icon} style={[styles.icon, { tintColor: dynamicIconColor }]} />
         </TouchableOpacity>
       </View>
 
@@ -92,20 +93,51 @@ const LanguageScreen = () => {
         style={[
           styles.button,
           {
-            backgroundColor: darkMode ? BLACK_COLOR : THEME_COLOR,
-            borderColor: darkMode ? WHITE_COLOR : THEME_COLOR,
+            backgroundColor: THEME_COLOR,
+            borderColor:THEME_COLOR
           },
         ]}
         textStyle={{
-          color: darkMode ? WHITE_COLOR : BLACK_COLOR,
+          color: darkMode ? WHITE_COLOR : WHITE_COLOR,
         }}
       />
+
+      <Modal
+        animationType="slide"
+        transparent={true} 
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Select a Language</Text>
+        
+            <FlatList
+              data={languages} 
+              keyExtractor={(item) => item} 
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.languageItem}
+                  onPress={() => handleLanguageSelect(item)} 
+                >
+                  <Text style={styles.languageText}>{item}</Text>
+                </TouchableOpacity>
+              )}
+            />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)} 
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
-  container: {
+  container : {
     flex: 1,
     paddingHorizontal: 16,
     paddingVertical: 20,
@@ -139,6 +171,42 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     height: 50,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "transparent",
+  },
+  modalContent: {
+    width: "80%",
+    backgroundColor: WHITE_COLOR,
+    borderRadius: 10,
+    padding: 20,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  languageItem: {
+    padding: 15,
+    borderBottomWidth: 1,
+  },
+  languageText: {
+    fontSize: 16,
+  },
+  closeButton: {
+    marginTop: 20,
+    alignItems: "center",
+    padding: 10,
+    backgroundColor: THEME_COLOR,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: WHITE_COLOR,
+    fontWeight: "bold",
   },
 });
 

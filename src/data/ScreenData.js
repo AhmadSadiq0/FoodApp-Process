@@ -32,6 +32,33 @@ export const initialCartItems = [
     active: false,
     originalIndex: 2,
   },
+  {
+    id: 4,
+    name: 'Biryani',
+    price: 99,
+    serving: 'Single Serving',
+    image: BURGERIMG,
+    active: false,
+    originalIndex: 2,
+  },
+  {
+    id: 5,
+    name: 'Biryani',
+    price: 99,
+    serving: 'Single Serving',
+    image: BURGERIMG,
+    active: false,
+    originalIndex: 2,
+  },
+  {
+    id: 6,
+    name: 'Biryani',
+    price: 99,
+    serving: 'Single Serving',
+    image: BURGERIMG,
+    active: false,
+    originalIndex: 2,
+  },
 ];
 
 export const burgerData = [
@@ -39,25 +66,21 @@ export const burgerData = [
     id: 1,
     name: "Double Cheese Burger",
     price: 59,
-   image: BURGERIMG,
   },
   {
     id: 2,
     name: "Cheese Burger",
     price: 49,
-    image: BURGERIMG,
   },
   {
     id: 3,
     name: "Chicken Burger",
     price: 39,
-   image: BURGERIMG,
   },
   {
     id: 4,
     name: "Chicken Burger is available here in our resturent and how you can access it",
     price: 39,
-    image: BURGERIMG,
   },
 ];
 

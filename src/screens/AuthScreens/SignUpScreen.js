@@ -12,11 +12,16 @@ import {
 } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
+//Field
 import InputField from "../../components/CustomInput";
+//Button
 import CustomButton from "../../components/CustomButtom";
+//Icon
 import { Google_Icon } from "../../res/drawables";
+//colors
 import { THEME_TEXT_COLOR, GRAY_COLOR, BLACK_COLOR, WHITE_COLOR, THEME_COLOR } from "../../res/colors";
-
+//store
+import authStore from '../../store/AuthStore'
 const validationSchema = Yup.object({
   username: Yup.string()
     .min(3, 'Name must be at least 3 characters long')
@@ -29,9 +34,9 @@ const validationSchema = Yup.object({
     .required('Password is required'),
 });
 
-const SignUpScreen = () => {
+const SignUpScreen = ({navigation}) => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
+  const {signup} = authStore()
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -48,11 +53,29 @@ const SignUpScreen = () => {
     };
   }, []);
 
-  const handleSignUp = (values) => {
+  const handleSignUp = async (values) => {
     console.log('Sign Up Values:', values);
-    alert('Form Submitted!');
+  
+    try {
+      const response = await signup(values);
+      console.log('Signup Response:', response); 
+  
+      if (response.success) {
+        alert('Account created successfully! Please sign in.');
+        navigation.navigate('SignIn');
+      } else {
+        console.log('Full Response:', response);
+        if (response.status === 422) {
+          alert('Invalid input. Please check all fields.');
+        } else {
+          alert(response.message || 'Signup failed. Please try again.');
+        }
+      }
+    } catch (error) {
+      console.error('Signup Error:', error);
+    }
   };
-
+  
   return (
     <View
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -60,11 +83,11 @@ const SignUpScreen = () => {
     >
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
-        keyboardShouldPersistTaps="handled"
+        keyboardShouldPersistTaps="handled" 
       >
         <View style={styles.redContainer}>
           <Image
-            source={require("../../../assets/image.png")} // Correct path
+            source={require("../../../assets/image.png")} 
             style={styles.image}
             resizeMode="contain"
           />
@@ -74,7 +97,7 @@ const SignUpScreen = () => {
             <Text style={styles.text1}>Create your free account</Text>
             <View style={styles.box1}>
               <Text style={styles.text2}>Already have an account?</Text>
-              <Pressable onPress={() => alert("Sign In is pressed")}>
+              <Pressable  onPress={() => navigation.navigate('SignIn')}>
                 <Text style={styles.text3}>Sign In</Text>
               </Pressable>
             </View>
@@ -97,7 +120,33 @@ const SignUpScreen = () => {
           <Formik
             initialValues={{ username: '', email: '', password: '' }}
             validationSchema={validationSchema}
-            onSubmit={handleSignUp}
+            // onSubmit={async (values) => {
+            //   let newUser = {
+            //     address: "",
+            //     email: values.email,
+            //     firstname: "New Test",
+            //     lastname: "User",
+            //     password: values.password,
+            //     paymentMethod: {},
+            //     phone: "",
+            //     profileImage: "",
+            //     role: "user",
+            //     username: values.username
+            // }
+            //  await  handleSignUp(newUser)
+            // }}
+            onSubmit={async (values) => {
+              await handleSignUp({
+                ...values,
+                address: "",
+                firstname: "New Test",
+                lastname: "User",
+                paymentMethod: {},
+                phone: "",
+                profileImage: "",
+                role: "user"
+              });
+            }}
           >
             {({
               handleChange,
@@ -166,7 +215,7 @@ const styles = StyleSheet.create({
   },
   redContainer: {
     flex: 3,
-    backgroundColor: THEME_TEXT_COLOR,  
+    backgroundColor: THEME_COLOR,  
     justifyContent: "center",
   },
   container2: {
@@ -246,7 +295,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   errorText: {
-    color: THEME_TEXT_COLOR,
+    color: THEME_COLOR,
     fontSize: 12,
     marginBottom: 12,
     alignSelf :"start",

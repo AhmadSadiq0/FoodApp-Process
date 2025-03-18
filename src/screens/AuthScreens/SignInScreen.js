@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import authStore from '../../store/AuthStore'
 import CustomButton from '../../components/CustomButtom';
 import InputField from '../../components/CustomInput';
 import { Google_Icon } from '../../res/drawables';
@@ -24,7 +25,8 @@ const validationSchema = Yup.object().shape({
 });
 const SignInScreen = () => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
+  const [signInResponse, setSignInResponse] = useState(null); 
+  const {login} = authStore()
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -39,11 +41,16 @@ const SignInScreen = () => {
       keyboardDidShowListener.remove();
     };
   }, []);
-  const handleSignIn = (values) => {
-    console.log('Sign In Values:', values);
-    alert('Form Submitted!');
-  };
-
+  const handleSignIn=async(values)=>{
+    console.log('Sign Up Values:', values);
+    const response =  await login({
+      identifier: values.email,
+      password: values.password,
+    });
+    console.log('Sign In Response:', response);
+    setSignupResponse(response);
+  }
+  
   return (
     <View behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
@@ -87,7 +94,7 @@ const SignInScreen = () => {
           <Formik initialValues={{ email: "", password: "" }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-              alert(`Signed Up with: ${JSON.stringify(values)}`);
+              handleSignIn(values)
             }}>
             {({
               handleChange,
@@ -228,3 +235,4 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
 });
+export default SignInScreen;

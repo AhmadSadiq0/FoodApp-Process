@@ -6,7 +6,6 @@ import { Back_Ground, THEME_COLOR, WHITE_COLOR, BLACK_COLOR } from '../res/color
 import { DISCOUNT_ICON, ARROW_ICON } from '../res/drawables';
 //navigation
 import { useNavigation } from '@react-navigation/native';
-
 const Header1 = (props) => {
     const {
         title = "Featured Discounts",
@@ -16,12 +15,10 @@ const Header1 = (props) => {
         containerStyle = {},
     } = props;
     const navigation = useNavigation();
-
     return (
         <View style={[styles.maincontainer]}>
             <View style={[styles.container, containerStyle]}>
                 <View style={styles.profileContainer}>
-                    {/* Make the arrow icon clickable to go back */}
                     <TouchableOpacity  onPress={() => navigation.goBack()}>
                         <Image source={arrowIcon} style={styles.arrowIcon} />
                     </TouchableOpacity>
@@ -31,7 +28,7 @@ const Header1 = (props) => {
                         </View>
                     )}
                 </View>
-
+                
                 <View style={styles.textContainer}>
                     <Text style={[styles.headerText, headerTextStyle]}>{title}</Text>
                 </View>

@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 50,
     backgroundColor: THEME_COLOR,
-  },
+  }, 
 });
 
 export default SettingScreen;

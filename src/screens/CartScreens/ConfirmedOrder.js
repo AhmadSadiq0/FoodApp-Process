@@ -24,7 +24,7 @@ const ConfirmedOrder = () => {
 
   return (
     <View style={[styles.container, darkMode && styles.containerDark]}>
-      <Header1 title="Order Confirmed" discountIcon={false}/>
+      <Header1 title="Order Confirmed" discountIcon={false} style={styles.header}/>
       <View style={styles.content}>
         <Image source={IMAGE29} style={styles.image} />
         <Text style={[styles.titleText, darkMode && styles.titleTextDark]}>Order placed successfully!</Text>
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     backgroundColor: WHITE_COLOR,
-    padding: 16,
+    // padding: 16,
   },
   containerDark: {
     backgroundColor: BLACK_COLOR,
@@ -118,6 +118,10 @@ const styles = StyleSheet.create({
   cartButtonTextDark: {
     color: BLACK_COLOR,
   },
+  header:{
+    width:"100%",
+    
+  }
 });
 
 export default ConfirmedOrder;

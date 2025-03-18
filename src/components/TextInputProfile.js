@@ -9,11 +9,10 @@ import { GRAY_COLOR, WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, BLACK_COLOR } f
 //Images
 import { IMAGE28 } from "../res/drawables";
 const EditableField = (props) => {
-  const { label, value, showEditIcon } = props;
+  const { label, value, showEditIcon,showButton } = props;
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(value);
   const { darkMode } = useThemeStore();
-
   const handleEdit = () => setIsEditing(true);
   const handleSave = () => setIsEditing(false);
 
@@ -46,17 +45,18 @@ const EditableField = (props) => {
   );
 };
 
-const TextInputProfile = ({ showEditIcon, showButton }) => {
-  const { darkMode } = useThemeStore();
+const TextInputProfile = ({ showEditIcon, showButton,username, email, phoneNo, address, debitCardDetail,password }) => {
+  // console.log("Profile Data:", { username, email, phoneNo, address, debitCardDetail, password }); // Debugging
 
+  const { darkMode } = useThemeStore(); 
   return (
     <View style={[styles.container, { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR }]}>
-      <EditableField label="Full Name" value="ZainZaka" showEditIcon={showEditIcon} />
-      <EditableField label="Email" value="xainzaka@gmail.com" showEditIcon={showEditIcon} />
-      <EditableField label="Password" value="12345678" showEditIcon={showEditIcon} />
-      <EditableField label="PhoneNo" value="12345678" showEditIcon={showEditIcon} />
-      <EditableField label="Address" value="12345678" showEditIcon={showEditIcon} />
-      <EditableField label="DebitCardDetail" value="12345678" showEditIcon={showEditIcon} />
+      <EditableField label="Full Name" value={username} showEditIcon={showEditIcon} />
+      <EditableField label="Email" value={email} showEditIcon={showEditIcon} />
+      <EditableField label="Password" value={password} showEditIcon={showEditIcon} />
+      <EditableField label="PhoneNo" value={phoneNo} showEditIcon={showEditIcon} />
+      <EditableField label="Address" value={address} showEditIcon={showEditIcon} />
+      <EditableField label="DebitCardDetail" value={debitCardDetail} showEditIcon={showEditIcon} />
       {showButton && <CustomButton title={"UpdateProfile"} textStyle={{ color: WHITE_COLOR }} />}
     </View>
   );
@@ -94,4 +94,4 @@ const styles = StyleSheet.create({
     tintColor: THEME_COLOR,
   },
 });
-export default TextInputProfile;
+export default TextInputProfile; 

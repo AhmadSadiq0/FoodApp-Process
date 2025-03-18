@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -6,42 +6,97 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  FlatList,
+  Modal,
+  TouchableWithoutFeedback,
 } from "react-native";
-//colors
+// Importing Colors
 import {
   THEME_COLOR,
   WHITE_COLOR,
   Green_Color,
   THEME_TEXT_COLOR,
   Back_Ground,
-  BLACK_COLOR
+  BLACK_COLOR,
 } from "../res/colors";
-//icon
-import { Profie_Image, Bell_ICON, Search_Icon } from "../res/drawables";
-// SearchBar Component
-const SearchBar = ({ placeholder }) => (
-  <View style={styles.searchContainer}>
-    <TextInput
-      style={styles.searchBar}
-      placeholder={placeholder}
-      placeholderTextColor={THEME_TEXT_COLOR}
-    />
-    <Image source={Search_Icon} style={styles.searchIcon} />
-  </View>
-);
+
+// Importing Icons
+import { Profie_Image, Bell_ICON, Search_Icon,LOCATION_ICON} from "../res/drawables";
+
+const BranchDropdown = ({ selectedBranch, onSelectBranch }) => {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const branches = ["Tibba Sultan Pur", "Jahania", "Multan"];
+
+  return (
+    <View style={styles.branchContainer}>
+      <TouchableOpacity
+        style={styles.branchButton}
+        onPress={() => setShowDropdown(true)}
+      >
+        <View style={styles.branchButtonContent}>
+          <Image source={LOCATION_ICON} style={styles.locationIcon} />
+          <Text style={styles.branchText}>
+            {selectedBranch || "Select Branch"}
+          </Text>
+        </View>
+      </TouchableOpacity>
+
+      <Modal
+        transparent={true}
+        visible={showDropdown}
+        onRequestClose={() => setShowDropdown(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setShowDropdown(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
+
+        <View style={styles.dropdownContainer}>
+          <FlatList
+            data={branches}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={[
+                  styles.dropdownItem,
+                  item === selectedBranch && styles.selectedDropdownItem,
+                ]}
+                onPress={() => {
+                  onSelectBranch(item);
+                  setShowDropdown(false);
+                }}
+              >
+                <Text
+                  style={[
+                    styles.dropdownText,
+                    item === selectedBranch && styles.selectedDropdownText,
+                  ]}
+                >
+                  {item}
+                </Text>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+      </Modal>
+    </View>
+  );
+};
 
 // Header Component
 const Header = (props) => {
+  const [selectedBranch, setSelectedBranch] = useState("");
   const {
     username = "Huzaifa Saddique",
-    title = "Ahmad Kitchen",
     Welcomermsg = "Welcome to",
     containerStyle = {},
     textContainer = {},
     showSearch = true,
     showShadow = false,
+    showBellIcon = true,
     onNotificationPressed,
+    navigation,
   } = props;
+
   return (
     <View style={styles.mainContainer}>
       <View
@@ -54,23 +109,36 @@ const Header = (props) => {
         <View style={styles.profileContainer}>
           <Image source={Profie_Image} style={styles.image} />
           <Text style={styles.usernameText}>{username}</Text>
-          <View style={styles.bellContainer}>
-            {onNotificationPressed && (
-              <>
-                <TouchableOpacity onPress={onNotificationPressed}>
-                  <Image source={Bell_ICON} style={styles.bellIcon} />
-                </TouchableOpacity>
-                <View style={styles.notificationBadge} />
-              </>
-            )}
-          </View>
+
+          {showBellIcon && (
+            <View style={styles.bellContainer}>
+              <TouchableOpacity onPress={() => navigation.navigate("Notifications")}>
+                <Image source={Bell_ICON} style={styles.bellIcon} />
+              </TouchableOpacity>
+              <View style={styles.notificationBadge} />
+            </View>
+          )}
         </View>
+
+        
         <View style={[styles.textContainer, textContainer]}>
           <Text style={styles.welcomeText}>{Welcomermsg}</Text>
-          <Text style={styles.kitchenText}>{title}</Text>
+         
+          <BranchDropdown
+            selectedBranch={selectedBranch}
+            onSelectBranch={setSelectedBranch}
+          />
         </View>
+
         {showSearch && (
-          <SearchBar placeholder="Search Your Favourite Food Item" />
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchBar}
+              placeholder="Search Your Favourite Food Item"
+              placeholderTextColor={THEME_TEXT_COLOR}
+            />
+            <Image source={Search_Icon} style={styles.searchIcon} />
+          </View>
         )}
       </View>
     </View>
@@ -80,16 +148,16 @@ const Header = (props) => {
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: Back_Ground,
+    paddingBottom: 20,
   },
   container: {
-    height: 200,
+    height: 230,
     width: "100%",
     padding: 30,
-    marginBottom: 40,
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
     backgroundColor: THEME_COLOR,
-    alignItems: "center",
+    // alignItems: "center",
   },
   shadowContainer: {
     shadowColor: BLACK_COLOR,
@@ -114,24 +182,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: WHITE_COLOR,
-    marginRight: 50,
-  },
-  searchBar: {
-    height: 65,
-    backgroundColor: Back_Ground,
-    borderRadius: 50,
-    paddingLeft: 50,
-    width: "100%",
-    marginTop: 30,
-    color: THEME_TEXT_COLOR,
-    shadowColor: BLACK_COLOR,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 20,
+    marginRight: 90,
+    
   },
   textContainer: {
-    alignItems: "center",
+    // alignItems: "center",
     marginVertical: 10,
   },
   welcomeText: {
@@ -143,16 +198,16 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "bold",
     color: WHITE_COLOR,
-    textAlign: "center",
+    // textAlign: "center",
     fontFamily: "Ribeye",
   },
   bellContainer: {
     flexDirection: "row",
-    alignItems: "center",
+    // alignItems: "center",
   },
   bellIcon: {
-    width: 25,
-    height: 25,
+    width: 37,
+    height: 37,
   },
   notificationBadge: {
     width: 10,
@@ -168,6 +223,20 @@ const styles = StyleSheet.create({
     marginTop: -30,
     position: "relative",
   },
+  searchBar: {
+    height: 65,
+    backgroundColor: Back_Ground,
+    borderRadius: 50,
+    paddingLeft: 50,
+    width: "100%",
+    marginTop: 30,
+    color: THEME_TEXT_COLOR,
+    shadowColor: BLACK_COLOR,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 20,
+  },
   searchIcon: {
     position: "absolute",
     left: 20,
@@ -175,6 +244,65 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
   },
+
+  branchContainer: {
+    marginTop: 5,
+    alignItems: "center",
+  },
+  branchButton: {
+    backgroundColor: THEME_COLOR,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10, 
+  },
+  branchText: {
+    fontSize: 23,
+    color: WHITE_COLOR,
+    fontWeight: "bold",
+  },
+  dropdownContainer: {
+    backgroundColor: WHITE_COLOR,
+    borderRadius: 10,
+    marginTop: 5,
+    width: "auto",
+    elevation: 5,
+    position: "absolute",
+    zIndex: 10,
+  },
+ 
+  dropdownItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    flexDirection: 'row', 
+    alignItems: 'center',
+  },
+  selectedDropdownItem: {
+    backgroundColor: THEME_TEXT_COLOR, 
+  },
+  dropdownText: {
+    fontSize: 16,
+    color: BLACK_COLOR,
+  },
+  locationIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 10, 
+    resizeMode: "contain", 
+  tintColor: "white",
+  },
+  branchButtonContent: {
+    flexDirection: "row-reverse",
+    alignItems: "center",
+    gap: 10, 
+  },
+  selectedDropdownText: {
+    color: WHITE_COLOR, 
+  },
+  modalOverlay: {
+    flex: 1,
+  },
+  
 });
 
 export default Header;

@@ -10,14 +10,12 @@ import { Back_Ground, WHITE_COLOR, BLACK_COLOR } from "../../res/colors";
 import useThemeStore from "../../../zustand/ThemeStore";
 //RawBottomSheet
 import RBSheet from "react-native-raw-bottom-sheet";
-
 const paymentMethods = [
   { name: "Debit Card", image: IMAGE25 },
   { name: "App Wallet", image: IMAGE26 },
   { name: "Cash on Delivery", image: IMAGE27 },
 ];
-
-const OrderConfirmationScreen = (props) => {
+const OrderConfirmationScreen = ( props ) => {
   const { navigation } = props;
   const { darkMode } = useThemeStore();
   const [selectedPayment, setSelectedPayment] = useState(null);
@@ -34,8 +32,9 @@ const OrderConfirmationScreen = (props) => {
   };
 
   return (
+
     <View style={[styles.container, darkMode && styles.containerDark]}>
-      <Header1 title="Order Confirmation" />
+      {/* //<Header1 title="Order Confirmation" navigation={navigation}/>   */}
       <DeliveryAddress />
       <PaymentComponent paymentMethods={paymentMethods} onSelectPayment={handlePaymentSelection} />
       <RBSheet
@@ -46,7 +45,6 @@ const OrderConfirmationScreen = (props) => {
           container: {
             borderTopLeftRadius: 40,
             borderTopRightRadius: 40,
-            backgroundColor: darkMode ? BLACK_COLOR : Back_Ground,
           },
         }}
       >

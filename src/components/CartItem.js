@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 //images
 import { DELETE_ICON } from '../res/drawables';  
 //colors
-import { WHITE_COLOR, THEME_COLOR, GRAY_COLOR, Back_Ground } from '../res/colors';  
+import { WHITE_COLOR, THEME_COLOR, GRAY_COLOR, Back_Ground, BLACK_COLOR } from '../res/colors';  
 import useThemeStore from '../../zustand/ThemeStore';
 
 const CartItem = ({ item, onPressItem, onDeleteItem }) => {
@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   cartItemDark: {
-    backgroundColor: 'black',
-    borderColor: 'white',
+    backgroundColor: BLACK_COLOR,
+    borderColor: WHITE_COLOR,
   },
   cartItemImage: {
     width: 50,
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     color: THEME_COLOR,
   },
   cartItemNameDark: {
-    color: 'white',
+    color: WHITE_COLOR,
   },
   cartItemPrice: {
     fontSize: 12,

@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 //images
 import { BURGERIMG } from "../res/drawables";
 //colors
@@ -15,7 +15,28 @@ import useThemeStore from "../../zustand/ThemeStore";
 
 const AddCard = (props) => {
   const { name, description, image, price, buttonText, onAddToCart } = props;
+
   const { darkMode } = useThemeStore();
+
+  const [selectedSize, setSelectedSize] = useState("Small");
+
+  const handleSizeSelection = (size) => {
+    setSelectedSize(size);
+  };
+
+  const getAdjustedPrice = () => {
+    switch (selectedSize) {
+      case "Small":
+        return 50;
+      case "Medium":
+        return 100;
+      case "Large":
+        return 150;
+       
+      default:
+        return 0;
+    }
+  };
 
   return (
     <View
@@ -42,6 +63,31 @@ const AddCard = (props) => {
         {description}
       </Text>
       <Image source={image} style={styles.image} />
+
+      {/* Size Selector */}
+      <View style={styles.sizeContainer}>
+        {["Small", "Medium", "Large", ].map((size) => (
+          <TouchableOpacity
+            key={size}
+            style={{
+              ...styles.sizeButton,
+              backgroundColor:
+                selectedSize === size ? THEME_COLOR : GRAY_COLOR,
+            }}
+            onPress={() => handleSizeSelection(size)}
+          >
+            <Text
+              style={{
+                ...styles.sizeButtonText,
+                color: selectedSize === size ? WHITE_COLOR : BLACK_COLOR,
+              }}
+            >
+              {size}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      {/* Price Display */}
       <View style={styles.priceContainer}>
         <Text
           style={{
@@ -57,16 +103,17 @@ const AddCard = (props) => {
             color: darkMode ? THEME_COLOR : THEME_COLOR,
           }}
         >
-          {`Rs. ${price}`}
+          {`Rs. ${getAdjustedPrice()}`}
         </Text>
       </View>
+
       <CustomButton
         title={buttonText || "Add To Cart"}
         style={{
           ...styles.buttonText,
           color: darkMode ? WHITE_COLOR : BLACK_COLOR,
         }}
-        onPress={onAddToCart}
+        // onPress={() => onAddToCart({ ...props, size: selectedSize })}
       />
     </View>
   );
@@ -97,6 +144,22 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     marginVertical: 8,
   },
+  sizeContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    marginVertical: 10,
+  },
+  sizeButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    margin: 4,
+  },
+  sizeButtonText: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
   priceContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -116,6 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "700",
     paddingHorizontal: 100,
+    // marginBottom: 40,
   },
 });
 

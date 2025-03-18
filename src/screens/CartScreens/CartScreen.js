@@ -2,16 +2,17 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import React, { useState, useRef } from 'react';
-import { StyleSheet, View, Text, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, FlatList,ScrollView } from 'react-native';
 import { CartItem, SummaryCard } from '../../components'; 
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { initialCartItems } from '../../data/ScreenData';
 import { Back_Ground, THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR } from '../../res/colors';
 import useThemeStore from "../../../zustand/ThemeStore";
-
+import useAuthStore from "../../store/AuthStore";
+import Header from "../../components/Header";
 const { width: deviceWidth } = Dimensions.get('window');
-
 const CartScreen = ({ navigation }) => {
+  const {user}= useAuthStore()
   const [cartItems, setCartItems] = useState(initialCartItems);
   const [selectedItems, setSelectedItems] = useState([]);
   const refRBSheet = useRef(null);
@@ -44,7 +45,10 @@ const CartScreen = ({ navigation }) => {
 
   return (
     <View style={[styles.container, darkMode && styles.containerDark]}>
+      {/* <Header navigation={navigation} username={user.username} showBellIcon={false} /> */}
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
       <Text style={[styles.headingText, darkMode && styles.headingTextDark]}>Check Out</Text>
+
 
       <FlatList
         data={cartItems}
@@ -57,7 +61,8 @@ const CartScreen = ({ navigation }) => {
         )}
         keyExtractor={item => item.id.toString()}
         style={styles.flatList}
-      />
+      />   
+      </ScrollView>    
       <RBSheet
         ref={refRBSheet}
         height={300}
@@ -87,7 +92,7 @@ const CartScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 10,
     backgroundColor: Back_Ground,
   },
   containerDark: {
