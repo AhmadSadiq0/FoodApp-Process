@@ -1,10 +1,14 @@
 import { create } from 'zustand';
-import { fetchCategorizedItemsService } from '../services/ServiceItem';
+import { fetchCategorizedItemsService, fetchHomeSectionItemsService } from '../services/ServiceItem';
 
 const initialState = {
     categorized_items: [],
     categorized_loading: false,
     categorized_error: null,
+    
+    homeSectionItems : [],
+    homeSectionItemsLoading : false,
+    homeSectionItemsError : null
 };
 
 const useItemStore = create((set) => ({
@@ -22,6 +26,21 @@ const useItemStore = create((set) => ({
             }
         } catch (error) {
             set({ categorized_items: [], categorized_loading: false, categorized_error: error.message });
+        }
+    },
+
+    fetchHomeSectionItems: async (branchId) => {
+        set({ homeSectionItemsLoading: true, homeSectionItemsError: null });
+        try {
+            const response = await fetchHomeSectionItemsService(branchId);
+            console.log(response.data)
+            if (response.success) {
+                set({ homeSectionItems : response.data.data, homeSectionItemsLoading: false });
+            } else {
+                set({ homeSectionItems : [], homeSectionItemsLoading: false, homeSectionItemsError: response.message });
+            }
+        } catch (error) {
+            set({ homeSectionItems : [], homeSectionItemsLoading: false, homeSectionItemsError: error.message });
         }
     },
 

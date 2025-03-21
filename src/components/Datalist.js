@@ -51,7 +51,7 @@ const Datalist = (props) => {
             <Animated.View style={[styles.cardContainer, { transform: [{ scale }] }]}>
               <BurgerCard
                 name={item.name}
-                price={item.price}
+                price={item?.variants[0]?.price}
                 image={item.image}
                 description={item.description}
                 onAdd={() => onAddToCart(item)}

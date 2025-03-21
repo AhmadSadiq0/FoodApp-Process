@@ -12,18 +12,19 @@ import RBSheet from "react-native-raw-bottom-sheet";
 //images
 import { BURGERIMG, HEART_ICON } from "../../res/drawables";
 //stores
-import useThemeStore from "../../../zustand/ThemeStore";
-import CustomButton from "../../components/CustomButtom";
-import useAuthStore from "../../store/AuthStore";
-import useItemStore from "../../store/ItemStore";
-import { ActivityIndicator } from "react-native";
-import useBranchStore from "../../store/BranchStore";
-
+ import useThemeStore from "../../../zustand/ThemeStore";
+ import CustomButton from "../../components/CustomButtom";
+ import useAuthStore from "../../store/AuthStore";
+ import useItemStore from "../../store/ItemStore";
+ import { ActivityIndicator } from "react-native";
+ import useBranchStore from "../../store/BranchStore";
+ import useSearchStore from "../../store/SearchStore";
  
-const HomeScreen = ({ navigation }) => {
+ const HomeScreen = ({ navigation }) => {
+  const { searchQuery } = useSearchStore();
   const {user} = useAuthStore();
   const { branches, branches_loading, branches_error, fetchBranches } = useBranchStore(); 
-  const { categorized_items, categorized_loading, categorized_error , fetchItemsByBranch } = useItemStore();
+  const {  fetchHomeSectionItems , homeSectionItems , homeSectionItemsLoading , homeSectionItemsError } = useItemStore();
   const refRBSheet = useRef();
   const [selectedBurger, setSelectedBurger] = useState(null);
   const { darkMode, toggleDarkMode } = useThemeStore();
@@ -49,15 +50,23 @@ const HomeScreen = ({ navigation }) => {
       burger.id === burgerId ? { ...burger, isFavorite: !burger.isFavorite } : burger
     ));
   };
-
   const getCategorizedItems = async () => {
-    fetchItemsByBranch("67c2cf8113ac30409ef067ec")
+    fetchHomeSectionItems("67c2cf8113ac30409ef067ec")
   };
 
   useEffect(() => { 
     getCategorizedItems();  
     getBranches();
   }, []);
+
+ // Filter the data based on the search query
+ const filteredData = homeSectionItems.map(category => ({
+  ...category,
+  items: category.items.filter(item => 
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  ),
+ })).filter(category => category.items.length > 0);
+
 
   const renderDatalist = ({ item }) => (
     <Datalist
@@ -81,7 +90,7 @@ const HomeScreen = ({ navigation }) => {
           console.log("this user data" , user)
       },[])
 
-  return (
+   return (
     <View style={[styles.container, { backgroundColor: darkMode ? BLACK_COLOR : Back_Ground }]}>
       {/* <Header navigation={navigation} username = {user.username} /> */}
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -90,7 +99,8 @@ const HomeScreen = ({ navigation }) => {
     { backgroundColor: darkMode ? BLACK_COLOR : THEME_COLOR },
   ]}   textStyle={{ color: darkMode ? WHITE_COLOR : WHITE_COLOR }}/> */}
       <FlatList
-         data={categorized_items}
+        //  data={categorized_items}
+        data={filteredData}
          renderItem={renderDatalist}
         keyExtractor={(item) => item?.categoryId.toString()}
         // ListEmptyComponent={() => {
@@ -100,7 +110,7 @@ const HomeScreen = ({ navigation }) => {
         //   </View>
         // }}
         ListEmptyComponent={() => {
-          if (categorized_loading) {
+          if (homeSectionItemsLoading) {
             return (
               <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: 300 }}>
                 <ActivityIndicator size="large" color={THEME_COLOR} />
@@ -109,7 +119,7 @@ const HomeScreen = ({ navigation }) => {
           }
           return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-              <Text>{categorized_error ? categorized_error : "No items found"}</Text>
+              <Text>{homeSectionItemsError ? homeSectionItemsError : "No items found"}</Text>
             </View>
           );
         }}
@@ -136,7 +146,7 @@ const HomeScreen = ({ navigation }) => {
         {selectedBurger && (
           <AddCard
             name={selectedBurger.name}
-            description="A delicious choice!!!"
+            description={selectedBurger.description}
             image={selectedBurger.image}
             price={selectedBurger.price}
             onAddToCart={() => console.log(`${selectedBurger.name} added to cart!`)}
@@ -161,6 +171,5 @@ const styles = StyleSheet.create({
     marginHorizontal:7,
     borderRadius: 10,
   },
-});
-
-export default HomeScreen;
+ });
+ export default HomeScreen;

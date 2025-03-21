@@ -1,17 +1,46 @@
-import React, { useState, useRef } from "react";
-import { ScrollView, StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
-import { WHITE_COLOR, THEME_COLOR, Back_Ground, GRAY_COLOR, BLACK_COLOR } from "../../res/colors";
+import {
+  WHITE_COLOR,
+  THEME_COLOR,
+  Back_Ground,
+  GRAY_COLOR,
+  BLACK_COLOR,
+} from "../../res/colors";
 import useThemeStore from "../../../zustand/ThemeStore";
 import { Header, AddCard, Datalist, BurgerItem } from "../../components";
-import { burgerData } from "../../data/ScreenData";
-import { categories } from "../../data/ScreenData";
 import useAuthStore from "../../store/AuthStore";
+import useSearchStore from "../../store/SearchStore";
+import useItemStore from "../../store/ItemStore";
+import useCategoryStore from "../../store/CategoryStore"; // Import the category store
 
 const MenuScreen = () => {
   const { user } = useAuthStore();
   const { darkMode } = useThemeStore();
-  const [selectedCategory, setSelectedCategory] = useState();
+  const { searchQuery } = useSearchStore();
+  const {
+    categorized_items = [], 
+    categorized_loading,
+    categorized_error,
+    fetchItemsByBranch,
+  } = useItemStore();
+  const {
+    categories = [],
+    categoriesLoading,
+    categoriesError,
+    fetchCategories,
+  } = useCategoryStore(); 
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const refRBSheet = useRef();
 
@@ -20,34 +49,67 @@ const MenuScreen = () => {
     refRBSheet.current.open();
   };
 
+  
+  useEffect(() => {
+    fetchItemsByBranch("67c2cf8113ac30409ef067ec"); 
+    fetchCategories(); 
+  }, []);
+
+  // Filter categorized items based on search query
+  const filteredData = categorized_items
+  .filter(category => 
+    !selectedCategory || category.categoryId == selectedCategory // Filter by categoryId
+  )
+  .map(category => ({
+    ...category,
+    items: category.items.filter(item =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    ),
+  }))
+  .filter(category => category.items.length > 0); // Ensure only categories with items are shown
+
+
+  // Render each category item
   const renderCategory = ({ item }) => {
-    const isSelected = selectedCategory === item.id;
+    const isSelected = selectedCategory == item._id;
     return (
       <TouchableOpacity
         style={[
           styles.categoryCard,
           {
-            backgroundColor: isSelected ? THEME_COLOR : darkMode ? BLACK_COLOR : WHITE_COLOR,
-            marginTop: 30,
+            backgroundColor: isSelected
+              ? THEME_COLOR
+              : darkMode
+              ? BLACK_COLOR
+              : WHITE_COLOR,
+            marginTop: 5,
           },
         ]}
-        onPress={() => setSelectedCategory(item.id)}
+        onPress={() => { selectedCategory == item._id ? setSelectedCategory(null) : setSelectedCategory(item._id)}}
       >
         <Image
-          source={item.image}
+          source={{ uri: item.image }} 
           style={[
             styles.image,
-            {
-              tintColor: isSelected ? WHITE_COLOR : darkMode ? WHITE_COLOR : THEME_COLOR,
-            },
+            // {
+            //   tintColor: isSelected
+            //     ? WHITE_COLOR
+            //     : darkMode
+            //     ? WHITE_COLOR
+            //     : THEME_COLOR,
+            // },
           ]}
-          resizeMode="contain"
+          resizeMode="cover"
         />
         <Text
           style={[
             styles.categoryText,
             {
-              color: isSelected ? WHITE_COLOR : darkMode ? WHITE_COLOR : THEME_COLOR,
+              color: isSelected
+                ? WHITE_COLOR
+                : darkMode
+                ? WHITE_COLOR
+                : THEME_COLOR,
             },
           ]}
         >
@@ -57,46 +119,107 @@ const MenuScreen = () => {
     );
   };
 
+  // Render the list of categories
+  const renderCategoryList = () => {
+    if (categoriesLoading) {
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            height: 100,
+          }}
+        >
+          <ActivityIndicator size="large" color={THEME_COLOR} />
+        </View>
+      );
+    }
+    if (categoriesError) {
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            height: 100,
+          }}
+        >
+          <Text style={{ color: darkMode ? WHITE_COLOR : BLACK_COLOR }}>
+            {categoriesError}
+          </Text>
+        </View>
+      );
+    }
+    return (
+      <FlatList
+        data={categories} 
+        renderItem={renderCategory}
+        keyExtractor={(item) => item._id}
+        contentContainerStyle={styles.scrollContainer}
+        numColumns={3}
+        showsVerticalScrollIndicator={false}
+      />
+    );
+  };
+
+  // Render each item in the categorized list
+  const renderDatalist = ({ item }) => (
+    <Datalist
+      title={item.categoryName}
+      seeMoreText=""
+      onSeeMorePress={() => console.log("See All pressed!")}
+      data={item.items}
+      onAddToCart={handleAddToCart}
+    />
+  );
+
   return (
     <View style={[styles.mainContainer, darkMode && styles.mainContainerDark]}>
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         <FlatList
-          data={burgerData}
+          data={filteredData}
           ListHeaderComponent={
             <View style={[styles.header, darkMode && styles.headerDark]}>
-              <FlatList
-                data={categories}
-                renderItem={renderCategory}
-                keyExtractor={(item) => item.id.toString()}
-                contentContainerStyle={styles.scrollContainer}
-                numColumns={3}
-                showsVerticalScrollIndicator={false}
-              />
-              <View>
-                <Datalist
-                  title="Discount"
-                  seeMoreText=""
-                  data={burgerData}
-                  onAddToCart={handleAddToCart}
-                />
-              </View>
-              <View>
-                <Datalist
-                  title="Discounts"
-                  seeMoreText=""
-                  onSeeMorePress={() => console.log("See All pressed!")}
-                  data={burgerData}
-                  onAddToCart={handleAddToCart}
-                />
-              </View>
+              {renderCategoryList()}
             </View>
           }
-          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderDatalist}
+          keyExtractor={(item) => item?.categoryId?.toString() || Math.random().toString()}
+          ListEmptyComponent={() => {
+            if (categorized_loading) {
+              return (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: 300,
+                  }}
+                >
+                  <ActivityIndicator size="large" color={THEME_COLOR} />
+                </View>
+              );
+            }
+            return (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text>
+                  {categorized_error ? categorized_error : "No items found"}
+                </Text>
+              </View>
+            );
+          }}
         />
       </ScrollView>
       <RBSheet
         ref={refRBSheet}
-        height={"auto"}
+        height={500}
         draggable={true}
         customStyles={{
           container: {
@@ -140,21 +263,21 @@ const styles = StyleSheet.create({
   },
   categoryCard: {
     width: 100,
-    height: 100,
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    margin: 8,
+    padding : 8,
+    marginHorizontal: 10,
   },
   image: {
-    width: 51,
-    height: 50,
+    width: 70,
+    height: 60,
+    borderRadius: 10,
     marginBottom: 8,
   },
   categoryText: {
-    fontWeight: "bold",
+    fontWeight: "400",
     textAlign: "center",
   },
 });
-
 export default MenuScreen;

@@ -53,7 +53,7 @@ const TextInputProfile = ({ showEditIcon, showButton,username, email, phoneNo, a
     <View style={[styles.container, { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR }]}>
       <EditableField label="Full Name" value={username} showEditIcon={showEditIcon} />
       <EditableField label="Email" value={email} showEditIcon={showEditIcon} />
-      <EditableField label="Password" value={password} showEditIcon={showEditIcon} />
+      {/* <EditableField label="Password" value={password} showEditIcon={showEditIcon} /> */}
       <EditableField label="PhoneNo" value={phoneNo} showEditIcon={showEditIcon} />
       <EditableField label="Address" value={address} showEditIcon={showEditIcon} />
       <EditableField label="DebitCardDetail" value={debitCardDetail} showEditIcon={showEditIcon} />

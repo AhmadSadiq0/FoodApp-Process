@@ -9,7 +9,8 @@ import {
     URL_TO_CREATE_ITEM, 
     URL_TO_UPDATE_ITEM, 
     URL_TO_DELETE_ITEM, 
-    URL_TO_GET_CATEGORIZED_ITEMS
+    URL_TO_GET_CATEGORIZED_ITEMS,
+    URL_TO_GET_HOME_SECTION_ITEMS
 } from '../res/api';
 
 const fetchItemsService = async () => {
@@ -46,6 +47,36 @@ const fetchItemsService = async () => {
 const fetchCategorizedItemsService = async (branchId) => {
     try {
         const response = await getRequest(`${URL_TO_GET_CATEGORIZED_ITEMS}/${branchId}`);
+
+        if (response.success) {
+            return {
+                success: true,
+                status: response.status,
+                data: response.data,
+                message: 'Items successfully fetched!'
+            };
+        } else {
+            return {
+                success: false,
+                status: response.status,
+                data: {},
+                message: response.message
+            };
+        }
+
+    } catch (error) {
+        return {
+            success: false,
+            status: error.response?.status,
+            data: null,
+            message: `Failed to fetch items: ${error.message || error}`
+        };
+    }
+};
+
+const fetchHomeSectionItemsService = async (branchId) => {
+    try {
+        const response = await getRequest(`${URL_TO_GET_HOME_SECTION_ITEMS}/${branchId}`);
 
         if (response.success) {
             return {
@@ -176,6 +207,7 @@ const deleteItemService = async (itemId) => {
 export {
     fetchItemsService,
     fetchCategorizedItemsService,
+    fetchHomeSectionItemsService,
     createItemService,
     updateItemService,
     deleteItemService,

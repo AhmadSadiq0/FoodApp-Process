@@ -19,6 +19,7 @@ import {
   Back_Ground,
   BLACK_COLOR,
 } from "../res/colors";
+import useSearchStore from "../store/SearchStore";
 
 // Importing Icons
 import { Profie_Image, Bell_ICON, Search_Icon,LOCATION_ICON} from "../res/drawables";
@@ -80,11 +81,12 @@ const BranchDropdown = ({ selectedBranch, onSelectBranch }) => {
       </Modal>
     </View>
   );
-};
+ };
 
-// Header Component
-const Header = (props) => {
+ // Header Component
+ const Header = (props) => {
   const [selectedBranch, setSelectedBranch] = useState("");
+  const { setSearchQuery } = useSearchStore();
   const {
     username = "Huzaifa Saddique",
     Welcomermsg = "Welcome to",
@@ -97,6 +99,10 @@ const Header = (props) => {
     navigation,
   } = props;
 
+  const handleSearch = (query) => {
+    setSearchQuery(query); 
+  };
+
   return (
     <View style={styles.mainContainer}>
       <View
@@ -108,7 +114,15 @@ const Header = (props) => {
       >
         <View style={styles.profileContainer}>
           <Image source={Profie_Image} style={styles.image} />
-          <Text style={styles.usernameText}>{username}</Text>
+          {/* <Text style={styles.usernameText}>{username}</Text> */}
+          <Text
+            style={[
+              styles.usernameText,
+              { marginRight: showBellIcon ? 90 : 140 }, 
+            ]}
+          >
+            {username}
+          </Text>
 
           {showBellIcon && (
             <View style={styles.bellContainer}>
@@ -119,8 +133,6 @@ const Header = (props) => {
             </View>
           )}
         </View>
-
-        
         <View style={[styles.textContainer, textContainer]}>
           <Text style={styles.welcomeText}>{Welcomermsg}</Text>
          
@@ -136,6 +148,7 @@ const Header = (props) => {
               style={styles.searchBar}
               placeholder="Search Your Favourite Food Item"
               placeholderTextColor={THEME_TEXT_COLOR}
+              onChangeText={handleSearch}
             />
             <Image source={Search_Icon} style={styles.searchIcon} />
           </View>
@@ -157,7 +170,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
     backgroundColor: THEME_COLOR,
-    // alignItems: "center",
+    alignItems: "center",
   },
   shadowContainer: {
     shadowColor: BLACK_COLOR,
@@ -186,7 +199,7 @@ const styles = StyleSheet.create({
     
   },
   textContainer: {
-    // alignItems: "center",
+    alignItems: "center",
     marginVertical: 10,
   },
   welcomeText: {
@@ -198,12 +211,12 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "bold",
     color: WHITE_COLOR,
-    // textAlign: "center",
+    textAlign: "center",
     fontFamily: "Ribeye",
   },
   bellContainer: {
     flexDirection: "row",
-    // alignItems: "center",
+    alignItems: "center",
   },
   bellIcon: {
     width: 37,
@@ -218,6 +231,7 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
   },
+
   searchContainer: {
     width: "100%",
     marginTop: -30,
@@ -302,7 +316,6 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
   },
-  
 });
 
 export default Header;

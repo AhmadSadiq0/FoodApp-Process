@@ -12,8 +12,9 @@ const BurgerItem = ({ selectedItem, onAddToCart }) => {
       {selectedItem ? (
         <AddCard
           name={selectedItem.name}
-          description="A delicious choice!!"
+          description={selectedItem.description}
           image={selectedItem.image}
+          variants = {selectedItem.variants}
           price={selectedItem.price}
           onAddToCart={onAddToCart}
         />
