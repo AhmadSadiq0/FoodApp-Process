@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, SectionList, Text } from "react-native";
 //Components
-import { InProgressOrder, Header } from "../../components";
+import { InProgressOrder,  } from "../../components";
 //colors
 import { Back_Ground } from "../../res/colors";
 import useAuthStore from "../../store/AuthStore";
@@ -65,21 +65,6 @@ const OrdersScreen = () => {
   ];  
   return (
     <View style={styles.container}>
-    
-
-      <Header
-        title="My Orders"
-        Welcomermsg=""
-        showSearch={false}
-        showShadow={true}
-        containerStyle={{
-          height: 160,
-        }}
-        textContainer={{
-          marginTop: 0,
-        }}  username={user.username}
-        showBellIcon={false}
-      />
 
       <InProgressOrder sections={sections} />
     </View>

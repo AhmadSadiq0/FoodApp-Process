@@ -11,9 +11,9 @@ import useThemeStore from "../../../zustand/ThemeStore";
 //RawBottomSheet
 import RBSheet from "react-native-raw-bottom-sheet";
 const paymentMethods = [
-  { name: "Debit Card", image: IMAGE25 },
-  { name: "App Wallet", image: IMAGE26 },
-  { name: "Cash on Delivery", image: IMAGE27 },
+  // { name: "Debit Card", image: IMAGE25 },
+  // { name: "App Wallet", image: IMAGE26 },
+  { name: "Cash on Delivery", image: IMAGE25 },
 ];
 const OrderConfirmationScreen = ( props ) => {
   const { navigation } = props;

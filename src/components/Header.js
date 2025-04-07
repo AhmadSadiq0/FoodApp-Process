@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -20,28 +20,33 @@ import {
   BLACK_COLOR,
 } from "../res/colors";
 import useSearchStore from "../store/SearchStore";
+import useBranchStore from "../store/BranchStore";
+import useThemeStore from "../../zustand/ThemeStore";
 
 // Importing Icons
-import { Profie_Image, Bell_ICON, Search_Icon,LOCATION_ICON} from "../res/drawables";
+import { Profie_Image, Bell_ICON, Search_Icon, LOCATION_ICON } from "../res/drawables";
 
-const BranchDropdown = ({ selectedBranch, onSelectBranch }) => {
+const BranchDropdown = ({ darkMode }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const branches = ["Tibba Sultan Pur", "Jahania", "Multan"];
+  const { branches, selectedBranch, setSelectedBranch } = useBranchStore();
+  const { searchQuery, setSearchQuery } = useSearchStore();
 
   return (
     <View style={styles.branchContainer}>
       <TouchableOpacity
-        style={styles.branchButton}
+        style={[styles.branchButton, darkMode && { backgroundColor: BLACK_COLOR }]}
         onPress={() => setShowDropdown(true)}
       >
         <View style={styles.branchButtonContent}>
-          <Image source={LOCATION_ICON} style={styles.locationIcon} />
-          <Text style={styles.branchText}>
-            {selectedBranch || "Select Branch"}
+          <Image 
+            source={LOCATION_ICON} 
+            style={[styles.locationIcon, darkMode && { tintColor: WHITE_COLOR }]} 
+          />
+          <Text style={[styles.branchText, darkMode && { color: WHITE_COLOR }]}>
+            {selectedBranch?.location || "Select Branch"}
           </Text>
         </View>
       </TouchableOpacity>
-
       <Modal
         transparent={true}
         visible={showDropdown}
@@ -51,28 +56,36 @@ const BranchDropdown = ({ selectedBranch, onSelectBranch }) => {
           <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>
 
-        <View style={styles.dropdownContainer}>
+        <View style={[styles.dropdownContainer, darkMode && { backgroundColor: BLACK_COLOR }]}>
           <FlatList
             data={branches}
-            keyExtractor={(item) => item}
+            keyExtractor={(item) => item._id}
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={[
                   styles.dropdownItem,
-                  item === selectedBranch && styles.selectedDropdownItem,
+                  item._id === selectedBranch?._id && [
+                    styles.selectedDropdownItem,
+                    darkMode && { backgroundColor: THEME_COLOR }
+                  ],
+                  darkMode && { borderBottomColor: '#444' }
                 ]}
                 onPress={() => {
-                  onSelectBranch(item);
+                  setSelectedBranch(item);
                   setShowDropdown(false);
                 }}
               >
                 <Text
                   style={[
                     styles.dropdownText,
-                    item === selectedBranch && styles.selectedDropdownText,
+                    darkMode && { color: WHITE_COLOR },
+                    item._id === selectedBranch?._id && [
+                      styles.selectedDropdownText,
+                      darkMode && { color: WHITE_COLOR }
+                    ]
                   ]}
                 >
-                  {item}
+                  {item.location}
                 </Text>
               </TouchableOpacity>
             )}
@@ -81,12 +94,22 @@ const BranchDropdown = ({ selectedBranch, onSelectBranch }) => {
       </Modal>
     </View>
   );
- };
+};
 
- // Header Component
- const Header = (props) => {
-  const [selectedBranch, setSelectedBranch] = useState("");
-  const { setSearchQuery } = useSearchStore();
+const Header = (props) => {
+  const { darkMode } = useThemeStore();
+  const { 
+    selectedBranch, 
+    setSelectedBranch, 
+    fetchBranches, 
+    branches 
+  } = useBranchStore();
+  const { searchQuery, setSearchQuery } = useSearchStore();
+
+  useEffect(() => {
+    fetchBranches();
+  }, [fetchBranches]);
+
   const {
     username = "Huzaifa Saddique",
     Welcomermsg = "Welcome to",
@@ -104,21 +127,22 @@ const BranchDropdown = ({ selectedBranch, onSelectBranch }) => {
   };
 
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer, darkMode && { backgroundColor: BLACK_COLOR }]}>
       <View
         style={[
           styles.container,
           containerStyle,
           showShadow && styles.shadowContainer,
+          darkMode && { backgroundColor: BLACK_COLOR }
         ]}
       >
         <View style={styles.profileContainer}>
           <Image source={Profie_Image} style={styles.image} />
-          {/* <Text style={styles.usernameText}>{username}</Text> */}
           <Text
             style={[
               styles.usernameText,
-              { marginRight: showBellIcon ? 90 : 140 }, 
+              { marginRight: showBellIcon ? 90 : 140 },
+              darkMode && { color: WHITE_COLOR }
             ]}
           >
             {username}
@@ -127,30 +151,47 @@ const BranchDropdown = ({ selectedBranch, onSelectBranch }) => {
           {showBellIcon && (
             <View style={styles.bellContainer}>
               <TouchableOpacity onPress={() => navigation.navigate("Notifications")}>
-                <Image source={Bell_ICON} style={styles.bellIcon} />
+                <Image 
+                  source={Bell_ICON} 
+                  style={[styles.bellIcon, darkMode && { tintColor: WHITE_COLOR }]} 
+                />
               </TouchableOpacity>
               <View style={styles.notificationBadge} />
             </View>
           )}
         </View>
         <View style={[styles.textContainer, textContainer]}>
-          <Text style={styles.welcomeText}>{Welcomermsg}</Text>
+          <Text style={[styles.welcomeText, darkMode && { color: WHITE_COLOR }]}>
+            {Welcomermsg}
+          </Text>
          
           <BranchDropdown
             selectedBranch={selectedBranch}
             onSelectBranch={setSelectedBranch}
+            branches={branches}
+            darkMode={darkMode}
           />
         </View>
 
         {showSearch && (
           <View style={styles.searchContainer}>
             <TextInput
-              style={styles.searchBar}
+              style={[
+                styles.searchBar,
+                darkMode && { 
+                  backgroundColor: '#333',
+                  color: WHITE_COLOR,
+                  placeholderTextColor: '#aaa'
+                }
+              ]}
               placeholder="Search Your Favourite Food Item"
-              placeholderTextColor={THEME_TEXT_COLOR}
+              placeholderTextColor={darkMode ? '#aaa' : THEME_TEXT_COLOR}
               onChangeText={handleSearch}
             />
-            <Image source={Search_Icon} style={styles.searchIcon} />
+            <Image 
+              source={Search_Icon} 
+              style={[styles.searchIcon, darkMode && { tintColor: WHITE_COLOR }]} 
+            />
           </View>
         )}
       </View>
@@ -196,7 +237,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: WHITE_COLOR,
     marginRight: 90,
-    
   },
   textContainer: {
     alignItems: "center",
@@ -231,7 +271,6 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
   },
-
   searchContainer: {
     width: "100%",
     marginTop: -30,
@@ -258,10 +297,10 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
   },
-
   branchContainer: {
     marginTop: 5,
     alignItems: "center",
+    marginBottom: 5,
   },
   branchButton: {
     backgroundColor: THEME_COLOR,
@@ -277,13 +316,14 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     backgroundColor: WHITE_COLOR,
     borderRadius: 10,
-    marginTop: 5,
-    width: "auto",
+    width: "50%", 
+    maxHeight: 300,
     elevation: 5,
     position: "absolute",
+    top: "17%",
+    left: "28%", 
     zIndex: 10,
   },
- 
   dropdownItem: {
     padding: 10,
     borderBottomWidth: 1,
@@ -292,7 +332,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   selectedDropdownItem: {
-    backgroundColor: THEME_TEXT_COLOR, 
+    backgroundColor: THEME_TEXT_COLOR,
   },
   dropdownText: {
     fontSize: 16,
@@ -303,7 +343,7 @@ const styles = StyleSheet.create({
     height: 20,
     marginRight: 10, 
     resizeMode: "contain", 
-  tintColor: "white",
+    tintColor: "white",
   },
   branchButtonContent: {
     flexDirection: "row-reverse",

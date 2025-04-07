@@ -23,12 +23,16 @@ import {
   CAMERA_ICON,
   ARROW_ICON,
 } from "../res/drawables";
-const Tab = memo(({ label, isActive, onPress, customStyle }) => (
+import useThemeStore from "../../zustand/ThemeStore";
+
+const Tab = memo(({ label, isActive, onPress, customStyle, darkMode }) => (
   <TouchableOpacity
     style={[
       styles.tab,
       isActive ? styles.activeTab : styles.inactiveTab,
       customStyle,
+      darkMode && { backgroundColor: BLACK_COLOR },
+      isActive && darkMode && { backgroundColor: THEME_COLOR }
     ]}
     onPress={onPress}
   >
@@ -36,14 +40,20 @@ const Tab = memo(({ label, isActive, onPress, customStyle }) => (
       style={[
         styles.tabText,
         isActive ? styles.activeTabText : styles.inactiveTabText,
+        darkMode && !isActive && { color: WHITE_COLOR }
       ]}
     >
       {label}
     </Text>
   </TouchableOpacity>
 ));
-const Tabs = memo(({ tabs, activeTab, onTabPress, position }) => (
-  <View style={[styles.tabsContainer, position]}>
+
+const Tabs = memo(({ tabs, activeTab, onTabPress, position, darkMode }) => (
+  <View style={[
+    styles.tabsContainer, 
+    position,
+    darkMode && { backgroundColor: BLACK_COLOR }
+  ]}>
     {tabs.map((tab, index) => (
       <Tab
         key={index}
@@ -51,10 +61,12 @@ const Tabs = memo(({ tabs, activeTab, onTabPress, position }) => (
         isActive={activeTab === index}
         onPress={() => onTabPress(index)}
         customStyle={tab.style}
+        darkMode={darkMode}
       />
     ))}
   </View>
 ));
+
 const ProfileHeader = memo(
   ({
     title = "Huzaifa",
@@ -70,6 +82,7 @@ const ProfileHeader = memo(
     showShadow = false,
     showTabsEnabled = true,
   }) => {
+    const { darkMode } = useThemeStore();
     const [showTabs, setShowTabs] = useState(false);
     const [activeTab, setActiveTab] = useState(null);
     const [dotsPosition, setDotsPosition] = useState({});
@@ -102,6 +115,7 @@ const ProfileHeader = memo(
       setDotsPosition(layout);
     }, []);
     const handleOutsideTouch = useCallback(() => setShowTabs(false), []);
+
     return (
       <TouchableWithoutFeedback onPress={handleOutsideTouch}>
         <View
@@ -109,18 +123,33 @@ const ProfileHeader = memo(
             styles.container,
             containerStyle,
             showShadow && styles.shadow,
+            darkMode && { backgroundColor: BLACK_COLOR }
           ]}
         >
           <View style={[styles.profileContainer]}>
             <View style={styles.iconContainer}>
               {showDotsIcon && showTabsEnabled && showTabsProp && (
                 <TouchableOpacity onPress={toggleTabs} onLayout={onDotsLayout}>
-                  <Image source={DOTSICON} style={[styles.icon, icon]} />
+                  <Image 
+                    source={DOTSICON} 
+                    style={[
+                      styles.icon, 
+                      icon,
+                      darkMode && { tintColor: WHITE_COLOR }
+                    ]} 
+                  />
                 </TouchableOpacity>
               )}
               {showArrowIcon && (
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                  <Image source={ARROW_ICON} style={[styles.icon, icon]} />
+                  <Image 
+                    source={ARROW_ICON} 
+                    style={[
+                      styles.icon, 
+                      icon,
+                      darkMode && { tintColor: WHITE_COLOR }
+                    ]} 
+                  />
                 </TouchableOpacity>
               )}
             </View>
@@ -130,7 +159,13 @@ const ProfileHeader = memo(
                   navigation.navigate("Notifcations");
                 }}
               >
-                <Image source={Bell_ICON} style={styles.icon} />
+                <Image 
+                  source={Bell_ICON} 
+                  style={[
+                    styles.icon,
+                    darkMode && { tintColor: WHITE_COLOR }
+                  ]} 
+                />
               </TouchableOpacity>
               <View style={styles.notificationBadge} />
             </View>
@@ -145,12 +180,18 @@ const ProfileHeader = memo(
                 top: dotsPosition.y + dotsPosition.height,
                 left: dotsPosition.x,
               }}
+              darkMode={darkMode}
             />
           )}
           <Image source={Profie_Image} style={styles.profileImage} />
           <Image source={CAMERA_ICON} style={[styles.cameraIcon, Cameraicon]} />
           <View style={[styles.textContainer, textContainerStyle]}>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={[
+              styles.title,
+              darkMode && { color: WHITE_COLOR }
+            ]}>
+              {title}
+            </Text>
           </View>
         </View>
       </TouchableWithoutFeedback>

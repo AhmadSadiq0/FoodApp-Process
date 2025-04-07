@@ -17,7 +17,7 @@ const BurgerCard = (props) => {
 
   const { darkMode } = useThemeStore();
 
-  const { name, price, image, onAdd , description } = props;
+  const { name, price, image, onAdd , description,navigation,item } = props;
 
   return (
     <View
@@ -57,6 +57,8 @@ const BurgerCard = (props) => {
           style={[styles.addButton, { backgroundColor: THEME_COLOR }]}
           onPress={() => {
             onAdd();
+            //  navigation.navigate("Discount", { item: burger });
+            // navigation.navigate('Discounts', { item : burger });
           }}
         >
           <Text
@@ -72,7 +74,6 @@ const BurgerCard = (props) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   card: {
     width: 150,

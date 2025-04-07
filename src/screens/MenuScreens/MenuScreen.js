@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -9,27 +9,25 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import RBSheet from "react-native-raw-bottom-sheet";
 import {
   WHITE_COLOR,
   THEME_COLOR,
   Back_Ground,
-  GRAY_COLOR,
   BLACK_COLOR,
 } from "../../res/colors";
 import useThemeStore from "../../../zustand/ThemeStore";
-import { Header, AddCard, Datalist, BurgerItem } from "../../components";
+import { Datalist } from "../../components";
 import useAuthStore from "../../store/AuthStore";
 import useSearchStore from "../../store/SearchStore";
 import useItemStore from "../../store/ItemStore";
-import useCategoryStore from "../../store/CategoryStore"; // Import the category store
+import useCategoryStore from "../../store/CategoryStore";
 
-const MenuScreen = () => {
-  const { user } = useAuthStore();
+const MenuScreen = ({ navigation }) => {
+  // State and store hooks
   const { darkMode } = useThemeStore();
   const { searchQuery } = useSearchStore();
   const {
-    categorized_items = [], 
+    categorized_items = [],
     categorized_loading,
     categorized_error,
     fetchItemsByBranch,
@@ -39,121 +37,65 @@ const MenuScreen = () => {
     categoriesLoading,
     categoriesError,
     fetchCategories,
-  } = useCategoryStore(); 
+  } = useCategoryStore();
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const refRBSheet = useRef();
 
-  const handleAddToCart = (item) => {
-    setSelectedItem(item);
-    refRBSheet.current.open();
-  };
-
-  
+  // Fetch data on component mount
   useEffect(() => {
-    fetchItemsByBranch("67c2cf8113ac30409ef067ec"); 
-    fetchCategories(); 
+    fetchItemsByBranch("67c2cf8113ac30409ef067ec");
+    fetchCategories();
   }, []);
 
-  // Filter categorized items based on search query
+  // Filter data based on selected category and search query
   const filteredData = categorized_items
-  .filter(category => 
-    !selectedCategory || category.categoryId == selectedCategory // Filter by categoryId
-  )
-  .map(category => ({
-    ...category,
-    items: category.items.filter(item =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    ),
-  }))
-  .filter(category => category.items.length > 0); // Ensure only categories with items are shown
+    .filter(category => !selectedCategory || category.categoryId === selectedCategory)
+    .map(category => ({
+      ...category,
+      items: category.items.filter(item =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      ) // Added missing closing parenthesis here
+    }))
+    .filter(category => category.items.length > 0);
 
+  // Handle add to cart action
+  const handleAddToCart = (item) => {
+     navigation.navigate("AddItem", { item });
+  };
 
-  // Render each category item
+  // Render individual category item
   const renderCategory = ({ item }) => {
-    const isSelected = selectedCategory == item._id;
+    const isSelected = selectedCategory === item._id;
+    const backgroundColor = isSelected ? THEME_COLOR : darkMode ? BLACK_COLOR : WHITE_COLOR;
+    const textColor = isSelected ? WHITE_COLOR : darkMode ? WHITE_COLOR : THEME_COLOR;
+
     return (
       <TouchableOpacity
-        style={[
-          styles.categoryCard,
-          {
-            backgroundColor: isSelected
-              ? THEME_COLOR
-              : darkMode
-              ? BLACK_COLOR
-              : WHITE_COLOR,
-            marginTop: 5,
-          },
-        ]}
-        onPress={() => { selectedCategory == item._id ? setSelectedCategory(null) : setSelectedCategory(item._id)}}
+        style={[styles.categoryCard, { backgroundColor }]}
+        onPress={() => setSelectedCategory(isSelected ? null : item._id)}
       >
         <Image
-          source={{ uri: item.image }} 
-          style={[
-            styles.image,
-            // {
-            //   tintColor: isSelected
-            //     ? WHITE_COLOR
-            //     : darkMode
-            //     ? WHITE_COLOR
-            //     : THEME_COLOR,
-            // },
-          ]}
+          source={{ uri: item.image }}
+          style={styles.image}
           resizeMode="cover"
         />
-        <Text
-          style={[
-            styles.categoryText,
-            {
-              color: isSelected
-                ? WHITE_COLOR
-                : darkMode
-                ? WHITE_COLOR
-                : THEME_COLOR,
-            },
-          ]}
-        >
+        <Text style={[styles.categoryText, { color: textColor }]}>
           {item.name}
         </Text>
       </TouchableOpacity>
     );
   };
 
-  // Render the list of categories
+  // Render category list
   const renderCategoryList = () => {
     if (categoriesLoading) {
-      return (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            height: 100,
-          }}
-        >
-          <ActivityIndicator size="large" color={THEME_COLOR} />
-        </View>
-      );
+      return <LoadingIndicator />;
     }
     if (categoriesError) {
-      return (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            height: 100,
-          }}
-        >
-          <Text style={{ color: darkMode ? WHITE_COLOR : BLACK_COLOR }}>
-            {categoriesError}
-          </Text>
-        </View>
-      );
+      return <ErrorText text={categoriesError} darkMode={darkMode} />;
     }
     return (
       <FlatList
-        data={categories} 
+        data={categories}
         renderItem={renderCategory}
         keyExtractor={(item) => item._id}
         contentContainerStyle={styles.scrollContainer}
@@ -163,20 +105,28 @@ const MenuScreen = () => {
     );
   };
 
-  // Render each item in the categorized list
+  // Render menu items list
   const renderDatalist = ({ item }) => (
     <Datalist
       title={item.categoryName}
       seeMoreText=""
-      onSeeMorePress={() => console.log("See All pressed!")}
       data={item.items}
+      navigation={navigation}
       onAddToCart={handleAddToCart}
     />
   );
 
+  // Render empty state
+  const renderEmptyComponent = () => {
+    if (categorized_loading) {
+      return <LoadingIndicator height={300} />;
+    }
+    return <ErrorText text={categorized_error || "No items found"} darkMode={darkMode} />;
+  };
+
   return (
     <View style={[styles.mainContainer, darkMode && styles.mainContainerDark]}>
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <FlatList
           data={filteredData}
           ListHeaderComponent={
@@ -186,60 +136,27 @@ const MenuScreen = () => {
           }
           renderItem={renderDatalist}
           keyExtractor={(item) => item?.categoryId?.toString() || Math.random().toString()}
-          ListEmptyComponent={() => {
-            if (categorized_loading) {
-              return (
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: 300,
-                  }}
-                >
-                  <ActivityIndicator size="large" color={THEME_COLOR} />
-                </View>
-              );
-            }
-            return (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text>
-                  {categorized_error ? categorized_error : "No items found"}
-                </Text>
-              </View>
-            );
-          }}
+          ListEmptyComponent={renderEmptyComponent}
         />
       </ScrollView>
-      <RBSheet
-        ref={refRBSheet}
-        height={500}
-        draggable={true}
-        customStyles={{
-          container: {
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
-            alignItems: "center",
-            backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
-          },
-          wrapper: { backgroundColor: "transparent" },
-          draggableIcon: { backgroundColor: GRAY_COLOR },
-        }}
-      >
-        <ScrollView>
-          <BurgerItem selectedItem={selectedItem} />
-        </ScrollView>
-      </RBSheet>
     </View>
   );
 };
 
+// Reusable components
+const LoadingIndicator = ({ height = 100 }) => (
+  <View style={[styles.centerContainer, { height }]}>
+    <ActivityIndicator size="large" color={THEME_COLOR} />
+  </View>
+);
+
+const ErrorText = ({ text, darkMode }) => (
+  <View style={styles.centerContainer}>
+    <Text style={{ color: darkMode ? WHITE_COLOR : BLACK_COLOR }}>{text}</Text>
+  </View>
+);
+
+// Styles
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
@@ -266,8 +183,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    padding : 8,
+    padding: 8,
     marginHorizontal: 10,
+    marginTop: 5,
   },
   image: {
     width: 70,
@@ -279,5 +197,11 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     textAlign: "center",
   },
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
+
 export default MenuScreen;

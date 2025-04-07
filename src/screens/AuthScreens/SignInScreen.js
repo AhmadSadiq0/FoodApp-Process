@@ -48,7 +48,7 @@ const SignInScreen = () => {
       password: values.password,
     });
     console.log('Sign In Response:', response);
-    setSignupResponse(response);
+    setSignInResponse(response);
   }
   
   return (
@@ -104,7 +104,9 @@ const SignInScreen = () => {
               errors,
               touched,
             }) => (
-              <>
+              <View style={styles.formContainer}>
+                <View style={styles.inputContainer}>
+
                 <InputField
                   label="Email"
                   placeholder="User 's email here"
@@ -115,6 +117,8 @@ const SignInScreen = () => {
                 {touched.email && errors.email && (
                   <Text style={styles.errorText}>{errors.email}</Text>
                 )}
+                </View>
+                <View style={styles.inputContainer}> 
                 <InputField
                   label="Password"
                   placeholder="User 's password here"
@@ -126,11 +130,12 @@ const SignInScreen = () => {
                 {touched.password && errors.password && (
                   <Text style={styles.errorText}>{errors.password}</Text>
                 )}
+                </View>
                 <CustomButton
                   title={"SignIn"}
                   onPress={handleSubmit}
                 />
-                </>
+                </View>
                  )}
               </Formik>
         </View>
@@ -233,6 +238,14 @@ const styles = StyleSheet.create({
     color: THEME_COLOR,
     marginTop: 5,
     alignSelf: "flex-start",
+    // marginBottom: 10,
+  },
+  formContainer: {
+    width: '100%',
+  },
+  inputContainer: {
+    width: '100%',
+    marginBottom: 10,
   },
 });
 export default SignInScreen;

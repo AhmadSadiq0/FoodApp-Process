@@ -1,9 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
-//component 
-import { Datalist, AddCard } from "../../components"; 
-//colors
-import { WHITE_COLOR } from '../../res/colors'; 
+import { StyleSheet, View, FlatList } from 'react-native';
+// Components 
+import { Datalist, AddCard } from "../../components";
 
 const DealsScreen = ({ data }) => {
   const renderItem = ({ item }) => (
@@ -29,29 +27,24 @@ const DealsScreen = ({ data }) => {
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
         ListFooterComponent={
-          <View style={styles.addCardContainer}>
-            <AddCard
-              name={addCardData.name}
-              description={addCardData.description}
-              image={addCardData.image}
-              price={addCardData.price}
-              onAddToCart={() => console.log(`${addCardData.name} added to cart`)}
-            />
-          </View>
+          <AddCard
+            name={addCardData.name}
+            description={addCardData.description}
+            image={addCardData.image}
+            price={addCardData.price}
+            onAddToCart={() => console.log(`${addCardData.name} added to cart`)}
+          />
         }
       />
     </View>
   );
 };
 
-export default DealsScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
   },
-  addCardContainer: {
-    marginTop: 20,
-  },
 });
+
+export default DealsScreen;

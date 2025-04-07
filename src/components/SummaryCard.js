@@ -1,9 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-//Colors
 import { THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR } from "../res/colors";
 import useThemeStore from "../../zustand/ThemeStore";
-//CustomButton
 import CustomButton from "./CustomButtom";
 
 const SummaryCard = ({ selectedItems, subtotal, onCheckout }) => {
@@ -13,11 +11,9 @@ const SummaryCard = ({ selectedItems, subtotal, onCheckout }) => {
     <View style={[styles.summaryCard, darkMode && styles.summaryCardDark]}>
       <View style={styles.cardTextContainer}>
         <Text style={[styles.summaryText, darkMode && styles.summaryTextDark]}>
-          Selected Item(s):{" "}
-          <Text style={styles.highlightText}>{selectedItems.length}</Text>
+          Selected Item(s): <Text style={styles.highlightText}>{selectedItems.length}</Text>
         </Text>
       </View>
-
       <Text style={[styles.summaryText, darkMode && styles.summaryTextDark]}>
         Sub Total: <Text style={styles.highlightText}>Rs. {subtotal}</Text>
       </Text>
@@ -26,7 +22,6 @@ const SummaryCard = ({ selectedItems, subtotal, onCheckout }) => {
           title={"CheckOut"}
           textStyle={{ color: WHITE_COLOR }}
           onPress={onCheckout}
-          
         />
       </View>
     </View>

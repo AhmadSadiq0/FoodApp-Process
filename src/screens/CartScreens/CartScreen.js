@@ -1,90 +1,55 @@
-import React, { useState, useRef } from 'react';
-import { StyleSheet, View, Text, Dimensions, FlatList, ScrollView } from 'react-native';
-import { CartItem, SummaryCard } from '../../components'; 
+import React, { useRef } from 'react';
+import { StyleSheet, View, Text, FlatList, ScrollView } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import { initialCartItems } from '../../data/ScreenData';
-import { Back_Ground, THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR } from '../../res/colors';
+import { CartItem, SummaryCard } from '../../components';
+import { Back_Ground, GRAY_COLOR, THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR } from '../../res/colors';
 import useThemeStore from "../../../zustand/ThemeStore";
-import useAuthStore from "../../store/AuthStore";
-import Header from "../../components/Header";
-
-const { width: deviceWidth } = Dimensions.get('window');
+import useCartStore from "../../store/CartStore";
 
 const CartScreen = ({ navigation }) => {
-  const { user } = useAuthStore();
-  const [cartItems, setCartItems] = useState(initialCartItems);
-  const [selectedItems, setSelectedItems] = useState([]);
-  const refRBSheet = useRef(null);
-  const { darkMode, toggleDarkMode } = useThemeStore();
-
+  const { items, removeItem, toggleItemActive } = useCartStore();
+  const { darkMode } = useThemeStore();
+  const summarySheetRef = useRef(null);
   const handlePressItem = (id) => {
-    setCartItems((prevItems) =>
-      prevItems.map(item =>
-        item.id === id ? { ...item, active: !item.active } : item
-      )
-    );
+    toggleItemActive(id);
+    const hasActiveItems = items.some(item => item.active);
+    hasActiveItems ? summarySheetRef.current.open() : summarySheetRef.current.close();
   };
-
-  const handleDeleteItem = (id) => {
-    setCartItems((prevItems) => prevItems.filter(item => item.id !== id));
-  };
-
-  const handleAddToCart = (newItem) => {
-    setCartItems((prevItems) => [...prevItems, newItem]);
-  };
-
   const calculateSubtotal = () => {
-    return selectedItems.reduce((total, item) => total + item.price, 0);
+    return items.filter(item => item.active).reduce((total, item) => total + item.price, 0);
   };
-
-  React.useEffect(() => {
-    const updatedSelectedItems = cartItems.filter(item => item.active);
-    setSelectedItems(updatedSelectedItems);
-    if (updatedSelectedItems.length > 0) {
-      refRBSheet.current.open();
-    } else {
-      refRBSheet.current.close();
-    }
-  }, [cartItems]);
 
   return (
     <View style={[styles.container, darkMode && styles.containerDark]}>
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Text style={[styles.headingText, darkMode && styles.headingTextDark]}>Check Out</Text>
         <FlatList
-          data={cartItems}
+          data={items}
           renderItem={({ item }) => (
             <CartItem
               item={item}
               onPressItem={handlePressItem}
-              onDeleteItem={handleDeleteItem}
+              onDeleteItem={removeItem}
             />
           )}
           keyExtractor={item => item.id.toString()}
-          style={styles.flatList}
         />
       </ScrollView>
       <RBSheet
-        ref={refRBSheet}
+        ref={summarySheetRef}
         height={300}
         draggable={true}
         customStyles={{
-          container: { 
-            borderTopLeftRadius: 20, 
-            borderTopRightRadius: 20, 
-            backgroundColor: darkMode ? 'black' : WHITE_COLOR 
-          },
+          container: styles.sheetContainer,
           wrapper: { backgroundColor: 'transparent' },
-          draggableIcon: { backgroundColor: 'gray' },
+          draggableIcon: { backgroundColor: GRAY_COLOR },
         }}
       >
-        {selectedItems.length > 0 && (
-          <SummaryCard
-            selectedItems={selectedItems}
-            subtotal={calculateSubtotal()}
-            onCheckout={() => navigation.navigate("ConfirmOrder")}
-          />
-        )}
+        <SummaryCard
+          selectedItems={items.filter(item => item.active)}
+          subtotal={calculateSubtotal()}
+          onCheckout={() => navigation.navigate("ConfirmOrder")}
+        />
       </RBSheet>
     </View>
   );
@@ -109,8 +74,10 @@ const styles = StyleSheet.create({
   headingTextDark: {
     color: THEME_COLOR,
   },
-  flatList: {
-    flex: 1,
+  sheetContainer: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    backgroundColor: WHITE_COLOR,
   },
 });
 

@@ -21,7 +21,7 @@ import {
 import {
     HomeScreen,
     DealsScreen,
-    DiscountsScreen,
+    AddItem,
     OffersScreen,
     CartsScreen
 } from '../screens/HomeScreens/index';
@@ -89,7 +89,7 @@ const HomeStack = () => {
             <Stack.Screen options={{ headerShown: false }} name="Offers" component={OffersScreen} />
             {/* <Stack.Screen options={{ headerShown: false }} name="Notifications" component={NotificationsScreen} /> */}
             <Stack.Screen    options={{ header: () => <Header1 discountIcon={null} title="Notifications" />, headerShown: true }}  name="Notifications" component={NotificationsScreen} />
-            <Stack.Screen options={{ header : () => <Header1/>, headerShown : true }} name="Discounts" component={DiscountsScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Discounts" component={AddItem} />
         </Stack.Navigator>
     )
 } 
@@ -106,6 +106,7 @@ const MenuStack = () => {
                 }}
             />
             <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="AddItem" component={AddItem} />
         </Stack.Navigator>
     )
 }
@@ -117,7 +118,7 @@ const MenuStack = () => {
                 name="Cart" 
                 component={CartScreen}
                 options={{
-                    header: () => <Header navigation={navigation} username={user.username} showBellIcon={false} />,
+                    header: () => <Header navigation={navigation} username={user.username} showBellIcon={false} />
                 }}
             />
            {/* <Stack.Screen options={{  headerShown : false }}name="Cart" component={CartScreen} /> */}
@@ -138,14 +139,37 @@ const MenuStack = () => {
     )
 }  
 const OrdersStack = () => {
+    const {user} = authStore()
     return (
         <Stack.Navigator initialRouteName="Orders" headerMode={false}>
-            <Stack.Screen options={{ headerShown: false }} name="Orders" component={OrdersScreen} />
+            {/* <Stack.Screen options={{ headerShown: false }} name="Orders" component={OrdersScreen} /> */}
+            <Stack.Screen 
+  name="Orders" 
+  component={OrdersScreen} 
+  options={{
+    header: () => (
+      <Header
+        title="My Orders"
+        Welcomermsg=""
+        showSearch={false}
+        showShadow={true}
+        containerStyle={{
+          height: 190,
+        }}
+        textContainer={{
+          marginTop: 0,
+        }}  
+        username={user.username}
+        showBellIcon={false}
+      />
+    ),
+  }} 
+/>
+
             <Stack.Screen options={{ headerShown: false }} name="Notifcations" component={NotificationsScreen} />
         </Stack.Navigator>
     )
 }
-
 const ProfileStack = () => {
     return (
         <Stack.Navigator initialRouteName="Profile" headerMode={false}>
@@ -344,4 +368,3 @@ const styles = StyleSheet.create({
         color: WHITE_COLOR
     }
 })
-

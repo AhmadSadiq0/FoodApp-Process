@@ -49,7 +49,6 @@ const InProgressOrder = ({ sections: initialSections }) => {
     const sectionIndex = updatedSections.findIndex((section) =>
       section.data.some((item) => item.orderId === order.orderId)
     );
-
     if (sectionIndex !== -1) {
       const [selectedSection] = updatedSections.splice(sectionIndex, 1);
       selectedSection.data.sort((a, b) => (a.orderId === order.orderId ? -1 : 1));

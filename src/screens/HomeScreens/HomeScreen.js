@@ -1,175 +1,142 @@
-//Hooks
-import React, { useRef, useState , useEffect} from "react";
-import { StyleSheet, View, FlatList , Text , ScrollView  } from "react-native";
-//components
-import { Header, Datalist, AddCard } from "../../components";
-//res
-import { WHITE_COLOR, Back_Ground, GRAY_COLOR, Green_Color,DARK_BACKGROUND,BLACK_COLOR, THEME_COLOR} from "../../res/colors";
-//data
-import { burgerData } from "../../data/ScreenData";
-//packages
+import React, { useRef, useState, useEffect } from "react";
+import { 
+  StyleSheet, 
+  View, 
+  FlatList, 
+  Text, 
+  ScrollView, 
+  ActivityIndicator,
+  TouchableOpacity,
+  Image 
+} from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
-//images
-import { BURGERIMG, HEART_ICON } from "../../res/drawables";
-//stores
- import useThemeStore from "../../../zustand/ThemeStore";
- import CustomButton from "../../components/CustomButtom";
- import useAuthStore from "../../store/AuthStore";
- import useItemStore from "../../store/ItemStore";
- import { ActivityIndicator } from "react-native";
- import useBranchStore from "../../store/BranchStore";
- import useSearchStore from "../../store/SearchStore";
- 
- const HomeScreen = ({ navigation }) => {
+// Components
+import { Datalist } from "../../components";
+// Stores
+import useItemStore from "../../store/ItemStore";
+import useBranchStore from "../../store/BranchStore";
+import useSearchStore from "../../store/SearchStore";
+import useThemeStore from "../../../zustand/ThemeStore";
+// Colors
+import { WHITE_COLOR, Back_Ground, BLACK_COLOR, THEME_COLOR } from "../../res/colors";
+// Screens
+import AddItem from "./AddItem";
+
+const HomeScreen = ({ navigation }) => {
+  const { darkMode } = useThemeStore();
   const { searchQuery } = useSearchStore();
-  const {user} = useAuthStore();
-  const { branches, branches_loading, branches_error, fetchBranches } = useBranchStore(); 
-  const {  fetchHomeSectionItems , homeSectionItems , homeSectionItemsLoading , homeSectionItemsError } = useItemStore();
+  const { 
+    fetchHomeSectionItems, 
+    homeSectionItems, 
+    homeSectionItemsLoading, 
+    homeSectionItemsError 
+  } = useItemStore();
+  const { fetchBranches,selectedBranch } = useBranchStore();
   const refRBSheet = useRef();
-  const [selectedBurger, setSelectedBurger] = useState(null);
-  const { darkMode, toggleDarkMode } = useThemeStore();
-  const [showFavorites, setShowFavorites] = useState(false);
-  const [burgerList, setBurgerList] = useState(
-    burgerData.map(burger => ({ ...burger, isFavorite: false }))
-  );
-
-  const getBranches = async () => {
-    await fetchBranches();
-  };
-
-  const handleAddToCart = (burger) => {
-    setSelectedBurger(burger); 
-    refRBSheet.current.open();
-  };
-  const handleSeeMorePress = (title , categoryId) => {
-    console.log("Navigating to Offers with categoryId:", categoryId);
-    navigation.navigate('Offers', { title, categoryId: categoryId });
-  };
-  const toggleFavorite = (burgerId) => {
-    setBurgerList(prev => prev.map(burger =>
-      burger.id === burgerId ? { ...burger, isFavorite: !burger.isFavorite } : burger
-    ));
-  };
-  const getCategorizedItems = async () => {
-    fetchHomeSectionItems("67c2cf8113ac30409ef067ec")
-  };
 
   useEffect(() => { 
-    getCategorizedItems();  
-    getBranches();
+    if (selectedBranch) {
+      fetchHomeSectionItems(selectedBranch._id);  
+    }
+    fetchBranches();
+  }, [selectedBranch]);
+
+  const filteredData = homeSectionItems
+    .map(category => ({
+      ...category,
+      items: category.items.filter(item => 
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    }))
+    .filter(category => category.items.length > 0);
+  useEffect(() => { 
+    fetchHomeSectionItems("67c2cf8113ac30409ef067ec");  
+    fetchBranches();
   }, []);
 
- // Filter the data based on the search query
- const filteredData = homeSectionItems.map(category => ({
-  ...category,
-  items: category.items.filter(item => 
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  ),
- })).filter(category => category.items.length > 0);
+  const handleAddToCart = (burger) => {
+    navigation.navigate('Discounts', { item: burger });
+  };
 
+  const handleSeeMorePress = (title, categoryId) => {
+    navigation.navigate('Offers', { title, categoryId });
+  };
 
   const renderDatalist = ({ item }) => (
     <Datalist
       title={item.categoryName}
       seeMoreText="See All"
-      onSeeMorePress={() => handleSeeMorePress(item.categoryName , item.categoryId)}
+      onSeeMorePress={() => handleSeeMorePress(item.categoryName, item.categoryId)}
       data={item.items}
       onAddToCart={handleAddToCart}
-      onToggleFavorite={toggleFavorite}
+      darkMode={darkMode}
     />
   );
 
-  const datalistSections = [
-    { id: 1, title: "Discounts" },
-    { id: 2, title: "Deals" },
-    { id: 3, title: "Loyalty Burgers" },
-    { id: 4, title: "Loyalty Burger" },
-  ];
+  // Render loading indicator
+  const renderLoading = () => (
+    <View style={[styles.centerContainer, { height: 300 }]}>
+      <ActivityIndicator size="large" color={THEME_COLOR} />
+    </View>
+  );
 
-  useEffect(() => {
-          console.log("this user data" , user)
-      },[])
+  // Render error or empty state
+  const renderEmpty = () => (
+    <View style={styles.centerContainer}>
+      <Text style={{ color: darkMode ? WHITE_COLOR : BLACK_COLOR }}>
+        {homeSectionItemsError || "No items found"}
+      </Text>
+    </View>
+  );
 
-   return (
-    <View style={[styles.container, { backgroundColor: darkMode ? BLACK_COLOR : Back_Ground }]}>
-      {/* <Header navigation={navigation} username = {user.username} /> */}
-      <ScrollView showsVerticalScrollIndicator={false}>
-      {/* <CustomButton image={HEART_ICON} title="My Favourites"  onPress={() => setShowFavorites(!showFavorites)}   style={[
-    styles.favoriteButton,
-    { backgroundColor: darkMode ? BLACK_COLOR : THEME_COLOR },
-  ]}   textStyle={{ color: darkMode ? WHITE_COLOR : WHITE_COLOR }}/> */}
-      <FlatList
-        //  data={categorized_items}
-        data={filteredData}
-         renderItem={renderDatalist}
-        keyExtractor={(item) => item?.categoryId.toString()}
-        // ListEmptyComponent={() => {
-        //   categorized_loading ? <ActivityIndicator size="large" color={THEME_COLOR} /> :
-        //   <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        //       <Text>{categorized_error ? categorized_error : "No items found"}</Text>
-        //   </View>
-        // }}
-        ListEmptyComponent={() => {
-          if (homeSectionItemsLoading) {
-            return (
-              <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: 300 }}>
-                <ActivityIndicator size="large" color={THEME_COLOR} />
-              </View>
-            );
-          }
-          return (
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-              <Text>{homeSectionItemsError ? homeSectionItemsError : "No items found"}</Text>
-            </View>
-          );
-        }}
-
-      />
-      </ScrollView>
-      <RBSheet
-        ref={refRBSheet}
-        height={"auto"}
-        draggable={true}
-        customStyles={{
-          container: { borderTopLeftRadius: 20, borderTopRightRadius: 20, alignItems: 'center',  backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR, },
-          wrapper: { backgroundColor: 'transparent' },
-          draggableIcon: { backgroundColor: GRAY_COLOR },
-        }}
-        customModalProps={{
-          animationType: 'slide',
-          statusBarTranslucent: true,
-        }}
-        customAvoidingViewProps={{
-          enabled: false,
-        }}
+  return (
+    <View style={[styles.mainContainer, darkMode && styles.mainContainerDark]}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        style={darkMode && styles.scrollViewDark}
       >
-        {selectedBurger && (
-          <AddCard
-            name={selectedBurger.name}
-            description={selectedBurger.description}
-            image={selectedBurger.image}
-            price={selectedBurger.price}
-            onAddToCart={() => console.log(`${selectedBurger.name} added to cart!`)}
-            onToggleFavorite={() => toggleFavorite(selectedBurger.id)}
-          />
-        )}
-      </RBSheet>
+        <FlatList
+          data={filteredData}
+          renderItem={renderDatalist}
+          keyExtractor={(item) => item?.categoryId.toString()}
+          ListEmptyComponent={homeSectionItemsLoading ? renderLoading : renderEmpty}
+          contentContainerStyle={styles.contentContainer}
+        />
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
     flex: 1,
+    backgroundColor: Back_Ground,
   },
-  favoriteButton: {
-    width:"96%",
-   fontFamily: 'Lato',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal:7,
-    borderRadius: 10,
+  mainContainerDark: {
+    backgroundColor: BLACK_COLOR,
   },
- });
- export default HomeScreen;
+  scrollViewDark: {
+    backgroundColor: BLACK_COLOR,
+  },
+  contentContainer: {
+    paddingBottom: 20,
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingContainer: {
+    flex: 1, 
+    justifyContent: "center", 
+    alignItems: "center", 
+    height: 300
+  },
+  emptyContainer: {
+    flex: 1, 
+    justifyContent: "center", 
+    alignItems: "center"
+  }
+});
+
+export default HomeScreen;

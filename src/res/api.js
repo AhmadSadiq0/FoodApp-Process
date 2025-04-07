@@ -1,5 +1,5 @@
 // User-Auth API URLs:
-const BASE_URL  = 'http://192.168.12.237:8000';
+const BASE_URL  = 'http://192.168.1.237:8000';
 
 //Auth Endpoints
 export const URL_TO_REGISTER_USER = `${BASE_URL}/users/signup`;    

@@ -11,7 +11,7 @@ const ITEM_WIDTH = 150 + 14;
 const SPACING = (width - ITEM_WIDTH) / 2;
 
 const Datalist = (props) => {
-  const { title, seeMoreText, onSeeMorePress, data, onAddToCart,onToggleFavorite } = props;
+  const { title, seeMoreText, onSeeMorePress, data, onAddToCart,onToggleFavorite,navigation } = props;
   const scrollX = useRef(new Animated.Value(0)).current;
   const { darkMode } = useThemeStore();
 
@@ -55,6 +55,8 @@ const Datalist = (props) => {
                 image={item.image}
                 description={item.description}
                 onAdd={() => onAddToCart(item)}
+                navigation={navigation} 
+                item={item} 
               />
             </Animated.View>
           );
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 19,
-    fontWeight: "bold",
+     fontWeight: "bold",
   },
   seeMore: {
     fontSize: 14,
