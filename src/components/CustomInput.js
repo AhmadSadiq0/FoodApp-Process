@@ -1,23 +1,24 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+//icon
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { THEME_TEXT_COLOR } from "../res/colors";
-import { GRAY_COLOR } from "../res/colors";
-import { WHITE_COLOR } from "../res/colors";
+//color
+import { THEME_TEXT_COLOR,WHITE_COLOR,GRAY_COLOR } from "../res/colors";
 
 
-const InputField = ({
-  label,
-  placeholder,
-  secureTextEntry,
-  value,
-  onChangeText,
-  style,
-  keyboardType = "default", 
-  autoCapitalize = "none", 
-}) => {
+const InputField = (props) => {
+ const  {
+    label,
+    placeholder,
+    secureTextEntry,
+    value,
+    onChangeText,
+    style,
+    keyboardType = "default", 
+    autoCapitalize = "none", 
+  } = props;  
   const [showPassword, setShowPassword] = useState(false);
-  const [labelColor, setLabelColor] = useState("#3C2E6B");
+  const [labelColor, setLabelColor] = useState(THEME_TEXT_COLOR);
 
   const toggleShowPassword = () => {
     setShowPassword((prevState) => !prevState);
@@ -67,7 +68,7 @@ const InputField = ({
 
 const styles = StyleSheet.create({
   inputContainer: {
-    marginBottom: 20,
+    marginBottom:10,
     width: "100%",
   },
   inputWrapper: {
@@ -95,8 +96,9 @@ const styles = StyleSheet.create({
     color: THEME_TEXT_COLOR,
     fontSize: 15,
     padding: 15,
+    borderBottomWidth: 0,
     borderRadius: 10,
-    fontWeight: "bold",
+    // fontWeight: "bold",
   },
   icon: {
     justifyContent: "center",

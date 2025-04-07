@@ -4,11 +4,14 @@
 import HomeScreen from "./HomeScreen";
 import OffersScreen from "./OffersScreen";
 import DealsScreen from "./DealsScreen";
-import DiscountsScreen from "./DiscountsScreen";
+// import DiscountsScreen from "./DiscountsScreen";
+import AddItem from "./AddItem";
 
 export {
     DealsScreen,
-    DiscountsScreen,
+    // DiscountsScreen,
+    AddItem,
     HomeScreen,
-    OffersScreen
+    OffersScreen,
+    
 };

@@ -8,14 +8,12 @@ import {
 const CheckOutScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>CheckOutScreen</Text>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
     container:{
-        flex:1,
         alignItems:'center',
         justifyContent:'center'
     }

@@ -2,7 +2,6 @@
 //Each screen is typically a component responsible for rendering a specific part of the app's layout.
 
 import OrdersScreen from "./OrdersScreen";
-
 export {
-    OrdersScreen
+    OrdersScreen,
 };

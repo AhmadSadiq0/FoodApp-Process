@@ -4,9 +4,12 @@
 import CartScreen from "./CartScreen";
 import CheckOutScreen from "./CheckOutScreen";
 import OrderConfirmationScreen from "./OrderConfirmationScreen";
-
+import ConfirmedOrder from "./ConfirmedOrder";
 export {
     CartScreen,
     CheckOutScreen,
-    OrderConfirmationScreen
+    OrderConfirmationScreen,
+    ConfirmedOrder,
+  
+   
 };
