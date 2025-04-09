@@ -1,9 +1,11 @@
 import { create } from 'zustand';
-import { 
-    signUpService, 
-    signInService, 
-    fetchUserService
-} from '../services/AuthServices'; 
+import {
+    signUpService,
+    signInService,
+    fetchUserService,
+    validateTokenService,
+    refreshTokenService
+} from '../services/AuthServices';
 
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,65 +13,65 @@ import { setAuthTokenInAxios } from '../utils/ManageAxios';
 
 const initialState = {
     user: null,
-    userData: null,
-    loading: false,
-    error: null    
+    userTokensData: null,
+    loading: {
+        login: false,
+        signup: false
+    },
+    error: {
+        login: null,
+        signup: null
+    },
+    isHydrated: false
 };
 
 const useAuthStore = create(
     persist(
-        (set) => ({
+        (set, get) => ({
             ...initialState,
 
             signup: async (payload) => {
-                set({ loading: true, error: null });
+                set({ loading: { ...get().loading, signup: true }, error: { ...get().error, signup: null } });
                 try {
                     const res = await signUpService(payload);
-                    set({ loading: false });
-                    return res;
+                    set({ loading: { ...get().loading, signup: false }, error: { ...get().error, signup: res.message } });
                 } catch (error) {
-                    set({ loading: false, error: error.message });
-                    return { success: false, message: error.message };
+                    set({ loading: { ...get().loading, signup: false }, error: error.message });
                 }
             },
             login: async (payload) => {
-                set({ loading: true, error: null });
+                set({ loading: { ...get().loading, login: true }, error: { ...get().error, login: null } });
                 try {
                     const res = await signInService(payload);
-                    
                     if (res.success) {
                         setAuthTokenInAxios(res.data.data.accessToken);
-                        
+                        set({ userTokensData : res.data.data })
                         const response = await fetchUserService();
                         if (response.success) {
                             set(() => ({
                                 user: response.data.data,
-                                loading: false
+                                loading: { ...get().loading, login: false },
                             }));
-                            return response.data;
                         } else {
                             set(() => ({
                                 user: null,
-                                loading: false,
-                                error: response.message
+                                loading: { ...get().loading, login: false },
+                                error: { ...get().error, login: response.status == 400 ? "User not found" : response.message + response.status }
                             }));
-                            return { success: false, message: response.message };
                         }
                     } else {
                         set(() => ({
                             user: null,
-                            loading: false,
-                            error: res.message
+                            loading: { ...get().loading, login: false },
+                            error: { ...get().error, login: res.status == 400 ? "Email or password is incorrect" : res.message }
                         }));
-                        return { success: false, message: res.message };
                     }
                 } catch (error) {
                     set(() => ({
                         user: null,
-                        loading: false,
-                        error: error.message
+                        loading: { ...get().loading, login: false },
+                        error: { ...get().error, login: error.message }
                     }));
-                    return { success: false, message: error.message };
                 }
             },
 
@@ -94,18 +96,69 @@ const useAuthStore = create(
                 }
             },
 
+            refreshAccessToken: async () => {
+                const storedUser = get().user;
+                const storedUserTokensData = get().userTokensData
+                console.log("user is", storedUser)
+                console.log("stored user data", storedUserTokensData)
+                if (!storedUserTokensData || !storedUser ) return;
+
+                try {
+                    const validation = await validateTokenService();
+                    console.log("this is validation respones", validation)
+
+                    if (validation.success) {
+                        console.log("token is valid")
+                        set({ user: storedUser , userTokensData : storedUserTokensData });
+                    } else {
+                        setAuthTokenInAxios(storedUserTokensData.refreshToken)
+                        const refreshRes = await refreshTokenService();
+                        console.log(refreshRes)
+                        if (refreshRes.success) {
+                            setAuthTokenInAxios(refreshRes.data.data.accessToken);
+                            set({userTokensData : refreshRes.data.data})
+                            const response = await fetchUserService();
+                            if (response.success) {
+                                set(() => ({
+                                    user: response.data.data
+                                }));
+                            } else {
+                                set({ user: null });
+                                setAuthTokenInAxios(null);
+                            }
+                        } else {
+                            set({ user: null });
+                            setAuthTokenInAxios(null);
+                        }
+                    }
+                } catch (error) {
+                    set({ user: null });
+                    setAuthTokenInAxios(null);
+                } finally {
+                    set({ isHydrated: true })
+                }
+            },
+
             logout: () => {
                 set({ user: null, userData: null, error: null });
-                setAuthTokenInAxios(null); // Clear the auth token
+                setAuthTokenInAxios(null);
             },
+            setHydrated: () => set({ isHydrated: true })
         }),
         {
             name: 'FOSUserDataStorage',
             storage: createJSONStorage(() => AsyncStorage),
-            onRehydrateStorage: () => (state) => {
-                 if (state) state.user = null;
+            onRehydrateStorage: () => async (state) => {
+                state.isHydrated = false
+                if (state && state.user && state.userTokensData) {
+                    console.log("this is the access token", state.userTokensData.accessToken)
+                    setAuthTokenInAxios(state.userTokensData.accessToken)
+                    await state.refreshAccessToken();
+                } else {
+                    state.isHydrated = true
+                }
             }
-        } 
+        }
     )
 );
 export default useAuthStore;

@@ -24,7 +24,7 @@ const AddCard = (props) => {
   } = props;
   const { darkMode } = useThemeStore();
   const [selectedSize, setSelectedSize] = useState(variants[0]?.size || "Small");
-  const [quantity, setQuantity] = useState(1); // State for quantity
+  const [quantity, setQuantity] = useState(1); 
 
   const handleSizeSelection = (size) => {
     setSelectedSize(size);
@@ -32,7 +32,7 @@ const AddCard = (props) => {
 
   const getAdjustedPrice = () => {
     const selectedVariant = variants.find((variant) => variant.name === selectedSize);
-    return selectedVariant ? selectedVariant.price * quantity : 0; // Multiply price by quantity
+    return selectedVariant ? selectedVariant.price * quantity : 0; 
   };
 
   const handleIncrement = () => {

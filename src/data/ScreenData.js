@@ -2,7 +2,7 @@
 
 
 // import { IMAGE16,IMAGE17,IMAGE18 } from "../res/drawables";
-import { BURGERIMG, IMAGE16, IMAGE17, IMAGE18 } from "../res/drawables";
+import { BURGERIMG, IMAGE16, IMAGE17, PIZZA_ICON } from "../res/drawables";
  
 export const initialCartItems = [
   {
@@ -97,7 +97,7 @@ export const burgerData = [
     {
       id: 2,
       name: "Pizzas",
-      image: IMAGE18,
+      image: PIZZA_ICON,
     },
     {
       id: 3,

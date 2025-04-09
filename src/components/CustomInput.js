@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-nativ
 //icon
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 //color
-import { THEME_TEXT_COLOR,WHITE_COLOR,GRAY_COLOR } from "../res/colors";
+import { THEME_TEXT_COLOR,WHITE_COLOR,GRAY_COLOR, THEME_COLOR } from "../res/colors";
 
 
 const InputField = (props) => {
@@ -14,11 +14,13 @@ const InputField = (props) => {
     value,
     onChangeText,
     style,
+    inputStyle,
     keyboardType = "default", 
     autoCapitalize = "none", 
   } = props;  
   const [showPassword, setShowPassword] = useState(false);
   const [labelColor, setLabelColor] = useState(THEME_TEXT_COLOR);
+  const [borderColor , setBorderColor] = useState(GRAY_COLOR);
 
   const toggleShowPassword = () => {
     setShowPassword((prevState) => !prevState);
@@ -26,23 +28,25 @@ const InputField = (props) => {
 
   const handleTextChange = (text) => {
     onChangeText(text);
-    setLabelColor(text ? GRAY_COLOR : THEME_TEXT_COLOR);
+    setLabelColor(THEME_COLOR);
   };
 
   const handleFocus = () => {
-    setLabelColor(GRAY_COLOR);
+    setLabelColor(THEME_COLOR);
+    setBorderColor(THEME_COLOR);
   };
 
   const handleBlur = () => {
-    setLabelColor(value ? GRAY_COLOR : THEME_TEXT_COLOR);
+    setLabelColor(THEME_TEXT_COLOR);
+    setBorderColor(GRAY_COLOR);
   };
 
   return (
     <View style={[styles.inputContainer, style]}>
       <Text style={[styles.label, { color: labelColor }]}>{label}</Text>
-      <View style={styles.inputWrapper}>
+      <View style={{...styles.inputWrapper , borderColor}}>
         <TextInput
-          style={styles.input}
+          style={[styles.input , inputStyle]}
           placeholder={placeholder}
           secureTextEntry={secureTextEntry && !showPassword}
           value={value}
@@ -68,9 +72,9 @@ const InputField = (props) => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    marginBottom:10,
-    width: "100%",
-  },
+    marginVertical: 7,
+    width: "100%", 
+  }, 
   inputWrapper: {
     flexDirection: "row",
     alignItems: "center",
@@ -81,20 +85,19 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   label: {
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 5,
-    fontWeight: "bold",
     position: "absolute",
     backgroundColor: WHITE_COLOR,
-    top: -12,
+    top: -10,
     left: 20,
     zIndex: 9,
   },
   input: {
-    height: 75,
     flex: 1,
+    paddingVertical : 20,
     color: THEME_TEXT_COLOR,
-    fontSize: 15,
+    fontSize: 14,
     padding: 15,
     borderBottomWidth: 0,
     borderRadius: 10,

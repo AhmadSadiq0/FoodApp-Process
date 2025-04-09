@@ -7,7 +7,9 @@ import {
     URL_TO_REGISTER_USER, 
     URL_TO_SIGNIN_USER, 
     URL_TO_FETCH_USER_DATA, 
-    URL_TO_UPDATE_USER_DATA
+    URL_TO_UPDATE_USER_DATA,
+    URL_TO_VALIDATE_TOKEN,
+    URL_TO_REFRESH_TOKEN
 } from '../res/api';
 
 const signUpService = async (userData) => {
@@ -128,9 +130,71 @@ const updateUserService = async (payload) => {
     }
 };
 
+
+const validateTokenService = async () => {
+    try {
+        const response = await getRequest(URL_TO_VALIDATE_TOKEN);
+
+        if (response.success) {
+            return {
+                success: true,
+                status: response.status,
+                data: response.data,
+                message: 'Token is valid!'
+            };
+        } else {
+            return {
+                success: false,
+                status: response.status,
+                data: {},
+                message: response.message || 'Invalid token.'
+            };
+        }
+    } catch (error) {
+        return {
+            success: false,
+            status: error.response?.status,
+            data: null,
+            message: `Token validation failed: ${error.message || error}`
+        };
+    }
+};
+
+const refreshTokenService = async () => {
+    try {
+        const response = await postRequest(URL_TO_REFRESH_TOKEN);
+
+        if (response.success) {
+            return {
+                success: true,
+                status: response.status,
+                data: response.data,
+                message: 'Token refreshed successfully!'
+            };
+        } else {
+            return {
+                success: false,
+                status: response.status,
+                data: {},
+                message: response.message || 'Failed to refresh token.'
+            };
+        }
+    } catch (error) {
+        return {
+            success: false,
+            status: error.response?.status,
+            data: null,
+            message: `Token refresh failed: ${error.message || error}`
+        };
+    }
+};
+
+
 export {
     signUpService,
     signInService,
     fetchUserService,
     updateUserService,
+    validateTokenService,
+    refreshTokenService
 }

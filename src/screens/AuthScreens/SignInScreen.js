@@ -11,22 +11,18 @@ import {
   Keyboard,
 } from 'react-native';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
 import authStore from '../../store/AuthStore'
 import CustomButton from '../../components/CustomButtom';
 import InputField from '../../components/CustomInput';
 import { Google_Icon } from '../../res/drawables';
-import { THEME_TEXT_COLOR,BACK_GROUND ,THEME_COLOR,WHITE_COLOR,GRAY_COLOR,BLACK_COLOR} from '../../res/colors';
-const validationSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email address").required("Email is required"),
-  password: Yup.string()
-    .min(6, "Password must be at least 6 characters")
-    .required("Password is required"),
-});
-const SignInScreen = () => {
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  const [signInResponse, setSignInResponse] = useState(null); 
-  const {login} = authStore()
+import { THEME_TEXT_COLOR, BACK_GROUND, THEME_COLOR, WHITE_COLOR, GRAY_COLOR, BLACK_COLOR } from '../../res/colors';
+import { SignInValidationSchema } from '../../utils/ValidationSchema';
+
+
+const SignInScreen = ({ navigation }) => {
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const { login, loading, error } = authStore()
+
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -41,16 +37,14 @@ const SignInScreen = () => {
       keyboardDidShowListener.remove();
     };
   }, []);
-  const handleSignIn=async(values)=>{
-    console.log('Sign Up Values:', values);
-    const response =  await login({
+
+  const handleSignIn = async (values) => {
+    await login({
       identifier: values.email,
       password: values.password,
     });
-    console.log('Sign In Response:', response);
-    setSignInResponse(response);
   }
-  
+
   return (
     <View behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
@@ -67,11 +61,11 @@ const SignInScreen = () => {
             <Text style={styles.text1}>Create your free account</Text>
             <View style={styles.box1}>
               <Text style={styles.text2}>Already have an account?</Text>
-              <Pressable onPress={() => { alert('Sign Up is pressed'); }}>
+              <Pressable onPress={() => { navigation.navigate('SignUp'); }}>
                 <Text style={styles.text3}>Sign Up</Text>
               </Pressable>
             </View>
-            {!isKeyboardVisible ? (
+            {!keyboardVisible ? (
               <TouchableOpacity
                 style={styles.touchable1}
                 onPress={() => { alert('Go to Google'); }}
@@ -92,7 +86,7 @@ const SignInScreen = () => {
           </View>
 
           <Formik initialValues={{ email: "", password: "" }}
-            validationSchema={validationSchema}
+            validationSchema={SignInValidationSchema}
             onSubmit={(values) => {
               handleSignIn(values)
             }}>
@@ -107,37 +101,41 @@ const SignInScreen = () => {
               <View style={styles.formContainer}>
                 <View style={styles.inputContainer}>
 
-                <InputField
-                  label="Email"
-                  placeholder="User 's email here"
-                  value={values.email}
-                  onChangeText={handleChange("email")}
-                  onBlur={handleBlur("email")}
-                />
-                {touched.email && errors.email && (
-                  <Text style={styles.errorText}>{errors.email}</Text>
-                )}
+                  <InputField
+                    label="Email"
+                    placeholder="User 's email here"
+                    value={values.email}
+                    onChangeText={handleChange("email")}
+                    onBlur={handleBlur("email")}
+                  />
+                  {touched.email && errors.email && (
+                    <Text style={styles.errorText}>{errors.email}</Text>
+                  )}
                 </View>
-                <View style={styles.inputContainer}> 
-                <InputField
-                  label="Password"
-                  placeholder="User 's password here"
-                  secureTextEntry={true}
-                  value={values.password}
-                  onChangeText={handleChange("password")}
-                  onBlur={handleBlur("password")}
-                />
-                {touched.password && errors.password && (
-                  <Text style={styles.errorText}>{errors.password}</Text>
-                )}
+                <View style={styles.inputContainer}>
+                  <InputField
+                    label="Password"
+                    placeholder="User 's password here"
+                    secureTextEntry={true}
+                    value={values.password}
+                    onChangeText={handleChange("password")}
+                    onBlur={handleBlur("password")}
+                  />
+                  {touched.password && errors.password && (
+                    <Text style={styles.errorText}>{errors.password}</Text>
+                  )}
                 </View>
+                {error?.login && (
+                  <Text style={styles.errorText}>{error.login} - Please try again</Text>
+                )}
                 <CustomButton
-                  title={"SignIn"}
+                  title={"Sign In"}
                   onPress={handleSubmit}
+                  loading={loading.login}
                 />
-                </View>
-                 )}
-              </Formik>
+              </View>
+            )}
+          </Formik>
         </View>
       </ScrollView>
     </View>
@@ -200,7 +198,7 @@ const styles = StyleSheet.create({
     borderColor: GRAY_COLOR,
     flexDirection: 'row',
     borderRadius: 25,
-    marginVertical: 15,
+    marginVertical: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -234,11 +232,10 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   errorText: {
-    fontSize: 12,
+    fontSize: 10,
     color: THEME_COLOR,
-    marginTop: 5,
     alignSelf: "flex-start",
-    // marginBottom: 10,
+    left: 4
   },
   formContainer: {
     width: '100%',

@@ -38,7 +38,7 @@ const MenuScreen = ({ navigation }) => {
     categoriesError,
     fetchCategories,
   } = useCategoryStore();
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   // Fetch data on component mount
   useEffect(() => {
@@ -47,7 +47,7 @@ const MenuScreen = ({ navigation }) => {
   }, []);
 
   // Filter data based on selected category and search query
-  const filteredData = categorized_items
+  const filteredData = selectedCategory && selectedCategory == "all" ? categorized_items : categorized_items
     .filter(category => !selectedCategory || category.categoryId === selectedCategory)
     .map(category => ({
       ...category,
@@ -59,7 +59,7 @@ const MenuScreen = ({ navigation }) => {
 
   // Handle add to cart action
   const handleAddToCart = (item) => {
-     navigation.navigate("AddItem", { item });
+     navigation.navigate("itemDetail", { item });
   };
 
   // Render individual category item
@@ -67,23 +67,38 @@ const MenuScreen = ({ navigation }) => {
     const isSelected = selectedCategory === item._id;
     const backgroundColor = isSelected ? THEME_COLOR : darkMode ? BLACK_COLOR : WHITE_COLOR;
     const textColor = isSelected ? WHITE_COLOR : darkMode ? WHITE_COLOR : THEME_COLOR;
-
+  
     return (
       <TouchableOpacity
-        style={[styles.categoryCard, { backgroundColor }]}
-        onPress={() => setSelectedCategory(isSelected ? null : item._id)}
+        onPress={() => setSelectedCategory(item._id)}
+        style={[
+          styles.categoryCard,
+          {
+            backgroundColor,
+            transform: [{ scale: isSelected ? 1.05 : 1 }],
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.2,
+            shadowRadius: 6,
+            elevation: 5,
+          },
+        ]}
+        activeOpacity={0.8}
       >
-        <Image
-          source={{ uri: item.image }}
-          style={styles.image}
-          resizeMode="cover"
-        />
+        <View style={styles.imageWrapper}>
+          <Image
+            source={{ uri: item.image }}
+            style={styles.categoryImage}
+            resizeMode="cover"
+          />
+        </View>
         <Text style={[styles.categoryText, { color: textColor }]}>
           {item.name}
         </Text>
       </TouchableOpacity>
     );
   };
+  
 
   // Render category list
   const renderCategoryList = () => {
@@ -93,9 +108,18 @@ const MenuScreen = ({ navigation }) => {
     if (categoriesError) {
       return <ErrorText text={categoriesError} darkMode={darkMode} />;
     }
+  
+    const allCategory = {
+      _id: "all",
+      name: "All",
+      image: "https://cdn-icons-png.flaticon.com/512/32/32195.png", 
+    };
+  
+    const updatedCategories = [allCategory, ...categories];
+  
     return (
       <FlatList
-        data={categories}
+        data={updatedCategories}
         renderItem={renderCategory}
         keyExtractor={(item) => item._id}
         contentContainerStyle={styles.scrollContainer}
@@ -104,6 +128,7 @@ const MenuScreen = ({ navigation }) => {
       />
     );
   };
+  
 
   // Render menu items list
   const renderDatalist = ({ item }) => (

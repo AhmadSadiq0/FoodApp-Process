@@ -1,8 +1,13 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-//images
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
 import { BURGERIMG } from "../res/drawables";
-//colors
 import {
   THEME_COLOR,
   THEME_TEXT_COLOR,
@@ -10,128 +15,101 @@ import {
   WHITE_COLOR,
   Back_Ground,
 } from "../res/colors";
-//Store
 import useThemeStore from "../../zustand/ThemeStore";
 
-const BurgerCard = (props) => {
+const { width } = Dimensions.get("window");
 
+const BurgerCard = ({ name, price, image, onAdd, description }) => {
   const { darkMode } = useThemeStore();
-
-  const { name, price, image, onAdd , description,navigation,item } = props;
+  const textColor = darkMode ? WHITE_COLOR : THEME_TEXT_COLOR;
+  const cardColor = darkMode ? BLACK_COLOR : WHITE_COLOR;
 
   return (
-    <View
-      style={[
-        styles.card,
-        { backgroundColor: darkMode ? BLACK_COLOR : Back_Ground },
-      ]}
-    >
-      <Text
-        style={[
-          styles.name,
-          { color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR },
-        ]}
-      >
-        {name && name.length > 16 ? name.slice(0, 16) + "..." : name}
-      </Text>
-      <Image source={image ? {uri : image} : BURGERIMG} style={styles.image} />
-      <Text
-        style={[
-          styles.price,
-          { color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR },
-        ]}
-      >
-        {`Rs. ${price}/-`}
-      </Text>
-      <Text
-        style={[
-          styles.serving,
-          { color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR },
-        ]}
-        numberOfLines={2}
-      >
-        {description && description.length > 30 ? description.slice(0, 30) + "..." : description}
-      </Text>
-      <View style={styles.addmargin}>
-        <TouchableOpacity
-          style={[styles.addButton, { backgroundColor: THEME_COLOR }]}
-          onPress={() => {
-            onAdd();
-            //  navigation.navigate("Discount", { item: burger });
-            // navigation.navigate('Discounts', { item : burger });
-          }}
-        >
-          <Text
-            style={[
-              styles.addText,
-              { color: darkMode ? BLACK_COLOR : WHITE_COLOR },
-            ]}
-          >
-            +
+    <View style={[styles.card, { backgroundColor: cardColor }]}>
+      <Image
+        source={image ? { uri: image } : BURGERIMG}
+        style={styles.image}
+        resizeMode="cover"
+      />
+
+      <View style={styles.content}>
+        <Text style={[styles.name, { color: textColor }]}>
+          {name?.length > 18 ? name.slice(0, 18) + "..." : name}
+        </Text>
+
+        <Text style={[styles.description, { color: textColor }]}>
+          {description?.length > 40
+            ? description.slice(0, 40) + "..."
+            : description}
+        </Text>
+
+        <View style={styles.footer}>
+          <Text style={[styles.price, { color: THEME_COLOR }]}>
+            Rs. {price}/-
           </Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.addButton} onPress={onAdd}>
+            <Text style={styles.addText}>+</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 };
+
+const CARD_WIDTH = 180;
+const CARD_HEIGHT = 260;
+
 const styles = StyleSheet.create({
   card: {
-    width: 150,
-    height: 230,
-    padding: 3,
-    borderRadius: 10,
-    backgroundColor: Back_Ground,
-    shadowColor: BLACK_COLOR,
+    width: CARD_WIDTH,
+    height: CARD_HEIGHT,
+    marginHorizontal: 10,
+    borderRadius: 18,
+    shadowColor: "#000",
     shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 2,
-    margin: 1,
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingVertical: 5,
+    shadowRadius: 6,
+    elevation: 4,
+    overflow: "hidden",
   },
   image: {
     width: "100%",
-    height: 100,
-    borderRadius: 10,
-    marginVertical: 15,
+    height: "50%",
+  },
+  content: {
+    flex: 1,
+    padding: 10,
+    justifyContent: "space-between",
   },
   name: {
-    fontSize: 14,
-    fontWeight: "bold",
-    //marginRight: 1,
-    marginTop: 5,
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  description: {
+    fontSize: 13,
+    marginTop: 4,
+  },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 10,
   },
   price: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: "bold",
-    alignSelf : "flex-start",
-    left: 5,
-  },
-  serving: {
-    width : '60%',
-    fontSize: 11,
-    alignSelf : "flex-start",
-    left: 5,
   },
   addButton: {
-    alignSelf: "flex-end",
-    width: 34,
-    height: 34,
     backgroundColor: THEME_COLOR,
+    width: 32,
+    height: 32,
     borderRadius: 8,
-    alignItems: "center",
     justifyContent: "center",
-    left: 48,
-    bottom: 30,
+    alignItems: "center",
   },
   addText: {
-    fontSize: 18,
+    color: WHITE_COLOR,
+    fontSize: 20,
     fontWeight: "bold",
-  },
-  addmargin: {
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
   },
 });
 

@@ -156,7 +156,7 @@ const ProfileHeader = memo(
             <View style={styles.bellContainer}>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("Notifcations");
+                  navigation.navigate("Notifications");
                 }}
               >
                 <Image 

@@ -8,7 +8,7 @@ async (url,  payload) => {
         console.log('RequestUrl ===> ', url)
         console.log('RequestPayload ===> ', payload)
 
-        response = await axios.post(url, payload, {
+        response = await axiosInstance.post(url, payload, {
             headers: {
                 'Content-Type' : 'application/json',
             }

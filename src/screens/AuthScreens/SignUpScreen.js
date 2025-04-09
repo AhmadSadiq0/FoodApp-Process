@@ -11,7 +11,6 @@ import {
   Keyboard,
 } from "react-native";
 import { Formik } from "formik";
-import * as Yup from "yup";
 //Field
 import InputField from "../../components/CustomInput";
 //Button
@@ -22,17 +21,9 @@ import { Google_Icon } from "../../res/drawables";
 import { THEME_TEXT_COLOR, GRAY_COLOR, BLACK_COLOR, WHITE_COLOR, THEME_COLOR } from "../../res/colors";
 //store
 import authStore from '../../store/AuthStore'
-const validationSchema = Yup.object({
-  username: Yup.string()
-    .min(3, 'Name must be at least 3 characters long')
-    .required('Full Name is required'),
-  email: Yup.string()
-    .email('Invalid email format')
-    .required('Email is required'),
-  password: Yup.string()
-    .min(6, 'Password must be at least 6 characters')
-    .required('Password is required'),
-});
+//validationSchema
+import { SignUpValidationSchema } from "../../utils/ValidationSchema";
+
 
 const SignUpScreen = ({navigation}) => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
@@ -97,7 +88,7 @@ const SignUpScreen = ({navigation}) => {
             <Text style={styles.text1}>Create your free account</Text>
             <View style={styles.box1}>
               <Text style={styles.text2}>Already have an account?</Text>
-              <Pressable  onPress={() => navigation.navigate('SignIn')}>
+              <Pressable  onPress={() => navigation.goBack()}>
                 <Text style={styles.text3}>Sign In</Text>
               </Pressable>
             </View>
@@ -119,22 +110,7 @@ const SignUpScreen = ({navigation}) => {
           </View>
           <Formik
             initialValues={{ username: '', email: '', password: '' }}
-            validationSchema={validationSchema}
-            // onSubmit={async (values) => {
-            //   let newUser = {
-            //     address: "",
-            //     email: values.email,
-            //     firstname: "New Test",
-            //     lastname: "User",
-            //     password: values.password,
-            //     paymentMethod: {},
-            //     phone: "",
-            //     profileImage: "",
-            //     role: "user",
-            //     username: values.username
-            // }
-            //  await  handleSignUp(newUser)
-            // }}
+            validationSchema={SignUpValidationSchema}
             onSubmit={async (values) => {
               await handleSignUp({
                 ...values,
@@ -261,7 +237,7 @@ const styles = StyleSheet.create({
     borderColor: GRAY_COLOR,  
     flexDirection: "row",
     borderRadius: 25,
-    marginVertical: 15,
+    marginVertical: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },

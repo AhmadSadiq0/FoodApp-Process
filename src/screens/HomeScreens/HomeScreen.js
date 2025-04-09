@@ -5,11 +5,8 @@ import {
   FlatList, 
   Text, 
   ScrollView, 
-  ActivityIndicator,
-  TouchableOpacity,
-  Image 
+  ActivityIndicator
 } from "react-native";
-import RBSheet from "react-native-raw-bottom-sheet";
 // Components
 import { Datalist } from "../../components";
 // Stores
@@ -20,7 +17,6 @@ import useThemeStore from "../../../zustand/ThemeStore";
 // Colors
 import { WHITE_COLOR, Back_Ground, BLACK_COLOR, THEME_COLOR } from "../../res/colors";
 // Screens
-import AddItem from "./AddItem";
 
 const HomeScreen = ({ navigation }) => {
   const { darkMode } = useThemeStore();
@@ -32,7 +28,6 @@ const HomeScreen = ({ navigation }) => {
     homeSectionItemsError 
   } = useItemStore();
   const { fetchBranches,selectedBranch } = useBranchStore();
-  const refRBSheet = useRef();
 
   useEffect(() => { 
     if (selectedBranch) {
@@ -55,23 +50,28 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   const handleAddToCart = (burger) => {
-    navigation.navigate('Discounts', { item: burger });
+    navigation.navigate('itemDetail', { item: burger });
   };
 
   const handleSeeMorePress = (title, categoryId) => {
-    navigation.navigate('Offers', { title, categoryId });
+    navigation.navigate('SeeAll', { title, categoryId , isHome : true });
   };
 
-  const renderDatalist = ({ item }) => (
-    <Datalist
-      title={item.categoryName}
-      seeMoreText="See All"
-      onSeeMorePress={() => handleSeeMorePress(item.categoryName, item.categoryId)}
-      data={item.items}
-      onAddToCart={handleAddToCart}
-      darkMode={darkMode}
-    />
-  );
+  const renderDatalist = ({ item, index }) => {
+    const isLastArray = index == filteredData.length - 1;
+    console.log(isLastArray)
+    return (
+      <Datalist
+        title={item.categoryName}
+        seeMoreText="See All"
+        onSeeMorePress={() => handleSeeMorePress(item.categoryName, item.categoryId)}
+        data={item.items}
+        onAddToCart={handleAddToCart}
+        darkMode={darkMode}
+        isLastArray={isLastArray}  
+      />
+    );
+  };
 
   // Render loading indicator
   const renderLoading = () => (
@@ -110,6 +110,7 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
+    paddingTop : 15,
     backgroundColor: Back_Ground,
   },
   mainContainerDark: {

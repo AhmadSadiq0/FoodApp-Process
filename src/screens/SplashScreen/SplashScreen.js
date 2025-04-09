@@ -1,10 +1,11 @@
 import React, {useEffect} from 'react';
 import { 
   StyleSheet, 
-  Text, 
+  Image, 
   View 
 } from 'react-native';
-import { THEME_COLOR } from '../../res/colors';
+import { THEME_COLOR, WHITE_COLOR } from '../../res/colors';
+import { PIZZA_ICON } from '../../res/drawables';
 
 const SplashScreen = () => {
 
@@ -15,7 +16,7 @@ useEffect(() => {
 
   return (
     <View style={styles.container}>
-      <Text>SplashScreen</Text>
+      <Image source={PIZZA_ICON} style={styles.image}/>
     </View>
   )
 }
@@ -26,6 +27,12 @@ const styles = StyleSheet.create({
     backgroundColor:THEME_COLOR,
     alignItems:'center',
     justifyContent:'center',
+},
+image : {
+  width : 80,
+  height : 80,
+  resizeMode : 'contain',
+  tintColor : WHITE_COLOR
 }
 })
 export default SplashScreen;
