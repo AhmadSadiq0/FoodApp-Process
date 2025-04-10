@@ -1,103 +1,12 @@
-// import { create } from 'zustand';
-// import { 
-//     fetchBranchesService, 
-//     createBranchService, 
-//     updateBranchService, 
-//     deleteBranchService 
-// } from '../services/ServiceBranch';
-
-// const initialState = {
-//     branches: [],
-//     branches_loading: false,
-//     branches_error: null,
-// };
-
-// const useBranchStore = create((set) => ({
-//     ...initialState,
-
-//     // Fetch all branches
-//     fetchBranches: async () => {
-//         set({ branches_loading: true, branches_error: null });
-//         try {
-//             const response = await fetchBranchesService();
-//             console.log("branches data are" , response.data.data)
-//             if (response.success) {
-//                 set({ branches: response.data.data, branches_loading: false });
-//             } else {
-//                 set({ branches: [], branches_loading: false, branches_error: response.message });
-//             }
-//         } catch (error) {
-//             set({ branches: [], branches_loading: false, branches_error: error.message });
-//         }
-//     },
-//     // Create a new branchh
-//     createBranch: async (branchData) => {
-//         set({ branches_loading: true, branches_error: null });
-//         try {
-//             const response = await createBranchService(branchData);
-//             if (response.success) {
-//                 set((state) => ({ 
-//                     branches: [...state.branches, response.data], 
-//                     branches_loading: false 
-//                 }));
-//             } else {
-//                 set({ branches_loading: false, branches_error: response.message });
-//             }
-//         } catch (error) {
-//             set({ branches_loading: false, branches_error: error.message });
-//         }
-//     },
-
-//     // Update an existing branch
-//     updateBranch: async (branchId, branchData) => {
-//         set({ branches_loading: true, branches_error: null });
-//         try { 
-//             const response = await updateBranchService(branchId, branchData);
-//             if (response.success) {
-//                 set((state) => ({
-//                     branches: state.branches.map(branch => 
-//                         branch._id === branchId ? response.data : branch
-//                     ),
-//                     branches_loading: false
-//                 }));
-//             } else {
-//                 set({ branches_loading: false, branches_error: response.message });
-//             }
-//         } catch (error) {
-//             set({ branches_loading: false, branches_error: error.message });
-//         }
-//     },
-
-//     // Delete a branch 
-//     deleteBranch: async (branchId) => {
-//         set({ branches_loading: true, branches_error: null });
-//         try {
-//             const response = await deleteBranchService(branchId);
-//             if (response.success) {
-//                 set((state) => ({
-//                     branches: state.branches.filter(branch => branch._id !== branchId),
-//                     branches_loading: false
-//                 }));
-//             } else {
-//                 set({ branches_loading: false, branches_error: response.message });
-//             }
-//         } catch (error) {
-//         }
-//             set({ branches_loading: false, branches_error: error.message });
-//     },
-
-//     // Clear branches
-//     clearBranches: () => set({ branches: [] }),
-// }));
-// export default useBranchStore;
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { 
   fetchBranchesService, 
   createBranchService, 
   updateBranchService, 
   deleteBranchService 
 } from '../services/ServiceBranch';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
   branches: [],
@@ -111,7 +20,6 @@ const useBranchStore = create(
     (set, get) => ({
       ...initialState,
 
-      // Fetch all branches
       fetchBranches: async () => {
         set({ branches_loading: true, branches_error: null });
         try {
@@ -121,7 +29,6 @@ const useBranchStore = create(
               branches: response.data.data, 
               branches_loading: false 
             });
-            // Keep selected branch if it still exists in the new list
             const currentSelected = get().selectedBranch;
             if (currentSelected) {
               const branchStillExists = response.data.data.some(
@@ -130,6 +37,8 @@ const useBranchStore = create(
               if (!branchStillExists) {
                 set({ selectedBranch: null });
               }
+            }else {
+              set({ selectedBranch: response.data.data[0] });
             }
           } else {
             set({ 
@@ -146,8 +55,6 @@ const useBranchStore = create(
           });
         }
       },
-
-      // Create a new branch
       createBranch: async (branchData) => {
         set({ branches_loading: true, branches_error: null });
         try {
@@ -219,14 +126,10 @@ const useBranchStore = create(
           return { success: false, error: error.message };
         }
       },
-
-      // Select a branch
       setSelectedBranch: (branch) => set({ selectedBranch: branch }),
       
-      // Clear selected branch
       clearSelectedBranch: () => set({ selectedBranch: null }),
 
-      // Clear all branches
       clearBranches: () => set({ 
         branches: [], 
         selectedBranch: null,
@@ -237,10 +140,10 @@ const useBranchStore = create(
       resetStore: () => set(initialState),
     }),
     {
-      name: 'branch-storage', // unique name for localStorage
-      getStorage: () => localStorage, // or AsyncStorage for React Native
-      partialize: (state) => ({
-        selectedBranch: state.selectedBranch, // persist only selectedBranch
+      name: 'branch-storage',
+      storage: createJSONStorage(() => AsyncStorage),
+      onRehydrateStorage: (state) => ({
+        selectedBranch: state.selectedBranch, 
       }),
     }
   )

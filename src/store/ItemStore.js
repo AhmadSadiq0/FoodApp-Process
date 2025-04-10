@@ -15,7 +15,7 @@ const useItemStore = create((set) => ({
     ...initialState,
 
     fetchItemsByBranch: async (branchId) => {
-        set({ categorized_loading: true, categorized_error: null });
+        set({ categorized_loading: true, categorized_error: null , categorized_items : [] });
         try {
             const response = await fetchCategorizedItemsService(branchId);
             console.log(response.data)
@@ -30,7 +30,7 @@ const useItemStore = create((set) => ({
     },
 
     fetchHomeSectionItems: async (branchId) => {
-        set({ homeSectionItemsLoading: true, homeSectionItemsError: null });
+        set({ homeSectionItemsLoading: true, homeSectionItemsError: null , homeSectionItems : [] });
         try {
             const response = await fetchHomeSectionItemsService(branchId);
             console.log(response.data)

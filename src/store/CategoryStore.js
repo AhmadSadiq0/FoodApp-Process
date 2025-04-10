@@ -15,10 +15,10 @@ const initialState = {
 const useCategoryStore = create((set) => ({
     ...initialState,
 
-    fetchCategories: async () => {
+    fetchCategories: async (branchId) => {
         set({ categoriesLoading: true, categoriesError: null });
         try {
-            const response = await fetchCategoriesService();
+            const response = await fetchCategoriesService(branchId);
             console.log(response.data)
             if (response.success) {
                 set({ categories: response.data.data, categoriesLoading: false });

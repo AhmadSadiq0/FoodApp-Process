@@ -66,11 +66,13 @@ const SeeAllScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    
     backgroundColor: Back_Ground,
   },
   headerRow: {
-    marginTop: 30,
+    marginTop: 35,
+    paddingHorizontal : 15,
+    paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',

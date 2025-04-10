@@ -44,10 +44,6 @@ const HomeScreen = ({ navigation }) => {
       )
     }))
     .filter(category => category.items.length > 0);
-  useEffect(() => { 
-    fetchHomeSectionItems("67c2cf8113ac30409ef067ec");  
-    fetchBranches();
-  }, []);
 
   const handleAddToCart = (burger) => {
     navigation.navigate('itemDetail', { item: burger });

@@ -11,9 +11,9 @@ import {
     URL_TO_DELETE_CATEGORY 
 } from '../res/api';
 
-const fetchCategoriesService = async () => {
+const fetchCategoriesService = async (branchId) => {
     try {
-        const response = await getRequest(URL_TO_GET_CATEGORIES);
+        const response = await getRequest(`${URL_TO_GET_CATEGORIES}/${branchId}`);
 
         if (response.success) {
             return {

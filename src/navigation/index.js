@@ -84,7 +84,6 @@ const HomeStack = () => {
         })}
       />
       <Stack.Screen name="Deals" component={DealsScreen} />
-      <Stack.Screen name="SeeAll" component={SeeAllScreen} />
     </Stack.Navigator>
   );
 };
@@ -124,7 +123,7 @@ const CartStack = () => {
               showBellIcon={false}
             />
           ),
-          headerShown: true,
+          headerShown: false,
         })}
       />
       <Stack.Screen name="CheckOut" component={CheckOutScreen} />
@@ -205,7 +204,7 @@ const BottomTabStack = () => (
     screenOptions={{
       tabBarStyle: {
         backgroundColor: THEME_COLOR,
-        height: 53,
+        height: 50,
       },
       tabBarLabelStyle: {
         fontSize: 12,
@@ -319,6 +318,7 @@ const Navigation = () => {
               }}
             />
             <RootStack.Screen name="itemDetail" component={ItemDetailScreen} />
+            <RootStack.Screen name="SeeAll" component={SeeAllScreen} />
           </>
         ) : (
           <RootStack.Screen name="Auth" component={AuthStack} />
@@ -343,8 +343,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: {
-    width: 22,
-    height: 22,
+    width: 20,
+    height: 20,
     resizeMode: 'contain',
     tintColor : WHITE_COLOR
   },
