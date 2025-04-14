@@ -80,5 +80,4 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE_COLOR,
   },
 });
-
 export default CartScreen;

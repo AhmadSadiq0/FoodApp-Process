@@ -27,7 +27,8 @@ const BurgerCardHorizantol = (props) => {
   const textColor = darkMode ? WHITE_COLOR : BLACK_COLOR;
 
   return (
-    <View style={[styles.cardContainer, { backgroundColor }]}>
+    <TouchableOpacity style={[styles.cardContainer, { backgroundColor }]} onPress={onAdd}>
+      
       <Image
         source={image ? { uri: image } : BURGERIMG}
         style={styles.image}
@@ -52,7 +53,7 @@ const BurgerCardHorizantol = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

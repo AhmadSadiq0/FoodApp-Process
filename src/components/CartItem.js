@@ -4,119 +4,120 @@ import { DELETE_ICON, BURGERIMG } from '../res/drawables';
 import { WHITE_COLOR, THEME_COLOR, GRAY_COLOR, BLACK_COLOR } from '../res/colors';
 import useThemeStore from '../../zustand/ThemeStore';
 
-const CartItem = ({ item, onPressItem, onDeleteItem }) => {
-  const { darkMode } = useThemeStore();
-
+const CartItem = ({ item, onIncrease, onDecrease, onDeleteItem }) => {
   return (
-    <View style={[
-      styles.cartItem, 
-      item.active && { borderColor: THEME_COLOR },
-      darkMode && styles.cartItemDark
-    ]}>
+    <View style={styles.container}>
       <Image 
         source={item.image ? { uri: item.image } : BURGERIMG} 
-        style={styles.cartItemImage} 
-        resizeMode="contain"
+        style={styles.image} 
+        resizeMode="cover"
       />
-      <View style={styles.cartItemDetails}>
-        <Text style={[styles.cartItemName, darkMode && styles.cartItemNameDark]}>{item.name}</Text>
-        <Text style={[styles.cartServing, darkMode && styles.cartItemNameDark]}>{item.serving}</Text>
-        <Text style={[styles.cartItemPrice, darkMode && styles.cartItemNameDark]}>Rs. {item.price}/-</Text>
+      <View style={styles.details}>
+        <Text style={styles.name}>{item.name}</Text>
+        <Text style={styles.type}>{item.serving}</Text>
+        <Text style={styles.price}>${item.price}</Text>
       </View>
-      <View style={styles.cartItemActions}>
-        <ToggleButton active={item.active} onPress={() => onPressItem(item.id)} />
-        <DeleteButton onPress={() => onDeleteItem(item.id)} />
+      <View style={styles.quantityControl}>
+        <TouchableOpacity 
+          style={styles.qtyButton} 
+          onPress={onDecrease}
+          disabled={item.quantity <= 1} // Disable if quantity is 1 or less
+        >
+          <Text style={[styles.qtyText, item.quantity <= 1 && { color: GRAY_COLOR }]}>−</Text>
+        </TouchableOpacity>
+        <Text style={styles.qtyCount}>{item.quantity}</Text>
+        <TouchableOpacity style={styles.qtyButton} onPress={onIncrease}>
+          <Text style={styles.qtyText}>＋</Text>
+        </TouchableOpacity>
       </View>
+      <TouchableOpacity 
+        style={styles.deleteButton} 
+        onPress={() => onDeleteItem(item.id)}
+      >
+        <Image style={styles.deleteIcon} source={DELETE_ICON} />
+      </TouchableOpacity>
     </View>
   );
 };
 
-const ToggleButton = ({ active, onPress }) => (
-  <TouchableOpacity 
-    style={[styles.circleBorder, active && { borderColor: THEME_COLOR }]} 
-    onPress={onPress}
-  >
-    <View style={[styles.circle, active && { backgroundColor: GRAY_COLOR, borderRadius: 10 }]} />
-  </TouchableOpacity>
-);
-
-const DeleteButton = ({ onPress }) => (
-  <TouchableOpacity onPress={onPress}>
-    <Image style={styles.deleteIcon} source={DELETE_ICON} />
-  </TouchableOpacity>
-);
-
 const styles = StyleSheet.create({
-  cartItem: {
+  container: {
     flexDirection: 'row',
-    padding: 10,
-    marginBottom: 12,
-    borderColor: WHITE_COLOR,
-    borderWidth: 1,
-    borderRadius: 10,
-    backgroundColor: WHITE_COLOR,
+    borderRadius: 16,
+    padding: 12,
     alignItems: 'center',
+    backgroundColor: WHITE_COLOR, // Changed from GRAY_COLOR to WHITE_COLOR
+    marginBottom: 12,
     shadowColor: GRAY_COLOR,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    position: 'relative',
   },
-  cartItemDark: {
-    backgroundColor: BLACK_COLOR,
-    borderColor: WHITE_COLOR,
-  },
-  cartItemImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 5,
+  image: {
+    width: 94,
+    height: 94,
+    borderRadius: 16,
+    backgroundColor: '#f5f5f5',
     marginRight: 12,
   },
-  cartItemDetails: {
+  details: {
     flex: 1,
+    justifyContent: 'center',
   },
-  cartItemName: {
+  name: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: BLACK_COLOR,
+  },
+  type: {
+    fontSize: 12,
+    color: GRAY_COLOR,
+    marginTop: 2,
+  },
+  price: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginTop: 6,
+    color: BLACK_COLOR,
+  },
+  quantityControl: {
+    paddingTop: 9,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginRight: 8,
+  },
+  qtyButton: {
+    backgroundColor: '#f0f0f0',
+    borderRadius: 12,
+    width: 24,
+    height: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  qtyText: {
+    color: BLACK_COLOR,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  qtyCount: {
+    color: BLACK_COLOR,
     fontSize: 14,
     fontWeight: 'bold',
-    color: THEME_COLOR,
+    marginHorizontal: 6,
   },
-  cartItemNameDark: {
-    color: WHITE_COLOR,
-  },
-  cartItemPrice: {
-    fontSize: 12,
-    color: THEME_COLOR,
-    marginTop: 4,
-  },
-  cartServing: {
-    fontSize: 12,
-    color: THEME_COLOR,
-    marginTop: 4,
-  },
-  cartItemActions: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
+  deleteButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    padding: 4,
   },
   deleteIcon: {
-    height: 25,
-    width: 25,
-  },
-  circleBorder: {
-    borderWidth: 2,
-    borderColor: THEME_COLOR,
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10,
-  },
-  circle: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: THEME_COLOR,
+    height: 18,
+    width: 18,
+    tintColor: THEME_COLOR,
   },
 });
 

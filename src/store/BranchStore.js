@@ -37,7 +37,9 @@ const useBranchStore = create(
               if (!branchStillExists) {
                 set({ selectedBranch: null });
               }
+              console.log("currentSelected", currentSelected);
             }else {
+              console.log("setting first value")
               set({ selectedBranch: response.data.data[0] });
             }
           } else {

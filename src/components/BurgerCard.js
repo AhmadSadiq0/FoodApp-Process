@@ -19,13 +19,20 @@ import useThemeStore from "../../zustand/ThemeStore";
 
 const { width } = Dimensions.get("window");
 
-const BurgerCard = ({ name, price, image, onAdd, description }) => {
+const BurgerCard = ({ name, price, image, onAdd, description, onCardPress }) => {
   const { darkMode } = useThemeStore();
   const textColor = darkMode ? WHITE_COLOR : THEME_TEXT_COLOR;
   const cardColor = darkMode ? BLACK_COLOR : WHITE_COLOR;
 
   return (
-    <View style={[styles.card, { backgroundColor: cardColor }]}>
+    <TouchableOpacity 
+      style={[styles.card, { backgroundColor: cardColor }]}
+      onPress={(e) => {
+        e.stopPropagation(); 
+        onAdd();
+      }}
+      activeOpacity={0.8}
+    >
       <Image
         source={image ? { uri: image } : BURGERIMG}
         style={styles.image}
@@ -47,12 +54,18 @@ const BurgerCard = ({ name, price, image, onAdd, description }) => {
           <Text style={[styles.price, { color: THEME_COLOR }]}>
             Rs. {price}/-
           </Text>
-          <TouchableOpacity style={styles.addButton} onPress={onAdd}>
+          <TouchableOpacity 
+            style={styles.addButton} 
+            onPress={(e) => {
+              e.stopPropagation(); 
+              onAdd();
+            }}
+          >
             <Text style={styles.addText}>+</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

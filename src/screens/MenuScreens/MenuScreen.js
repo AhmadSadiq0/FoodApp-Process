@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   FlatList,
+  
 } from "react-native";
 import {
   WHITE_COLOR,
@@ -84,10 +85,16 @@ const MenuScreen = ({ navigation }) => {
           data={filteredData}
           ListHeaderComponent={
             <View style={[styles.header, darkMode && styles.headerDark]}>
+                <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.categoryScrollContainer}
+          >
               <CategoryList
                 selectedCategory={selectedCategory}
                 onSelectCategory={setSelectedCategory}
               />
+              </ScrollView>
             </View>
           }
           renderItem={renderDatalist}
@@ -114,6 +121,9 @@ const styles = StyleSheet.create({
   },
   headerDark: {
     backgroundColor: BLACK_COLOR,
+  },
+  categoryScrollContainer: {
+    paddingHorizontal: 16, 
   },
 });
 

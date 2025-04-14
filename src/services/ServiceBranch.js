@@ -81,7 +81,6 @@ const createBranchService = async (branchData) => {
 const updateBranchService = async (branchId, branchData) => {
     try {
         const response = await putRequest(`${URL_TO_UPDATE_BRANCH}/${branchId}`, branchData);
-
         if (response.status) {
             return {
                 success: true,
