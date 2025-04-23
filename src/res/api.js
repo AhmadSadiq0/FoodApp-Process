@@ -28,3 +28,9 @@ export const URL_TO_UPDATE_BRANCH = `${BASE_URL}/branches/update`;
 export const URL_TO_DELETE_BRANCH = `${BASE_URL}/branches/delete`;
 // Extras Endpoints
 export const URL_TO_GET_EXTRAS = `${BASE_URL}/extras/branch`;
+
+// Orders
+export const URL_TO_CREATE_ORDER = `${BASE_URL}/orders/create`;
+export const URL_TO_GET_ORDERS = `${BASE_URL}/orders/getOrders`;
+export const URL_TO_UPDATE_ORDER = `${BASE_URL}/orders/updateOrder`;
+export const URL_TO_DELETE_ORDER = `${BASE_URL}/orders/deleteOrder`;

@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import {
   View,
@@ -7,7 +8,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Animated,
-  Dimensions
 } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { BURGERIMG, BACK_ICON } from "../../res/drawables";
@@ -17,7 +17,6 @@ import {
   GRAY_COLOR,
   BLACK_COLOR,
   LIGHT_GRAY,
-  DARK_GRAY
 } from "../../res/colors";
 import QuantitySelector from "../../components/QuantitySelector";
 import useExtraStore from "../../store/ExtrasStore";
@@ -31,8 +30,6 @@ import NutritionRow from "../../components/NutritionalRaw";
 import ToppingItem from "../../components/ToppingItem";
 import ExtrasItem from "../../components/ExtrasItem";
 
-const { width } = Dimensions.get('window');
-
 const ItemDetailScreen = ({ navigation, route }) => {
   // State and store hooks
   const { addItem } = useCartStore();
@@ -42,27 +39,52 @@ const ItemDetailScreen = ({ navigation, route }) => {
   const [selectedSize, setSelectedSize] = useState(variants[0]?.name || "Regular");
   const [quantity, setQuantity] = useState(1);
   const [selectedToppings, setSelectedToppings] = useState([]);
-  const [selectedExtras, setSelectedExtras] = useState([]);
+  // const [selectedExtras, setSelectedExtras] = useState([]);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const { fetchExtrasByBranch, extras } = useExtraStore();
   const { selectedBranch } = useBranchStore();
   const successSheetRef = useRef();
   const checkmarkScale = useRef(new Animated.Value(0)).current;
+  const { 
+    selectedExtras, 
+    toggleExtra, 
+    updateExtraQuantity,
+    clearSelectedExtras 
+  } = useExtraStore();
   useEffect(() => {
     if (selectedBranch) {
       fetchExtrasByBranch(selectedBranch._id);
     }
   }, [selectedBranch]);
+  useEffect(() => {
+    console.log('Selected Extras Updated:', selectedExtras);
+  }, [selectedExtras]);
 
+  useEffect(() => {
+    return () => {
+      clearSelectedExtras();
+    };
+  }, []);
+  // useEffect(() => {
+  //   console.log('Selected Extras Updated:', selectedExtras);
+  // }, [selectedExtras]);
+
+  // const toggleExtra = (extra) => {
+  //   setSelectedExtras(prev => 
+  //     prev.some(e => e._id === extra._id)
+  //       ? prev.filter(e => e._id !== extra._id)
+  //       : [...prev, { ...extra, quantity: 1 }] // ← Must include quantity
+  //   );
+  // };
   const getSelectedVariant = () => variants.find(v => v.name === selectedSize) || variants[0];
-
   const getAdjustedPrice = () => {
     const variant = getSelectedVariant();
     const toppingsPrice = selectedToppings.reduce((total, t) => total + t.price, 0);
-    const extrasPrice = selectedExtras.reduce((total, e) => total + e.price, 0);
+    // const extrasPrice = selectedExtras.reduce((total, e) => total + e.price, 0);
+    const extrasPrice = selectedExtras.reduce((total, e) => total + (e.price * e.quantity), 0); // Multiply price by quantity
+
     return variant ? (variant.price + toppingsPrice + extrasPrice) * quantity : 0;
   };
-
   const handleSizeSelection = (size) => {
     setSelectedSize(size);
   };
@@ -85,13 +107,16 @@ const ItemDetailScreen = ({ navigation, route }) => {
     );
   };
 
-  const toggleExtra = (extra) => {
-    setSelectedExtras(prev =>
-      prev.some(e => e._id === extra._id)
-        ? prev.filter(e => e._id !== extra._id)
-        : [...prev, extra]
-    );
-  };
+
+  // const updateExtraQuantity = (extraId, newQuantity) => {
+  //   setSelectedExtras(prev => 
+  //     prev.map(extra => 
+  //       extra._id === extraId 
+  //         ? { ...extra, quantity: newQuantity } 
+  //         : extra
+  //     )
+  //   );
+  // };
 
   const animateCheckmark = () => {
     Animated.sequence([
@@ -121,7 +146,10 @@ const ItemDetailScreen = ({ navigation, route }) => {
       size: variant.name,
       quantity,
       toppings: selectedToppings,
-      extras: selectedExtras,
+      extras: selectedExtras.map(extra => ({ 
+        ...extra,
+        quantity: extra.quantity || 1 
+      })),
       specifications: variant.specifications,
       serving: `${variant.name} size`,
       id: `${name}-${variant.name}-${Date.now()}`,
@@ -217,15 +245,15 @@ const ItemDetailScreen = ({ navigation, route }) => {
         </View>
 
         <View style={styles.contentContainer}>
-          <View style={styles.header}>
+             <View style={styles.header}>
             <Text style={[styles.name, { color: darkMode ? WHITE_COLOR : BLACK_COLOR }]}>
               {name}
-            </Text>
-            <Text style={[styles.price, { color: THEME_COLOR }]}>
+            </Text> 
+             <Text style={[styles.price, { color: THEME_COLOR }]}>
               Rs. {getSelectedVariant()?.price || 0}
             </Text>
-          </View>
-          <Text style={[styles.description, { color: darkMode ? GRAY_COLOR : '#666' }]}>
+          </View> 
+           <Text style={[styles.description, { color: darkMode ? GRAY_COLOR : '#666' }]}>
             {description}
           </Text>
           
@@ -276,18 +304,17 @@ const ItemDetailScreen = ({ navigation, route }) => {
               </View>
             </View>
           )}
-
           {renderSpecificationsTable()}
           {renderToppingsSection()}
           <ExtrasItem
             extras={extras}
-            selectedExtras={selectedExtras}
-            toggleExtra={toggleExtra}
+  //           selectedExtras={selectedExtras}
+  //           toggleExtra={toggleExtra}
+  // updateExtraQuantity={updateExtraQuantity} 
             darkMode={darkMode}
           />
         </View>
       </ScrollView>
-
       <View style={[styles.footer, {
         backgroundColor: darkMode ? 'rgba(0,0,0,0.9)' : 'rgba(255,255,255,0.95)',
         borderTopColor: darkMode ? GRAY_COLOR : LIGHT_GRAY
@@ -541,15 +568,7 @@ const styles = StyleSheet.create({
   viewCartText: {
     fontSize: 14,
   },
-  sectionSubtitle: {
-    fontSize: 13,
-    marginBottom: 16,
-    color: '#666',
-    fontStyle: 'italic',
-  },
-  sectionSubtitleDark: {
-    color: '#AAA',
-  }
+ 
 });
 
 export default ItemDetailScreen; 

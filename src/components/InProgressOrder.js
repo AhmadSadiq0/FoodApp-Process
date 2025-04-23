@@ -87,7 +87,7 @@ const InProgressOrder = ({ sections: initialSections }) => {
 };
 const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
   const statusColors = {
-    Preparing: THEME_COLOR,
+    pending: THEME_COLOR,
     Delivered: Green_Color,
     default: GRAY_COLOR,
   };
@@ -193,4 +193,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InProgressOrder;
+export default InProgressOrder; 
