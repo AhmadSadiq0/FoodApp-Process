@@ -4,119 +4,150 @@ import { DELETE_ICON, BURGERIMG } from '../res/drawables';
 import { WHITE_COLOR, THEME_COLOR, GRAY_COLOR, BLACK_COLOR } from '../res/colors';
 import useThemeStore from '../../zustand/ThemeStore';
 
-const CartItem = ({ item, onPressItem, onDeleteItem }) => {
+const CartItem = ({ item, onIncrease, onDecrease, onDeleteItem, onPressItem }) => {
   const { darkMode } = useThemeStore();
 
   return (
-    <View style={[
-      styles.cartItem, 
-      item.active && { borderColor: THEME_COLOR },
-      darkMode && styles.cartItemDark
-    ]}>
-      <Image 
-        source={item.image ? { uri: item.image } : BURGERIMG} 
-        style={styles.cartItemImage} 
-        resizeMode="contain"
+    <TouchableOpacity
+      // onPress={() => onPressItem(item.id)}
+      style={[
+        styles.container,
+        { backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : WHITE_COLOR }
+      ]}
+      activeOpacity={0.8}
+    >
+      <Image
+        source={item.image ? { uri: item.image } : BURGERIMG}
+        style={styles.image}
+        resizeMode="cover"
       />
-      <View style={styles.cartItemDetails}>
-        <Text style={[styles.cartItemName, darkMode && styles.cartItemNameDark]}>{item.name}</Text>
-        <Text style={[styles.cartServing, darkMode && styles.cartItemNameDark]}>{item.serving}</Text>
-        <Text style={[styles.cartItemPrice, darkMode && styles.cartItemNameDark]}>Rs. {item.price}/-</Text>
+
+      <View style={styles.details}>
+        <Text style={[styles.name, { color: darkMode ? WHITE_COLOR : BLACK_COLOR }]}>
+          {item.name}
+        </Text>
+        <Text style={[styles.type, { color: darkMode ? GRAY_COLOR : '#666' }]}>
+          {item.serving}
+        </Text>
+        <Text style={[styles.price, { color: THEME_COLOR }]}>
+  Rs.{parseInt(item.price)}
+</Text> 
       </View>
-      <View style={styles.cartItemActions}>
-        <ToggleButton active={item.active} onPress={() => onPressItem(item.id)} />
-        <DeleteButton onPress={() => onDeleteItem(item.id)} />
+      <View style={styles.quantityControl}>
+        <TouchableOpacity
+          style={[
+            styles.qtyButton,
+            { backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : '#f0f0f0' }
+          ]}
+          onPress={onDecrease}
+          disabled={item.quantity <= 1}
+        >
+          <Text style={[
+            styles.qtyText,
+            {
+              color: item.quantity <= 1
+                ? GRAY_COLOR
+                : (darkMode ? WHITE_COLOR : BLACK_COLOR)
+            }
+          ]}>−</Text>
+        </TouchableOpacity>
+        <Text style={[styles.qtyCount, { color: darkMode ? WHITE_COLOR : BLACK_COLOR }]}>
+          {item.quantity}
+        </Text>
+        <TouchableOpacity
+          style={[
+            styles.qtyButton,
+            { backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : '#f0f0f0' }
+          ]}
+          onPress={onIncrease}
+        >
+          <Text style={[styles.qtyText, { color: darkMode ? WHITE_COLOR : BLACK_COLOR }]}>
+            ＋
+          </Text>
+        </TouchableOpacity>
       </View>
-    </View>
+
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => onDeleteItem(item.id)}
+      >
+        <Image
+          style={styles.deleteIcon}
+          source={DELETE_ICON}
+          tintColor={THEME_COLOR}
+        />
+      </TouchableOpacity>
+    </TouchableOpacity>
   );
 };
 
-const ToggleButton = ({ active, onPress }) => (
-  <TouchableOpacity 
-    style={[styles.circleBorder, active && { borderColor: THEME_COLOR }]} 
-    onPress={onPress}
-  >
-    <View style={[styles.circle, active && { backgroundColor: GRAY_COLOR, borderRadius: 10 }]} />
-  </TouchableOpacity>
-);
-
-const DeleteButton = ({ onPress }) => (
-  <TouchableOpacity onPress={onPress}>
-    <Image style={styles.deleteIcon} source={DELETE_ICON} />
-  </TouchableOpacity>
-);
-
 const styles = StyleSheet.create({
-  cartItem: {
+  container: {
     flexDirection: 'row',
-    padding: 10,
-    marginBottom: 12,
-    borderColor: WHITE_COLOR,
-    borderWidth: 1,
-    borderRadius: 10,
-    backgroundColor: WHITE_COLOR,
+    borderRadius: 16,
+    padding: 12,
     alignItems: 'center',
-    shadowColor: GRAY_COLOR,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    marginBottom: 12,
     elevation: 5,
+    position: 'relative',
+    flexWrap: 'wrap',
   },
-  cartItemDark: {
-    backgroundColor: BLACK_COLOR,
-    borderColor: WHITE_COLOR,
-  },
-  cartItemImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 5,
+  image: {
+    width: 94,
+    height: 94,
+    borderRadius: 16,
+    backgroundColor: '#f5f5f5',
     marginRight: 12,
   },
-  cartItemDetails: {
+  details: {
     flex: 1,
+    justifyContent: 'center',
   },
-  cartItemName: {
+  name: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  type: {
+    fontSize: 12,
+    marginTop: 2,
+  },
+  price: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginTop: 6,
+  },
+  quantityControl: {
+    paddingTop: 9,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginRight: 8,
+  },
+  qtyButton: {
+    borderRadius: 12,
+    width: 24,
+    height: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  qtyText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  qtyCount: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: THEME_COLOR,
+    marginHorizontal: 6,
   },
-  cartItemNameDark: {
-    color: WHITE_COLOR,
-  },
-  cartItemPrice: {
-    fontSize: 12,
-    color: THEME_COLOR,
-    marginTop: 4,
-  },
-  cartServing: {
-    fontSize: 12,
-    color: THEME_COLOR,
-    marginTop: 4,
-  },
-  cartItemActions: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
+  deleteButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    padding: 4,
   },
   deleteIcon: {
-    height: 25,
-    width: 25,
-  },
-  circleBorder: {
-    borderWidth: 2,
-    borderColor: THEME_COLOR,
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10,
-  },
-  circle: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: THEME_COLOR,
+    height: 18,
+    width: 18,
   },
 });
 

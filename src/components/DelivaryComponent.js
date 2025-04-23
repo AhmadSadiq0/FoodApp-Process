@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     marginLeft: 12,
+    tintColor: THEME_COLOR,
   },
 });
 

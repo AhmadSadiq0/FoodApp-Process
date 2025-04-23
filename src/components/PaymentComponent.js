@@ -39,8 +39,7 @@ const PaymentComponent = ({ paymentMethods, onSelectPayment }) => {
         ]}
       />
     </TouchableOpacity>
-  );
-
+  );  
   return (
     <View style={[styles.container, darkMode && styles.containerDark]}>
       <Text style={[styles.title, darkMode && styles.titleDark]}>Payment Method</Text>

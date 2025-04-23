@@ -6,7 +6,7 @@ import { ConfirmOrderSummary, DeliveryAddress, PaymentComponent, Header1 } from 
 //images
 import { IMAGE25, IMAGE26, IMAGE27 } from "../../res/drawables";
 //colors
-import { Back_Ground, WHITE_COLOR, BLACK_COLOR } from "../../res/colors";
+import { Back_Ground, WHITE_COLOR, BLACK_COLOR, THEME_COLOR } from "../../res/colors";
 import useThemeStore from "../../../zustand/ThemeStore";
 //RawBottomSheet
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -36,7 +36,7 @@ const OrderConfirmationScreen = ( props ) => {
     <View style={[styles.container, darkMode && styles.containerDark]}>
       {/* //<Header1 title="Order Confirmation" navigation={navigation}/>   */}
       <DeliveryAddress />
-      <PaymentComponent paymentMethods={paymentMethods} onSelectPayment={handlePaymentSelection} />
+      <PaymentComponent paymentMethods={paymentMethods} onSelectPayment={handlePaymentSelection} themeColor={THEME_COLOR} />
       <RBSheet
         ref={sheetRef}
         height={350}

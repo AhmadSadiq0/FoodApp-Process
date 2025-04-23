@@ -1,5 +1,5 @@
 // User-Auth API URLs:
-const BASE_URL  = 'http://192.168.1.140:8000';
+const BASE_URL  = 'http://192.168.1.237:8000';
 
 //Auth Endpoints
 export const URL_TO_REGISTER_USER = `${BASE_URL}/users/signup`;    
@@ -26,3 +26,11 @@ export const URL_TO_GET_BRANCHES = `${BASE_URL}/branches/get`;
 export const URL_TO_CREATE_BRANCH = `${BASE_URL}/branches/create`;
 export const URL_TO_UPDATE_BRANCH = `${BASE_URL}/branches/update`;
 export const URL_TO_DELETE_BRANCH = `${BASE_URL}/branches/delete`;
+// Extras Endpoints
+export const URL_TO_GET_EXTRAS = `${BASE_URL}/extras/branch`;
+
+// Orders
+export const URL_TO_CREATE_ORDER = `${BASE_URL}/orders/create`;
+export const URL_TO_GET_ORDERS = `${BASE_URL}/orders/getOrders`;
+export const URL_TO_UPDATE_ORDER = `${BASE_URL}/orders/updateOrder`;
+export const URL_TO_DELETE_ORDER = `${BASE_URL}/orders/deleteOrder`;

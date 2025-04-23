@@ -99,8 +99,6 @@ const useAuthStore = create(
             refreshAccessToken: async () => {
                 const storedUser = get().user;
                 const storedUserTokensData = get().userTokensData
-                console.log("user is", storedUser)
-                console.log("stored user data", storedUserTokensData)
                 if (!storedUserTokensData || !storedUser ) return;
 
                 try {
@@ -151,11 +149,12 @@ const useAuthStore = create(
             onRehydrateStorage: () => async (state) => {
                 state.isHydrated = false
                 if (state && state.user && state.userTokensData) {
-                    console.log("this is the access token", state.userTokensData.accessToken)
                     setAuthTokenInAxios(state.userTokensData.accessToken)
                     await state.refreshAccessToken();
                 } else {
                     state.isHydrated = true
+                    state.user = null,
+                    state.userTokensData = null
                 }
             }
         }

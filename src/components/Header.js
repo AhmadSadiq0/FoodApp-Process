@@ -184,7 +184,7 @@ const Header = (props) => {
                   placeholderTextColor: '#aaa'
                 }
               ]}
-              placeholder="Search Your Favourite Food Item"
+              placeholder="Search Your Favourite Food Items"
               placeholderTextColor={darkMode ? '#aaa' : THEME_TEXT_COLOR}
               onChangeText={handleSearch}
             />
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     paddingVertical : 10,
     paddingHorizontal : 10,
     gap : 5,
-    borderRadius : 5
+    borderRadius : 5,
   },
   searchBar: {
     width: "100%",
@@ -292,13 +292,12 @@ const styles = StyleSheet.create({
   },
   dropdownContainer: {
     backgroundColor: WHITE_COLOR,
-    borderRadius: 10,
-    width: "50%", 
-    maxHeight: 300,
-    position: "absolute",
-    top: "17%",
-    left: "28%", 
-    zIndex: 10,
+    width: "40%", 
+     position: "absolute",
+    top: "7%",
+    left: "19%", 
+    zIndex: 1,
+      borderWidth : 1,
   },
   dropdownItem: {
     padding: 10,
@@ -306,12 +305,17 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
     flexDirection: 'row', 
     alignItems: 'center',
+    // borderTopLeftRadius: 10,
+    // borderTopRightRadius: 10,
+    // borderBottomLeftRadius: 10,
+    // borderBottomRightRadius: 10,
   },
   selectedDropdownItem: {
     backgroundColor: THEME_TEXT_COLOR,
+  
   },
   dropdownText: {
-    fontSize: 16,
+    fontSize: 12,
     color: BLACK_COLOR,
   },
   locationIcon: {
