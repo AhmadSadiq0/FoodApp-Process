@@ -12,7 +12,7 @@ import {
 import useThemeStore from "../../zustand/ThemeStore";
 
 const ConfirmOrderSummary = (props) => {
-  const { onButtonPressed, selectedOrder } = props;
+  const { onButtonPressed, selectedOrder, } = props;
   const { darkMode } = useThemeStore();
 
   return (
