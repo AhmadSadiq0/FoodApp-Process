@@ -1,7 +1,7 @@
 import { StyleSheet, View, ScrollView } from "react-native";
 import React from "react";
 //component
-import {ProfileHeader,TextInputProfile} from "../../components";
+import {TextInputProfile} from "../../components";
 //colors
 import { Back_Ground, DARK_THEME_BACKGROUND } from "../../res/colors";
 //Global State
@@ -18,12 +18,12 @@ const UpdateProfileScreen = (props) => {
 
   return (
     <View style={[styles.container, containerStyle]}>
-      <ProfileHeader
+      {/* <ProfileHeader
         navigation={navigation} 
         showDotsIcon={false}
         showArrowIcon={true}
         title={user?.username || "User"}
-      />
+      /> */}
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"

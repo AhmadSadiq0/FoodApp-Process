@@ -1,19 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons'; // or react-native-vector-icons/FontAwesome5
+import { useNavigation } from '@react-navigation/native';
+import { FontAwesome5 } from '@expo/vector-icons'; 
+import CustomButton from './CustomButtom';
 
 const items = [
-  'Personal informations',
-  'Passport details',
-  'Payment methods',
-  'Flight preferences',
-];
-
+    { name: 'SettingsScreen', screen: 'Settings' },
+    { name: 'Language', screen: 'LanguageSettings' },
+     { name: 'UpdateProfile', screen: 'UpdateProfile' },
+    // { name: 'Help&Support', screen: 'HelpSupportScreen' },
+  ];
 const PersonalDetails = () => {
+    const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.headerText}>PERSONAL DETAILS</Text>
         <View style={styles.divider} />
         {items.map((item, index) => (
           <TouchableOpacity
@@ -23,21 +23,19 @@ const PersonalDetails = () => {
               index === items.length - 1 && styles.lastItem,
             ]}
             activeOpacity={0.7}
+            onPress={() => navigation.navigate(item.screen)}
           >
-            <Text style={styles.itemText}>{item}</Text>
-            <FontAwesome5 name="chevron-right" size={14} color="#9CA3AF" />
+            <Text style={styles.itemText}>{item.name}</Text>
+             <FontAwesome5 name="chevron-right" size={14} color="#9CA3AF" /> 
           </TouchableOpacity>
         ))}
-      </View>
+      <CustomButton title="Logout" />
     </View>
   );
 };
-
 export default PersonalDetails;
-
 const styles = StyleSheet.create({
   container: {
-
     flex: 1,
     marginTop: 36,
   },
@@ -49,7 +47,7 @@ const styles = StyleSheet.create({
     // backgroundColor: '#fff',
   },
   headerText: {
-    fontSize: 10,
+    fontSize: 20,
     fontWeight: '600',
     color: '#9CA3AF',
     textTransform: 'uppercase',

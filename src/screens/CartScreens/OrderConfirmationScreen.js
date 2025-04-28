@@ -16,7 +16,9 @@ const paymentMethods = [
   { name: "Cash on Delivery", image: IMAGE25 },
 ];
 const OrderConfirmationScreen = ( props ) => {
-  const { navigation } = props;
+  const {  route, navigation  } = props;
+  const { selectedItems, subtotal } = route.params || {};
+ 
   const { darkMode } = useThemeStore();
   const [selectedPayment, setSelectedPayment] = useState(null);
   const sheetRef = useRef(null);
@@ -48,10 +50,21 @@ const OrderConfirmationScreen = ( props ) => {
           },
         }}
       >
-        <ConfirmOrderSummary
+          <ConfirmOrderSummary
           sheetRef={sheetRef}
           selectedOrder={selectedPayment}
-          onButtonPressed={() => navigation.navigate("ConfirmedOrder")}
+          selectedItems={selectedItems}
+          subtotal={subtotal}
+          paymentMethod={selectedPayment}
+          onButtonPressed={() =>  {
+            const orderDetails = {
+              selectedItems,
+              subtotal,
+              paymentMethod: selectedPayment
+            };
+            console.log('Creating order with details:', orderDetails);
+    navigation.navigate("ConfirmedOrder", orderDetails);
+}}
         />
       </RBSheet>
     </View>
@@ -61,6 +74,7 @@ const OrderConfirmationScreen = ( props ) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 30,
     backgroundColor: Back_Ground,
   },
   containerDark: {

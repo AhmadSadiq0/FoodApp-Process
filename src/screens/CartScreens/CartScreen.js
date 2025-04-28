@@ -7,9 +7,8 @@ import useThemeStore from "../../../zustand/ThemeStore";
 import useCartStore from "../../store/CartStore";
 import { DELETE_ICON } from '../../res/drawables';
 const CartScreen = ({ navigation }) => {
-  const { items, removeItem, toggleItemActive, updateExtraQuantity, updateItemQuantity } = useCartStore();
+  const { items, removeItem, toggleItemActive, updateExtraQuantity, updateItemQuantity,updateItemExtras } = useCartStore();
   const { darkMode } = useThemeStore();
-  const {updateItemExtras} = useCartStore();
   const summarySheetRef = useRef(null);
 
   const handleIncrease = (id) => {
@@ -19,12 +18,6 @@ const CartScreen = ({ navigation }) => {
   const handleDecrease = (id) => {
     updateItemQuantity(id, -1);
   };
-
-  // const handlePressItem = (id) => {
-  //   toggleItemActive(id);
-  //   const hasActiveItems = items.some(item => item.active);
-  //   hasActiveItems ? summarySheetRef.current.open() : summarySheetRef.current.close();
-  // };
 
   const handleExtraQuantityChange = (parentId, extraId, action) => {
     updateExtraQuantity(parentId, extraId, action === 'increase' ? 1 : -1);
@@ -39,7 +32,8 @@ const CartScreen = ({ navigation }) => {
   };
 
   const allExtras = items
-    .filter(item => item.extras?.length > 0)
+    // .filter(item => item.extras?.length > 0)
+    .filter(item => item.active && item.extras?.length > 0) 
     .flatMap(item => 
       item.extras.map(extra => ({ 
         ...extra, 
@@ -59,7 +53,9 @@ const CartScreen = ({ navigation }) => {
         subtotal: calculateSubtotal(),
       });
     };
+    
     const handleRemoveExtra = (parentId, extraId) => {
+      // removeExtra(extraId);
       const parentItem = items.find(item => item.id === parentId);
       
       if (parentItem) {
@@ -67,13 +63,7 @@ const CartScreen = ({ navigation }) => {
         updateItemExtras(parentId, updatedExtras); 
       }
     };
-    // const updateItemExtras = (itemId, newExtras) => {
-    //   set(state => ({
-    //     items: state.items.map(item => 
-    //       item.id === itemId ? { ...item, extras: newExtras } : item
-    //     )
-    //   }));
-    // };
+    
     
   return (
     <View style={[styles.container, darkMode && styles.containerDark]}>
@@ -114,9 +104,9 @@ const CartScreen = ({ navigation }) => {
             </View>
 
             {allExtras.map((extra, index) => (
-
               <View
-                key={`${extra._id}-${index}`}
+                
+                key={`${extra.parentId}-${extra._id || index}`}
                 style={[
                   styles.extraItem,
                   { 

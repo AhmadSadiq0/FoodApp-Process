@@ -65,17 +65,16 @@ const ItemDetailScreen = ({ navigation, route }) => {
       clearSelectedExtras();
     };
   }, []);
-  // useEffect(() => {
-  //   console.log('Selected Extras Updated:', selectedExtras);
-  // }, [selectedExtras]);
-
-  // const toggleExtra = (extra) => {
-  //   setSelectedExtras(prev => 
-  //     prev.some(e => e._id === extra._id)
-  //       ? prev.filter(e => e._id !== extra._id)
-  //       : [...prev, { ...extra, quantity: 1 }] // ← Must include quantity
-  //   );
-  // };
+  const handleViewCart = () => {
+    successSheetRef.current.close();
+    navigation.navigate('Main', { 
+      screen: 'Cart',
+      params: { 
+        screen: 'Cart' 
+      }
+    });
+  };
+ 
   const getSelectedVariant = () => variants.find(v => v.name === selectedSize) || variants[0];
   const getAdjustedPrice = () => {
     const variant = getSelectedVariant();
@@ -384,10 +383,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
           </Text>
           <CustomButton
             title="View Cart"
-            onPress={() => {
-              successSheetRef.current.close();
-              navigation.navigate('Cart');
-            }}
+            onPress={handleViewCart}
             style={styles.viewCartButton}
             textStyle={styles.viewCartText}
             outline
@@ -477,6 +473,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 5,
     minWidth: 100,
+   // backgroundColor:THEME_COLOR,
   },
   sizeOptionSelected: {
     borderColor: THEME_COLOR,

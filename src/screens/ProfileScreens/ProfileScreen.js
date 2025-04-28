@@ -5,7 +5,7 @@ import PersonalDetails from '../../components/PersonalDetails';
 import useAuthStore from '../../store/AuthStore';
 
 const ProfileScreen = () => {
-  const { user } = useAuthStore();
+  const { user,username } = useAuthStore();
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
@@ -34,7 +34,7 @@ const ProfileScreen = () => {
             <View style={styles.badge} />
           </View>
           <Text style={styles.name}>{user?.username || 'Guest'}</Text>
-          {/* <Text style={styles.memberStatus}>Gold Member</Text> */}
+           <Text style={styles.memberStatus}>{user?.email||'Guest'}</Text> 
         </View>
       </View>
       <PersonalDetails/>
