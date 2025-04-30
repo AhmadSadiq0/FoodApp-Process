@@ -50,6 +50,8 @@ import Header from '../components/Header';
 import authStore from '../store/AuthStore';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import SplashScreen from '../screens/SplashScreen/SplashScreen';
+import EmptyCart from '../screens/CartScreens/EmptyCart';
+import useCartStore from '../store/CartStore';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -110,42 +112,61 @@ const MenuStack = () => {
 // Cart Stack
 const CartStack = () => {
   const { user } = authStore();
+   const {items} =useCartStore();
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen
-        name="Cart"
-        component={CartScreen}
-        options={({ navigation }) => ({
-          header: () => (
-            <Header
-              navigation={navigation}
-              user={user}
-              showBellIcon={false}
-            />
-          ),
-          headerShown: false,
-        })}
-      />
-      <Stack.Screen name="CheckOut" component={CheckOutScreen} />
-      <Stack.Screen
-        name="ConfirmOrder"
-        component={OrderConfirmationScreen}
-        options={{
-          header: () => (
-            <Header1
-              title="Order Confirmation"
-              discountIcon={false}
-              style={styles.header}
-            />
-          ),
-          headerShown: true,
-        }}
-      />
-      <Stack.Screen name="ConfirmedOrder" component={ConfirmedOrder} />
+     {items.length === 0 ? (
+        <Stack.Screen
+          name="Cart"
+          component={EmptyCart}
+          options={({ navigation }) => ({
+            // header: () => (
+              // <Header
+              //   navigation={navigation}
+              //   user={user}
+              //   showBellIcon={false}
+              // />
+            // ),
+            headerShown: false,
+          })}
+        />
+      ) : (
+        <>
+          <Stack.Screen
+            name="Cart"
+            component={CartScreen}
+            options={({ navigation }) => ({
+              // header: () => (
+              //   <Header
+              //     navigation={navigation}
+              //     user={user}
+              //     showBellIcon={false}
+              //   />
+              // ),
+              headerShown: false,
+            })}
+          />
+          <Stack.Screen name="CheckOut" component={CheckOutScreen} />
+          <Stack.Screen
+            name="ConfirmOrder"
+            component={OrderConfirmationScreen}
+            options={{
+              // header: () => (
+              //   <Header1
+              //     title="Order Confirmation"
+              //     discountIcon={false}
+              //     style={styles.header}
+              //   />
+              // ),
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen name="ConfirmedOrder" component={ConfirmedOrder} />
+        </>
+      )}
     </Stack.Navigator>
   );
 };
-
 // Orders Stack
 const OrdersStack = () => {
   const { user } = authStore();
@@ -181,17 +202,17 @@ const ProfileStack = () => (
     <Stack.Screen
       name="Settings"
       component={SettingsScreen}
-      options={{
-        header: () => <Header1 discountIcon={null} title="Settings" />,
-        headerShown: true,
-      }}
+      options={({ navigation }) => ({ 
+      //   header: () => <Header1 discountIcon={null} title="Settings" />,
+        headerShown: false,
+      })}
     />
     <Stack.Screen
       name="LanguageSettings"
       component={LanguageSettingsScreen}
       options={{
-        header: () => <Header1 discountIcon={null} title="Language Settings" />,
-        headerShown: true,
+      //   header: () => <Header1 discountIcon={null} title="Language Settings" />,
+        headerShown: false,
       }}
     />
   </Stack.Navigator>
@@ -313,8 +334,8 @@ const Navigation = () => {
               name="Notifications"
               component={NotificationsScreen}
               options={{
-                header: () => <Header1 discountIcon={null} title="Notifications" />,
-                headerShown: true,
+                // header: () => <Header1 discountIcon={null} title="Notifications" />,
+                headerShown: false,
               }}
             />
             <RootStack.Screen name="itemDetail" component={ItemDetailScreen} />

@@ -9,7 +9,7 @@ import useThemeStore from "../../zustand/ThemeStore";
 const DeliveryComponent = () => {
   const { darkMode } = useThemeStore();
   const [isEditing, setIsEditing] = useState(false);
-  const [address, setAddress] = useState("32215 Maplewood Avenue Pine Hills District.");
+  const [address, setAddress] = useState("Tibba Sultan Pur, Punjab, Pakistan");
 
   const handleEdit = () => {
     setIsEditing(true);

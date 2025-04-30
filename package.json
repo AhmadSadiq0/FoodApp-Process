@@ -23,6 +23,7 @@
     "formik": "^2.4.6",
     "i18n-js": "^4.5.1",
     "lottie-react-native": "^7.2.2",
+    "lucide-react-native": "^0.503.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-native": "0.76.3",

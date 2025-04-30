@@ -17,7 +17,7 @@ import {
 } from "../res/colors";
 //Images
 import {
-  Profie_Image,
+  SECONDARY_PROFILE_AVATAR ,
   Bell_ICON,
   DOTS_ICON,
   CAMERA_ICON,
@@ -134,7 +134,6 @@ const ProfileHeader = memo(
                     source={DOTSICON} 
                     style={[
                       styles.icon, 
-                      icon,
                       darkMode && { tintColor: WHITE_COLOR }
                     ]} 
                   />
@@ -183,7 +182,7 @@ const ProfileHeader = memo(
               darkMode={darkMode}
             />
           )}
-          <Image source={Profie_Image} style={styles.profileImage} />
+          <Image source={SECONDARY_PROFILE_AVATAR } style={styles.profileImage} />
           <Image source={CAMERA_ICON} style={[styles.cameraIcon, Cameraicon]} />
           <View style={[styles.textContainer, textContainerStyle]}>
             <Text style={[
@@ -297,7 +296,7 @@ const styles = StyleSheet.create({
     borderBottomEndRadius: 10,
   },
   tabText: {
-    fontSize: 12,
+    fontSize: 12, 
     fontWeight: "bold",
   },
   activeTabText: {

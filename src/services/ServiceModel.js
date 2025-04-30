@@ -26,7 +26,6 @@ async (url) => {
         let response;
         console.log('RequestUrl ===> ', url)
 
-
         response = await axiosInstance.get(url);
         return { status: response.status, success: true, data: response.data, message: 'Success!' }
     }
@@ -52,7 +51,6 @@ async (url,  payload) => {
         return { status: e.response?.status, success: false, data: {}, message: e.message || 'Failure!' };
     }
 } 
-
 
 // Service function to fetch categories
 // export const fetchCategoriesService = async () => {

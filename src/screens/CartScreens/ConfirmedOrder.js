@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image } from "react-native";
 //Images
 import { IMAGE29 } from "../../res/drawables";
 //CustomButton
-import { CustomButton, Header1 } from "../../components";
+import { CustomButton } from "../../components";
 //Navigation
 import { useNavigation } from "@react-navigation/native";
 //Colors
@@ -24,7 +24,7 @@ const ConfirmedOrder = () => {
 
   return (
     <View style={[styles.container, darkMode && styles.containerDark]}>
-      <Header1 title="Order Confirmed" discountIcon={false} style={styles.header}/>
+      {/* <Header1 title="Order Confirmed" discountIcon={false} style={styles.header}/> */}
       <View style={styles.content}>
         <Image source={IMAGE29} style={styles.image} />
         <Text style={[styles.titleText, darkMode && styles.titleTextDark]}>Order placed successfully!</Text>

@@ -5,9 +5,9 @@ import { CartItem, CustomButton, SummaryCard } from '../../components';
 import { Back_Ground, GRAY_COLOR, THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR, BLACK_COLOR, LIGHT_GRAY } from '../../res/colors';
 import useThemeStore from "../../../zustand/ThemeStore";
 import useCartStore from "../../store/CartStore";
-
+import { DELETE_ICON } from '../../res/drawables';
 const CartScreen = ({ navigation }) => {
-  const { items, removeItem, toggleItemActive, updateExtraQuantity, updateItemQuantity } = useCartStore();
+  const { items, removeItem, toggleItemActive, updateExtraQuantity, updateItemQuantity,updateItemExtras } = useCartStore();
   const { darkMode } = useThemeStore();
   const summarySheetRef = useRef(null);
 
@@ -18,12 +18,6 @@ const CartScreen = ({ navigation }) => {
   const handleDecrease = (id) => {
     updateItemQuantity(id, -1);
   };
-
-  // const handlePressItem = (id) => {
-  //   toggleItemActive(id);
-  //   const hasActiveItems = items.some(item => item.active);
-  //   hasActiveItems ? summarySheetRef.current.open() : summarySheetRef.current.close();
-  // };
 
   const handleExtraQuantityChange = (parentId, extraId, action) => {
     updateExtraQuantity(parentId, extraId, action === 'increase' ? 1 : -1);
@@ -38,7 +32,8 @@ const CartScreen = ({ navigation }) => {
   };
 
   const allExtras = items
-    .filter(item => item.extras?.length > 0)
+    // .filter(item => item.extras?.length > 0)
+    .filter(item => item.active && item.extras?.length > 0) 
     .flatMap(item => 
       item.extras.map(extra => ({ 
         ...extra, 
@@ -58,6 +53,17 @@ const CartScreen = ({ navigation }) => {
         subtotal: calculateSubtotal(),
       });
     };
+    
+    const handleRemoveExtra = (parentId, extraId) => {
+      // removeExtra(extraId);
+      const parentItem = items.find(item => item.id === parentId);
+      
+      if (parentItem) {
+        const updatedExtras = parentItem.extras.filter(extra => extra._id !== extraId);
+        updateItemExtras(parentId, updatedExtras); 
+      }
+    };
+    
     
   return (
     <View style={[styles.container, darkMode && styles.containerDark]}>
@@ -99,7 +105,8 @@ const CartScreen = ({ navigation }) => {
 
             {allExtras.map((extra, index) => (
               <View
-                key={`${extra._id}-${index}`}
+                
+                key={`${extra.parentId}-${extra._id || index}`}
                 style={[
                   styles.extraItem,
                   { 
@@ -117,6 +124,16 @@ const CartScreen = ({ navigation }) => {
                 )}
                 
                 <View style={styles.extraContent}>
+                <TouchableOpacity
+        style={styles.extraDeleteButton}
+        onPress={() => handleRemoveExtra(extra.parentId, extra._id)}
+      >
+        <Image
+          style={styles.extraDeleteIcon}
+          source={DELETE_ICON}
+          tintColor={THEME_COLOR}
+        />
+      </TouchableOpacity>
                   <View style={styles.extraInfoContainer}>
                     <Text style={[styles.extraName, { color: darkMode ? WHITE_COLOR : BLACK_COLOR }]}>
                       {extra.name}
@@ -171,13 +188,16 @@ const CartScreen = ({ navigation }) => {
           </View>
         )}
       </ScrollView>
+      {(items.length > 0 || allExtras.length > 0) && (
       <View style={styles.bottomButtonContainer}>
+        
         <CustomButton
           title={`Review Order (${items.filter(item => item.active).length})`}
           onPress={handleAddToCartPress}
           style={styles.proceedButton}
         />
       </View>
+        )}
       <RBSheet
         ref={summarySheetRef}
         height={300}
@@ -329,7 +349,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: '100%',
     alignItems: 'center',
-  }
+  },
+  extraDeleteButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    padding: 4,
+    zIndex: 1,
+  },
+  extraDeleteIcon: {
+    height: 24,
+    width: 24,
+  },
 });
 
 export default CartScreen;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'; 
 import { DELETE_ICON, BURGERIMG } from '../res/drawables';
 import { WHITE_COLOR, THEME_COLOR, GRAY_COLOR, BLACK_COLOR } from '../res/colors';
 import useThemeStore from '../../zustand/ThemeStore';
@@ -69,7 +69,7 @@ const CartItem = ({ item, onIncrease, onDecrease, onDeleteItem, onPressItem }) =
 
       <TouchableOpacity
         style={styles.deleteButton}
-        onPress={() => onDeleteItem(item.id)}
+         onPress={() => onDeleteItem(item.id)}
       >
         <Image
           style={styles.deleteIcon}
@@ -146,8 +146,8 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   deleteIcon: {
-    height: 18,
-    width: 18,
+    height: 24,
+    width: 24,
   },
 });
 

@@ -11,8 +11,14 @@ import {
 } from "../res/colors";
 import useThemeStore from "../../zustand/ThemeStore";
 
-const ConfirmOrderSummary = (props) => {
-  const { onButtonPressed, selectedOrder } = props;
+const ConfirmOrderSummary = (props ) => {
+  const { 
+    selectedItems = [], 
+    subtotal = 0,
+    onButtonPressed = () => {},
+    selectedOrder = null ,
+    paymentMethod = "Not selected",
+  } = props;
   const { darkMode } = useThemeStore();
 
   return (
@@ -21,19 +27,23 @@ const ConfirmOrderSummary = (props) => {
         <View style={[styles.card, darkMode && styles.cardDark]}>
           <View style={styles.row}>
             <Text style={[styles.label, darkMode && styles.labelDark]}>Selected Item(s):</Text>
-            <Text style={[styles.value, darkMode && styles.valueDark]}>1</Text>
+            <Text style={[styles.value, darkMode && styles.valueDark]}>{selectedItems.length}</Text>
           </View>
           <View style={styles.row}>
             <Text style={[styles.label, darkMode && styles.labelDark]}>Sub Total:</Text>
-            <Text style={[styles.value, darkMode && styles.valueDark]}>Rs. 599</Text>
+            <Text style={[styles.value, darkMode && styles.valueDark]}>{subtotal}</Text>
           </View>
           <View style={styles.row}>
             <Text style={[styles.label, darkMode && styles.labelDark]}>Delivery Charges:</Text>
             <Text style={[styles.value, darkMode && styles.valueDark]}>Rs. 0.00</Text>
           </View>
           <View style={[styles.row, styles.totalRow]}>
-            <Text style={[styles.label, darkMode && styles.labelDark]}>Total:</Text>
-            <Text style={[styles.value, darkMode && styles.valueDark]}>Rs. 599</Text>
+            <Text style={[styles.label, darkMode && styles.labelDark]}>Payment:</Text>
+            {/* <Text style={[styles.value, darkMode && styles.valueDark]}>{paymentMethod}</Text> */}
+            <Text style={[styles.value, darkMode && styles.valueDark]}>
+              {paymentMethod.name || "Cash on Delivery"} 
+              {/* Fallback to "Cash on Delivery" if name doesn't exist */}
+            </Text>
           </View>
           <View style={styles.margin}>
             <CustomButton
@@ -72,8 +82,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   label: {
-    fontWeight: "bold",
-    fontSize: 24,
+     fontWeight: 500,
+    fontSize: 22,
     lineHeight: 25,
     color: THEME_TEXT_COLOR,
   },
@@ -81,7 +91,7 @@ const styles = StyleSheet.create({
     color: WHITE_COLOR,
   },
   value: {
-    fontSize: 24,
+    fontSize: 19,
     lineHeight: 25,
     fontWeight: 'bold',
     color: THEME_COLOR,
