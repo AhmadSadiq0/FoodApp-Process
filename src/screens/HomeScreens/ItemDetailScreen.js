@@ -455,7 +455,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 500,
   },
   sectionSubtitle: {
     fontSize: 13,
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 5,
     minWidth: 100,
-   // backgroundColor:THEME_COLOR,
+    backgroundColor:THEME_COLOR,
   },
   sizeOptionSelected: {
     borderColor: THEME_COLOR,
