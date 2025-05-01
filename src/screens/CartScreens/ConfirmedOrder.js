@@ -19,7 +19,7 @@ const ConfirmedOrder = () => {
     navigation.navigate("Menu");
   };
   const navigateToCart = () => {
-    navigation.navigate("Cart");
+    navigation.replace("Cart");
   };
 
   return (
@@ -51,10 +51,8 @@ const ConfirmedOrder = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
     backgroundColor: WHITE_COLOR,
-    // padding: 16,
+    padding: 20,
   },
   containerDark: {
     backgroundColor: BLACK_COLOR,
@@ -67,7 +65,7 @@ const styles = StyleSheet.create({
   image: {
     width: 150,
     height: 150,
-    marginTop: 50,
+    marginTop: 30,
     marginBottom: 40,
   },
   titleText: {

@@ -5,10 +5,10 @@ import { THEME_COLOR, WHITE_COLOR } from "../res/colors";
 import { HEART_ICON } from "../res/drawables";
 
 const CustomButton = (props) => {
-  const { title, onPress, style, textStyle,  loading = false ,  image } = props;
+  const { title, onPress, style, textStyle,  loading = false ,  image , disabled = false } = props;
 
   return (
-    <TouchableOpacity style={[styles.button, style]} onPress={onPress} disabled = {loading}>
+    <TouchableOpacity style={[styles.button, style]} onPress={onPress} disabled = {loading || disabled}>
       <View style={styles.buttonContent}>
         {loading && <ActivityIndicator size="small" color={WHITE_COLOR}  style={styles.activityIndicator}/>}
         {image && <Image source={HEART_ICON} style={styles.icon} />}

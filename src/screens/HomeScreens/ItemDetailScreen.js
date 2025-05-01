@@ -39,7 +39,6 @@ const ItemDetailScreen = ({ navigation, route }) => {
   const [selectedSize, setSelectedSize] = useState(variants[0]?.name || "Regular");
   const [quantity, setQuantity] = useState(1);
   const [selectedToppings, setSelectedToppings] = useState([]);
-  // const [selectedExtras, setSelectedExtras] = useState([]);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const { fetchExtrasByBranch, extras } = useExtraStore();
   const { selectedBranch } = useBranchStore();
@@ -51,20 +50,21 @@ const ItemDetailScreen = ({ navigation, route }) => {
     updateExtraQuantity,
     clearSelectedExtras 
   } = useExtraStore();
+
   useEffect(() => {
     if (selectedBranch) {
       fetchExtrasByBranch(selectedBranch._id);
     }
   }, [selectedBranch]);
+
   useEffect(() => {
     console.log('Selected Extras Updated:', selectedExtras);
   }, [selectedExtras]);
 
   useEffect(() => {
-    return () => {
       clearSelectedExtras();
-    };
   }, []);
+
   const handleViewCart = () => {
     successSheetRef.current.close();
     navigation.navigate('Main', { 
@@ -79,8 +79,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
   const getAdjustedPrice = () => {
     const variant = getSelectedVariant();
     const toppingsPrice = selectedToppings.reduce((total, t) => total + t.price, 0);
-    // const extrasPrice = selectedExtras.reduce((total, e) => total + e.price, 0);
-    const extrasPrice = selectedExtras.reduce((total, e) => total + (e.price * e.quantity), 0); // Multiply price by quantity
+    const extrasPrice = selectedExtras.reduce((total, e) => total + (e.price * e.quantity), 0);
 
     return variant ? (variant.price + toppingsPrice + extrasPrice) * quantity : 0;
   };
@@ -105,17 +104,6 @@ const ItemDetailScreen = ({ navigation, route }) => {
         : [...prev, topping]
     );
   };
-
-
-  // const updateExtraQuantity = (extraId, newQuantity) => {
-  //   setSelectedExtras(prev => 
-  //     prev.map(extra => 
-  //       extra._id === extraId 
-  //         ? { ...extra, quantity: newQuantity } 
-  //         : extra
-  //     )
-  //   );
-  // };
 
   const animateCheckmark = () => {
     Animated.sequence([
@@ -143,19 +131,23 @@ const ItemDetailScreen = ({ navigation, route }) => {
       image,
       price: getAdjustedPrice(),
       size: variant.name,
+      variant : getSelectedVariant(),
       quantity,
       toppings: selectedToppings,
       extras: selectedExtras.map(extra => ({ 
         ...extra,
         quantity: extra.quantity || 1 
       })),
+      categoryId : item.categoryId._id,
+      categoryName : item.categoryName,
       specifications: variant.specifications,
       serving: `${variant.name} size`,
-      id: `${name}-${variant.name}-${Date.now()}`,
+      itemId: item._id,
     });
     setIsAddingToCart(false);
     successSheetRef.current.open();
     animateCheckmark();
+    clearSelectedExtras()
   };
 
   const renderSpecificationsTable = () => {
@@ -307,9 +299,6 @@ const ItemDetailScreen = ({ navigation, route }) => {
           {renderToppingsSection()}
           <ExtrasItem
             extras={extras}
-  //           selectedExtras={selectedExtras}
-  //           toggleExtra={toggleExtra}
-  // updateExtraQuantity={updateExtraQuantity} 
             darkMode={darkMode}
           />
         </View>

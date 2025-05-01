@@ -1,46 +1,178 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
-//Images
-import { IMAGE28 } from "../res/drawables";
-//Colors
-import { WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, Back_Ground, BLACK_COLOR } from "../res/colors";
+import React, { useState, useEffect } from "react";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, Back_Ground, BLACK_COLOR, LIGHT_GRAY, DARK_GRAY } from "../res/colors";
+import InputFieldAddress from "./InputFieldAddress";
 import useThemeStore from "../../zustand/ThemeStore";
 
-const DeliveryComponent = () => {
+const DeliveryComponent = ({ onAddressChange }) => {
   const { darkMode } = useThemeStore();
   const [isEditing, setIsEditing] = useState(false);
-  const [address, setAddress] = useState("Tibba Sultan Pur, Punjab, Pakistan");
+  const [hasAddress, setHasAddress] = useState(false);
+  const [address, setAddress] = useState({
+    street: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    country: "",
+    phone: "",
+    instructions: ""
+  });
 
-  const handleEdit = () => {
-    setIsEditing(true);
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    setHasAddress(Object.values(address).some(value => value !== ""));
+  }, [address]);
+
+  const validateFields = () => {
+    const newErrors = {};
+    if (!address.street) newErrors.street = "Street address is required";
+    if (!address.city) newErrors.city = "City is required";
+    if (!address.state) newErrors.state = "State is required";
+    if (!address.zipCode) newErrors.zipCode = "Zip code is required";
+    if (!address.phone) newErrors.phone = "Phone number is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSave = () => {
-    setIsEditing(false);
+    if (validateFields()) {
+      setIsEditing(false);
+      onAddressChange(address);
+    }
+  };
+
+  const handleChange = (field, value) => {
+    setAddress(prev => ({ ...prev, [field]: value }));
+    setErrors(prev => ({ ...prev, [field]: "" }));
   };
 
   return (
     <View style={[styles.screen, darkMode && styles.screenDark]}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={[styles.deliverTo, darkMode && styles.deliverToDark]}>Deliver To</Text>
-        <View style={[styles.addressContainer, darkMode && styles.addressContainerDark]}>
-          <View style={styles.addressTextContainer}>
-            <Text style={[styles.addressTitle, darkMode && styles.addressTitleDark]}>My Address</Text>
-            {isEditing ? (
-              <TextInput
-                style={[styles.addressInput, darkMode && styles.addressInputDark]}
-                value={address}
-                onChangeText={setAddress}
+        <View style={styles.header}>
+          <Ionicons name="location" size={24} color={THEME_COLOR} />
+          <Text style={[styles.title, darkMode && styles.titleDark]}>Delivery Address</Text>
+        </View>
+
+        {!hasAddress && !isEditing ? (
+          <View style={[styles.emptyState, darkMode && styles.emptyStateDark]}>
+            <Ionicons 
+              name="alert-circle" 
+              size={40} 
+              color={THEME_COLOR} 
+              style={styles.emptyIcon}
+            />
+            <Text style={[styles.emptyText, darkMode && styles.emptyTextDark]}>
+              Please provide address for parcel delivery
+            </Text>
+            <TouchableOpacity 
+              style={[styles.addButton, darkMode && styles.addButtonDark]}
+              onPress={() => setIsEditing(true)}
+            >
+              <Text style={styles.addButtonText}>Add Address</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+        <View style={[styles.card, darkMode && styles.cardDark]}>
+          {isEditing ? (
+            <>
+              <InputFieldAddress
+                label="Street Address"
+                value={address.street}
+                onChange={v => handleChange('street', v)}
+                error={errors.street}
+                darkMode={darkMode}
+              />
+              <View style={styles.row}>
+                <InputFieldAddress
+                  label="City"
+                  value={address.city}
+                  onChange={v => handleChange('city', v)}
+                  error={errors.city}
+                  darkMode={darkMode}
+                  containerStyle={{ flex: 1 }}
+                />
+                <InputFieldAddress
+                  label="State"
+                  value={address.state}
+                  onChange={v => handleChange('state', v)}
+                  error={errors.state}
+                  darkMode={darkMode}
+                  containerStyle={{ flex: 1, marginLeft: 10 }}
+                />
+              </View>
+              <View style={styles.row}>
+                <InputFieldAddress
+                  label="Zip Code"
+                  value={address.zipCode}
+                  onChange={v => handleChange('zipCode', v)}
+                  error={errors.zipCode}
+                  darkMode={darkMode}
+                  containerStyle={{ flex: 1 }}
+                  keyboardType="numeric"
+                />
+                <InputFieldAddress
+                  label="Country"
+                  value={address.country}
+                  onChange={v => handleChange('country', v)}
+                  darkMode={darkMode}
+                  containerStyle={{ flex: 1, marginLeft: 10 }}
+                />
+              </View>
+              <InputFieldAddress
+                label="Contact Number"
+                value={address.phone}
+                onChange={v => handleChange('phone', v)}
+                error={errors.phone}
+                darkMode={darkMode}
+                keyboardType="phone-pad"
+              />
+              <InputFieldAddress
+                label="Delivery Instructions"
+                value={address.instructions}
+                onChange={v => handleChange('instructions', v)}
+                darkMode={darkMode}
                 multiline
               />
-            ) : (
-              <Text style={[styles.addressDetails, darkMode && styles.addressDetailsDark]}>{address}</Text>
-            )}
-          </View>
-          <TouchableOpacity onPress={isEditing ? handleSave : handleEdit}>
-            <Image source={IMAGE28} style={styles.image} />
+            </>
+          ) : (
+            <View style={styles.addressDisplay}>
+              <Text style={[styles.addressText, darkMode && styles.addressTextDark]}>
+                {address.street}, {address.city}
+              </Text>
+              <Text style={[styles.addressText, darkMode && styles.addressTextDark]}>
+                {address.state}, {address.zipCode}
+              </Text>
+              <Text style={[styles.addressText, darkMode && styles.addressTextDark]}>
+                {address.country}
+              </Text>
+              <Text style={[styles.phoneText, darkMode && styles.phoneTextDark]}>
+                Contact: {address.phone}
+              </Text>
+              {address.instructions && (
+                <Text style={[styles.instructionsText, darkMode && styles.instructionsTextDark]}>
+                  Instructions: {address.instructions}
+                </Text>
+              )}
+            </View>
+          )}
+          <TouchableOpacity 
+            style={[styles.button, darkMode && styles.buttonDark]}
+            onPress={isEditing ? handleSave : () => setIsEditing(true)}
+          >
+            <Ionicons 
+              name={isEditing ? "checkmark-circle" : "create"} 
+              size={24} 
+              color={darkMode ? WHITE_COLOR : THEME_COLOR} 
+            />
+            <Text style={[styles.buttonText, darkMode && styles.buttonTextDark]}>
+              {isEditing ? "Save Address" : "Edit Address"}
+            </Text>
           </TouchableOpacity>
         </View>
+        )}
       </ScrollView>
     </View>
   );
@@ -48,78 +180,168 @@ const DeliveryComponent = () => {
 
 const styles = StyleSheet.create({
   screen: {
+    flex: 1,
     backgroundColor: Back_Ground,
   },
   screenDark: {
     backgroundColor: BLACK_COLOR,
   },
   scrollContainer: {
-    padding: 16, 
-  },
-  deliverTo: {
-    marginBottom: 16,
-    color: THEME_COLOR,
-    fontWeight: "bold",
-    fontSize: 18,
-  },
-  deliverToDark: {
-    color: WHITE_COLOR,
-  },
-  addressContainer: {
-    backgroundColor: WHITE_COLOR,
     padding: 16,
-    borderRadius: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    maxWidth: "100%",
-    elevation: 3, 
-    shadowColor: BLACK_COLOR, 
-    shadowOffset: {
-        width: 0, 
-        height: 2, 
-    },
-    shadowOpacity: 0.25, 
-    shadowRadius: 3.5, 
   },
-  addressContainerDark: {
-    backgroundColor: BLACK_COLOR,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
   },
-  addressTextContainer: {
-    flex: 1, 
-  },
-  addressTitle: {
-    marginBottom: 8,
+  title: {
+    fontSize: 20,
+    fontWeight: '600',
     color: THEME_TEXT_COLOR,
-    fontWeight: "bold",
-    fontSize: 18,
-  },
-  addressTitleDark: {
-    color: WHITE_COLOR,
-  },
-  addressDetails: {
-    color: THEME_TEXT_COLOR,
-    marginTop: 4,
-  },
-  addressDetailsDark: {
-    color: WHITE_COLOR,
-  },
-  addressInput: {
-    color: THEME_TEXT_COLOR,
-    marginTop: 4,
-    borderRadius: 4,
-    padding: 8,
-    borderWidth: 1,
-    borderColor: THEME_COLOR,
-  },
-  addressInputDark: {
-    color: WHITE_COLOR,
-    borderColor: WHITE_COLOR,
-  },
-  image: {
-    width: 28,
-    height: 28,
     marginLeft: 12,
-    tintColor: THEME_COLOR,
+  },
+  titleDark: {
+    color: WHITE_COLOR,
+  },
+  card: {
+    backgroundColor: WHITE_COLOR,
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  cardDark: {
+    backgroundColor: DARK_GRAY,
+    shadowColor: '#444',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  inputContainer: {
+    marginBottom: 16,
+  },
+  inputLabel: {
+    fontSize: 14,
+    color: THEME_TEXT_COLOR,
+    marginBottom: 6,
+  },
+  inputLabelDark: {
+    color: WHITE_COLOR,
+  },
+  input: {
+    backgroundColor: LIGHT_GRAY,
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    color: THEME_TEXT_COLOR,
+  },
+  inputDark: {
+    backgroundColor: '#2A2A2A',
+    color: WHITE_COLOR,
+  },
+  errorInput: {
+    borderColor: '#FF3B30',
+    borderWidth: 1,
+  },
+  errorText: {
+    color: '#FF3B30',
+    fontSize: 12,
+    marginTop: 4,
+  },
+  addressDisplay: {
+    marginBottom: 20,
+  },
+  addressText: {
+    fontSize: 16,
+    color: THEME_TEXT_COLOR,
+    marginBottom: 4,
+  },
+  addressTextDark: {
+    color: WHITE_COLOR,
+  },
+  phoneText: {
+    fontSize: 14,
+    color: THEME_COLOR,
+    marginTop: 8,
+  },
+  phoneTextDark: {
+    color: '#4A90E2',
+  },
+  instructionsText: {
+    fontSize: 14,
+    color: THEME_TEXT_COLOR,
+    marginTop: 8,
+    fontStyle: 'italic',
+  },
+  instructionsTextDark: {
+    color: WHITE_COLOR,
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: LIGHT_GRAY,
+    borderRadius: 12,
+    padding: 16,
+    marginTop: 20,
+  },
+  buttonDark: {
+    backgroundColor: '#333',
+  },
+  buttonText: {
+    color: THEME_TEXT_COLOR,
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 12,
+  },
+  buttonTextDark: {
+    color: WHITE_COLOR,
+  },
+  emptyState: {
+    backgroundColor: WHITE_COLOR,
+    borderRadius: 16,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 200,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  emptyStateDark: {
+    backgroundColor: DARK_GRAY,
+  },
+  emptyIcon: {
+    marginBottom: 16,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: THEME_TEXT_COLOR,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  emptyTextDark: {
+    color: WHITE_COLOR,
+  },
+  addButton: {
+    backgroundColor: THEME_COLOR,
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 30,
+  },
+  addButtonDark: {
+    backgroundColor: '#4A90E2',
+  },
+  addButtonText: {
+    color: WHITE_COLOR,
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
