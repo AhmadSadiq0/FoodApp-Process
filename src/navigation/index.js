@@ -115,23 +115,6 @@ const CartStack = () => {
    const {items} =useCartStore();
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-     {items.length === 0 ? (
-        <Stack.Screen
-          name="Cart"
-          component={EmptyCart}
-          options={({ navigation }) => ({
-            // header: () => (
-              // <Header
-              //   navigation={navigation}
-              //   user={user}
-              //   showBellIcon={false}
-              // />
-            // ),
-            headerShown: false,
-          })}
-        />
-      ) : (
-        <>
           <Stack.Screen
             name="Cart"
             component={CartScreen}
@@ -162,8 +145,6 @@ const CartStack = () => {
             }}
           />
           <Stack.Screen name="ConfirmedOrder" component={ConfirmedOrder} />
-        </>
-      )}
     </Stack.Navigator>
   );
 };

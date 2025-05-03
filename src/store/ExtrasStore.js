@@ -12,7 +12,7 @@ const initialState = {
   extras_loading: false,
   extras_error: null,
   currentBranchId: null,
-  selectedExtras: [], // Add selectedExtras to initial state
+  selectedExtras: [],
 };
 
 const useExtraStore = create(

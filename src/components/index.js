@@ -21,7 +21,8 @@ import CustomLoadingIndicator from './CustomLoadingIndicator';
 import CustomErrorText from './CustomErrorText';
 import CategoryItem from './CategoryItem';
 import CategoryList from './CategoryList';
-
+import OrderTypeSelector from './OrderTypeSelector';
+import InputFieldAddress from './InputFieldAddress';
 export {
      CartItem,
      BurgerItem,
@@ -43,6 +44,8 @@ export {
      CustomLoadingIndicator,
      CustomErrorText,
      CategoryItem,
-     CategoryList
+     CategoryList,
+     OrderTypeSelector,
+     InputFieldAddress
 
 };

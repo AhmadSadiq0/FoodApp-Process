@@ -33,7 +33,7 @@ const EmptyCart = ({ navigation }) => {
       >
         <Frown
           size={120}
-          color={THEME_COLOR}  // Icon color THEME_COLOR
+          color={THEME_COLOR} 
           strokeWidth={1.5}
         />
       </Animated.View>

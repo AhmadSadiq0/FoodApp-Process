@@ -6,8 +6,9 @@ import { Back_Ground, GRAY_COLOR, THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR, BL
 import useThemeStore from "../../../zustand/ThemeStore";
 import useCartStore from "../../store/CartStore";
 import { DELETE_ICON } from '../../res/drawables';
+import EmptyCart from './EmptyCart';
 const CartScreen = ({ navigation }) => {
-  const { items, removeItem, toggleItemActive, updateExtraQuantity, updateItemQuantity,updateItemExtras } = useCartStore();
+  const { items, removeItem, toggleItemActive, updateExtraQuantity, updateItemQuantity, updateItemExtras } = useCartStore();
   const { darkMode } = useThemeStore();
   const summarySheetRef = useRef(null);
 
@@ -33,174 +34,179 @@ const CartScreen = ({ navigation }) => {
 
   const allExtras = items
     // .filter(item => item.extras?.length > 0)
-    .filter(item => item.active && item.extras?.length > 0) 
-    .flatMap(item => 
-      item.extras.map(extra => ({ 
-        ...extra, 
+    .filter(item => item.active && item.extras?.length > 0)
+    .flatMap(item =>
+      item.extras.map(extra => ({
+        ...extra,
         parentId: item.id,
-        parentName: item.name 
+        parentName: item.name
       })))
     .filter(extra => extra.quantity > 0);
 
-    const handleAddToCartPress = () => {
-      summarySheetRef.current.open();
-    };
-  
-    const handleCheckout = () => {
-      summarySheetRef.current.close();
-      navigation.navigate("ConfirmOrder", {
-        selectedItems: items.filter(item => item.active),
-        subtotal: calculateSubtotal(),
-      });
-    };
-    
-    const handleRemoveExtra = (parentId, extraId) => {
-      // removeExtra(extraId);
-      const parentItem = items.find(item => item.id === parentId);
-      
-      if (parentItem) {
-        const updatedExtras = parentItem.extras.filter(extra => extra._id !== extraId);
-        updateItemExtras(parentId, updatedExtras); 
-      }
-    };
-    
-    
+  const handleAddToCartPress = () => {
+    summarySheetRef.current.open();
+  };
+
+  const handleCheckout = () => {
+    summarySheetRef.current.close();
+    navigation.navigate("ConfirmOrder", {
+      selectedItems: items.filter(item => item.active),
+      selectedExtras: allExtras,
+      subtotal: calculateSubtotal(),
+    });
+  };
+
+  const handleRemoveExtra = (parentId, extraId) => {
+    // removeExtra(extraId);
+    const parentItem = items.find(item => item.id === parentId);
+
+    if (parentItem) {
+      const updatedExtras = parentItem.extras.filter(extra => extra._id !== extraId);
+      updateItemExtras(parentId, updatedExtras);
+    }
+  };
+
+
   return (
     <View style={[styles.container, darkMode && styles.containerDark]}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* <Text style={[styles.headingText, darkMode && styles.headingTextDark]}>Check Out</Text> */}
-        <FlatList
-          data={items}
-          renderItem={({ item }) => (
-            <CartItem
-              item={item}
-              // onPressItem={handlePressItem}
-              onDeleteItem={removeItem}
-              onIncrease={() => handleIncrease(item.id)} 
-              onDecrease={() => handleDecrease(item.id)}
+      {
+        items.length === 0 ?
+          <EmptyCart navigation={navigation} /> :
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {/* <Text style={[styles.headingText, darkMode && styles.headingTextDark]}>Check Out</Text> */}
+            <FlatList
+              data={items}
+              renderItem={({ item }) => (
+                <CartItem
+                  item={item}
+                  // onPressItem={handlePressItem}
+                  onDeleteItem={removeItem}
+                  onIncrease={() => handleIncrease(item.id)}
+                  onDecrease={() => handleDecrease(item.id)}
+                />
+              )}
+              keyExtractor={item => item.id.toString()}
             />
-          )}
-          keyExtractor={item => item.id.toString()}
-        />
 
-        {allExtras.length > 0 && (
-          <View style={[
-            styles.extrasContainer,
-            { 
-              backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : '#f9f9f9',
-              borderColor: darkMode ? 'rgba(255,255,255,0.1)' : '#e1e1e1'
-            }
-          ]}>
-            <View style={styles.extrasHeader}>
-              <Text style={[
-                styles.extrasTitle,
-                { color: darkMode ? WHITE_COLOR : BLACK_COLOR }
+            {allExtras.length > 0 && (
+              <View style={[
+                styles.extrasContainer,
+                {
+                  backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : '#f9f9f9',
+                  borderColor: darkMode ? 'rgba(255,255,255,0.1)' : '#e1e1e1'
+                }
               ]}>
-                Extras
-              </Text>
-              <View style={[styles.extrasCountBadge, { backgroundColor: THEME_COLOR }]}>
-                <Text style={styles.extrasCountText}>{allExtras.length}</Text>
-              </View>
-            </View>
-
-            {allExtras.map((extra, index) => (
-              <View
-                
-                key={`${extra.parentId}-${extra._id || index}`}
-                style={[
-                  styles.extraItem,
-                  { 
-                    backgroundColor: darkMode ? 'rgba(255,255,255,0.03)' : WHITE_COLOR,
-                    borderColor: darkMode ? 'rgba(255,255,255,0.1)' : '#e1e1e1'
-                  }
-                ]}
-              >
-                {extra.image && (
-                  <Image 
-                    source={{ uri: extra.image }}
-                    style={styles.extraImage}
-                    resizeMode="cover"
-                  />
-                )}
-                
-                <View style={styles.extraContent}>
-                <TouchableOpacity
-        style={styles.extraDeleteButton}
-        onPress={() => handleRemoveExtra(extra.parentId, extra._id)}
-      >
-        <Image
-          style={styles.extraDeleteIcon}
-          source={DELETE_ICON}
-          tintColor={THEME_COLOR}
-        />
-      </TouchableOpacity>
-                  <View style={styles.extraInfoContainer}>
-                    <Text style={[styles.extraName, { color: darkMode ? WHITE_COLOR : BLACK_COLOR }]}>
-                      {extra.name}
-                    </Text>
-                    <Text style={[styles.extraParent, { color: darkMode ? GRAY_COLOR : '#666' }]}>
-                      with {extra.parentName}
-                    </Text>
-                  </View>
-
-                  <View style={styles.extraBottomRow}>
-                    <View style={styles.extraQuantityContainer}>
-                      <TouchableOpacity
-                        style={[
-                          styles.extraQtyButton,
-                          { 
-                            backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : '#f0f0f0',
-                            opacity: extra.quantity <= 1 ? 0.5 : 1
-                          }
-                        ]}
-                        onPress={() => handleExtraQuantityChange(extra.parentId, extra._id, 'decrease')}
-                        disabled={extra.quantity <= 1}
-                      >
-                        <Text style={[
-                          styles.extraQtyText,
-                          { color: darkMode ? WHITE_COLOR : BLACK_COLOR }
-                        ]}>−</Text>
-                      </TouchableOpacity>
-
-                      <Text style={[styles.extraQtyValue, { color: darkMode ? WHITE_COLOR : BLACK_COLOR }]}>
-                        {extra.quantity}
-                      </Text>
-
-                      <TouchableOpacity
-                        style={[
-                          styles.extraQtyButton,
-                          { backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : '#f0f0f0' }
-                        ]}
-                        onPress={() => handleExtraQuantityChange(extra.parentId, extra._id, 'increase')}
-                      >
-                        <Text style={[styles.extraQtyText, { color: darkMode ? WHITE_COLOR : BLACK_COLOR }]}> 
-                          ＋
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                     <Text style={[styles.extraPrice, { color: THEME_COLOR }]}>
-                      Rs.{(extra.price )}
-                    </Text>
+                <View style={styles.extrasHeader}>
+                  <Text style={[
+                    styles.extrasTitle,
+                    { color: darkMode ? WHITE_COLOR : BLACK_COLOR }
+                  ]}>
+                    Extras
+                  </Text>
+                  <View style={[styles.extrasCountBadge, { backgroundColor: THEME_COLOR }]}>
+                    <Text style={styles.extrasCountText}>{allExtras.length}</Text>
                   </View>
                 </View>
+
+                {allExtras.map((extra, index) => (
+                  <View
+
+                    key={`${extra.parentId}-${extra._id || index}`}
+                    style={[
+                      styles.extraItem,
+                      {
+                        backgroundColor: darkMode ? 'rgba(255,255,255,0.03)' : WHITE_COLOR,
+                        borderColor: darkMode ? 'rgba(255,255,255,0.1)' : '#e1e1e1'
+                      }
+                    ]}
+                  >
+                    {extra.image && (
+                      <Image
+                        source={{ uri: extra.image }}
+                        style={styles.extraImage}
+                        resizeMode="cover"
+                      />
+                    )}
+
+                    <View style={styles.extraContent}>
+                      <TouchableOpacity
+                        style={styles.extraDeleteButton}
+                        onPress={() => handleRemoveExtra(extra.parentId, extra._id)}
+                      >
+                        <Image
+                          style={styles.extraDeleteIcon}
+                          source={DELETE_ICON}
+                          tintColor={THEME_COLOR}
+                        />
+                      </TouchableOpacity>
+                      <View style={styles.extraInfoContainer}>
+                        <Text style={[styles.extraName, { color: darkMode ? WHITE_COLOR : BLACK_COLOR }]}>
+                          {extra.name}
+                        </Text>
+                        <Text style={[styles.extraParent, { color: darkMode ? GRAY_COLOR : '#666' }]}>
+                          with {extra.parentName}
+                        </Text>
+                      </View>
+
+                      <View style={styles.extraBottomRow}>
+                        <View style={styles.extraQuantityContainer}>
+                          <TouchableOpacity
+                            style={[
+                              styles.extraQtyButton,
+                              {
+                                backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : '#f0f0f0',
+                                opacity: extra.quantity <= 1 ? 0.5 : 1
+                              }
+                            ]}
+                            onPress={() => handleExtraQuantityChange(extra.parentId, extra._id, 'decrease')}
+                            disabled={extra.quantity <= 1}
+                          >
+                            <Text style={[
+                              styles.extraQtyText,
+                              { color: darkMode ? WHITE_COLOR : BLACK_COLOR }
+                            ]}>−</Text>
+                          </TouchableOpacity>
+
+                          <Text style={[styles.extraQtyValue, { color: darkMode ? WHITE_COLOR : BLACK_COLOR }]}>
+                            {extra.quantity}
+                          </Text>
+
+                          <TouchableOpacity
+                            style={[
+                              styles.extraQtyButton,
+                              { backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : '#f0f0f0' }
+                            ]}
+                            onPress={() => handleExtraQuantityChange(extra.parentId, extra._id, 'increase')}
+                          >
+                            <Text style={[styles.extraQtyText, { color: darkMode ? WHITE_COLOR : BLACK_COLOR }]}>
+                              ＋
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                        <Text style={[styles.extraPrice, { color: THEME_COLOR }]}>
+                          Rs.{(extra.price)}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                ))}
               </View>
-            ))}
-          </View>
-        )}
-      </ScrollView>
+            )}
+          </ScrollView>
+      }
+
       {(items.length > 0 || allExtras.length > 0) && (
-      <View style={styles.bottomButtonContainer}>
-        
-        <CustomButton
-          title={`Review Order (${items.filter(item => item.active).length})`}
-          onPress={handleAddToCartPress}
-          style={styles.proceedButton}
-        />
-      </View>
-        )}
+        <View style={styles.bottomButtonContainer}>
+
+          <CustomButton
+            title={`Review Order (${items.filter(item => item.active).length})`}
+            onPress={handleAddToCartPress}
+          />
+        </View>
+      )}
       <RBSheet
         ref={summarySheetRef}
-        height={300}
+        height={500}
         draggable={true}
         customStyles={{
           container: styles.sheetContainer,
@@ -214,10 +220,11 @@ const CartScreen = ({ navigation }) => {
           onCheckout={() => [summarySheetRef.current.close() ,navigation.navigate("ConfirmOrder")]}
         /> */}
         <SummaryCard
-  selectedItems={items.filter(item => item.active)}
-  subtotal={calculateSubtotal()}
-  onCheckout={handleCheckout}
-/>
+          selectedItems={items.filter(item => item.active)}
+          selectedExtras={allExtras}
+          subtotal={calculateSubtotal()}
+          onCheckout={handleCheckout}
+        />
       </RBSheet>
     </View>
   );
@@ -226,10 +233,8 @@ const CartScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-     marginTop:50,
-   // paddingTop:50,
+    marginTop: 50,
     margin: 16,
-    // backgroundColor: Back_Ground,
   },
   containerDark: {
     backgroundColor: 'black',
@@ -239,7 +244,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 24,
     marginBottom: 20,
-    textAlign:"right",
+    textAlign: "right",
   },
   headingTextDark: {
     color: THEME_COLOR,
@@ -262,7 +267,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-     borderBottomColor: 'rgba(0,0,0,0.05)',
+    borderBottomColor: 'rgba(0,0,0,0.05)',
   },
   extrasTitle: {
     fontSize: 18,
@@ -277,7 +282,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   extrasCountText: {
-     color: WHITE_COLOR,
+    color: WHITE_COLOR,
     fontSize: 12,
     fontWeight: 'bold',
   },
@@ -341,14 +346,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginLeft: 10,
-  },
-  proceedButton:{
-    marginBottom:-10,
-    backgroundColor: THEME_COLOR,
-    paddingVertical: 12,
-    borderRadius: 8,
-    width: '100%',
-    alignItems: 'center',
   },
   extraDeleteButton: {
     position: 'absolute',
