@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   FlatList,
+  Text
   
 } from "react-native";
 import {
@@ -85,6 +86,7 @@ const MenuScreen = ({ navigation }) => {
           data={filteredData}
           ListHeaderComponent={
             <View style={[styles.header, darkMode && styles.headerDark]}>
+              <Text style={styles.category}>Category</Text>
                 <ScrollView 
             horizontal 
             showsHorizontalScrollIndicator={false}
@@ -124,6 +126,12 @@ const styles = StyleSheet.create({
   },
   categoryScrollContainer: {
     paddingHorizontal: 16, 
+  },
+  category: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: THEME_COLOR,
+    paddingHorizontal: 16,
   },
 });
 

@@ -474,7 +474,7 @@ const styles = StyleSheet.create({
   sectionSubtitle: {
     fontSize: 13,
     marginBottom: 16,
-    fontStyle: 'italic',
+    // fontStyle: 'italic',
   },
   extrasContainer: {
     // height:"50%",

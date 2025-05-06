@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: WHITE_COLOR,
     fontSize: 18,
-    fontStyle : "italic",
+    // fontStyle : "italic",
   },
   buttonContent: {
     flexDirection: 'row',

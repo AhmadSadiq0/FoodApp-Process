@@ -22,7 +22,8 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
   const { user } = useAuthStore();
   const { selectedBranch } = useBranchStore();
   const { createOrder , orders_loading , orders_error } = useOrderStore();
-  const { clearCart } = useCartStore()
+  const { clearCart } = useCartStore();
+  
 
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [orderType, setOrderType] = useState("dine_in");
@@ -31,12 +32,13 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
     city: "",
     state: "",
     zipCode: "",
-    country: "",
+    // country: "",
     phone: "",
     instructions: ""
   });
   const [isFormValid, setIsFormValid] = useState(false);
   const sheetRef = useRef(null);
+  const paymentRef = useRef(null);
 
   const tax = subtotal * 0.08;
   const deliveryFee = orderType === 'delivery' ? 2.99 : 0;
@@ -104,7 +106,7 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
           city: address.city,
           state: address.state,
           zipCode: address.zipCode,
-          country: address.country
+          // country: address.country
         },
         contactNumber: address.phone,
         deliveryInstructions: address.instructions
@@ -114,7 +116,22 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
     return payload;
   };
 
-  const handleConfirmOrder =async () => {
+  // const handleConfirmOrder =async () => {
+  //   const orderPayload = buildOrderPayload();
+  //   if (!orderPayload) return;
+  //   await createOrder(orderPayload);
+  //   sheetRef.current.close();
+  //   clearCart();
+  //   navigation.navigate("ConfirmedOrder", { orderPayload });
+  // };
+
+  const handleConfirmOrder = async () => {
+    const isNameValid = paymentRef.current?.validateName?.();
+    if (!isNameValid) {
+      Alert.alert("Validation Error", "Please enter your name");
+      return;
+    }
+  
     const orderPayload = buildOrderPayload();
     if (!orderPayload) return;
     await createOrder(orderPayload);
@@ -122,6 +139,7 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
     clearCart();
     navigation.navigate("ConfirmedOrder", { orderPayload });
   };
+  
 
   const renderContent = () => {
     if (!orderType) {
@@ -148,6 +166,7 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
         )}
 
         <PaymentComponent
+         ref={paymentRef}
           paymentMethods={[
             {
               name: "Cash",

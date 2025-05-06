@@ -1,84 +1,57 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Back_Ground, THEME_COLOR, WHITE_COLOR, THEME_TEXT_COLOR } from '../../res/colors';
 import { SECONDARY_PROFILE_AVATAR } from '../../res/drawables';
 import PersonalDetails from '../../components/PersonalDetails';
 import useAuthStore from '../../store/AuthStore';
 
 const ProfileScreen = () => {
-  const { user,username } = useAuthStore();
+  const { user } = useAuthStore();
+
   return (
     <View style={styles.container}>
-      <View style={styles.contentWrapper}>
-        {/* Header */}
-        {/* <View style={styles.header}> */}
-          {/* <TouchableOpacity>
-            <Text style={styles.doneText}>Done</Text>
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Profile</Text>
-          <TouchableOpacity accessibilityLabel="Settings"> */}
-            {/* <FontAwesome5 name="cog" size={20} color="#000" /> */}
-          {/* </TouchableOpacity>
-        </View> */}
-
-        {/* Profile Info */}
+      <View style={styles.card}>
         <View style={styles.profileSection}>
           <View style={styles.avatarWrapper}>
             <TouchableOpacity>
-                             <Image 
-                              source={SECONDARY_PROFILE_AVATAR}
-                               style={[
-                                 styles.icon,
-                               ]} 
-                             />
-                           </TouchableOpacity>
+              <Image 
+                source={SECONDARY_PROFILE_AVATAR}
+                style={styles.avatar}
+              />
+            </TouchableOpacity>
             <View style={styles.badge} />
           </View>
           <Text style={styles.name}>{user?.username || 'Guest'}</Text>
-           <Text style={styles.memberStatus}>{user?.email||'Guest'}</Text> 
+          <Text style={styles.email}>{user?.email || 'guest@example.com'}</Text>
         </View>
       </View>
-      <PersonalDetails/>
+
+      <PersonalDetails />
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
-    paddingTop:40,
     flex: 1,
-    //  backgroundColor: '#ffffff',
-    padding: 16,
+    paddingTop: 40,
+    paddingHorizontal: 16,
+    backgroundColor: Back_Ground,
   },
-  contentWrapper: {
-    width: '100%',
-    maxWidth: 320, 
-  },
-  header: {
-    flexDirection: 'row',
+  card: {
+    borderRadius: 20,
+    paddingVertical: 24,
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 24,
-  },
-  doneText: {
-    color: '#3b82f6',
-    fontSize: 14,
-    fontWeight: '400',
-  },
-  headerTitle: {
-    color: '#000',
-    fontWeight: '600',
-    fontSize: 16,
-    flex: 1,
-    textAlign: 'center',
-    marginLeft: -24, // Offset center due to buttons
+    marginBottom: 20,
   },
   profileSection: {
-    paddingTop: 34,
     alignItems: 'center',
   },
   avatarWrapper: {
     position: 'relative',
-
+    borderWidth: 4,
+    borderColor: THEME_COLOR, // Using theme color for border
+    borderRadius: 100,
+    padding: 4,
   },
   avatar: {
     width: 96,
@@ -87,33 +60,26 @@ const styles = StyleSheet.create({
   },
   badge: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 4,
     right: 0,
-    width: 24,
-    height: 24,
-    backgroundColor: '#facc15', // Tailwind's yellow-400
-    borderRadius: 12,
+    width: 16,
+    height: 16,
+    backgroundColor: THEME_COLOR,
+    borderRadius: 8,
     borderWidth: 2,
-    borderColor: '#ffffff',
+    borderColor: WHITE_COLOR,
   },
   name: {
     marginTop: 12,
     fontSize: 20,
-    fontWeight: '600',
-    color: '#000000',
+    fontWeight: '700',
+    color: THEME_TEXT_COLOR,
   },
-  memberStatus: {
+  email: {
+    marginTop: 4,
     fontSize: 14,
-    fontWeight: '400',
-    color: '#facc15',
-  },
-  iconContainer: {
-    flexDirection: "row",
-  },
-  icon: {
-    width: 120,
-    height: 120,
+    fontWeight: '600',
+    color: THEME_COLOR,
   },
 });
-
 export default ProfileScreen;

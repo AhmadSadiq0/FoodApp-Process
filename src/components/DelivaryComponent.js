@@ -14,7 +14,7 @@ const DeliveryComponent = ({ onAddressChange }) => {
     city: "",
     state: "",
     zipCode: "",
-    country: "",
+    // country: "",
     phone: "",
     instructions: ""
   });
@@ -94,17 +94,17 @@ const DeliveryComponent = ({ onAddressChange }) => {
                   darkMode={darkMode}
                   containerStyle={{ flex: 1 }}
                 />
-                <InputFieldAddress
+                {/* <InputFieldAddress
                   label="State"
                   value={address.state}
                   onChange={v => handleChange('state', v)}
                   error={errors.state}
                   darkMode={darkMode}
                   containerStyle={{ flex: 1, marginLeft: 10 }}
-                />
+                /> */}
               </View>
               <View style={styles.row}>
-                <InputFieldAddress
+                {/* <InputFieldAddress
                   label="Zip Code"
                   value={address.zipCode}
                   onChange={v => handleChange('zipCode', v)}
@@ -112,14 +112,14 @@ const DeliveryComponent = ({ onAddressChange }) => {
                   darkMode={darkMode}
                   containerStyle={{ flex: 1 }}
                   keyboardType="numeric"
-                />
-                <InputFieldAddress
+                /> */}
+                {/* <InputFieldAddress
                   label="Country"
                   value={address.country}
                   onChange={v => handleChange('country', v)}
                   darkMode={darkMode}
                   containerStyle={{ flex: 1, marginLeft: 10 }}
-                />
+                /> */}
               </View>
               <InputFieldAddress
                 label="Contact Number"
@@ -142,12 +142,12 @@ const DeliveryComponent = ({ onAddressChange }) => {
               <Text style={[styles.addressText, darkMode && styles.addressTextDark]}>
                 {address.street}, {address.city}
               </Text>
-              <Text style={[styles.addressText, darkMode && styles.addressTextDark]}>
+              {/* <Text style={[styles.addressText, darkMode && styles.addressTextDark]}>
                 {address.state}, {address.zipCode}
-              </Text>
-              <Text style={[styles.addressText, darkMode && styles.addressTextDark]}>
+              </Text> */}
+              {/* <Text style={[styles.addressText, darkMode && styles.addressTextDark]}>
                 {address.country}
-              </Text>
+              </Text> */}
               <Text style={[styles.phoneText, darkMode && styles.phoneTextDark]}>
                 Contact: {address.phone}
               </Text>
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: THEME_TEXT_COLOR,
     marginTop: 8,
-    fontStyle: 'italic',
+    // fontStyle: 'italic',
   },
   instructionsTextDark: {
     color: WHITE_COLOR,

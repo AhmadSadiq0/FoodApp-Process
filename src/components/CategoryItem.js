@@ -23,6 +23,7 @@ const CategoryItem = ({ item, isSelected, onPress }) => {
       activeOpacity={0.8}
     >
       <View style={styles.imageWrapper}>
+        
         <Image
           source={{ uri: item.image }}
           style={styles.image}

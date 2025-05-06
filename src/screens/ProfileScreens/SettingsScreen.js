@@ -46,10 +46,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: WHITE_COLOR,
-    paddingHorizontal: 15,
+    paddingTop:10,
+    paddingHorizontal: 20,
     borderRadius: 25,
     width: "100%",
     elevation: 5,
+
   },
   toggleContainerDark: {
     backgroundColor: GRAY_COLOR,
@@ -62,12 +64,12 @@ const styles = StyleSheet.create({
     transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }],
   },
   button: {
-    paddingHorizontal: 15,
-    borderRadius: 25,
-    width: "100%",
-    alignItems: "center",
-    height: 50,
-    backgroundColor: THEME_COLOR,
+    // paddingHorizontal: 15,
+    // borderRadius: 25,
+    // width: "100%",
+    // alignItems: "center",
+    // height: 50,
+    // backgroundColor: THEME_COLOR,
   }, 
 });
 
