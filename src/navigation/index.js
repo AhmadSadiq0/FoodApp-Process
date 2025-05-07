@@ -157,18 +157,18 @@ const OrdersStack = () => {
         name="Orders"
         component={OrdersScreen}
         options={{
-          header: () => (
-            <Header
-              title="My Orders"
-              Welcomermsg=""
-              showSearch={false}
-              containerStyle={{ height: 190 }}
-              textContainer={{ marginTop: 0 }}
-              user={user}
-              showBellIcon={false}
-            />
-          ),
-          headerShown: true,
+          // header: () => (
+          //   <Header
+          //     title="My Orders"
+          //     Welcomermsg=""
+          //     showSearch={false}
+          //     containerStyle={{ height: 190 }}
+          //     textContainer={{ marginTop: 0 }}
+          //     user={user}
+          //     showBellIcon={false}
+          //   />
+          // ),
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

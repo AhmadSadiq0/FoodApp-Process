@@ -34,9 +34,8 @@ export const HEART_ICON = require(`${PATH}/icons/heart.png`);
 export const LOCATION_ICON = require(`${PATH}/icons/Location.png`);
 export const PLUS_ICON = require(`${PATH}/icons/plus.png`);
 export const VERIFIED_ICON = require(`${PATH}/icons/verified.png`);
-
 //profile screen
 export const SECONDARY_PROFILE_AVATAR = require(`${PATH}/icons/profileAvatar.png`);
-
 //utils Icon
 export const BACK_ICON  = require(`${PATH}/icons/backIcon.png`)
+export const CHEVRON_ICON = require(`${PATH}/icons/ChevronRightIcon1.png`)

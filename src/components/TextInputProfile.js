@@ -8,13 +8,20 @@ import useThemeStore from "../../zustand/ThemeStore";
 import { GRAY_COLOR, WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, BLACK_COLOR } from "../res/colors";
 //Images
 import { IMAGE28 } from "../res/drawables";
-const EditableField = (props) => {
-  const { label, value, showEditIcon,showButton } = props;
+
+const EditableField = ({ label, value, showEditIcon, fieldName, onSave }) => {
+  const { darkMode } = useThemeStore();
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(value);
-  const { darkMode } = useThemeStore();
-  const handleEdit = () => setIsEditing(true);
-  const handleSave = () => setIsEditing(false);
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleSave = () => {
+    onSave(fieldName, text);
+    setIsEditing(false);
+  };
 
   return (
     <View
@@ -45,19 +52,79 @@ const EditableField = (props) => {
   );
 };
 
-const TextInputProfile = ({ showEditIcon, showButton,username, email, phoneNo, address, debitCardDetail,password }) => {
-  // console.log("Profile Data:", { username, email, phoneNo, address, debitCardDetail, password }); // Debugging
+const TextInputProfile = ({ 
+  showEditIcon, 
+  showButton, 
+  username, 
+  email, 
+  phoneNo, 
+  address, 
+  debitCardDetail, 
+  password,
+  onSave
+}) => {
+  const { darkMode } = useThemeStore();
+  const [formData, setFormData] = useState({
+    username,
+    email,
+    phoneNo,
+    address,
+    password
+  });
 
-  const { darkMode } = useThemeStore(); 
+  const handleSave = (field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+    if (onSave) {
+      onSave({ ...formData, [field]: value });
+    }
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR }]}>
-      <EditableField label="Full Name" value={username} showEditIcon={showEditIcon} />
-      <EditableField label="Email" value={email} showEditIcon={showEditIcon} />
-      {/* <EditableField label="Password" value={password} showEditIcon={showEditIcon} /> */}
-      <EditableField label="PhoneNo" value={phoneNo} showEditIcon={showEditIcon} />
-      <EditableField label="Address" value={address} showEditIcon={showEditIcon} />
-      <EditableField label="DebitCardDetail" value={debitCardDetail} showEditIcon={showEditIcon} />
-      {showButton && <CustomButton title={"UpdateProfile"} textStyle={{ color: WHITE_COLOR }} />}
+      <EditableField 
+        label="Full Name" 
+        value={formData.username} 
+        showEditIcon={showEditIcon}
+        fieldName="username"
+        onSave={handleSave}
+      />
+      <EditableField 
+        label="Email" 
+        value={formData.email} 
+        showEditIcon={showEditIcon}
+        fieldName="email"
+        onSave={handleSave}
+      />
+      <EditableField 
+        label="PhoneNo" 
+        value={formData.phoneNo} 
+        showEditIcon={showEditIcon}
+        fieldName="phoneNo"
+        onSave={handleSave}
+      />
+      <EditableField 
+        label="Address" 
+        value={formData.address} 
+        showEditIcon={showEditIcon}
+        fieldName="address"
+        onSave={handleSave}
+      />
+      <EditableField 
+        label="DebitCardDetail" 
+        value={debitCardDetail} 
+        showEditIcon={showEditIcon}
+        fieldName="debitCardDetail"
+        onSave={handleSave}
+      />
+      {showButton && (
+        <CustomButton 
+          title="Update Profile"
+          textStyle={{ color: WHITE_COLOR }}
+        />
+      )}
     </View>
   );
 };
@@ -75,6 +142,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  textContainer: {
+    flex: 1,
   },
   label: {
     fontSize: 12,
@@ -94,4 +164,5 @@ const styles = StyleSheet.create({
     tintColor: THEME_COLOR,
   },
 });
+
 export default TextInputProfile; 

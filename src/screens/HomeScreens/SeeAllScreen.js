@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '500',
     color: THEME_COLOR,
-    fontStyle: "italic",
+    // fontStyle: "italic",
     bottom: 2
   },
 });

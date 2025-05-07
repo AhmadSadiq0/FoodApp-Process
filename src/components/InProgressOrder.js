@@ -8,7 +8,7 @@ import {
   Pressable,
 } from "react-native";
 //image
-import { BURGERIMG } from "../res/drawables";
+import { ARROW_ICON, BURGERIMG } from "../res/drawables";
 //color
 import {
   Back_Ground,
@@ -27,7 +27,7 @@ import RBOrderSheet from "./RBOrderSheet";
 import RBDelivered from "./RBDelivered";
 //zustand
 import useThemeStore from "../../zustand/ThemeStore";
-const InProgressOrder = ({ sections: initialSections }) => {
+const InProgressOrder = ({ sections: initialSections, refreshControl }) => {
   const { darkMode } = useThemeStore();
   const [sections, setSections] = useState(initialSections);
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -79,6 +79,7 @@ const InProgressOrder = ({ sections: initialSections }) => {
         renderItem={renderOrderItem}
         renderSectionHeader={renderSectionHeader}
         contentContainerStyle={styles.sectionListContainer}
+        refreshControl={refreshControl}
       />
       <RBOrderSheet sheetRef={sheetRef} selectedOrder={selectedOrder}  />
       <RBDelivered sheetRef={deliveredSheetRef} selectedOrder={selectedOrder} />
@@ -88,8 +89,8 @@ const InProgressOrder = ({ sections: initialSections }) => {
 const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
   const statusColors = {
     pending: THEME_COLOR,
-    Delivered: Green_Color,
-    default: GRAY_COLOR,
+    Delivered: THEME_TEXT_COLOR,
+    default: Green_Color,
   };
 
   return (
@@ -128,8 +129,7 @@ const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
         >
           {order.status}
         </Text>
-        <Image source={BURGERIMG} style={styles.image} />
-
+        {/* <Image source={ARROW_ICON} style={styles.image} /> */}
       </View>
       
 

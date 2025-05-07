@@ -1,20 +1,22 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { INPUT_BACK_COLOR, WHITE_COLOR, THEME_TEXT_COLOR, THEME_COLOR, BLACK_COLOR, GRAY_COLOR } from '../res/colors';
 import { useNavigation } from '@react-navigation/native';
-import { FontAwesome5 } from '@expo/vector-icons'; 
+import { CHEVRON_ICON } from '../res/drawables';
 import CustomButton from './CustomButtom';
 
 const items = [
-    { name: 'SettingsScreen', screen: 'Settings' },
-    { name: 'Language', screen: 'LanguageSettings' },
-     { name: 'UpdateProfile', screen: 'UpdateProfile' },
-    // { name: 'Help&Support', screen: 'HelpSupportScreen' },
-  ];
+  { name: 'Settings', screen: 'Settings' },
+  { name: 'Language', screen: 'LanguageSettings' },
+  { name: 'Update Profile', screen: 'UpdateProfile' },
+];
+
 const PersonalDetails = () => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+
   return (
-    <View style={styles.container}>
-        <View style={styles.divider} />
+    <View style={styles.wrapper}>
+      <View style={styles.card}>
         {items.map((item, index) => (
           <TouchableOpacity
             key={index}
@@ -26,56 +28,59 @@ const PersonalDetails = () => {
             onPress={() => navigation.navigate(item.screen)}
           >
             <Text style={styles.itemText}>{item.name}</Text>
-             <FontAwesome5 name="chevron-right" size={14} color="#9CA3AF" /> 
+            <Image
+              source={CHEVRON_ICON}
+              style={styles.chevron}
+            />
           </TouchableOpacity>
         ))}
-      <CustomButton title="Logout" />
+      </View>
+
+      <View style={styles.logoutContainer}>
+        <CustomButton title="Logout" />
+      </View>
     </View>
   );
 };
+
 export default PersonalDetails;
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 36,
+  wrapper: {
+   // flex: 1,
+    padding: 16,
+   // backgroundColor: INPUT_BACK_COLOR,
   },
   card: {
-    width: '100%',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    // backgroundColor: '#fff',
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#9CA3AF',
-    textTransform: 'uppercase',
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 8,
-  },
-  divider: {
-    borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    backgroundColor: WHITE_COLOR,
+    borderRadius: 16,
+    overflow: 'hidden',
+    // elevation: 3,
+    shadowColor: BLACK_COLOR,
   },
   item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
-     borderBottomColor: '#E5E7EB',
+    borderBottomColor: GRAY_COLOR,
   },
   lastItem: {
     borderBottomWidth: 0,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
   },
   itemText: {
-    fontSize: 14,
-    fontWeight: '600',
-    // color: '#111827',
+    fontSize: 16,
+    fontWeight: '700',
+    color: THEME_TEXT_COLOR,
+  },
+  chevron: {
+    width: 16,
+    height: 16,
+    tintColor: THEME_COLOR, 
+  },
+  logoutContainer: {
+    marginTop: 26,
+    padding: 16,
   },
 });

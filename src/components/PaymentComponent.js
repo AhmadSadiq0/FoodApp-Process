@@ -1,6 +1,7 @@
-import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, FlatList } from "react-native";
+import React,{useState,useRef} from "react";
+import { View, Text, TouchableOpacity, StyleSheet, FlatList,TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+
 import {
   GRAY_COLOR,
   THEME_COLOR,
@@ -8,25 +9,57 @@ import {
   WHITE_COLOR,
   BLACK_COLOR,
   DARK_GRAY,
-  LIGHT_GRAY
+  LIGHT_GRAY,
+  ERROR_COLOR
 } from "../res/colors";
 import useThemeStore from "../../zustand/ThemeStore";
 
-const PaymentComponent = ({ 
+const PaymentComponent = React.forwardRef(({
   paymentMethods, 
   onSelectPayment, 
   selectedMethod,
   themeColor = THEME_COLOR,
-  darkMode = false
-}) => {
+  darkMode = false,
+  autoSelectFirst = false,
+  onNameChange,
+}, ref) => {
+
   const { darkMode: systemDarkMode } = useThemeStore();
   const finalDarkMode = darkMode || systemDarkMode;
+  const [name, setName] = useState("");
+  const [nameError, setNameError] = useState("");
+  const paymentRef = useRef(null);
+
+  React.useImperativeHandle(ref, () => ({
+    validateName
+  }));
 
   const paymentIcons = {
     'Cash': 'cash',
     'Debit Card': 'card',
     'App Wallet': 'wallet',
     'Online Payment': 'globe'
+  };
+  React.useEffect(() => {
+    if (autoSelectFirst && paymentMethods?.length > 0 && !selectedMethod) {
+      onSelectPayment(paymentMethods[0]);
+    }
+  }, [autoSelectFirst, paymentMethods, selectedMethod, onSelectPayment]);
+
+  const handleNameChange = (text) => {
+    setName(text);
+    setNameError("");
+    if (onNameChange) {
+      onNameChange(text);
+    }
+  };
+
+  const validateName = () => {
+    if (!name.trim()) {
+      setNameError("Please enter your name");
+      return false;
+    }
+    return true;
   };
 
   const renderItem = ({ item }) => (
@@ -79,6 +112,29 @@ const PaymentComponent = ({
       <Text style={[styles.title, finalDarkMode && styles.titleDark]}>
         Select Payment Method
       </Text>
+
+      <View style={styles.nameInputContainer}>
+        <Text style={[styles.inputLabel, finalDarkMode && styles.inputLabelDark]}>
+          Your Name
+        </Text>
+        <TextInput
+          style={[
+            styles.nameInput,
+            finalDarkMode && styles.nameInputDark,
+            nameError && styles.errorInput
+          ]}
+          value={name}
+          onChangeText={handleNameChange}
+          placeholder="Enter your name"
+          placeholderTextColor={finalDarkMode ? LIGHT_GRAY : GRAY_COLOR}
+          onBlur={validateName}
+        />
+        {nameError ? (
+          <Text style={styles.errorText}>{nameError}</Text>
+        ) : null}
+      </View>
+      
+
       <FlatList
         data={paymentMethods}
         renderItem={renderItem}
@@ -87,7 +143,7 @@ const PaymentComponent = ({
       />
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -175,6 +231,39 @@ const styles = StyleSheet.create({
   radioButtonSelected: {
     backgroundColor: THEME_COLOR,
     borderColor: THEME_COLOR,
+  },
+  nameInputContainer: {
+    paddingHorizontal: 16,
+    marginBottom: 16,
+  },
+  inputLabel: {
+    fontSize: 14,
+    color: THEME_TEXT_COLOR,
+    marginBottom: 8,
+  },
+  inputLabelDark: {
+    color: WHITE_COLOR,
+  },
+  nameInput: {
+    backgroundColor: LIGHT_GRAY,
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: THEME_COLOR,
+  },
+  nameInputDark: {
+     backgroundColor: '#2A2A2A',
+    color: WHITE_COLOR,
+  },
+  errorInput: {
+    borderColor: ERROR_COLOR,
+    borderWidth: 1,
+  },
+  errorText: {
+    color: ERROR_COLOR,
+    fontSize: 12,
+    marginTop: 4,
   },
 });
 

@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
   usernameText: {
     fontSize: 16,
     color: BLACK_COLOR,
-    fontStyle : "italic"
+    // fontStyle : "italic"
   },
   textContainer: {
     width : '100%',

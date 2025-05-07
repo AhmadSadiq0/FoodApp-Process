@@ -1,104 +1,91 @@
-import React,{useEffect} from "react";
-import { StyleSheet, View, SectionList, Text,ActivityIndicator } from "react-native";
-//Components
-import { InProgressOrder,  } from "../../components";
-//colors
-import { Back_Ground } from "../../res/colors";
-//Global State
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View, ActivityIndicator, Text, RefreshControl } from "react-native";
+// Components
+import { InProgressOrder } from "../../components";
+// Colors
+import { Back_Ground, THEME_COLOR } from "../../res/colors";
+// Global State
 import useAuthStore from "../../store/AuthStore";
-import useOrderStore from "../../store/OrderStore";
+import useUserOrderStore from "../../store/UserStore";
 
-  const OrdersScreen = () => {
-    const {
-      fetchOrders,
-      orders,
-      orders_loading,
-      orders_error,
-    } = useOrderStore();
-    // console.log('orders_error:', orders_error);
-    // console.log('orders:', orders);
-    // console.log('orders_loading:', orders_loading);
-    // console.log("fetchOrders:", fetchOrders);
+const OrdersScreen = () => {
   const { user } = useAuthStore();
- 
+  const {
+    userOrders,
+    userOrders_loading,
+    userOrders_error,
+    fetchUserOrders,
+  } = useUserOrderStore();
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const loadOrders = async () => {
+      await fetchUserOrders();
+  };
+
   useEffect(() => {
-    fetchOrders();
+    loadOrders();
   }, []);
-  const allOrders = [
-    {
-      orderId: "AK-141124-DCB07",
-      itemName: "Double Cheese Burger",
-      price: "Rs. 590/-",
-      status: "Preparing",
-      deliveredOn: "14/11/2024 11:08 PM",
-    },
-    {
-      orderId: "AK-121124-DCB07",
-      itemName: "Double Cheese Burger",
-      price: "Rs. 590/-",
-      status: "Preparing",
-      deliveredOn: "14/11/2024 11:08 PM",
-    },
-    {
-      orderId: "AK-111124-DCB07",
-      itemName: "Double Cheese Burger",
-      price: "Rs. 590/-",
-      status: "Delivered",
-      deliveredBy: "Husnain",
-      deliveredOn: "November 14, 2024 11:39 PM",
-      orderDetails: "Double Cheese Burger",
-    },
-    {
-      orderId: "AK-061124-DCB07",
-      itemName: "Double Cheese Burger",
-      price: "Rs. 590/-",
-      status: "Delivered",
-      deliveredBy: "ZainZaka",
-      deliveredOn: "November 13, 2024 10:15 AM",
-      orderDetails: "Double Cheese Burger",
-    },
-    {
-      orderId: "AK-281024-DCB07",
-      itemName: "Double Cheese Burger",
-      price: "Rs. 590/-",
-      status: "Delivered",
-      deliveredBy: "ZainZaka",
-      deliveredOn: "November 12, 2024 3:45 PM",
-      orderDetails: "Double Cheese Burger",
-    },
-  ];
 
-  const sections = [
-    {
-      title: "In Progress Orders",
-      data: allOrders.filter((order) => order.status === "Preparing"),
-    },
+  const onRefresh = async () => {
+    setRefreshing(true);
+    loadOrders();
+    setRefreshing(false);
+  };
 
-    {
-      title: "Orders History",
-      data: allOrders.filter((order) => order.status === "Delivered"),
-    },
-  ];  
-
-  if (orders_loading) {
+  if (userOrders_loading && !refreshing) {
     return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#999" />
+      <View style={[styles.container, styles.center]}>
+        <ActivityIndicator size="large" color={THEME_COLOR} />
       </View>
     );
   }
 
-  // if (orders_error) {
-  //   return (
-  //     <View style={styles.loaderContainer}>
-  //       <Text style={{ color: 'red' }}>{orders_error}</Text>
-  //     </View>
-  //   );
-  // }
+  if (userOrders_error) {
+    return (
+      <View style={[styles.container, styles.center]}>
+        <Text>Error loading orders: {userOrders_error}</Text>
+      </View>
+    );
+  }
+
+  // Transform the API data into the format your component expects
+  const transformOrder = (order) => ({
+    orderId: order.orderNumber,
+    itemName: order.items.map(item => item.name).join(", "), 
+    price: `Rs. ${order.totalAmount.toFixed(2)}/-`,
+    status: order.status === "out_for_delivery" ? "Preparing" : order.status,
+    deliveredOn: new Date(order.updatedAt).toLocaleString(),
+  });
+
+  const sections = [
+    {
+      title: "In Progress Orders",
+      data: userOrders
+        .filter(order => ["pending", "preparing", "out_for_delivery"].includes(order.status))
+        .map(transformOrder),
+    },
+    {
+      title: "Orders History",
+      data: userOrders
+        .filter(order => order.status === "completed" || order.status === "delivered")
+        .map(transformOrder),
+    },
+  ];
+
   return (
     <View style={styles.container}>
-
-      <InProgressOrder sections={sections} />
+      <InProgressOrder 
+        sections={sections} 
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[THEME_COLOR]}
+            tintColor={THEME_COLOR}
+          />
+        }
+      />
     </View>
   );
 };
@@ -106,7 +93,13 @@ import useOrderStore from "../../store/OrderStore";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Back_Ground ,
+    paddingTop: 26,
+    backgroundColor: Back_Ground,
+  },
+  center: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
+
 export default OrdersScreen;

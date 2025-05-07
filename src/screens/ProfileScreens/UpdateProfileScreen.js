@@ -47,11 +47,11 @@ const UpdateProfileScreen = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 40,
   },
   scrollContent: {
     flexGrow: 1,
     padding: 16,
   },
 }); 
-
 export default UpdateProfileScreen;

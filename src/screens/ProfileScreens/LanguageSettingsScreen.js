@@ -145,6 +145,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
+    paddingTop: 20,
   },
   languageRow: {
     flexDirection: "row",

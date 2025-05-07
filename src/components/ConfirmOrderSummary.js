@@ -42,7 +42,30 @@ const ConfirmOrderSummary = (props) => {
       </Text>
     </View>
   );
+  const handleConfirmationPress = () => {
+    if (orderType === 'delivery') {
+      // Show alert only for delivery
+      if (!deliveryAddress) {
+        alert('Please select the delivery address before confirming your order');
+        return;
+      }
+  
+      if (
+        !deliveryAddress?.street ||
+        !deliveryAddress?.city ||
+        !deliveryAddress?.state ||
+        !deliveryAddress?.zipCode
+      ) {
+        alert('Please complete your delivery address information (street, city, state, and zip code) before confirming your order.');
+        return;
+      }
+    }
+  
+    onButtonPressed();
+  };
+  
 
+  
   return (
     <ScrollView 
       style={[styles.container, finalDarkMode && styles.containerDark]}
@@ -136,10 +159,11 @@ const ConfirmOrderSummary = (props) => {
 
       {/* Confirm Button */}
       <CustomButton
-        title="Confirm Order"
+        title="Confirm Orderr"
         textStyle={styles.buttonText}
         buttonStyle={[styles.button, isButtonDisabled && styles.disabledButton]}
-        onPress={onButtonPressed}
+        //onPress={onButtonPressed}
+        onPress={handleConfirmationPress}
         loading={loading}
       />
     </ScrollView>

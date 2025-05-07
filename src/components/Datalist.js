@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: "500",
-    fontStyle : "italic"
+    // fontStyle : "italic"
   },
   seeMore: {
     fontSize: 14,

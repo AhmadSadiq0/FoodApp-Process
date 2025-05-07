@@ -9,6 +9,9 @@ const OrderTypeSelector = ({ selectedType, onSelect, darkMode }) => {
     { id: 'pickup', icon: 'walk', label: 'Pickup' },
     { id: 'delivery', icon: 'car', label: 'Delivery' },
   ];
+  const handleSelect = (type) => {
+    onSelect(type, type === 'dine_in' || type === 'pickup');
+  };
 
   return (
     <View style={[styles.container, darkMode && styles.containerDark]}>
@@ -25,7 +28,8 @@ const OrderTypeSelector = ({ selectedType, onSelect, darkMode }) => {
               darkMode && styles.optionDark,
               selectedType === option.id && darkMode && styles.selectedOptionDark
             ]}
-            onPress={() => onSelect(option.id)}
+            // onPress={() => onSelect(option.id)}
+            onPress={() => handleSelect(option.id)}
           >
             <Ionicons
               name={option.icon}
