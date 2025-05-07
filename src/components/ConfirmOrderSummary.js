@@ -20,7 +20,7 @@ const ConfirmOrderSummary = (props) => {
     tax = 0,
     deliveryFee = 0,
     totalAmount = 0,
-    onButtonPressed = () => {},
+    onButtonPressed = () => { },
     paymentMethod = { name: "Cash on Delivery" },
     orderType = "delivery",
     deliveryAddress = null,
@@ -49,25 +49,25 @@ const ConfirmOrderSummary = (props) => {
         alert('Please select the delivery address before confirming your order');
         return;
       }
-  
+
       if (
         !deliveryAddress?.street ||
         !deliveryAddress?.city ||
-        !deliveryAddress?.state ||
-        !deliveryAddress?.zipCode
+        !deliveryAddress?.phone ||
+        !deliveryAddress?.instructions
       ) {
         alert('Please complete your delivery address information (street, city, state, and zip code) before confirming your order.');
         return;
       }
     }
-  
+
     onButtonPressed();
   };
-  
 
-  
+
+
   return (
-    <ScrollView 
+    <ScrollView
       style={[styles.container, finalDarkMode && styles.containerDark]}
       contentContainerStyle={styles.scrollContent}
       showsVerticalScrollIndicator={false}
@@ -75,24 +75,40 @@ const ConfirmOrderSummary = (props) => {
       {/* Order Type Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Ionicons 
-            name={orderType === 'delivery' ? 'car' : orderType === 'pickup' ? 'walk' : 'restaurant'} 
-            size={20} 
-            color={finalDarkMode ? WHITE_COLOR : THEME_COLOR} 
+          <Ionicons
+            name={orderType === 'delivery' ? 'car' : orderType === 'pickup' ? 'walk' : 'restaurant'}
+            size={20}
+            color={finalDarkMode ? WHITE_COLOR : THEME_COLOR}
           />
           <Text style={[styles.sectionTitle, finalDarkMode && styles.sectionTitleDark]}>
             {orderType.replace(/_/g, ' ').toUpperCase()}
           </Text>
         </View>
-        
+
         {orderType === 'delivery' && deliveryAddress && (
           <View style={styles.addressContainer}>
-            <Text style={[styles.addressText, finalDarkMode && styles.addressTextDark]}>
-              {deliveryAddress.street}, {deliveryAddress.city}
-            </Text>
-            <Text style={[styles.addressText, finalDarkMode && styles.addressTextDark]}>
-              {deliveryAddress.state}, {deliveryAddress.zipCode}
-            </Text>
+            {
+              deliveryAddress && deliveryAddress.street && (
+                <Text style={[styles.addressText, finalDarkMode && styles.addressTextDark]}>
+                  {deliveryAddress.street} - {deliveryAddress.city}
+                </Text>
+              )
+            }
+            {
+              deliveryAddress && deliveryAddress.phone && (
+                <Text style={[styles.addressText, finalDarkMode && styles.addressTextDark]}>
+                  {deliveryAddress.phone}
+                </Text>
+              )
+            }
+            {
+              deliveryAddress && deliveryAddress.instructions && (
+                <Text style={[styles.addressText, finalDarkMode && styles.addressTextDark]}>
+                  {deliveryAddress.instructions}
+                </Text>
+              )
+            }
+
           </View>
         )}
       </View>
@@ -121,12 +137,12 @@ const ConfirmOrderSummary = (props) => {
           <Text style={[styles.priceLabel, finalDarkMode && styles.priceLabelDark]}>Subtotal</Text>
           <Text style={styles.priceValue}>Rs. {subtotal.toFixed(2)}</Text>
         </View>
-        
+
         <View style={styles.priceRow}>
           <Text style={[styles.priceLabel, finalDarkMode && styles.priceLabelDark]}>Tax (8%)</Text>
           <Text style={styles.priceValue}>Rs. {tax.toFixed(2)}</Text>
         </View>
-        
+
         {orderType === 'delivery' && (
           <View style={styles.priceRow}>
             <Text style={[styles.priceLabel, finalDarkMode && styles.priceLabelDark]}>Delivery Fee</Text>
@@ -143,10 +159,10 @@ const ConfirmOrderSummary = (props) => {
       {/* Payment Method */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Ionicons 
-            name="card" 
-            size={20} 
-            color={finalDarkMode ? WHITE_COLOR : THEME_COLOR} 
+          <Ionicons
+            name="card"
+            size={20}
+            color={finalDarkMode ? WHITE_COLOR : THEME_COLOR}
           />
           <Text style={[styles.sectionTitle, finalDarkMode && styles.sectionTitleDark]}>
             PAYMENT METHOD
@@ -194,7 +210,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap : 10
+    gap: 10
   },
   sectionTitle: {
     fontSize: 16,

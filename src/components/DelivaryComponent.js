@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, Back_Ground, BLACK_COLOR, LIGHT_GRAY, DARK_GRAY } from "../res/colors";
 import InputFieldAddress from "./InputFieldAddress";
 import useThemeStore from "../../zustand/ThemeStore";
+import CustomErrorText from "./CustomErrorText";
 
 const DeliveryComponent = ({ onAddressChange }) => {
   const { darkMode } = useThemeStore();
@@ -12,9 +13,6 @@ const DeliveryComponent = ({ onAddressChange }) => {
   const [address, setAddress] = useState({
     street: "",
     city: "",
-    state: "",
-    zipCode: "",
-    // country: "",
     phone: "",
     instructions: ""
   });
@@ -29,8 +27,6 @@ const DeliveryComponent = ({ onAddressChange }) => {
     const newErrors = {};
     if (!address.street) newErrors.street = "Street address is required";
     if (!address.city) newErrors.city = "City is required";
-    if (!address.state) newErrors.state = "State is required";
-    if (!address.zipCode) newErrors.zipCode = "Zip code is required";
     if (!address.phone) newErrors.phone = "Phone number is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

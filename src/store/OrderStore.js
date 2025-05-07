@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import useUserOrderStore from './UserStore';
 import { 
   fetchOrdersService, 
   createOrderService, 
@@ -68,6 +68,9 @@ const useOrderStore = create(
               orders: [...state.orders, response.data], 
               orders_loading: false 
             }));
+            if(!useUserOrderStore.getState().userOrders.length == 0) {
+              useUserOrderStore.getState().addUserOrder(response.data);
+            }
             return { success: true, data: response.data };
           } else {
             set({ orders_loading: false, orders_error: response.message });

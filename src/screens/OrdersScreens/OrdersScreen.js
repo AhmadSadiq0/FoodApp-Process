@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, ActivityIndicator, Text, RefreshControl } from "react-native";
 // Components
-import { InProgressOrder } from "../../components";
+import { OrderList } from "../../components";
 // Colors
 import { Back_Ground, THEME_COLOR } from "../../res/colors";
 // Global State
@@ -9,7 +9,6 @@ import useAuthStore from "../../store/AuthStore";
 import useUserOrderStore from "../../store/UserStore";
 
 const OrdersScreen = () => {
-  const { user } = useAuthStore();
   const {
     userOrders,
     userOrders_loading,
@@ -20,7 +19,7 @@ const OrdersScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const loadOrders = async () => {
-      await fetchUserOrders();
+    await fetchUserOrders();
   };
 
   useEffect(() => {
@@ -51,10 +50,11 @@ const OrdersScreen = () => {
 
   // Transform the API data into the format your component expects
   const transformOrder = (order) => ({
+    ...order,
     orderId: order.orderNumber,
-    itemName: order.items.map(item => item.name).join(", "), 
+    itemName: order.items.map(item => item.name).join(", "),
     price: `Rs. ${order.totalAmount.toFixed(2)}/-`,
-    status: order.status === "out_for_delivery" ? "Preparing" : order.status,
+    status: order.status,
     deliveredOn: new Date(order.updatedAt).toLocaleString(),
   });
 
@@ -62,21 +62,21 @@ const OrdersScreen = () => {
     {
       title: "In Progress Orders",
       data: userOrders
-        .filter(order => ["pending", "preparing", "out_for_delivery"].includes(order.status))
+        .filter(order => ["pending", "preparing", "out_for_delivery", "confirmed", "ready"].includes(order.status))
         .map(transformOrder),
     },
     {
       title: "Orders History",
       data: userOrders
-        .filter(order => order.status === "completed" || order.status === "delivered")
+        .filter(order => ["delivered", "cancelled"].includes(order.status))
         .map(transformOrder),
     },
   ];
 
   return (
     <View style={styles.container}>
-      <InProgressOrder 
-        sections={sections} 
+      <OrderList
+        sections={sections}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

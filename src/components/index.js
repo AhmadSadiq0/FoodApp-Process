@@ -14,7 +14,7 @@ import PaymentComponent from './PaymentComponent';
 import DeliveryAddress from './DelivaryComponent';
 import ConfirmOrderSummary from './ConfirmOrderSummary';
 import Header from './Header';
-import InProgressOrder from './InProgressOrder';
+import OrderList from './OrderList';
 import ProfileHeader from './ProfileHeader';
 import BurgerItem from './BurgerItem';
 import CustomLoadingIndicator from './CustomLoadingIndicator';
@@ -39,7 +39,7 @@ export {
      PaymentComponent,
      DeliveryAddress,
      ConfirmOrderSummary,
-     InProgressOrder,
+     OrderList,
      ProfileHeader,
      CustomLoadingIndicator,
      CustomErrorText,

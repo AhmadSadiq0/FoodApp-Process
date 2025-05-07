@@ -10,7 +10,8 @@ import {
   BLACK_COLOR,
   DARK_GRAY,
   LIGHT_GRAY,
-  ERROR_COLOR
+  ERROR_COLOR,
+  RED_COLOR
 } from "../res/colors";
 import useThemeStore from "../../zustand/ThemeStore";
 
@@ -21,12 +22,13 @@ const PaymentComponent = React.forwardRef(({
   themeColor = THEME_COLOR,
   darkMode = false,
   autoSelectFirst = false,
+  name,
+  setName,
   onNameChange,
 }, ref) => {
 
   const { darkMode: systemDarkMode } = useThemeStore();
   const finalDarkMode = darkMode || systemDarkMode;
-  const [name, setName] = useState("");
   const [nameError, setNameError] = useState("");
   const paymentRef = useRef(null);
 
@@ -115,7 +117,7 @@ const PaymentComponent = React.forwardRef(({
 
       <View style={styles.nameInputContainer}>
         <Text style={[styles.inputLabel, finalDarkMode && styles.inputLabelDark]}>
-          Your Name
+          Your Name on Order
         </Text>
         <TextInput
           style={[
@@ -125,7 +127,7 @@ const PaymentComponent = React.forwardRef(({
           ]}
           value={name}
           onChangeText={handleNameChange}
-          placeholder="Enter your name"
+          placeholder="Enter name"
           placeholderTextColor={finalDarkMode ? LIGHT_GRAY : GRAY_COLOR}
           onBlur={validateName}
         />
@@ -261,7 +263,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   errorText: {
-    color: ERROR_COLOR,
+    color: RED_COLOR,
     fontSize: 12,
     marginTop: 4,
   },

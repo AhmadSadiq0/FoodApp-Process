@@ -6,7 +6,7 @@ import {
   ScrollView,
   FlatList,
   Text
-  
+
 } from "react-native";
 import {
   WHITE_COLOR,
@@ -21,7 +21,7 @@ import useItemStore from "../../store/ItemStore";
 import useCategoryStore from "../../store/CategoryStore";
 import useBranchStore from "../../store/BranchStore";
 
-import { CustomErrorText, CustomLoadingIndicator, Datalist , CategoryList } from "../../components";
+import { CustomErrorText, CustomLoadingIndicator, Datalist, CategoryList } from "../../components";
 
 const MenuScreen = ({ navigation }) => {
   const { darkMode } = useThemeStore();
@@ -46,14 +46,14 @@ const MenuScreen = ({ navigation }) => {
     selectedCategory === "all"
       ? categorized_items
       : categorized_items
-          .filter((cat) => cat.categoryId === selectedCategory)
-          .map((cat) => ({
-            ...cat,
-            items: cat.items.filter((item) =>
-              item.name.toLowerCase().includes(searchQuery.toLowerCase())
-            ),
-          }))
-          .filter((cat) => cat.items.length > 0);
+        .filter((cat) => cat.categoryId === selectedCategory)
+        .map((cat) => ({
+          ...cat,
+          items: cat.items.filter((item) =>
+            item.name.toLowerCase().includes(searchQuery.toLowerCase())
+          ),
+        }))
+        .filter((cat) => cat.items.length > 0);
 
   const handleAddToCart = (item) => {
     navigation.navigate("itemDetail", { item });
@@ -71,7 +71,9 @@ const MenuScreen = ({ navigation }) => {
 
   const renderEmptyComponent = () =>
     categorized_loading ? (
-      <CustomLoadingIndicator height={300} />
+      <View style={{ alignItems: 'center', height: 300 }}>
+        <CustomLoadingIndicator />
+      </View>
     ) : (
       <CustomErrorText
         text={categorized_error || "No items found"}
@@ -87,15 +89,15 @@ const MenuScreen = ({ navigation }) => {
           ListHeaderComponent={
             <View style={[styles.header, darkMode && styles.headerDark]}>
               <Text style={styles.category}>Category</Text>
-                <ScrollView 
-            horizontal 
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.categoryScrollContainer}
-          >
-              <CategoryList
-                selectedCategory={selectedCategory}
-                onSelectCategory={setSelectedCategory}
-              />
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.categoryScrollContainer}
+              >
+                <CategoryList
+                  selectedCategory={selectedCategory}
+                  onSelectCategory={setSelectedCategory}
+                />
               </ScrollView>
             </View>
           }
@@ -112,6 +114,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Back_Ground,
+    alignItems: 'center'
   },
   darkContainer: {
     backgroundColor: BLACK_COLOR,
@@ -125,13 +128,14 @@ const styles = StyleSheet.create({
     backgroundColor: BLACK_COLOR,
   },
   categoryScrollContainer: {
-    paddingHorizontal: 16, 
+    paddingHorizontal: 16,
   },
   category: {
     fontSize: 20,
-    fontWeight: "600",
+    fontWeight: "500",
     color: THEME_COLOR,
     paddingHorizontal: 16,
+    alignSelf : 'flex-start'
   },
 });
 

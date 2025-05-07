@@ -21,45 +21,33 @@ import {
   DARK_THEME_TEXT_COLOR,
   DARK_STATUS_COLOR,
   BLACK_COLOR,
+  RED_COLOR,
 } from "../res/colors";
 //components 
 import RBOrderSheet from "./RBOrderSheet";
 import RBDelivered from "./RBDelivered";
 //zustand
 import useThemeStore from "../../zustand/ThemeStore";
-const InProgressOrder = ({ sections: initialSections, refreshControl }) => {
+const OrderList = ({ sections: initialSections, refreshControl }) => {
   const { darkMode } = useThemeStore();
   const [sections, setSections] = useState(initialSections);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const sheetRef = useRef();
-  const deliveredSheetRef = useRef();
 
   const handleCardPress = (order) => {
     const isSameOrder = selectedOrder?.orderId === order.orderId;
     setSelectedOrder(isSameOrder ? null : order);
+    console.log(order)
 
     if (!isSameOrder) {
-      const sheet = order.status === "Delivered" ? deliveredSheetRef : sheetRef;
-      sheet.current.open();
+      sheetRef.current.open();
     }
-    setSections((prevSections) => reorderSections(prevSections, order));
   };
-  const reorderSections = (sections, order) => {
-    const updatedSections = [...sections];
-    const sectionIndex = updatedSections.findIndex((section) =>
-      section.data.some((item) => item.orderId === order.orderId)
-    );
-    if (sectionIndex !== -1) {
-      const [selectedSection] = updatedSections.splice(sectionIndex, 1);
-      selectedSection.data.sort((a, b) => (a.orderId === order.orderId ? -1 : 1));
-      updatedSections.unshift(selectedSection);
-    }
-    return updatedSections;
-  }; 
+
   const renderOrderItem = ({ item }) => (
     <OrderCard
       order={item}
-      isSelected={ selectedOrder && selectedOrder.orderId == item.orderId}
+      isSelected={selectedOrder && selectedOrder.orderId == item.orderId}
       onPress={() => handleCardPress(item)}
       darkMode={darkMode}
     />
@@ -81,16 +69,18 @@ const InProgressOrder = ({ sections: initialSections, refreshControl }) => {
         contentContainerStyle={styles.sectionListContainer}
         refreshControl={refreshControl}
       />
-      <RBOrderSheet sheetRef={sheetRef} selectedOrder={selectedOrder}  />
-      <RBDelivered sheetRef={deliveredSheetRef} selectedOrder={selectedOrder} />
+      <RBOrderSheet sheetRef={sheetRef} selectedOrder={selectedOrder} />
     </View>
   );
 };
+
+
 const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
   const statusColors = {
     pending: THEME_COLOR,
-    Delivered: THEME_TEXT_COLOR,
-    default: Green_Color,
+    delivered: THEME_TEXT_COLOR,
+    cancelled: RED_COLOR,
+    default: THEME_TEXT_COLOR,
   };
 
   return (
@@ -123,16 +113,13 @@ const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
             styles.status,
             {
               backgroundColor: statusColors[order.status] || statusColors.default,
-              color: darkMode ? WHITE_COLOR : WHITE_COLOR, 
+              color: darkMode ? WHITE_COLOR : WHITE_COLOR,
             },
           ]}
         >
-          {order.status}
+          {order.status.toUpperCase()}
         </Text>
-        {/* <Image source={ARROW_ICON} style={styles.image} /> */}
       </View>
-      
-
     </Pressable>
   );
 };
@@ -140,6 +127,7 @@ const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 25
   },
   sectionListContainer: {
     paddingHorizontal: 16,
@@ -159,7 +147,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 2 },
     elevation: 5,
-  }, 
+  },
   textContainer: {
     flex: 1,
   },
@@ -179,11 +167,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   status: {
-    paddingHorizontal: 2,
-    borderRadius: 12,
-    width: 80,
-    height: 20,
-    fontWeight: "bold",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 2,
     textAlign: "center",
   },
   image: {
@@ -191,6 +177,7 @@ const styles = StyleSheet.create({
     height: 50,
     marginLeft: 10,
   },
+  
 });
 
-export default InProgressOrder; 
+export default OrderList; 

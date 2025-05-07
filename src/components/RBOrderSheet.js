@@ -1,170 +1,262 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, Pressable, View } from "react-native";
-//RawBottomSheet
+import { ScrollView, StyleSheet, Text, View, FlatList } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
-//Colors
+import { useNavigation } from "@react-navigation/native";
+import useThemeStore from "../../zustand/ThemeStore";
 import {
   GRAY_COLOR,
   WHITE_COLOR,
   THEME_COLOR,
-  THEME_TEXT_COLOR,
   Green_Color,
   DARK_BACKGROUND,
-  DARK_TEXT_COLOR,
+  RED_COLOR,
   BLACK_COLOR,
-  LIGHT_THEME_BACKGROUND,
+  DARK_GREEN,
+  THEME_TEXT_COLOR,
 } from "../res/colors";
-//CustomButton
 import CustomButton from "./CustomButtom";
-//Navigation
-import { useNavigation } from "@react-navigation/native";
-//State Manage
-import useThemeStore from "../../zustand/ThemeStore";
-const RBOrderSheet = (props) => {
-  const { sheetRef, selectedOrder } = props;
+import Icon from "react-native-vector-icons/MaterialIcons";
+
+
+const statusSequence = [
+  'pending',
+  'confirmed',
+  'preparing',
+  'ready',
+  'out_for_delivery',
+  'delivered',
+  'cancelled'
+];
+
+const statusConfig = {
+  pending: {
+    label: "Order Received",
+    icon: "access-time",
+    color: "#FFA500",
+    activeIcon: "hourglass-empty"
+  },
+  confirmed: {
+    label: "Order Confirmed",
+    icon: "check-circle",
+    color: THEME_COLOR,
+    activeIcon: "check-circle-outline"
+  },
+  preparing: {
+    label: "In Kitchen",
+    icon: "restaurant",
+    color: "#4A90E2",
+    activeIcon: "restaurant-menu"
+  },
+  ready: {
+    label: "Ready for Delivery",
+    icon: "shopping-cart",
+    color: DARK_GREEN,
+    activeIcon: "local-shipping"
+  },
+  out_for_delivery: {
+    label: "On the Way",
+    icon: "delivery-dining",
+    color: DARK_GREEN,
+    activeIcon: "directions-bike"
+  },
+  delivered: {
+    label: "Delivered",
+    icon: "check-circle",
+    color: Green_Color,
+    activeIcon: "check-circle"
+  },
+  cancelled: {
+    label: "Order Cancelled",
+    icon: "cancel",
+    color: RED_COLOR,
+    activeIcon: "highlight-off"
+  }
+};
+
+const RBOrderSheet = ({ sheetRef, selectedOrder }) => {
   const navigation = useNavigation();
   const { darkMode } = useThemeStore();
-  const goBack = () => {
-    sheetRef.current.close();
-    navigation.goBack();
-  };
-  // Dynamic styles based on theme
+
+  const getStatusIndex = (status) =>
+    Object.keys(statusConfig).indexOf(status);
+
   const dynamicStyles = {
-    container: {
-      backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
-    },
-    text: {
-      color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR,
-    },
-    label: {
-      color: darkMode ? WHITE_COLOR : THEME_COLOR,
-    },
-    button: {
-      backgroundColor: darkMode ? DARK_TEXT_COLOR : THEME_COLOR,
-      borderColor: darkMode ? DARK_TEXT_COLOR : THEME_COLOR,
-    },
-    totalBillContainer: {
-      backgroundColor: darkMode ? DARK_BACKGROUND : WHITE_COLOR,
-    },
+    container: { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR },
+    text: { color: darkMode ? WHITE_COLOR : "#2D3748" },
+    label: { color: darkMode ? WHITE_COLOR : THEME_COLOR },
+    card: { backgroundColor: darkMode ? DARK_BACKGROUND : "#F7FAFC" },
   };
+
+  const renderTimelineStep = (status, index) => {
+    const { label, icon, color, activeIcon } = statusConfig[status];
+    const statusEntry = selectedOrder.statusHistory.find(s => s.status === status);
+    const currentIndex = getStatusIndex(selectedOrder.status);
+    const isCompleted = index <= currentIndex;
+    const isCurrent = index === currentIndex;
+    const isCancelled = selectedOrder.status === 'cancelled';
+
+    // Don't show steps after cancellation
+    if (isCancelled && index > currentIndex && status !== 'cancelled') return null;
+
+    return (
+      <React.Fragment key={status}>
+        <View style={styles.timelineStep}>
+          <View style={[
+            styles.statusIconContainer,
+            {
+              backgroundColor: isCompleted ? color : dynamicStyles.card.backgroundColor,
+              borderColor: isCompleted ? color : GRAY_COLOR
+            }
+          ]}>
+            <Icon
+              name={isCurrent ? activeIcon : icon}
+              size={20}
+              color={isCompleted ? WHITE_COLOR : GRAY_COLOR}
+            />
+          </View>
+          <View style={styles.statusDetails}>
+            <Text style={[
+              styles.statusLabel,
+              dynamicStyles.text,
+              isCompleted && { color },
+              isCancelled && status === 'cancelled' && { color: RED_COLOR }
+            ]}>
+              {label}
+              {isCurrent && !isCancelled && (
+                <Text style={styles.currentBadge}> • Now</Text>
+              )}
+            </Text>
+            {statusEntry && (
+              <Text style={[styles.statusTime, { color: THEME_TEXT_COLOR }]}>
+                {new Date(statusEntry.timestamp).toLocaleString()}
+              </Text>
+            )}
+          </View>
+        </View>
+        {index < statusSequence.length - 1 && !(isCancelled && index >= currentIndex) && (
+          <View style={[
+            styles.timelineConnector,
+            {
+              backgroundColor: isCompleted && !isCancelled ? color : dynamicStyles.card.backgroundColor,
+              opacity: isCancelled ? 0.3 : 1
+            }
+          ]} />
+        )}
+      </React.Fragment>
+    );
+  };
+
+  const renderItem = ({ item }) => (
+    <View style={[styles.itemCard, dynamicStyles.card]}>
+      <Text style={[styles.itemName, dynamicStyles.text]}>{item.name}</Text>
+      <View style={styles.itemDetails}>
+        <Text style={[styles.itemPrice, dynamicStyles.text]}>
+          Rs. {item.totalPrice.toFixed(2)}
+        </Text>
+        <Text style={styles.itemQuantity}>x{item.quantity}</Text>
+      </View>
+      {item.variant && (
+        <Text style={[styles.itemVariant, { color: THEME_TEXT_COLOR }]}>
+          Variant: {item.variant.name}
+        </Text>
+      )}
+    </View>
+  );
+
+  const renderExtraItem = ({ item }) => (
+    <View style={[styles.itemCard, dynamicStyles.card]}>
+      <View style={styles.extraHeader}>
+        <Text style={[styles.itemName, dynamicStyles.text]}>{item.name}</Text>
+        <Text style={[styles.extraPrice, dynamicStyles.text]}>
+          Rs. {(item.price * item.quantity).toFixed(2)}
+        </Text>
+      </View>
+      <View style={styles.extraDetails}>
+        <Text style={[styles.extraQuantity, { color: THEME_TEXT_COLOR }]}>
+          {item.quantity} x Rs. {item.price.toFixed(2)}
+        </Text>
+      </View>
+    </View>
+  );
+
 
   return (
     <RBSheet
       ref={sheetRef}
-      height={450}
+      height={700}
       draggable={true}
       customStyles={{
         container: {
           ...dynamicStyles.container,
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
         },
-        wrapper: {
-          backgroundColor: "transparent",
-        },
-        draggableIcon: {
-          backgroundColor: GRAY_COLOR,
-        },
+        draggableIcon: { backgroundColor: GRAY_COLOR, width: 40 },
       }}
-      animationType="slide"
     >
       {selectedOrder && (
-        <ScrollView style={styles.sheetContent}>
-          <Text style={[styles.OrderIdText, dynamicStyles.text]}>
-            Order Details
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+          <Text style={[styles.orderId, dynamicStyles.text]}>
+            Order #{selectedOrder.orderNumber}
           </Text>
-          <Text style={[styles.sheetLabel, dynamicStyles.label]}>
-            Item(s):{" "}
-            <Text style={[styles.sheetValue, dynamicStyles.text]}>1</Text>
-          </Text>
-          <Text style={[styles.sheetLabel, dynamicStyles.label]}>
-            Details:{" "}
-            <Text style={[styles.sheetValue, dynamicStyles.text]}>
-              {selectedOrder.itemName}
-            </Text>{" "}
-            (<Text style={[styles.sheetValue, dynamicStyles.text]}>1</Text>)
-          </Text>
-          <View
-            style={[
-              styles.totalBillContainer,
-              dynamicStyles.totalBillContainer,
-            ]}
-          >
-            <Text style={[styles.sheetLabel, dynamicStyles.label]}>
-              Total Bill:{" "}
-              <Text style={[styles.sheetValue, dynamicStyles.text]}>
-                Rs. {selectedOrder.price}
+
+          {/* Order Summary */}
+          <View style={[styles.summaryCard, dynamicStyles.card]}>
+            <View style={styles.summaryRow}>
+              <Text style={[styles.summaryLabel, dynamicStyles.label]}>Order Date:</Text>
+              <Text style={[styles.summaryValue, dynamicStyles.text]}>
+                {new Date(selectedOrder.createdAt).toLocaleDateString()}
               </Text>
-            </Text>
-          </View>
-          <View style={styles.buttonContainer}>
-            <Pressable style={styles.ScrollButton}>
-              <Text style={styles.ScrollButtonText}>
-                Scroll Down For Tracking
+            </View>
+            <View style={styles.summaryRow}>
+              <Text style={[styles.summaryLabel, dynamicStyles.label]}>Payment:</Text>
+              <Text style={[styles.summaryValue, dynamicStyles.text]}>
+                {selectedOrder.payment.method.toUpperCase()} - {selectedOrder.payment.status}
               </Text>
-            </Pressable>
-            <Text style={[styles.OrderIdText, dynamicStyles.text]}>
-              {selectedOrder.orderId}
-            </Text>
+            </View>
+            <View style={styles.summaryLastRow}>
+              <Text style={[styles.summaryLabel, dynamicStyles.label]}>Total Amount:</Text>
+              <Text style={[styles.totalAmount, dynamicStyles.text]}>
+                Rs. {selectedOrder.totalAmount.toFixed(2)}
+              </Text>
+            </View>
           </View>
+
+          {/* Items List */}
+          <Text style={[styles.sectionTitle, dynamicStyles.text]}>Order Items</Text>
+          <FlatList
+            data={selectedOrder.items}
+            renderItem={renderItem}
+            keyExtractor={item => item._id}
+            scrollEnabled={false}
+          />
+
+          {selectedOrder.extras?.length > 0 && (
+            <>
+              <Text style={[styles.sectionTitle, dynamicStyles.text]}>Extras</Text>
+              <FlatList
+                data={selectedOrder.extras}
+                renderItem={renderExtraItem}
+                keyExtractor={item => item._id}
+                scrollEnabled={false}
+              />
+            </>
+          )}
+
+          {/* Status Timeline */}
+          <Text style={[styles.sectionTitle, dynamicStyles.text]}>Order Journey</Text>
           <View style={styles.timelineContainer}>
-            <View style={styles.timelineItem}>
-              <View style={[styles.circle, styles.redCircle]} />
-              <Text style={[styles.statusText, dynamicStyles.text]}>
-                Order Confirmation
-              </Text>
-              <Text style={[styles.statusDate, dynamicStyles.text]}>
-                {selectedOrder.deliveredOn}
-              </Text>
-            </View>
-            <View style={styles.verticalLine} />
-            <View style={styles.timelineItem}>
-              <View style={[styles.circle, styles.redCircle]} />
-              <Text style={[styles.statusText, dynamicStyles.text]}>
-                In Preparation
-              </Text>
-              <Text style={[styles.statusDate, dynamicStyles.text]}>
-                {selectedOrder.deliveredOn}
-              </Text>
-            </View>
-            <View style={[styles.verticalLine, { borderColor: Green_Color }]} />
-            <View style={styles.timelineItem}>
-              <View style={[styles.circle, { backgroundColor: Green_Color }]} />
-              <Text style={[styles.statusText, { color: Green_Color }]}>
-                Ready To Dispatch
-              </Text>
-              <Text style={[styles.statusDate, dynamicStyles.text]}>
-                {selectedOrder.deliveredOn}
-              </Text>
-            </View>
-            <View style={[styles.verticalLine, { borderColor: GRAY_COLOR }]} />
-            <View style={styles.timelineItem}>
-              <View style={[styles.circle, { backgroundColor: GRAY_COLOR }]} />
-              <Text style={[styles.statusText, { color: GRAY_COLOR }]}>
-                On The Way
-              </Text>
-              <Text style={styles.statusDate}></Text>
-            </View>
-            <View style={[styles.verticalLine, { borderColor: GRAY_COLOR }]} />
-            <View style={styles.timelineItem}>
-              <View style={[styles.circle, { backgroundColor: GRAY_COLOR }]} />
-              <Text style={[styles.statusText, { color: GRAY_COLOR }]}>
-                Delivered
-              </Text>
-              <Text style={styles.statusDate}></Text>
-            </View>
+            {Object.keys(statusConfig).map((status, index) =>
+              renderTimelineStep(status, index)
+            )}
           </View>
-          <View style={styles.buttonContainer}>
-            <CustomButton
-              title={"Go Back"}
-              width={"100%"}
-              height={48}
-              backgroundColor={dynamicStyles.button.backgroundColor}
-              borderColor={dynamicStyles.button.borderColor}
-              textStyle={{ color: WHITE_COLOR }}
-              onPress={goBack}
-            />
-          </View>
+
+          <CustomButton
+            title="Close Details"
+            onPress={() => sheetRef.current.close()}
+            style={styles.closeButton}
+            textStyle={{ color: WHITE_COLOR }}
+          />
         </ScrollView>
       )}
     </RBSheet>
@@ -172,91 +264,142 @@ const RBOrderSheet = (props) => {
 };
 
 const styles = StyleSheet.create({
-  sheetLabel: {
-    fontSize: 14,
-    color: THEME_TEXT_COLOR,
-    fontWeight: "bold",
-  },
-  sheetValue: {
-    fontSize: 14,
-    color: THEME_COLOR,
-    fontWeight: "bold",
-  },
-  sheetContent: {
+  container: {
     flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 16,
+    padding: 20,
   },
-  totalBillContainer: {
+  orderId: {
+    fontSize: 22,
+    fontWeight: "700",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  summaryCard: {
+    borderRadius: 12,
+    padding: 16,
+  },
+  summaryRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 8,
+  },
+  summaryLastRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  summaryLabel: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  summaryValue: {
+    fontSize: 14,
+  },
+  totalAmount: {
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginVertical: 16,
+  },
+  itemCard: {
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 12,
+  },
+  extraHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  extraPrice: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  extraQuantity: {
+    fontSize: 12,
+  },
+  itemName: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 8,
+  },
+  itemDetails: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 8,
   },
-  OrderIdText: {
-    fontSize: 18,
+  itemPrice: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  itemQuantity: {
+    fontSize: 14,
     color: THEME_TEXT_COLOR,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 16,
   },
-  buttonContainer: {
-    marginBottom: 20,
-    marginTop: 20,
-    alignItems: "center",
+  itemVariant: {
+    fontSize: 12,
+    marginTop: 8,
+    color: THEME_COLOR
   },
-  ScrollButton: {
-    backgroundColor: THEME_TEXT_COLOR,
-    height: 30,
-    width: 225,
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
+  statusIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+    borderWidth: 2,
   },
-  ScrollButtonText: {
-    color: WHITE_COLOR,
-    fontWeight: "bold",
-    fontSize: 15,
-    textAlign: "center",
-    color: WHITE_COLOR,
+  currentBadge: {
+    fontSize: 12,
+    color: GRAY_COLOR,
+    fontWeight: '300',
+  },
+  timelineConnector: {
+    width: 2,
+    height: 40,
+    marginLeft: 19,
+    marginBottom: 8,
   },
   timelineContainer: {
-    marginTop: 10,
-    alignItems: "center",
+    marginVertical: 16,
+    paddingLeft: 24,
   },
-  timelineItem: {
+  timelineStep: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 8,
   },
-  circle: {
-    width: 25,
-    height: 25,
-    borderRadius: 15,
-    backgroundColor: THEME_COLOR,
-    marginRight: 8,
-  },
-  statusText: {
+  statusDetails: {
     flex: 1,
-    fontSize: 15,
-    color: THEME_COLOR,
-    fontWeight: "bold",
+    paddingVertical: 8,
   },
-  statusDate: {
-    fontSize: 10,
-    color: THEME_TEXT_COLOR,
+  statusLabel: {
+    fontSize: 14,
+    fontWeight: "600",
+    marginBottom: 4,
   },
-  verticalLine: {
-    width: 2,
-    height: 40,
-    borderWidth: 1,
-    borderColor: THEME_COLOR,
+  statusTime: {
+    fontSize: 12,
+  },
+  currentStatus: {
     alignSelf: "flex-start",
-    marginLeft: 10,
-    marginBottom: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    marginTop: 8,
   },
-  redCircle: {
-    backgroundColor: THEME_TEXT_COLOR,
+  currentStatusText: {
+    color: WHITE_COLOR,
+    fontSize: 10,
+    fontWeight: "500",
+  },
+  closeButton: {
+    marginVertical: 30,
+    backgroundColor: THEME_COLOR,
   },
 });
+
 export default RBOrderSheet;
