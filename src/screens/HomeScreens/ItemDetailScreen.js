@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Animated,
+  Platform,
 } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { BURGERIMG, BACK_ICON } from "../../res/drawables";
@@ -81,8 +82,9 @@ const ItemDetailScreen = ({ navigation, route }) => {
     const toppingsPrice = selectedToppings.reduce((total, t) => total + t.price, 0);
     const extrasPrice = selectedExtras.reduce((total, e) => total + (e.price * e.quantity), 0);
 
-    return variant ? (variant.price + toppingsPrice + extrasPrice) * quantity : 0;
+    return variant ? ((variant.price + toppingsPrice + extrasPrice) * quantity).toFixed(2) : 0;
   };
+  
   const handleSizeSelection = (size) => {
     setSelectedSize(size);
   };
@@ -489,7 +491,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 15,
-     borderTopWidth: 1,
+    paddingBottom: Platform.OS === 'ios' ? 25 : 20,
+    borderTopWidth: 1,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.1,

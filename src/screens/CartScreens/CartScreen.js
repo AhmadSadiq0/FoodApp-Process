@@ -210,15 +210,10 @@ const CartScreen = ({ navigation }) => {
         draggable={true}
         customStyles={{
           container: styles.sheetContainer,
-          wrapper: { backgroundColor: 'transparent' },
           draggableIcon: { backgroundColor: GRAY_COLOR },
+          
         }}
       >
-        {/* <SummaryCard
-          selectedItems={items.filter(item => item.active)}
-          subtotal={calculateSubtotal()}
-          onCheckout={() => [summarySheetRef.current.close() ,navigation.navigate("ConfirmOrder")]}
-        /> */}
         <SummaryCard
           selectedItems={items.filter(item => item.active)}
           selectedExtras={allExtras}
@@ -252,7 +247,6 @@ const styles = StyleSheet.create({
   sheetContainer: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    backgroundColor: WHITE_COLOR,
   },
   extrasContainer: {
     marginTop: 16,

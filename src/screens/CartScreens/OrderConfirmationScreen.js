@@ -19,24 +19,22 @@ const paymentMethods = [
 const OrderConfirmationScreen = ({ route, navigation }) => {
   const { selectedItems = [], selectedExtras = [], subtotal = 0 } = route.params || {};
   const { darkMode } = useThemeStore();
-  const { user } = useAuthStore();
-  const { selectedBranch } = useBranchStore();
-  const { createOrder , orders_loading , orders_error } = useOrderStore();
-  const { clearCart } = useCartStore();
-  
 
+  const { selectedBranch } = useBranchStore();
+  const { createOrder, orders_loading, orders_error } = useOrderStore();
+  const { clearCart } = useCartStore();
+
+  const [name, setName] = useState("")
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [orderType, setOrderType] = useState("dine_in");
   const [address, setAddress] = useState({
     street: "",
     city: "",
-    state: "",
-    zipCode: "",
-    // country: "",
-    phone: "",
+    phone : "",
     instructions: ""
   });
   const [isFormValid, setIsFormValid] = useState(false);
+  const [error, setError] = useState(null)
   const sheetRef = useRef(null);
   const paymentRef = useRef(null);
 
@@ -54,9 +52,6 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
       }
     }
     setIsFormValid(valid);
-    console.log("selectedItems are ", selectedItems);
-    console.log("selectedExtras are ", selectedExtras);
-    console.log("selected Branch" ,selectedBranch)
   }, [orderType, selectedPayment, address]);
 
   const handlePaymentSelection = (paymentMethod) => {
@@ -64,6 +59,8 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
   };
 
   const buildOrderPayload = () => {
+
+
     const items = selectedItems.map(item => ({
       itemId: item.itemId,
       name: item.name,
@@ -86,6 +83,7 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
       orderType,
       items,
       extras,
+      customerName: name,
       branchId: selectedBranch?._id,
       payment: {
         method: selectedPayment.name.toLowerCase(),
@@ -104,9 +102,6 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
         address: {
           street: address.street,
           city: address.city,
-          state: address.state,
-          zipCode: address.zipCode,
-          // country: address.country
         },
         contactNumber: address.phone,
         deliveryInstructions: address.instructions
@@ -116,30 +111,26 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
     return payload;
   };
 
-  // const handleConfirmOrder =async () => {
-  //   const orderPayload = buildOrderPayload();
-  //   if (!orderPayload) return;
-  //   await createOrder(orderPayload);
-  //   sheetRef.current.close();
-  //   clearCart();
-  //   navigation.navigate("ConfirmedOrder", { orderPayload });
-  // };
-
   const handleConfirmOrder = async () => {
     const isNameValid = paymentRef.current?.validateName?.();
     if (!isNameValid) {
       Alert.alert("Validation Error", "Please enter your name");
       return;
     }
-  
+
     const orderPayload = buildOrderPayload();
     if (!orderPayload) return;
-    await createOrder(orderPayload);
-    sheetRef.current.close();
-    clearCart();
-    navigation.navigate("ConfirmedOrder", { orderPayload });
+    const res = await createOrder(orderPayload);
+    if (res.success) {
+      sheetRef.current.close();
+      clearCart();
+      navigation.navigate("ConfirmedOrder", { orderPayload });
+    } else {
+      setError(res.message)
+    }
+
   };
-  
+
 
   const renderContent = () => {
     if (!orderType) {
@@ -166,7 +157,9 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
         )}
 
         <PaymentComponent
-         ref={paymentRef}
+          ref={paymentRef}
+          name={name}
+          setName={setName}
           paymentMethods={[
             {
               name: "Cash",

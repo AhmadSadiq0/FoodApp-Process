@@ -11,9 +11,7 @@ const initialState = {
   userOrders_error: null,
 };
 
-const useUserOrderStore = create(
-  persist(
-    (set, get) => ({
+const useUserOrderStore = create((set, get) => ({
       ...initialState,
 
       // Fetch orders for a specific user
@@ -45,6 +43,12 @@ const useUserOrderStore = create(
         }
       },
 
+      addUserOrder: (order) => {
+        set((state) => ({
+          userOrders: [...state.userOrders, order],
+        }));
+      },
+
       // Clear user orders
       clearUserOrders: () => set({ 
         userOrders: [], 
@@ -58,7 +62,6 @@ const useUserOrderStore = create(
       name: 'user-order-storage',
       storage: createJSONStorage(() => AsyncStorage),
     }
-  )
 );
 
 export default useUserOrderStore;

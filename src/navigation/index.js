@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Image, StyleSheet, Pressable } from 'react-native';
+import { Text, View, Image, StyleSheet, Pressable, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -206,7 +206,7 @@ const BottomTabStack = () => (
     screenOptions={{
       tabBarStyle: {
         backgroundColor: THEME_COLOR,
-        height: 50,
+        height: Platform.OS === 'ios' ? 80 : 60,
       },
       tabBarLabelStyle: {
         fontSize: 12,
