@@ -21,7 +21,6 @@ const OrdersScreen = () => {
   const loadOrders = async () => {
     await fetchUserOrders();
   };
-
   useEffect(() => {
     loadOrders();
   }, []);

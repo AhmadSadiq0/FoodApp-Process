@@ -92,7 +92,6 @@ const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
           borderColor: isSelected ? THEME_COLOR : "transparent",
           borderWidth: isSelected ? 2 : 0,
           backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
-          backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR,
         },
       ]}
     >
@@ -131,55 +130,82 @@ const styles = StyleSheet.create({
   },
   sectionListContainer: {
     paddingHorizontal: 16,
+    paddingBottom: 20,
   },
   sectionHeader: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 15,
   },
   orderCard: {
-    marginBottom: 15,
-    padding: 15,
-    borderRadius: 10,
+    marginBottom: 20,
+    padding: 20,
+    borderRadius: 12,
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     shadowColor: GRAY_COLOR,
+<<<<<<< Updated upstream:src/components/OrderList.js
     shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 2 },
     elevation: 5,
   },
+=======
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 8,
+    elevation: 4,
+  }, 
+>>>>>>> Stashed changes:src/components/InProgressOrder.js
   textContainer: {
     flex: 1,
+    marginRight: 15,
   },
   orderId: {
-    fontSize: 13,
+    fontSize: 15,
     fontWeight: "bold",
+    marginBottom: 8,
   },
   itemName: {
+<<<<<<< Updated upstream:src/components/OrderList.js
     fontSize: 12,
     paddingRight : 10,
+=======
+    fontSize: 14,
+    marginBottom: 8,
+    lineHeight: 20,
+>>>>>>> Stashed changes:src/components/InProgressOrder.js
   },
   price: {
-    fontSize: 12,
+    fontSize: 15,
     fontWeight: "bold",
   },
   statusContainer: {
-    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    minWidth: 90,
   },
   status: {
+<<<<<<< Updated upstream:src/components/OrderList.js
     fontSize: 12,
     paddingHorizontal : 6,
     paddingVertical: 5,
     borderRadius: 2,
+=======
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    fontWeight: "600",
+>>>>>>> Stashed changes:src/components/InProgressOrder.js
     textAlign: "center",
-  },
-  image: {
-    width: 50,
-    height: 50,
-    marginLeft: 10,
+    fontSize: 13,
   },
   
 });
 
+<<<<<<< Updated upstream:src/components/OrderList.js
 export default OrderList; 
+=======
+export default InProgressOrder; 
+
+>>>>>>> Stashed changes:src/components/InProgressOrder.js
