@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 12,
+    paddingRight : 10,
   },
   price: {
     fontSize: 12,
@@ -167,7 +168,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   status: {
-    paddingHorizontal: 10,
+    fontSize: 12,
+    paddingHorizontal : 6,
     paddingVertical: 5,
     borderRadius: 2,
     textAlign: "center",

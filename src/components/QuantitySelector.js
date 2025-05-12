@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { THEME_COLOR,LIGHT_GRAY,BLACK_COLOR, } from '../res/colors';
+import { THEME_COLOR,LIGHT_GRAY,BLACK_COLOR,GRAY_COLOR,WHITE_COLOR } from '../res/colors';
  
 const QuantitySelector = ({ 
   quantity, 

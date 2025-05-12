@@ -15,7 +15,7 @@ import { BURGERIMG, BACK_ICON } from "../../res/drawables";
 import {
   THEME_COLOR,
   WHITE_COLOR,
-  GRAY_COLOR,
+GRAY_COLOR,
   BLACK_COLOR,
   LIGHT_GRAY,
 } from "../../res/colors";
