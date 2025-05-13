@@ -145,18 +145,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     shadowColor: GRAY_COLOR,
-<<<<<<< Updated upstream:src/components/OrderList.js
     shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 2 },
     elevation: 5,
   },
-=======
-    shadowOpacity: 0.15,
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 8,
-    elevation: 4,
-  }, 
->>>>>>> Stashed changes:src/components/InProgressOrder.js
   textContainer: {
     flex: 1,
     marginRight: 15,
@@ -167,14 +159,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   itemName: {
-<<<<<<< Updated upstream:src/components/OrderList.js
     fontSize: 12,
     paddingRight : 10,
-=======
-    fontSize: 14,
-    marginBottom: 8,
-    lineHeight: 20,
->>>>>>> Stashed changes:src/components/InProgressOrder.js
   },
   price: {
     fontSize: 15,
@@ -186,26 +172,14 @@ const styles = StyleSheet.create({
     minWidth: 90,
   },
   status: {
-<<<<<<< Updated upstream:src/components/OrderList.js
     fontSize: 12,
     paddingHorizontal : 6,
     paddingVertical: 5,
     borderRadius: 2,
-=======
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    fontWeight: "600",
->>>>>>> Stashed changes:src/components/InProgressOrder.js
     textAlign: "center",
     fontSize: 13,
   },
   
 });
 
-<<<<<<< Updated upstream:src/components/OrderList.js
 export default OrderList; 
-=======
-export default InProgressOrder; 
-
->>>>>>> Stashed changes:src/components/InProgressOrder.js
