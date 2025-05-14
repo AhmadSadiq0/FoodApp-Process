@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, FlatList } from "react-native";
 // CustomButton
 import { CustomButton } from "../../components";
@@ -16,17 +16,33 @@ import {
 } from "../../res/colors";
 // State Manage
 import useThemeStore from "../../../zustand/ThemeStore";
-
+import { t, changeLanguage, getCurrentLanguage } from '../../components/i18n';
 const LanguageScreen = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("English");
   const [modalVisible, setModalVisible] = useState(false);
   const { darkMode } = useThemeStore();
 
-  const languages = ["English", "Urdu",];
+  const languages = [
+    { code: 'en', name: 'English' },
+    { code: 'ur', name: 'اردو' }
+  ];
 
-  const handleLanguageSelect = (language) => {
-    setSelectedLanguage(language); 
-    setModalVisible(false); 
+  useEffect(() => {
+    loadCurrentLanguage();
+  }, []);
+
+  const loadCurrentLanguage = async () => {
+    const currentLang = await getCurrentLanguage();
+    const language = languages.find(lang => lang.code === currentLang);
+    if (language) {
+      setSelectedLanguage(language.name);
+    }
+  };
+
+  const handleLanguageSelect = async (language) => {
+    setSelectedLanguage(language.name);
+    await changeLanguage(language.code);
+    setModalVisible(false);
   };
  
   const dynamicThemeColor = darkMode ? WHITE_COLOR : THEME_COLOR;
@@ -54,7 +70,7 @@ const LanguageScreen = () => {
               { color: dynamicThemeColor },
             ]}
           >
-            Language
+            {t('settings.language')}
           </Text>
           <Text
             style={[
@@ -62,7 +78,7 @@ const LanguageScreen = () => {
               { color: darkMode ? DARK_THEME_TEXT_COLOR : THEME_TEXT_COLOR },
             ]}
           >
-            {selectedLanguage} 
+            {selectedLanguage}
           </Text>
         </View>
 
@@ -73,7 +89,7 @@ const LanguageScreen = () => {
               backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
             },
           ]}
-          onPress={() => setModalVisible(true)} 
+          onPress={() => setModalVisible(true)}
         >
           <Text
             style={[
@@ -81,7 +97,7 @@ const LanguageScreen = () => {
               { color: dynamicThemeColor },
             ]}
           >
-            Select Language
+            {t('settings.selectLanguage')}
           </Text>
           <Image source={Language_Icon} style={[styles.icon, { tintColor: dynamicIconColor }]} />
         </TouchableOpacity>
@@ -89,12 +105,12 @@ const LanguageScreen = () => {
 
       {/* Save Button */}
       <CustomButton
-        title={"Save"}
+        title={t('common.save')}
         style={[
           styles.button,
           {
             backgroundColor: THEME_COLOR,
-            borderColor:THEME_COLOR
+            borderColor: THEME_COLOR
           },
         ]}
         textStyle={{
@@ -104,31 +120,31 @@ const LanguageScreen = () => {
 
       <Modal
         animationType="slide"
-        transparent={true} 
+        transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Select a Language</Text>
+            <Text style={styles.modalTitle}>{t('settings.selectLanguage')}</Text>
         
             <FlatList
-              data={languages} 
-              keyExtractor={(item) => item} 
+              data={languages}
+              keyExtractor={(item) => item.code}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={styles.languageItem}
-                  onPress={() => handleLanguageSelect(item)} 
+                  onPress={() => handleLanguageSelect(item)}
                 >
-                  <Text style={styles.languageText}>{item}</Text>
+                  <Text style={styles.languageText}>{item.name}</Text>
                 </TouchableOpacity>
               )}
             />
             <TouchableOpacity
               style={styles.closeButton}
-              onPress={() => setModalVisible(false)} 
+              onPress={() => setModalVisible(false)}
             >
-              <Text style={styles.closeButtonText}>Close</Text>
+              <Text style={styles.closeButtonText}>{t('common.close')}</Text>
             </TouchableOpacity>
           </View>
         </View>

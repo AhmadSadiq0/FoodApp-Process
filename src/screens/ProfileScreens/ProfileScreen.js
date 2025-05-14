@@ -7,7 +7,7 @@ import useAuthStore from '../../store/AuthStore';
 
 const ProfileScreen = () => {
   const { user } = useAuthStore();
-
+  console.log(user)
   return (
     <View style={styles.container}>
       <View style={styles.card}>

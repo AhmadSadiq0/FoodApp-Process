@@ -56,20 +56,26 @@ const TextInputProfile = ({
   showEditIcon, 
   showButton, 
   username, 
+  firstname,
+  lastname,
   email, 
   phoneNo, 
   address, 
   debitCardDetail, 
   password,
-  onSave
+  onSave,
+  isUpdating
 }) => {
   const { darkMode } = useThemeStore();
   const [formData, setFormData] = useState({
+    firstname,
+    lastname,
     username,
     email,
     phoneNo,
     address,
-    password
+    password,
+    
   });
 
   const handleSave = (field, value) => {
@@ -84,11 +90,25 @@ const TextInputProfile = ({
 
   return (
     <View style={[styles.container, { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR }]}>
-      <EditableField 
+      {/* <EditableField 
         label="Full Name" 
         value={formData.username} 
         showEditIcon={showEditIcon}
         fieldName="username"
+        onSave={handleSave}
+      /> */}
+       <EditableField 
+        label="First Name" 
+        value={formData.firstname} 
+        showEditIcon={showEditIcon}
+        fieldName="firstname"
+        onSave={handleSave}
+      />
+      <EditableField 
+        label="Last Name" 
+        value={formData.lastname} 
+        showEditIcon={showEditIcon}
+        fieldName="lastname"
         onSave={handleSave}
       />
       <EditableField 
@@ -123,6 +143,8 @@ const TextInputProfile = ({
         <CustomButton 
           title="Update Profile"
           textStyle={{ color: WHITE_COLOR }}
+          onPress={() => onSave(formData)} 
+          loading={isUpdating}
         />
       )}
     </View>

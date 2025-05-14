@@ -1,11 +1,11 @@
 // User-Auth API URLs:
-const BASE_URL  = 'http://192.168.1.142:8000';
+const BASE_URL  = 'http://192.168.1.132:8000';
 
 //Auth Endpoints
 export const URL_TO_REGISTER_USER = `${BASE_URL}/users/signup`;    
 export const URL_TO_SIGNIN_USER = `${BASE_URL}/users/signin`; 
 export const URL_TO_FETCH_USER_DATA = `${BASE_URL}/users/getUserData`;
-export const URL_TO_UPDATE_USER_DATA = `${BASE_URL}/users/updateUserData`;
+//export const URL_TO_UPDATE_USER_DATA = `${BASE_URL}/users/updateUserData`;
 export const URL_TO_VALIDATE_TOKEN = `${BASE_URL}/users/token/valid`;
 export const URL_TO_REFRESH_TOKEN = `${BASE_URL}/users/refresh-token`
 
@@ -28,7 +28,6 @@ export const URL_TO_UPDATE_BRANCH = `${BASE_URL}/branches/update`;
 export const URL_TO_DELETE_BRANCH = `${BASE_URL}/branches/delete`;
 // Extras Endpoints
 export const URL_TO_GET_EXTRAS = `${BASE_URL}/extras/branch`;
-
 // Orders
 export const URL_TO_CREATE_ORDER = `${BASE_URL}/order/create`;
 export const URL_TO_GET_ORDERS = `${BASE_URL}/orders/getOrders`;
@@ -36,3 +35,8 @@ export const URL_TO_UPDATE_ORDER = `${BASE_URL}/orders/updateOrder`;
 export const URL_TO_DELETE_ORDER = `${BASE_URL}/orders/deleteOrder`;
 //get user orders
 export const URL_TO_GET_USER_ORDERS = `${BASE_URL}/order/get/user`;
+
+// Edit Profile
+export const URL_TO_UPDATE_USER_DATA = `${BASE_URL}/users/updateUserData`;
+// export const URL_TO_EDIT_USER_PROFILE = `${BASE_URL}/users/updateUser`;
+

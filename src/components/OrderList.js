@@ -92,7 +92,6 @@ const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
           borderColor: isSelected ? THEME_COLOR : "transparent",
           borderWidth: isSelected ? 2 : 0,
           backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
-          backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR,
         },
       ]}
     >
@@ -131,18 +130,20 @@ const styles = StyleSheet.create({
   },
   sectionListContainer: {
     paddingHorizontal: 16,
+    paddingBottom: 20,
   },
   sectionHeader: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 15,
   },
   orderCard: {
-    marginBottom: 15,
-    padding: 15,
-    borderRadius: 10,
+    marginBottom: 20,
+    padding: 20,
+    borderRadius: 12,
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     shadowColor: GRAY_COLOR,
     shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 2 },
@@ -150,32 +151,33 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
+    marginRight: 15,
   },
   orderId: {
-    fontSize: 13,
+    fontSize: 15,
     fontWeight: "bold",
+    marginBottom: 8,
   },
   itemName: {
     fontSize: 12,
+    paddingRight : 10,
   },
   price: {
-    fontSize: 12,
+    fontSize: 15,
     fontWeight: "bold",
   },
   statusContainer: {
-    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    minWidth: 90,
   },
   status: {
-    paddingHorizontal: 10,
+    fontSize: 12,
+    paddingHorizontal : 6,
     paddingVertical: 5,
     borderRadius: 2,
     textAlign: "center",
-  },
-  image: {
-    width: 50,
-    height: 50,
-    marginLeft: 10,
+    fontSize: 13,
   },
   
 });

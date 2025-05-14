@@ -2,15 +2,16 @@
 import { getRequest } from './ServiceModel';
 import { URL_TO_GET_USER_ORDERS } from "../res/api";
 
-// Fetch all orders for a specific user
-const fetchUserOrdersService = async (userId) => {
+const fetchUserOrdersService = async () => {
+
   try {
     const response = await getRequest(`${URL_TO_GET_USER_ORDERS}`);
+    
     if (response.status) {
       return {
         success: true,
         status: response.status,
-        data: response.data, // Note: Adjust based on actual response structure
+        data: response.data, 
         message: response.msg || 'User orders retrieved successfully.'
       };
     } else {
