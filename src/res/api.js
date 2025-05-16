@@ -40,3 +40,10 @@ export const URL_TO_GET_USER_ORDERS = `${BASE_URL}/order/get/user`;
 export const URL_TO_UPDATE_USER_DATA = `${BASE_URL}/users/updateUserData`;
 // export const URL_TO_EDIT_USER_PROFILE = `${BASE_URL}/users/updateUser`;
 
+
+//Notification URLs
+export const URL_TO_CREATE_NOTIFICATION = `${BASE_URL}/notifications/create`;
+export const URL_TO_GET_NOTIFICATIONS = `${BASE_URL}/notifications/get`;
+export const URL_TO_UPDATE_NOTIFICATION = `${BASE_URL}/notifications/update`;
+export const URL_TO_DELETE_NOTIFICATION = `${BASE_URL}/notifications/delete`;
+export const URL_TO_MARK_NOTIFICATION_AS_READ = `${BASE_URL}/notifications/mark-as-read`;

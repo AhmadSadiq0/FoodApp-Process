@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
-  Platform,
+   Platform,
   ScrollView,
   Text,
   Image,
@@ -69,7 +69,7 @@ const SignUpScreen = ({navigation}) => {
   
   return (
     <View
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
       <ScrollView

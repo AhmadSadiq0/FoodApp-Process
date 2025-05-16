@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
-  Platform,
+   Platform,
   ScrollView,
   Text,
   Image,
@@ -46,7 +46,8 @@ const SignInScreen = ({ navigation }) => {
   }
 
   return (
-    <View behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+     <View behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+   
       <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
         <View style={styles.redContainer}>
           <Image

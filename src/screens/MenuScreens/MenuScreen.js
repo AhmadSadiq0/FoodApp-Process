@@ -6,7 +6,6 @@ import {
   ScrollView,
   FlatList,
   Text
-
 } from "react-native";
 import {
   WHITE_COLOR,
@@ -84,11 +83,13 @@ const MenuScreen = ({ navigation }) => {
   return (
     <View style={[styles.container, darkMode && styles.darkContainer]}>
       <ScrollView showsVerticalScrollIndicator={false}>
+      {!categorized_loading && (
+    <Text style={styles.category}>Category</Text>
+  )}
         <FlatList
           data={filteredData}
           ListHeaderComponent={
             <View style={[styles.header, darkMode && styles.headerDark]}>
-              <Text style={styles.category}>Category</Text>
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -109,6 +110,7 @@ const MenuScreen = ({ navigation }) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -138,5 +140,4 @@ const styles = StyleSheet.create({
     alignSelf : 'flex-start'
   },
 });
-
 export default MenuScreen;

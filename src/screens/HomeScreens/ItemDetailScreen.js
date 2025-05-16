@@ -8,7 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Animated,
-  Platform,
+   Platform,
 } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { BURGERIMG, BACK_ICON } from "../../res/drawables";
@@ -16,8 +16,13 @@ import {
   THEME_COLOR,
   WHITE_COLOR,
 GRAY_COLOR,
+INPUT_BACK_COLOR,
   BLACK_COLOR,
   LIGHT_GRAY,
+  THEME_TEXT_COLOR,
+  DARK_THEME_BACKGROUND,
+  LIGHT_THEME_BACKGROUND,
+  LIGHT_THEME_COLOR
 } from "../../res/colors";
 import QuantitySelector from "../../components/QuantitySelector";
 import useExtraStore from "../../store/ExtrasStore";
@@ -166,7 +171,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
         <View style={[
           styles.nutritionContainer,
           { 
-            backgroundColor: darkMode ? 'rgba(255,255,255,0.03)' : '#f9f9f9',
+            backgroundColor: darkMode ? BLACK_COLOR : INPUT_BACK_COLOR,
             borderColor: darkMode ? GRAY_COLOR : LIGHT_GRAY
           }
         ]}>
@@ -195,7 +200,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
             Topping on {name}
           </Text>
         </View>
-        <Text style={[styles.sectionSubtitle, { color: darkMode ? GRAY_COLOR : '#666' }]}>
+        <Text style={[styles.sectionSubtitle, { color: darkMode ? GRAY_COLOR : THEME_TEXT_COLOR }]}>
           Select your preferred toppings (optional)
         </Text>
         <View style={styles.toppingsGrid}>
@@ -216,7 +221,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
   return (
     <>
       <ScrollView
-        style={[styles.container, { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR }]}
+        style={[styles.container, { backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR }]}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
@@ -231,7 +236,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
             onPress={() => navigation.goBack()}
             buttonStyle={[
               styles.backButton,
-              { backgroundColor: darkMode ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.5)' }
+              { backgroundColor: darkMode ? LIGHT_THEME_BACKGROUND : LIGHT_THEME_BACKGROUND }
             ]}
             imageStyle={{ tintColor: darkMode ? WHITE_COLOR : BLACK_COLOR }}
           />
@@ -246,7 +251,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
               Rs. {getSelectedVariant()?.price || 0}
             </Text>
           </View> 
-           <Text style={[styles.description, { color: darkMode ? GRAY_COLOR : '#666' }]}>
+           <Text style={[styles.description, { color: darkMode ? GRAY_COLOR : THEME_TEXT_COLOR }]}>
             {description}
           </Text>
           
@@ -267,7 +272,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
                       {
                         backgroundColor: selectedSize === variant.name 
                           ? THEME_COLOR 
-                          : (darkMode ? 'rgba(255,255,255,0.05)' : WHITE_COLOR),
+                          : (darkMode ? BLACK_COLOR : WHITE_COLOR),
                         borderColor: selectedSize === variant.name 
                           ? THEME_COLOR 
                           : (darkMode ? GRAY_COLOR : LIGHT_GRAY)
@@ -287,7 +292,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
                     <Text style={[
                       styles.sizePrice,
                       { 
-                        color: selectedSize === variant.name ? WHITE_COLOR : (darkMode ? GRAY_COLOR : '#666') 
+                        color: selectedSize === variant.name ? WHITE_COLOR : (darkMode ? GRAY_COLOR : THEME_TEXT_COLOR) 
                       }
                     ]}>
                       Rs. {variant.price}
@@ -306,7 +311,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
         </View>
       </ScrollView>
       <View style={[styles.footer, {
-        backgroundColor: darkMode ? 'rgba(0,0,0,0.9)' : 'rgba(255,255,255,0.95)',
+        backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
         borderTopColor: darkMode ? GRAY_COLOR : LIGHT_GRAY
       }]}>
         <View style={styles.footerContent}> 
@@ -318,7 +323,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
           />
           
           <View style={styles.priceSummary}>
-            <Text style={[styles.totalLabel, { color: darkMode ? WHITE_COLOR : '#666' }]}>
+            <Text style={[styles.totalLabel, { color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR }]}>
               Total
             </Text>
             <Text style={[styles.totalPrice, { color: THEME_COLOR }]}>
@@ -344,7 +349,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
           container: [
             styles.successSheet,
             {
-              backgroundColor: darkMode ? '#1a1a1a' : WHITE_COLOR,
+              backgroundColor: darkMode ?  BLACK_COLOR : WHITE_COLOR,
               borderTopLeftRadius: 24,
               borderTopRightRadius: 24
             }
@@ -369,7 +374,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
           <Text style={[styles.successTitle, { color: darkMode ? WHITE_COLOR : BLACK_COLOR }]}>
             Added to Your Cart!
           </Text>
-          <Text style={[styles.successMessage, { color: darkMode ? GRAY_COLOR : '#666' }]}>
+          <Text style={[styles.successMessage, { color: darkMode ? GRAY_COLOR : THEME_TEXT_COLOR }]}>
             {name} has been added to your shopping cart
           </Text>
           <CustomButton
@@ -491,13 +496,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 15,
-    paddingBottom: Platform.OS === 'ios' ? 25 : 20,
+     paddingBottom: Platform.OS === 'ios' ? 25 : 20,
+    paddingBottom: 20,
     borderTopWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
   },
   footerContent: {
     flexDirection: 'row',

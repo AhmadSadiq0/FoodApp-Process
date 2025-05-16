@@ -1,10 +1,13 @@
+
 import { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import { Frown } from 'lucide-react-native';
-import { THEME_COLOR, WHITE_COLOR, INPUT_BACK_COLOR } from '../../res/colors';
+import { THEME_COLOR, WHITE_COLOR, INPUT_BACK_COLOR, BLACK_COLOR } from '../../res/colors';
 import { CustomButton } from '../../components';
+import useThemeStore from '../../../zustand/ThemeStore';
 
 const EmptyCart = ({ navigation }) => {
+  const { darkMode } = useThemeStore(); 
   const bounceAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -23,8 +26,9 @@ const EmptyCart = ({ navigation }) => {
       ])
     ).start();
   }, []);
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, darkMode && styles.darkContainer]}>
       <Animated.View
         style={[
           styles.iconContainer,
@@ -38,11 +42,11 @@ const EmptyCart = ({ navigation }) => {
         />
       </Animated.View>
 
-      <Text style={styles.title}>Your cart is empty</Text>
-      <Text style={styles.subtitle}>
+      <Text style={[styles.title, darkMode && styles.darkText]}>Your cart is empty</Text>
+      <Text style={[styles.subtitle, darkMode && styles.darkText]}>
         Looks like you haven't added anything yet.
       </Text>
-      <Text style={styles.message}>
+      <Text style={[styles.message, darkMode && styles.darkText]}>
         Browse our delicious menu and add some mouth-watering dishes!
       </Text>
       <CustomButton
@@ -60,7 +64,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
-    backgroundColor: INPUT_BACK_COLOR,  // Light background
+     backgroundColor: INPUT_BACK_COLOR,  
+  },
+  darkContainer: {
+    backgroundColor: BLACK_COLOR,  // Dark background
   },
   iconContainer: {
     alignItems: 'center',
@@ -71,32 +78,33 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: THEME_COLOR,  // Theme color
+    color: THEME_COLOR,
     marginBottom: 12,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
-    color: THEME_COLOR,  // Theme color
+    color: THEME_COLOR,
     marginBottom: 8,
     textAlign: 'center',
     paddingHorizontal: 10,
   },
   message: {
     fontSize: 16,
-    color: THEME_COLOR,  // Theme color
+    color: THEME_COLOR,
     fontWeight: '600',
     textAlign: 'center',
     marginTop: 4,
     paddingHorizontal: 20,
   },
-    button: {
-        marginTop: 24,
-        backgroundColor: THEME_COLOR,  // Button color
-       // paddingVertical: 12,
-       // paddingHorizontal: 32,
-        borderRadius: 8,
-    },
+  darkText: {
+    color: WHITE_COLOR,  // White text for dark mode
+  },
+  button: {
+    marginTop: 24,
+    backgroundColor: THEME_COLOR,
+    borderRadius: 8,
+  },
 });
 
 export default EmptyCart;

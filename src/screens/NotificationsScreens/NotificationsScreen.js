@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState,useEffect } from 'react';
 import {
     StyleSheet,
     View,
@@ -17,35 +17,40 @@ import {
     Back_Ground,
 } from '../../res/colors';
 //Images
-import { PIZZAIMAGE } from '../../res/drawables';
+import { ARROW_ICON, PIZZAIMAGE } from '../../res/drawables';
 //Button
 import CustomButton from '../../components/CustomButtom';
 //RawBottomSheet
 import RBSheet from 'react-native-raw-bottom-sheet';
+import useNotificationStore from '../../store/NotificationStore';
 const NotificationsScreen = ({ navigation }) => {
+    const { notifications, fetchNotifications, unreadCount } = useNotificationStore();
     const [cartItems, setCartItems] = useState([
-        {
-            id: 1, title: 'Your order has been confirmed!',
-            message: "There is no one who loves pain itself who seeks after it and wants to have it simply because it is pain.",
-            subtitle: 'Order Id:',
-            code: 'AK-141124-DC807',
-            date: '14/11/24',
-            time: '11:08 PM',
-            image: PIZZAIMAGE,
-            active: false
-        },
-        {
-            id: 2, title: 'Welcome to Ahmad’s Kitchen!',
-            message: "There is no one who loves pain itself who seeks after it and wants to have it simply because it is pain.",
-            subtitle: 'Enjoy your favourite meals at home!!!',
-            date: '14/11/24',
-            time: '11:08 PM',
-            image: PIZZAIMAGE,
-            active: false
-        },
+        // {
+        //     id: 1, title: 'Your order has been confirmed!',
+        //     message: "There is no one who loves pain itself who seeks after it and wants to have it simply because it is pain.",
+        //     subtitle: 'Order Id:',
+        //     code: 'AK-141124-DC807',
+        //     date: '14/11/24',
+        //     time: '11:08 PM',
+        //     image: PIZZAIMAGE,
+        //     active: false
+        // },
+        // {
+        //     id: 2, title: 'Welcome to Ahmad’s Kitchen!',
+        //     message: "There is no one who loves pain itself who seeks after it and wants to have it simply because it is pain.",
+        //     subtitle: 'Enjoy your favourite meals at home!!!',
+        //     date: '14/11/24',
+        //     time: '11:08 PM',
+        //     image: PIZZAIMAGE,
+        //     active: false
+        // },
     ]);
     const refRBSheet = useRef(null);
-
+    useEffect(() => {
+        fetchNotifications();
+        console.log('Notifications:', notifications);
+      }, []);
     const handlePressItem = (id) => {
         const updatedItems = cartItems.map((item) =>
             item.id === id ? { ...item, active: !item.active } : { ...item, active: false }
@@ -63,11 +68,10 @@ const NotificationsScreen = ({ navigation }) => {
     if (cartItems.length === 0) {
         return (
             <View style={styles.container}>
-                <Text style={styles.emptyCartText}>Your cart is empty</Text>
+                <Text style={styles.emptyCartText}>Your Notifications is empty</Text>
             </View>
         );
     } 
-
     return (
         <View style={styles.container}>
             {cartItems.map((item) => (
@@ -140,6 +144,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 16,
         backgroundColor: Back_Ground,
+     
     },
     cartItem: {
         flexDirection: 'row',
@@ -224,9 +229,10 @@ const styles = StyleSheet.create({
     },
     emptyCartText: {
         fontSize: 18,
-        color: GRAY_COLOR,
+        color: THEME_TEXT_COLOR,
         textAlign: 'center',
-        marginTop: 20,
+        marginTop:"100%",
+       
     },
     customButton: {
         marginTop: 150,
@@ -234,3 +240,4 @@ const styles = StyleSheet.create({
     },
 });
 export default NotificationsScreen;
+
