@@ -131,18 +131,24 @@ const styles = StyleSheet.create({
   sectionListContainer: {
     paddingHorizontal: 16,
     paddingBottom: 20,
+    paddingBottom: 20,
   },
   sectionHeader: {
     fontSize: 20,
     fontWeight: "bold",
+    marginBottom: 15,
     marginBottom: 15,
   },
   orderCard: {
     marginBottom: 20,
     padding: 20,
     borderRadius: 12,
+    marginBottom: 20,
+    padding: 20,
+    borderRadius: 12,
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     alignItems: "center",
     shadowColor: GRAY_COLOR,
     shadowOpacity: 0.2,
@@ -152,10 +158,13 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     marginRight: 15,
+    marginRight: 15,
   },
   orderId: {
     fontSize: 15,
+    fontSize: 15,
     fontWeight: "bold",
+    marginBottom: 8,
     marginBottom: 8,
   },
   itemName: {
@@ -164,10 +173,13 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 15,
+    fontSize: 15,
     fontWeight: "bold",
   },
   statusContainer: {
     alignItems: "center",
+    justifyContent: "center",
+    minWidth: 90,
     justifyContent: "center",
     minWidth: 90,
   },
@@ -177,6 +189,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 2,
     textAlign: "center",
+    fontSize: 13,
     fontSize: 13,
   },
   
