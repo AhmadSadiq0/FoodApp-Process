@@ -74,7 +74,6 @@ const OrderList = ({ sections: initialSections, refreshControl }) => {
   );
 };
 
-
 const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
   const statusColors = {
     pending: THEME_COLOR,
@@ -82,7 +81,6 @@ const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
     cancelled: RED_COLOR,
     default: THEME_TEXT_COLOR,
   };
-
   return (
     <Pressable
       onPress={onPress}

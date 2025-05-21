@@ -28,7 +28,7 @@ const AddCard = (props) => {
 
   const handleSizeSelection = (size) => {
     setSelectedSize(size);
-  };
+  };  
 
   const getAdjustedPrice = () => {
     const selectedVariant = variants.find((variant) => variant.name === selectedSize);

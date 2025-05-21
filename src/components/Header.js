@@ -345,6 +345,7 @@ const styles = StyleSheet.create({
   darkSelectedItem: {
     backgroundColor: THEME_TEXT_COLOR,
   },
+  
 });
 
 export default Header;

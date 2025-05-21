@@ -476,6 +476,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginRight: 12,
   },
+  extraDeleteIcon:{
+    left:"90%",
+    width: 24,
+    height: 24,
+  },
   extraContent: {
     flex: 1,
   },

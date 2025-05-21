@@ -19,7 +19,8 @@ import useThemeStore from "../../zustand/ThemeStore";
 
 const { width } = Dimensions.get("window");
 
-const BurgerCard = ({ name, price, image, onAdd, description, onCardPress }) => {
+const BurgerCard = (props) => {
+  const { name, description, price, image, onAdd } = props;
   const { darkMode } = useThemeStore();
   const textColor = darkMode ? WHITE_COLOR : THEME_TEXT_COLOR;
   const cardColor = darkMode ? BLACK_COLOR : WHITE_COLOR;
