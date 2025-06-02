@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, ActivityIndicator, Text, RefreshControl } from "react-native";
+import { StyleSheet, View, ActivityIndicator, Text, RefreshControl, StatusBar } from "react-native";
 // Components
 import { OrderList } from "../../components";
 // Colors
-import { Back_Ground, THEME_COLOR } from "../../res/colors";
+import { Back_Ground, THEME_COLOR, DARK_THEME_BACKGROUND } from "../../res/colors";
 // Global State
 import useAuthStore from "../../store/AuthStore";
 import useUserOrderStore from "../../store/UserStore";
+import useThemeStore from "../../../zustand/ThemeStore";
+
 
 const OrdersScreen = () => {
   const {
@@ -15,6 +17,7 @@ const OrdersScreen = () => {
     userOrders_error,
     fetchUserOrders,
   } = useUserOrderStore();
+  const { darkMode } = useThemeStore();
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -74,6 +77,10 @@ const OrdersScreen = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        // barStyle={darkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={darkMode ? DARK_THEME_BACKGROUND : Back_Ground}
+      />
       <OrderList
         sections={sections}
         refreshControl={
@@ -92,7 +99,7 @@ const OrdersScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 26,
+    //paddingTop: 26,
     backgroundColor: Back_Ground,
   },
   center: {

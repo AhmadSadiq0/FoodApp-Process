@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   darkText: {
-    color: WHITE_COLOR,  // White text for dark mode
+    color: WHITE_COLOR, 
   },
   button: {
     marginTop: 24,

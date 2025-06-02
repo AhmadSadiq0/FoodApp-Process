@@ -19,7 +19,7 @@ import { THEME_TEXT_COLOR, BACK_GROUND, THEME_COLOR, WHITE_COLOR, GRAY_COLOR, BL
 import { SignInValidationSchema } from '../../utils/ValidationSchema';
 
 
-const SignInScreen = ({ navigation }) => {
+const SignInScreen = ({navigation}) => {
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const { login, loading, error } = authStore()
 
