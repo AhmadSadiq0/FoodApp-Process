@@ -1,44 +1,73 @@
 // UpdateProfileScreen.js
-import React, { useState } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
+import React, { useEffect } from "react";
+import { View, ScrollView, StyleSheet, Text } from "react-native";
 import { TextInputProfile } from "../../components";
 import { Back_Ground, DARK_THEME_BACKGROUND } from "../../res/colors";
 import useThemeStore from "../../../zustand/ThemeStore";
 import useAuthStore from "../../store/AuthStore";
-import { updateUserDataService } from "../../services/ProfileUpdateService";
+import useUpdateProfileStore from "../../store/UpdateProfileStore";
 
 const UpdateProfileScreen = (props) => {
   const { user, setUser } = useAuthStore();
   const { navigation, route } = props;
   const { darkMode } = useThemeStore();
   const showEditIcon = route?.params?.showEditIcon ?? true;
-  const [isUpdating, setIsUpdating] = useState(false);
+  
+  const { 
+    isUpdating, 
+    message, 
+    isSuccess, 
+    updateProfile, 
+    clearMessage,
+    initializeUserData,
+    getUserData
+  } = useUpdateProfileStore();
+
+  // Initialize user data when component mounts
+  useEffect(() => {
+    if (user) {
+      initializeUserData(user);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        clearMessage();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message, clearMessage]);
 
   const handleUpdateProfile = async (updatedData) => {
-    setIsUpdating(true);
     try {
-      console.log('Updating profile with new data:', updatedData);
-      const result = await updateUserDataService({
-        ...updatedData,
-        username: user.username,
-        role: user.role,
-      });
-
-      if (setUser && result?.data) {
-        console.log('Profile updated successfully:', result.data);
-        await setUser(result.data);
+      const updatePayload = {
+        firstname: updatedData.firstname,
+        lastname: updatedData.lastname,
+        phone: updatedData.phone,
+        address: updatedData.address
+      };
+      
+      const result = await updateProfile(updatePayload);
+      
+      if (result.success && setUser) {
+        // Update local user state with new data
+        await setUser({ 
+          ...user, 
+          ...updatePayload 
+        });
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
-      // Silently handle errors or consider logging to external service
-    } finally {
-      setIsUpdating(false);
+      console.error('Update failed:', error);
     }
   };
 
   const containerStyle = darkMode
     ? { backgroundColor: DARK_THEME_BACKGROUND }
     : { backgroundColor: Back_Ground };
+
+  // Get the current user data from the store
+  const currentUserData = getUserData() || user;
 
   return (
     <View style={[styles.container, containerStyle]}>
@@ -50,14 +79,18 @@ const UpdateProfileScreen = (props) => {
         <TextInputProfile
           showEditIcon={showEditIcon}
           showButton={true}
-          firstname={user?.firstname || ""}
-          lastname={user?.lastname || ""}
-          email={user?.email || ""}
-          phoneNo={user?.phone || ""}
-          address={user?.address || ""}
+          firstname={currentUserData?.firstname || ""}
+          lastname={currentUserData?.lastname || ""}
+          phone={currentUserData?.phone || ""}
+          address={currentUserData?.address || ""}
           onSave={handleUpdateProfile}
           isUpdating={isUpdating}
         />
+        {message && (
+          <Text style={[styles.message, { color: isSuccess ? "green" : "red" }]}>
+            {message}
+          </Text>
+        )}
       </ScrollView>
     </View>
   );
@@ -66,11 +99,15 @@ const UpdateProfileScreen = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
   },
   scrollContent: {
-    flexGrow: 1,
+    paddingTop: 40,
     padding: 16,
+  },
+  message: {
+    marginTop: 12,
+    fontSize: 14,
+    textAlign: "center",
   },
 });
 

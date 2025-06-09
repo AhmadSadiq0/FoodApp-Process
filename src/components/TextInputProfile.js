@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from "react-native";
-// CustomButton
 import CustomButton from "./CustomButtom";
-//State Manage
 import useThemeStore from "../../zustand/ThemeStore";
-//Colors
 import { GRAY_COLOR, WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, BLACK_COLOR } from "../res/colors";
-//Images
 import { IMAGE28 } from "../res/drawables";
 
-const EditableField = ({ label, value, showEditIcon, fieldName, onSave }) => {
+const EditableField = ({ label, value, showEditIcon, fieldName, onSave,keyboardType  }) => {
   const { darkMode } = useThemeStore();
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(value);
@@ -19,8 +15,8 @@ const EditableField = ({ label, value, showEditIcon, fieldName, onSave }) => {
   };
 
   const handleSave = () => {
-    onSave(fieldName, text);
     setIsEditing(false);
+    onSave(fieldName, text);
   };
 
   return (
@@ -38,6 +34,7 @@ const EditableField = ({ label, value, showEditIcon, fieldName, onSave }) => {
             value={text}
             onChangeText={setText}
             autoFocus
+            keyboardType={keyboardType || 'default'}
           />
         ) : (
           <Text style={[styles.value, { color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR }]}>{text}</Text>
@@ -59,9 +56,8 @@ const TextInputProfile = ({
   firstname,
   lastname,
   email, 
-  phoneNo, 
+  phone, 
   address, 
-  debitCardDetail, 
   password,
   onSave,
   isUpdating
@@ -70,34 +66,37 @@ const TextInputProfile = ({
   const [formData, setFormData] = useState({
     firstname,
     lastname,
-    username,
-    email,
-    phoneNo,
+    phone,
     address,
-    password,
-    
   });
+  
+  const [initialData] = useState({
+    firstname,
+    lastname,
+    phone,
+    address,
+  });
+  
+  const [hasChanges, setHasChanges] = useState(false);
+  const checkForChanges = (newFormData) => {
+    return Object.keys(newFormData).some(
+      key => newFormData[key] !== initialData[key]
+    );
+  };
 
   const handleSave = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-    if (onSave) {
-      onSave({ ...formData, [field]: value });
-    }
+    const newFormData = { ...formData, [field]: value };
+    setFormData(newFormData);
+    const changesExist = checkForChanges(newFormData);
+    setHasChanges(changesExist);
+    // if (onSave) {
+    //   onSave(newFormData);
+    // }
   };
 
   return (
     <View style={[styles.container, { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR }]}>
-      {/* <EditableField 
-        label="Full Name" 
-        value={formData.username} 
-        showEditIcon={showEditIcon}
-        fieldName="username"
-        onSave={handleSave}
-      /> */}
-       <EditableField 
+      <EditableField 
         label="First Name" 
         value={formData.firstname} 
         showEditIcon={showEditIcon}
@@ -111,40 +110,29 @@ const TextInputProfile = ({
         fieldName="lastname"
         onSave={handleSave}
       />
+      
       <EditableField 
-        label="Email" 
-        value={formData.email} 
+        label="Phone" 
+        value={formData.phone} 
         showEditIcon={showEditIcon}
-        fieldName="email"
+        fieldName="phone"
         onSave={handleSave}
-      />
-      <EditableField 
-        label="PhoneNo" 
-        value={formData.phoneNo} 
-        showEditIcon={showEditIcon}
-        fieldName="phoneNo"
-        onSave={handleSave}
+         keyboardType="numeric"
       />
       <EditableField 
         label="Address" 
-        value={formData.address} 
+        value={formData.address || ''} 
         showEditIcon={showEditIcon}
         fieldName="address"
         onSave={handleSave}
       />
-      <EditableField 
-        label="DebitCardDetail" 
-        value={debitCardDetail} 
-        showEditIcon={showEditIcon}
-        fieldName="debitCardDetail"
-        onSave={handleSave}
-      />
-      {showButton && (
-        <CustomButton 
+      
+      {showButton && hasChanges && (
+        <CustomButton
           title="Update Profile"
-          textStyle={{ color: WHITE_COLOR }}
-          onPress={() => onSave(formData)} 
+          onPress={() => onSave(formData)}
           loading={isUpdating}
+          textStyle={{ color: WHITE_COLOR }}
         />
       )}
     </View>
@@ -186,5 +174,4 @@ const styles = StyleSheet.create({
     tintColor: THEME_COLOR,
   },
 });
-
 export default TextInputProfile; 

@@ -66,7 +66,6 @@ const SummaryCard = ({ selectedItems, selectedExtras, subtotal, onCheckout }) =>
           </View>
         ))}
       </View>
-
       {/* Extras Breakdown */}
       {selectedExtras.length > 0 && (
         <View style={styles.section}>

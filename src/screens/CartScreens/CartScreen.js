@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity, Image } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { CartItem, CustomButton, SummaryCard } from '../../components';
-import { Back_Ground, GRAY_COLOR, THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR, BLACK_COLOR, LIGHT_GRAY } from '../../res/colors';
+import { Back_Ground, GRAY_COLOR, THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR, BLACK_COLOR, LIGHT_GRAY,DARK_THEME_BACKGROUND,DARK_THEME_TEXT_COLOR,LIGHT_THEME_BACKGROUND} from '../../res/colors';
 import useThemeStore from "../../../zustand/ThemeStore";
 import useCartStore from "../../store/CartStore";
 import { DELETE_ICON } from '../../res/drawables';
@@ -58,7 +58,165 @@ const CartScreen = ({ navigation }) => {
 
   const handleRemoveExtra = (parentId, extraId) => {
     // removeExtra(extraId);
-    const parentItem = items.find(item => item.id === parentId);
+    const parentItem = items.find(item => item.id === parentId);    const styles = StyleSheet.create({
+      container: {
+        flex: 1,
+        backgroundColor: Back_Ground,
+        paddingHorizontal: 16,
+        paddingTop: 50,
+      },
+      containerDark: {
+        backgroundColor: DARK_THEME_BACKGROUND,
+      },
+      headingText: {
+        color: THEME_TEXT_COLOR,
+        fontWeight: 'bold',
+        fontSize: 24,
+        marginBottom: 20,
+        textAlign: "right",
+      },
+      headingTextDark: {
+        color: DARK_THEME_TEXT_COLOR,
+      },
+      sheetContainer: {
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        backgroundColor: Back_Ground,
+      },
+      extrasContainer: {
+        marginTop: 16,
+        padding: 16,
+        borderRadius: 12,
+        marginBottom: 20,
+        borderWidth: 1,
+        borderColor: GRAY_COLOR,
+        backgroundColor: LIGHT_THEME_BACKGROUND,
+      },
+      extrasContainerDark: {
+        backgroundColor: DARK_THEME_BACKGROUND,
+        borderColor: DARK_THEME_TEXT_COLOR,
+      },
+      extrasHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 12,
+      },
+      extrasTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: THEME_TEXT_COLOR,
+      },
+      extrasTitleDark: {
+        color: DARK_THEME_TEXT_COLOR,
+      },
+      extrasCountBadge: {
+        borderRadius: 10,
+        width: 24,
+        height: 24,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: THEME_COLOR,
+      },
+      extrasCountText: {
+        color: WHITE_COLOR,
+        fontSize: 12,
+        fontWeight: 'bold',
+      },
+      extraItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 12,
+        borderRadius: 8,
+        marginBottom: 8,
+        backgroundColor: WHITE_COLOR,
+        borderColor: GRAY_COLOR,
+        borderWidth: 1,
+      },
+      extraItemDark: {
+        backgroundColor: DARK_THEME_BACKGROUND,
+        borderColor: DARK_THEME_TEXT_COLOR,
+      },
+      extraImage: {
+        width: 60,
+        height: 60,
+        borderRadius: 8,
+        marginRight: 12,
+      },
+      extraContent: {
+        flex: 1,
+      },
+      extraName: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: BLACK_COLOR,
+      },
+      extraNameDark: {
+        color: WHITE_COLOR,
+      },
+      extraParent: {
+        fontSize: 13,
+        color: GRAY_COLOR,
+        marginTop: 4,
+      },
+      extraParentDark: {
+        color: DARK_THEME_TEXT_COLOR,
+      },
+      extraBottomRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 8,
+      },
+      extraQuantityContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+      },
+      extraQtyButton: {
+        borderRadius: 8,
+        width: 28,
+        height: 28,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: LIGHT_GRAY,
+      },
+      extraQtyButtonDark: {
+        backgroundColor: DARK_THEME_TEXT_COLOR,
+      },
+      extraQtyText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: BLACK_COLOR,
+      },
+      extraQtyTextDark: {
+        color: WHITE_COLOR,
+      },
+      extraQtyValue: {
+        fontSize: 15,
+        fontWeight: '600',
+        marginHorizontal: 10,
+        textAlign: 'center',
+        color: BLACK_COLOR,
+      },
+      extraQtyValueDark: {
+        color: WHITE_COLOR,
+      },
+      extraPrice: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: THEME_COLOR,
+      },
+      bottomButtonContainer: {
+        padding: 16,
+        backgroundColor: WHITE_COLOR,
+        borderTopWidth: 1,
+        borderColor: GRAY_COLOR,
+      },
+      bottomButtonContainerDark: {
+        backgroundColor: DARK_THEME_BACKGROUND,
+        borderColor: DARK_THEME_TEXT_COLOR,
+      },
+    });
 
     if (parentItem) {
       const updatedExtras = parentItem.extras.filter(extra => extra._id !== extraId);
@@ -196,22 +354,29 @@ const CartScreen = ({ navigation }) => {
       }
 
       {(items.length > 0 || allExtras.length > 0) && (
-        <View style={styles.bottomButtonContainer}>
-
-          <CustomButton
-            title={`Review Order (${items.filter(item => item.active).length})`}
-            onPress={handleAddToCartPress}
-          />
-        </View>
+       
+        <View
+        style={[
+          styles.bottomButtonContainer,
+          { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR }
+        ]}
+      >
+        <CustomButton
+          title={`Review Order (${items.filter(item => item.active).length})`}
+          onPress={handleAddToCartPress}
+        />
+      </View>
       )}
       <RBSheet
         ref={summarySheetRef}
         height={500}
         draggable={true}
         customStyles={{
-          container: styles.sheetContainer,
+          container: [
+            styles.sheetContainer, 
+            darkMode && { backgroundColor: BLACK_COLOR }
+          ],
           draggableIcon: { backgroundColor: GRAY_COLOR },
-          
         }}
       >
         <SummaryCard
@@ -228,11 +393,13 @@ const CartScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 50,
-    margin: 16,
+    backgroundColor: Back_Ground,
+    paddingHorizontal: 16,
+    paddingTop: 50,
   },
   containerDark: {
-    backgroundColor: 'black',
+    // backgroundColor: DARK_THEME_BACKGROUND,
+    backgroundColor: BLACK_COLOR,
   },
   headingText: {
     color: THEME_TEXT_COLOR,
@@ -242,38 +409,47 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   headingTextDark: {
-    color: THEME_COLOR,
+    color: DARK_THEME_TEXT_COLOR,
   },
   sheetContainer: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    backgroundColor: Back_Ground,
   },
   extrasContainer: {
     marginTop: 16,
-    padding: 0,
+    padding: 16,
     borderRadius: 12,
     marginBottom: 20,
     borderWidth: 1,
-    overflow: 'hidden',
+    borderColor: GRAY_COLOR,
+    backgroundColor: LIGHT_THEME_BACKGROUND,
+  },
+  extrasContainerDark: {
+    backgroundColor: DARK_THEME_BACKGROUND,
+    borderColor: DARK_THEME_TEXT_COLOR,
   },
   extrasHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0,0,0,0.05)',
+    justifyContent: 'space-between',
+    marginBottom: 12,
   },
   extrasTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: THEME_TEXT_COLOR,
+  },
+  extrasTitleDark: {
+    color: DARK_THEME_TEXT_COLOR,
   },
   extrasCountBadge: {
-    marginLeft: 10,
     borderRadius: 10,
-    width: 20,
-    height: 20,
+    width: 24,
+    height: 24,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: THEME_COLOR,
   },
   extrasCountText: {
     color: WHITE_COLOR,
@@ -282,11 +458,17 @@ const styles = StyleSheet.create({
   },
   extraItem: {
     flexDirection: 'row',
-    padding: 12,
-    marginBottom: 1,
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0,0,0,0.05)',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+    backgroundColor: WHITE_COLOR,
+    borderColor: GRAY_COLOR,
+    borderWidth: 1,
+  },
+  extraItemDark: {
+    backgroundColor: DARK_THEME_BACKGROUND,
+    borderColor: DARK_THEME_TEXT_COLOR,
   },
   extraImage: {
     width: 60,
@@ -294,24 +476,35 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginRight: 12,
   },
+  extraDeleteIcon:{
+    left:"90%",
+    width: 24,
+    height: 24,
+  },
   extraContent: {
     flex: 1,
-  },
-  extraInfoContainer: {
-    marginBottom: 8,
   },
   extraName: {
     fontSize: 16,
     fontWeight: '600',
+    color: BLACK_COLOR,
+  },
+  extraNameDark: {
+    color: WHITE_COLOR,
   },
   extraParent: {
     fontSize: 13,
-    marginTop: 2,
+    color: GRAY_COLOR,
+    marginTop: 4,
+  },
+  extraParentDark: {
+    color: DARK_THEME_TEXT_COLOR,
   },
   extraBottomRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginTop: 8,
   },
   extraQuantityContainer: {
     flexDirection: 'row',
@@ -323,35 +516,44 @@ const styles = StyleSheet.create({
     height: 28,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: LIGHT_GRAY,
+  },
+  extraQtyButtonDark: {
+    backgroundColor: DARK_THEME_TEXT_COLOR,
   },
   extraQtyText: {
     fontSize: 16,
     fontWeight: 'bold',
-    lineHeight: 20,
+    color: BLACK_COLOR,
+  },
+  extraQtyTextDark: {
+    color: WHITE_COLOR,
   },
   extraQtyValue: {
     fontSize: 15,
     fontWeight: '600',
     marginHorizontal: 10,
-    minWidth: 20,
     textAlign: 'center',
+    color: BLACK_COLOR,
+  },
+  extraQtyValueDark: {
+    color: WHITE_COLOR,
   },
   extraPrice: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginLeft: 10,
+    color: THEME_COLOR,
   },
-  extraDeleteButton: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    padding: 4,
-    zIndex: 1,
+  bottomButtonContainer: {
+    padding: 16,
+    backgroundColor: WHITE_COLOR,
+    borderTopWidth: 1,
+    borderColor: GRAY_COLOR,
   },
-  extraDeleteIcon: {
-    height: 24,
-    width: 24,
+  bottomButtonContainerDark: {
+    backgroundColor: DARK_THEME_BACKGROUND,
+    borderColor: DARK_THEME_TEXT_COLOR,
   },
 });
 
-export default CartScreen;
+export default CartScreen;    

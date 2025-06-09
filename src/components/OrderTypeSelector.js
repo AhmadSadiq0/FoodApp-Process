@@ -52,7 +52,6 @@ const OrderTypeSelector = ({ selectedType, onSelect, darkMode }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: WHITE_COLOR,

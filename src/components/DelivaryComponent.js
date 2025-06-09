@@ -28,6 +28,7 @@ const DeliveryComponent = ({ onAddressChange }) => {
     if (!address.street) newErrors.street = "Street address is required";
     if (!address.city) newErrors.city = "City is required";
     if (!address.phone) newErrors.phone = "Phone number is required";
+    if (!address.instructions) newErrors.instructions = "instructions is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -129,6 +130,7 @@ const DeliveryComponent = ({ onAddressChange }) => {
                 label="Delivery Instructions"
                 value={address.instructions}
                 onChange={v => handleChange('instructions', v)}
+                error={errors.instructions}
                 darkMode={darkMode}
                 multiline
               />

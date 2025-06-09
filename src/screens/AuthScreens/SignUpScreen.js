@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Pressable,
   Keyboard,
+  KeyboardAvoidingView,
 } from "react-native";
 import { Formik } from "formik";
 //Field
@@ -24,7 +25,6 @@ import authStore from '../../store/AuthStore'
 //validationSchema
 import { SignUpValidationSchema } from "../../utils/ValidationSchema";
 
-
 const SignUpScreen = ({navigation}) => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const {signup} = authStore()
@@ -37,12 +37,15 @@ const SignUpScreen = ({navigation}) => {
       "keyboardDidHide",
       () => setKeyboardVisible(false)
     );
-
+   
     return () => {
       keyboardDidHideListener.remove();
       keyboardDidShowListener.remove();
     };
   }, []);
+  const goToNextScreen = () => {
+    navigation.navigate('SignIn');
+  };
 
   const handleSignUp = async (values) => {
     console.log('Sign Up Values:', values);
@@ -68,13 +71,14 @@ const SignUpScreen = ({navigation}) => {
   };
   
   return (
-    <View
+    <KeyboardAvoidingView 
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
-        keyboardShouldPersistTaps="handled" 
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
         <View style={styles.redContainer}>
           <Image
@@ -88,7 +92,7 @@ const SignUpScreen = ({navigation}) => {
             <Text style={styles.text1}>Create your free account</Text>
             <View style={styles.box1}>
               <Text style={styles.text2}>Already have an account?</Text>
-              <Pressable  onPress={() => navigation.goBack()}>
+              <Pressable onPress={goToNextScreen}>
                 <Text style={styles.text3}>Sign In</Text>
               </Pressable>
             </View>
@@ -108,104 +112,110 @@ const SignUpScreen = ({navigation}) => {
             <Text style={styles.orText}>or</Text>
             <View style={styles.divider} />
           </View>
-          <Formik
-            initialValues={{ username: '', email: '', password: '' }}
-            validationSchema={SignUpValidationSchema}
-            onSubmit={async (values) => {
-              await handleSignUp({
-                ...values,
-                address: "",
-                firstname: "New Test",
-                lastname: "User",
-                paymentMethod: {},
-                phone: "",
-                profileImage: "",
-                role: "user"
-              });
-            }}
-          >
-            {({
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              values,
-              errors,
-              touched,
-            }) => (
-              <>
-                <InputField
-                  label="Full Name"
-                  placeholder="User's full name here"
-                  value={values.username}
-                  onChangeText={handleChange('username')}
-                  onBlur={handleBlur('username')}
-                  error={touched.username && errors.username}
-                />
-                {touched.username && errors.username && (
-                  <Text style={styles.errorText}>{errors.username}</Text>
-                )}
-                <InputField
-                  label="Email"
-                  placeholder="User's email here"
-                  value={values.email}
-                  onChangeText={handleChange('email')}
-                  onBlur={handleBlur('email')}
-                  error={touched.email && errors.email}
-                />
-                {touched.email && errors.email && (
-                  <Text style={styles.errorText}>{errors.email}</Text>
-                )}
+          <View style={styles.formContainer}>
+            <Formik
+              initialValues={{ username: '', email: '', password: '' }}
+              validationSchema={SignUpValidationSchema}
+              onSubmit={async (values) => {
+                await handleSignUp({
+                  ...values,
+                  address: "",
+                  firstname: "New Test",
+                  lastname: "User",
+                  paymentMethod: {},
+                  phone: "",
+                  profileImage: "",
+                  role: "user"
+                });
+              }}
+            >
+              {({
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                values,
+                errors,
+                touched,
+              }) => (
+                <>
+                  <InputField
+                    label="Full Name"
+                    placeholder="User's full name here"
+                    value={values.username}
+                    onChangeText={handleChange('username')}
+                    onBlur={handleBlur('username')}
+                    error={touched.username && errors.username}
+                  />
+                  {touched.username && errors.username && (
+                    <Text style={styles.errorText}>{errors.username}</Text>
+                  )}
+                  <InputField
+                    label="Email"
+                    placeholder="User's email here"
+                    value={values.email}
+                    onChangeText={handleChange('email')}
+                    onBlur={handleBlur('email')}
+                    error={touched.email && errors.email}
+                  />
+                  {touched.email && errors.email && (
+                    <Text style={styles.errorText}>{errors.email}</Text>
+                  )}
 
-                <InputField
-                  label="Password"
-                  placeholder="User's password here"
-                  secureTextEntry={true}
-                  value={values.password}
-                  onChangeText={handleChange("password")}
-                  onBlur={handleBlur("password")}
-                />
-                {touched.password && errors.password && (
-                  <Text style={styles.errorText}>{errors.password}</Text>
-                )}
-                <CustomButton
-                  title="Sign Up"
-                  onPress={handleSubmit}
-                />
-              </>
-            )}
-          </Formik>
+                  <InputField
+                    label="Password"
+                    placeholder="User's password here"
+                    secureTextEntry={true}
+                    value={values.password}
+                    onChangeText={handleChange("password")}
+                    onBlur={handleBlur("password")}
+                  />
+                  {touched.password && errors.password && (
+                    <Text style={styles.errorText}>{errors.password}</Text>
+                  )}
+                  <CustomButton
+                    title="Sign Up"
+                    onPress={handleSubmit}
+                  />
+                </>
+              )}
+            </Formik>
+          </View>
         </View>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: WHITE_COLOR, 
+    backgroundColor: WHITE_COLOR,
   },
   scrollContainer: {
     flexGrow: 1,
-    justifyContent: "flex-end",
   },
   redContainer: {
-    flex: 3,
-    backgroundColor: THEME_COLOR,  
+    height: 200,
+    backgroundColor: THEME_COLOR,
     justifyContent: "center",
+    alignItems: "center",
   },
   container2: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-end",
-    paddingHorizontal: 20,
-    backgroundColor: WHITE_COLOR,  
+    backgroundColor: WHITE_COLOR,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
+    paddingHorizontal: 20,
+    paddingTop: 20,
   },
   cardTier1: {
     width: "100%",
     alignItems: "center",
+    marginBottom: 20,
+  },
+  formContainer: {
+    width: "100%",
+    paddingBottom: 30,
   },
   text1: {
     fontSize: 18,
@@ -265,10 +275,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   image: {
-    height: 100,
-    width: 100,
+    height: 120,
+    width: 120,
     alignSelf: "center",
-    marginTop: 30,
   },
   errorText: {
     color: THEME_COLOR,

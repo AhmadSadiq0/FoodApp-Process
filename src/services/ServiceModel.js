@@ -40,7 +40,7 @@ async (url,  payload) => {
         let response;
         console.log('RequestUrl ===> ', url)
         console.log('RequestPayload ===> ', payload)
-        response = await axios.put(url, payload, {
+        response = await axiosInstance.put(url, payload, {
             headers: {
                 'Content-Type' : 'application/json',
             }

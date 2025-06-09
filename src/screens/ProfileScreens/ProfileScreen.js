@@ -1,18 +1,20 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { Back_Ground, THEME_COLOR, WHITE_COLOR, THEME_TEXT_COLOR } from '../../res/colors';
+import { Back_Ground, THEME_COLOR, WHITE_COLOR, THEME_TEXT_COLOR, BLACK_COLOR } from '../../res/colors';
 import { SECONDARY_PROFILE_AVATAR } from '../../res/drawables';
 import PersonalDetails from '../../components/PersonalDetails';
 import useAuthStore from '../../store/AuthStore';
+import useThemeStore from '../../../zustand/ThemeStore';
 
 const ProfileScreen = () => {
   const { user } = useAuthStore();
-  console.log(user)
+  const { darkMode } = useThemeStore();
+
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
+    <View style={[styles.container, darkMode && styles.darkContainer]}>
+      <View style={[styles.card, darkMode && styles.darkCard]}>
         <View style={styles.profileSection}>
-          <View style={styles.avatarWrapper}>
+          <View style={[styles.avatarWrapper, darkMode && styles.darkAvatarWrapper]}>
             <TouchableOpacity>
               <Image 
                 source={SECONDARY_PROFILE_AVATAR}
@@ -21,15 +23,15 @@ const ProfileScreen = () => {
             </TouchableOpacity>
             <View style={styles.badge} />
           </View>
-          <Text style={styles.name}>{user?.username || 'Guest'}</Text>
-          <Text style={styles.email}>{user?.email || 'guest@example.com'}</Text>
+          <Text style={[styles.name, darkMode && styles.darkText]}>{user?.username || 'Guest'}</Text>
+          <Text style={[styles.email, darkMode && styles.darkThemeText]}>{user?.email || 'guest@example.com'}</Text>
         </View>
       </View>
-
-      <PersonalDetails />
+      <PersonalDetails darkMode={darkMode} />
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -37,11 +39,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: Back_Ground,
   },
+  darkContainer: {
+    backgroundColor: BLACK_COLOR,
+  },
   card: {
     borderRadius: 20,
     paddingVertical: 24,
     alignItems: 'center',
     marginBottom: 20,
+    backgroundColor: WHITE_COLOR,
+  },
+  darkCard: {
+    backgroundColor: BLACK_COLOR,
   },
   profileSection: {
     alignItems: 'center',
@@ -49,9 +58,13 @@ const styles = StyleSheet.create({
   avatarWrapper: {
     position: 'relative',
     borderWidth: 4,
-    borderColor: THEME_COLOR, // Using theme color for border
+    borderColor: THEME_COLOR,
     borderRadius: 100,
     padding: 4,
+    backgroundColor: WHITE_COLOR,
+  },
+  darkAvatarWrapper: {
+    backgroundColor: BLACK_COLOR,
   },
   avatar: {
     width: 96,
@@ -75,11 +88,18 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: THEME_TEXT_COLOR,
   },
+  darkText: {
+    color: WHITE_COLOR,
+  },
   email: {
     marginTop: 4,
     fontSize: 14,
     fontWeight: '600',
     color: THEME_COLOR,
   },
+  darkThemeText: {
+    color: THEME_COLOR,
+  },
 });
+
 export default ProfileScreen;

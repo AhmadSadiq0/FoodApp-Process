@@ -56,7 +56,7 @@ const ConfirmOrderSummary = (props) => {
         !deliveryAddress?.phone ||
         !deliveryAddress?.instructions
       ) {
-        alert('Please complete your delivery address information (street, city, state, and zip code) before confirming your order.');
+        alert('please save your address before confirming your order.');
         return;
       }
     }

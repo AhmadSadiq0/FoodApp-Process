@@ -5,8 +5,7 @@ import { URL_TO_UPDATE_USER_DATA } from "../res/api";
 const updateUserDataService = async (userData) => {
   try {
     const response = await putRequest(URL_TO_UPDATE_USER_DATA, userData);
-    // console.log("dckdkc:", response);
-    
+    console.log("profileupdated:", response);
     if (response.status) {
       return {
         success: true,
@@ -31,5 +30,4 @@ const updateUserDataService = async (userData) => {
     };
   }
 };
-
 export { updateUserDataService };

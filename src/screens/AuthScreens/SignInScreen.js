@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
-  Platform,
+   Platform,
   ScrollView,
   Text,
   Image,
@@ -19,7 +19,7 @@ import { THEME_TEXT_COLOR, BACK_GROUND, THEME_COLOR, WHITE_COLOR, GRAY_COLOR, BL
 import { SignInValidationSchema } from '../../utils/ValidationSchema';
 
 
-const SignInScreen = ({ navigation }) => {
+const SignInScreen = ({navigation}) => {
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const { login, loading, error } = authStore()
 
@@ -46,7 +46,8 @@ const SignInScreen = ({ navigation }) => {
   }
 
   return (
-    <View behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+     <View behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+   
       <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
         <View style={styles.redContainer}>
           <Image

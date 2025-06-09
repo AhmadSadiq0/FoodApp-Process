@@ -10,7 +10,6 @@ import {
   Modal,
   TouchableWithoutFeedback,
 } from "react-native";
-// Importing Colors
 import {
   THEME_COLOR,
   WHITE_COLOR,
@@ -18,12 +17,11 @@ import {
   Back_Ground,
   BLACK_COLOR,
   INPUT_BACK_COLOR,
+  DARK_INPUT_BACK_COLOR
 } from "../res/colors";
 import useSearchStore from "../store/SearchStore";
 import useBranchStore from "../store/BranchStore";
 import useThemeStore from "../../zustand/ThemeStore";
-
-// Importing Icons
 import { NOTIFICATION_ICON, Search_Icon, LOCATION_ICON, SECONDARY_PROFILE_AVATAR } from "../res/drawables";
 
 const BranchDropdown = ({ darkMode }) => {
@@ -33,16 +31,16 @@ const BranchDropdown = ({ darkMode }) => {
   return (
     <View style={styles.branchContainer}>
       <TouchableOpacity
-        style={[styles.branchButton, darkMode && { backgroundColor: BLACK_COLOR }]}
+        style={[styles.branchButton, darkMode && styles.darkBranchButton]}
         onPress={() => setShowDropdown(true)}
       >
-        <Text style = {styles.branchName}>Branch</Text>
+        <Text style={[styles.branchName, darkMode && styles.darkText]}>Branch</Text>
         <View style={styles.branchButtonContent}>
           <Image 
             source={LOCATION_ICON} 
-            style={[styles.locationIcon, darkMode && { tintColor: WHITE_COLOR }]} 
+            style={[styles.locationIcon, darkMode && styles.darkIcon]} 
           />
-          <Text style={[styles.branchText, darkMode && { color: WHITE_COLOR }]}>
+          <Text style={[styles.branchText, darkMode && styles.darkText]}>
             {selectedBranch?.location || "Select Branch"}
           </Text>
         </View>
@@ -51,12 +49,13 @@ const BranchDropdown = ({ darkMode }) => {
         transparent={true}
         visible={showDropdown}
         onRequestClose={() => setShowDropdown(false)}
+        animationType="fade"
       >
         <TouchableWithoutFeedback onPress={() => setShowDropdown(false)}>
-          <View style={styles.modalOverlay} />
+          <View style={[styles.modalOverlay, darkMode && styles.darkOverlay]} />
         </TouchableWithoutFeedback>
 
-        <View style={[styles.dropdownContainer, darkMode && { backgroundColor: BLACK_COLOR }]}>
+        <View style={[styles.dropdownContainer, darkMode && styles.darkDropdownContainer]}>
           <FlatList
             data={branches}
             keyExtractor={(item) => item._id}
@@ -64,11 +63,11 @@ const BranchDropdown = ({ darkMode }) => {
               <TouchableOpacity
                 style={[
                   styles.dropdownItem,
+                  darkMode && styles.darkDropdownItem,
                   item._id === selectedBranch?._id && [
                     styles.selectedDropdownItem,
-                    darkMode && { backgroundColor: THEME_COLOR }
-                  ],
-                  darkMode && { borderBottomColor: '#444' }
+                    darkMode && styles.darkSelectedItem
+                  ]
                 ]}
                 onPress={() => {
                   setSelectedBranch(item);
@@ -78,11 +77,8 @@ const BranchDropdown = ({ darkMode }) => {
                 <Text
                   style={[
                     styles.dropdownText,
-                    darkMode && { color: WHITE_COLOR },
-                    item._id === selectedBranch?._id && [
-                      styles.selectedDropdownText,
-                      darkMode && { color: WHITE_COLOR }
-                    ]
+                    darkMode && styles.darkText,
+                    item._id === selectedBranch?._id && styles.selectedDropdownText
                   ]}
                 >
                   {item.location}
@@ -98,12 +94,7 @@ const BranchDropdown = ({ darkMode }) => {
 
 const Header = (props) => {
   const { darkMode } = useThemeStore();
-  const { 
-    selectedBranch, 
-    setSelectedBranch, 
-    fetchBranches, 
-    branches 
-  } = useBranchStore();
+  const { selectedBranch, setSelectedBranch, fetchBranches, branches } = useBranchStore();
   const { searchQuery, setSearchQuery } = useSearchStore();
 
   useEffect(() => {
@@ -125,23 +116,15 @@ const Header = (props) => {
   };
 
   return (
-    <View style={[styles.mainContainer, darkMode && { backgroundColor: BLACK_COLOR }]}>
-      <View
-        style={[
-          styles.container,
-          containerStyle,
-          darkMode && { backgroundColor: BLACK_COLOR }
-        ]}
-      >
+    <View style={[styles.mainContainer, darkMode && styles.darkMainContainer]}>
+      <View style={[styles.container, containerStyle, darkMode && styles.darkContainer]}>
         <View style={styles.profileContainer}>
-          <View style = {styles.profileFirstContainer}>
-          <Image source={user && user.image ? { uri: user.image } : SECONDARY_PROFILE_AVATAR} style={styles.image} />
-          <BranchDropdown
-            selectedBranch={selectedBranch}
-            onSelectBranch={setSelectedBranch}
-            branches={branches}
-            darkMode={darkMode}
-          />
+          <View style={styles.profileFirstContainer}>
+            <Image 
+              source={user?.image ? { uri: user.image } : SECONDARY_PROFILE_AVATAR} 
+              style={[styles.image, darkMode && styles.darkImageBorder]} 
+            />
+            <BranchDropdown darkMode={darkMode} />
           </View>
           
           {showBellIcon && (
@@ -149,7 +132,7 @@ const Header = (props) => {
               <TouchableOpacity onPress={() => navigation.navigate("Notifications")}>
                 <Image 
                   source={NOTIFICATION_ICON} 
-                  style={[styles.bellIcon, darkMode && { tintColor: WHITE_COLOR }]} 
+                  style={[styles.bellIcon, darkMode && styles.darkIcon]} 
                 />
               </TouchableOpacity>
               <View style={styles.notificationBadge} />
@@ -157,36 +140,25 @@ const Header = (props) => {
           )}
         </View>
         <View style={[styles.textContainer, textContainer]}>
-          <Text style={[styles.welcomeText, darkMode && { color: WHITE_COLOR }]}>
-            Hi <Text
-            style={[
-              styles.usernameText,
-              darkMode && { color: WHITE_COLOR }
-            ]}
-          >
-            {user && user.username}
-          </Text> , {Welcomermsg}
+          <Text style={[styles.welcomeText, darkMode && styles.darkText]}>
+            Hi <Text style={[styles.usernameText, darkMode && styles.darkText]}>
+              {user?.username}
+            </Text>, {Welcomermsg}
           </Text>
         </View>
 
         {showSearch && (
-          <View style={styles.searchContainer}>
+          <View style={[styles.searchContainer, darkMode && styles.darkSearchContainer]}>
             <Image 
               source={Search_Icon} 
-              style={[styles.searchIcon, darkMode && { tintColor: WHITE_COLOR }]} 
+              style={[styles.searchIcon, darkMode && styles.darkSearchIcon]} 
             />
             <TextInput
-              style={[
-                styles.searchBar,
-                darkMode && { 
-                  backgroundColor: '#333',
-                  color: WHITE_COLOR,
-                  placeholderTextColor: '#aaa'
-                }
-              ]}
+              style={[styles.searchBar, darkMode && styles.darkSearchBar]}
               placeholder="Search Your Favourite Food Items"
               placeholderTextColor={darkMode ? '#aaa' : THEME_TEXT_COLOR}
               onChangeText={handleSearch}
+              value={searchQuery}
             />
           </View>
         )}
@@ -196,16 +168,17 @@ const Header = (props) => {
 };
 
 const styles = StyleSheet.create({
+  // Light mode styles
   mainContainer: {
-    width : '100%'
+    width: '100%'
   },
   container: {
     width: "100%",
     padding: 20,
-    paddingBottom : 0,
+    paddingBottom: 0,
     alignItems: "center",
-    paddingTop : 40,
-    backgroundColor : Back_Ground
+    paddingTop: 40,
+    backgroundColor: Back_Ground
   },
   profileContainer: {
     flexDirection: "row",
@@ -216,7 +189,7 @@ const styles = StyleSheet.create({
   profileFirstContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap : 10
+    gap: 10
   },
   image: {
     width: 35,
@@ -228,13 +201,12 @@ const styles = StyleSheet.create({
   usernameText: {
     fontSize: 16,
     color: BLACK_COLOR,
-    // fontStyle : "italic"
   },
   textContainer: {
-    width : '100%',
+    width: '100%',
     marginVertical: 10,
-    marginTop : 30,
-    paddingLeft : 3
+    marginTop: 30,
+    paddingLeft: 3
   },
   welcomeText: {
     fontSize: 14,
@@ -248,7 +220,7 @@ const styles = StyleSheet.create({
   bellIcon: {
     width: 27,
     height: 27,
-    tintColor : THEME_TEXT_COLOR
+    tintColor: THEME_TEXT_COLOR
   },
   notificationBadge: {
     width: 5,
@@ -262,12 +234,12 @@ const styles = StyleSheet.create({
   searchContainer: {
     width: "100%",
     backgroundColor: INPUT_BACK_COLOR,
-    flexDirection : "row",
-    alignItems : 'center',
-    paddingVertical : 10,
-    paddingHorizontal : 10,
-    gap : 5,
-    borderRadius : 5,
+    flexDirection: "row",
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    gap: 5,
+    borderRadius: 5,
   },
   searchBar: {
     width: "100%",
@@ -276,43 +248,36 @@ const styles = StyleSheet.create({
   searchIcon: {
     width: 25,
     height: 25,
-    tintColor : THEME_COLOR,
+    tintColor: THEME_COLOR,
   },
   branchContainer: {
     marginTop: 5,
     alignItems: "center",
     marginBottom: 5,
   },
-  branchButton: {
-   
-  },
+  branchButton: {},
   branchText: {
     fontSize: 13,
     color: BLACK_COLOR,
   },
   dropdownContainer: {
     backgroundColor: WHITE_COLOR,
-    width: "40%", 
-     position: "absolute",
+    width: "40%",
+    position: "absolute",
     top: "7%",
-    left: "19%", 
+    left: "19%",
     zIndex: 1,
-      borderWidth : 1,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
   },
   dropdownItem: {
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    flexDirection: 'row', 
-    alignItems: 'center',
-    // borderTopLeftRadius: 10,
-    // borderTopRightRadius: 10,
-    // borderBottomLeftRadius: 10,
-    // borderBottomRightRadius: 10,
   },
   selectedDropdownItem: {
     backgroundColor: THEME_TEXT_COLOR,
-  
   },
   dropdownText: {
     fontSize: 12,
@@ -321,25 +286,66 @@ const styles = StyleSheet.create({
   locationIcon: {
     width: 12,
     height: 12,
-    resizeMode: "contain", 
+    resizeMode: "contain",
     tintColor: BLACK_COLOR,
   },
-  branchName : {
+  branchName: {
     fontSize: 14,
-    fontWeight : "500",
+    fontWeight: "500",
     color: THEME_COLOR,
   },
   branchButtonContent: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 5, 
+    gap: 5,
   },
   selectedDropdownText: {
-    color: WHITE_COLOR, 
+    color: WHITE_COLOR,
   },
   modalOverlay: {
     flex: 1,
   },
+
+  // Dark mode styles
+  darkMainContainer: {
+    backgroundColor: BLACK_COLOR,
+  },
+  darkContainer: {
+    backgroundColor: BLACK_COLOR,
+  },
+  darkText: {
+    color: WHITE_COLOR,
+  },
+  darkIcon: {
+    tintColor: WHITE_COLOR,
+  },
+  darkImageBorder: {
+    borderColor: THEME_COLOR,
+  },
+  darkSearchContainer: {
+    backgroundColor: DARK_INPUT_BACK_COLOR || '#333',
+  },
+  darkSearchBar: {
+    color: WHITE_COLOR,
+    placeholderTextColor: '#aaa',
+  },
+  darkSearchIcon: {
+    tintColor: WHITE_COLOR,
+  },
+  darkBranchButton: {
+    backgroundColor: 'transparent',
+  },
+  darkDropdownContainer: {
+    backgroundColor: '#222',
+    borderColor: '#444',
+  },
+  darkDropdownItem: {
+    borderBottomColor: '#444',
+  },
+  darkSelectedItem: {
+    backgroundColor: THEME_TEXT_COLOR,
+  },
+  
 });
 
 export default Header;

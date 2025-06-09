@@ -4,7 +4,8 @@ import { Text, TouchableOpacity, View, Image, StyleSheet } from "react-native";
 import { THEME_COLOR, WHITE_COLOR, BLACK_COLOR } from "../res/colors";
 import useThemeStore from "../../zustand/ThemeStore";
 
-const CategoryItem = ({ item, isSelected, onPress }) => {
+const CategoryItem = (props) => {
+  const { item, onPress, isSelected } = props;
   const { darkMode } = useThemeStore();
 
   return (

@@ -211,17 +211,17 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
       </RBSheet>
 
       {orderType && selectedPayment && (
-        <View style={styles.footer}>
-          {
-            orders_error && (
-              <Text style={{ color: 'red' }}>{orders_error}</Text>
-            )
-          }
-          <CustomButton
-            title="Confirm Order"
-            onPress={() => sheetRef.current.open()}
-          />
-        </View>
+       <View style={[styles.footer, darkMode && styles.footerDark]}>
+       {
+         orders_error && (
+           <Text style={{ color: 'red' }}>{orders_error}</Text>
+         )
+       }
+       <CustomButton
+         title="Confirm Order"
+         onPress={() => sheetRef.current.open()}
+       />
+     </View>
       )}
     </View>
   );

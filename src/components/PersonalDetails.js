@@ -1,9 +1,17 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { INPUT_BACK_COLOR, WHITE_COLOR, THEME_TEXT_COLOR, THEME_COLOR, BLACK_COLOR, GRAY_COLOR } from '../res/colors';
+import {
+  INPUT_BACK_COLOR,
+  WHITE_COLOR,
+  THEME_TEXT_COLOR,
+  THEME_COLOR,
+  BLACK_COLOR,
+  GRAY_COLOR,
+} from '../res/colors';
 import { useNavigation } from '@react-navigation/native';
 import { CHEVRON_ICON } from '../res/drawables';
 import CustomButton from './CustomButtom';
+import useThemeStore from '../../zustand/ThemeStore';
 
 const items = [
   { name: 'Settings', screen: 'Settings' },
@@ -13,24 +21,28 @@ const items = [
 
 const PersonalDetails = () => {
   const navigation = useNavigation();
+  const { darkMode } = useThemeStore();
 
   return (
-    <View style={styles.wrapper}>
-      <View style={styles.card}>
+    <View style={[styles.wrapper, darkMode && styles.wrapperDark]}>
+      <View style={[styles.card, darkMode && styles.cardDark]}>
         {items.map((item, index) => (
           <TouchableOpacity
             key={index}
             style={[
               styles.item,
               index === items.length - 1 && styles.lastItem,
+              darkMode && styles.itemDark,
             ]}
             activeOpacity={0.7}
             onPress={() => navigation.navigate(item.screen)}
           >
-            <Text style={styles.itemText}>{item.name}</Text>
+            <Text style={[styles.itemText, darkMode && styles.itemTextDark]}>
+              {item.name}
+            </Text>
             <Image
               source={CHEVRON_ICON}
-              style={styles.chevron}
+              style={[styles.chevron, darkMode && styles.chevronDark]}
             />
           </TouchableOpacity>
         ))}
@@ -44,18 +56,23 @@ const PersonalDetails = () => {
 };
 
 export default PersonalDetails;
+
 const styles = StyleSheet.create({
   wrapper: {
-   // flex: 1,
     padding: 16,
-   // backgroundColor: INPUT_BACK_COLOR,
+  },
+  wrapperDark: {
+    backgroundColor: BLACK_COLOR,
   },
   card: {
     backgroundColor: WHITE_COLOR,
     borderRadius: 16,
     overflow: 'hidden',
-    // elevation: 3,
     shadowColor: BLACK_COLOR,
+  },
+  cardDark: {
+    backgroundColor: '#1e1e1e',
+    shadowColor: WHITE_COLOR,
   },
   item: {
     flexDirection: 'row',
@@ -66,6 +83,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: GRAY_COLOR,
   },
+  itemDark: {
+    borderBottomColor: '#333',
+  },
   lastItem: {
     borderBottomWidth: 0,
   },
@@ -74,10 +94,16 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: THEME_TEXT_COLOR,
   },
+  itemTextDark: {
+    color: WHITE_COLOR,
+  },
   chevron: {
     width: 16,
     height: 16,
-    tintColor: THEME_COLOR, 
+    tintColor: THEME_COLOR,
+  },
+  chevronDark: {
+    tintColor: WHITE_COLOR,
   },
   logoutContainer: {
     marginTop: 26,
