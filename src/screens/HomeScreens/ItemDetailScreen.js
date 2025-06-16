@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import {
   View,
@@ -238,7 +237,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
               styles.backButton,
               { backgroundColor: darkMode ? LIGHT_THEME_BACKGROUND : LIGHT_THEME_BACKGROUND }
             ]}
-            imageStyle={{ tintColor: darkMode ? WHITE_COLOR : BLACK_COLOR }}
+            imageStyle={{ tintColor: THEME_COLOR }}
           />
         </View>
 

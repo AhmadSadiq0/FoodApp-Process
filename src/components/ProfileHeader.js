@@ -88,10 +88,9 @@ const ProfileHeader = memo(
     const [dotsPosition, setDotsPosition] = useState({});
     const tabsData = [
       { label: "Settings", style: styles.tabRadiusTop },
-      { label: "Update Profile" },
-      { label: "Language", style: styles.tabRadiusBottom },
+     { label: "Update Profile" },
+      // { label: "Languages", style: styles.tabRadiusBottom },
     ];
-
     const toggleTabs = () => setShowTabs((prevState) => !prevState);
     const handleTabPress = (index) => {
       if (activeTab !== index) {
@@ -103,9 +102,9 @@ const ProfileHeader = memo(
           case 1:
             navigation.navigate("UpdateProfile");
             break;
-          case 2:
-            navigation.navigate("LanguageSettings");
-            break;
+          // case 2:
+          //   navigation.navigate("LanguageSettings");
+          //   break;
           default:
             break;
         }

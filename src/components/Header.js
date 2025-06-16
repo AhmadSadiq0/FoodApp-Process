@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 0,
     alignItems: "center",
-    paddingTop: 40,
+    paddingTop: 30,
     backgroundColor: Back_Ground
   },
   profileContainer: {
@@ -345,7 +345,5 @@ const styles = StyleSheet.create({
   darkSelectedItem: {
     backgroundColor: THEME_TEXT_COLOR,
   },
-  
 });
-
 export default Header;
