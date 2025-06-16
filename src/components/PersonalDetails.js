@@ -12,17 +12,21 @@ import { useNavigation } from '@react-navigation/native';
 import { CHEVRON_ICON } from '../res/drawables';
 import CustomButton from './CustomButtom';
 import useThemeStore from '../../zustand/ThemeStore';
-
+import useAuthStore from '../store/AuthStore';
 const items = [
   { name: 'Settings', screen: 'Settings' },
-  { name: 'Language', screen: 'LanguageSettings' },
+ // { name: 'Language', screen: 'LanguageSettings' },
   { name: 'Update Profile', screen: 'UpdateProfile' },
 ];
 
 const PersonalDetails = () => {
   const navigation = useNavigation();
   const { darkMode } = useThemeStore();
+  const { logout } = useAuthStore();
 
+  const handleLogout = () => {
+    logout();
+  };
   return (
     <View style={[styles.wrapper, darkMode && styles.wrapperDark]}>
       <View style={[styles.card, darkMode && styles.cardDark]}>
@@ -49,7 +53,7 @@ const PersonalDetails = () => {
       </View>
 
       <View style={styles.logoutContainer}>
-        <CustomButton title="Logout" />
+      <CustomButton title="Logout" onPress={handleLogout} />
       </View>
     </View>
   );

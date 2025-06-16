@@ -36,7 +36,7 @@ const OrdersScreen = () => {
 
   if (userOrders_loading && !refreshing) {
     return (
-      <View style={[styles.container, styles.center]}>
+      <View style={[styles.container, styles.center, { backgroundColor: darkMode ? DARK_THEME_BACKGROUND : Back_Ground }]}>
         <ActivityIndicator size="large" color={THEME_COLOR} />
       </View>
     );
@@ -44,7 +44,7 @@ const OrdersScreen = () => {
 
   if (userOrders_error) {
     return (
-      <View style={[styles.container, styles.center]}>
+      <View style={[styles.container, styles.center, { backgroundColor: darkMode ? DARK_THEME_BACKGROUND : Back_Ground }]}>
         <Text>Error loading orders: {userOrders_error}</Text>
       </View>
     );
