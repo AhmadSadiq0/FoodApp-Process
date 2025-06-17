@@ -3,11 +3,11 @@ import { fetchCategorizedItemsService, fetchHomeSectionItemsService } from '../s
 
 const initialState = {
     categorized_items: [],
-    categorized_loading: false,
+    categorized_loading: true,
     categorized_error: null,
     
     homeSectionItems : [],
-    homeSectionItemsLoading : false,
+    homeSectionItemsLoading : true,
     homeSectionItemsError : null
 };
 

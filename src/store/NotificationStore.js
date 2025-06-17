@@ -50,7 +50,7 @@ const useNotificationStore = create(
           if (response.success) {
             const unreadCount = response.data.filter(n => !n.seen).length;
             set({ 
-              notifications: response.data,
+              notifications: response.data.data,
               unreadCount,
               loading: false 
             });

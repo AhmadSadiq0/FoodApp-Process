@@ -34,9 +34,16 @@ const useAuthStore = create(
                 set({ loading: { ...get().loading, signup: true }, error: { ...get().error, signup: null } });
                 try {
                     const res = await signUpService(payload);
+                    console.log(res)
                     set({ loading: { ...get().loading, signup: false }, error: { ...get().error, signup: res.message } });
+                    if(res.success) {
+                        return {data : res.data , success : true , status : res.status , message : res.message}
+                    } else {
+                        return {data : {} , success : false , status : res.status , message : res.message}
+                    }
                 } catch (error) {
                     set({ loading: { ...get().loading, signup: false }, error: error.message });
+                    return {success : false , status : error.response?.status , message : error.message}
                 }
             },
             login: async (payload) => {

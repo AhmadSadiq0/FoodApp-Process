@@ -94,8 +94,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   itemText: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 15,
+    fontWeight: '500',
     color: THEME_TEXT_COLOR,
   },
   itemTextDark: {

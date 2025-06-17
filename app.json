@@ -19,13 +19,26 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.hassnainpro.FoodAppProcess"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-localization"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d33cf888-53dd-4b30-b69d-f8c7e824aadf"
+      }
+    },
+    "owner": "hassnainpro",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/d33cf888-53dd-4b30-b69d-f8c7e824aadf"
+    }
   }
 }

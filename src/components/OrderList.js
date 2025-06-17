@@ -4,30 +4,28 @@ import {
   View,
   SectionList,
   Text,
-  Image,
   Pressable,
 } from "react-native";
-//image
-import { ARROW_ICON, BURGERIMG } from "../res/drawables";
 //color
 import {
   Back_Ground,
   GRAY_COLOR,
-  Green_Color,
   THEME_COLOR,
   THEME_TEXT_COLOR,
   WHITE_COLOR,
   DARK_THEME_BACKGROUND,
   DARK_THEME_TEXT_COLOR,
-  DARK_STATUS_COLOR,
   BLACK_COLOR,
   RED_COLOR,
 } from "../res/colors";
 //components 
 import RBOrderSheet from "./RBOrderSheet";
-import RBDelivered from "./RBDelivered";
 //zustand
 import useThemeStore from "../../zustand/ThemeStore";
+import { Frown } from "lucide-react-native";
+
+
+
 const OrderList = ({ sections: initialSections, refreshControl }) => {
   const { darkMode } = useThemeStore();
   const [sections, setSections] = useState(initialSections);
@@ -59,7 +57,20 @@ const OrderList = ({ sections: initialSections, refreshControl }) => {
   );
   return (
     <View style={[styles.container, { backgroundColor: darkMode ? DARK_THEME_BACKGROUND : Back_Ground }]}>
-
+      {
+        sections.length == 0 && (
+          <View style={styles.emptyContainer}>
+            <Frown
+              size={150}
+              color={THEME_COLOR}
+              strokeWidth={1.5}
+            />
+            <Text style={[styles.emptyText, { color: darkMode ? DARK_THEME_TEXT_COLOR : THEME_COLOR }]}>
+              You have no orders yet
+            </Text>
+          </View>
+        )
+      }
       <SectionList
         showsVerticalScrollIndicator={false}
         sections={sections}
@@ -87,8 +98,8 @@ const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
       style={[
         styles.orderCard,
         {
-          borderColor: isSelected ? THEME_COLOR : "transparent",
-          borderWidth: isSelected ? 2 : 0,
+          borderColor: isSelected ? THEME_COLOR : GRAY_COLOR,
+          borderWidth: isSelected ? 2 : 1,
           backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
         },
       ]}
@@ -167,7 +178,7 @@ const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 12,
-    paddingRight : 10,
+    paddingRight: 10,
   },
   price: {
     fontSize: 15,
@@ -183,14 +194,21 @@ const styles = StyleSheet.create({
   },
   status: {
     fontSize: 12,
-    paddingHorizontal : 6,
+    paddingHorizontal: 6,
     paddingVertical: 5,
     borderRadius: 2,
     textAlign: "center",
     fontSize: 13,
     fontSize: 13,
   },
-  
+  emptyContainer: {
+    flex: 1,
+    alignSelf: 'center',
+    justifyContent: 'flex-end'
+  },
+  emptyText: {
+    fontSize : 14,
+  }
 });
 
 export default OrderList; 

@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'; 
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { DELETE_ICON, BURGERIMG } from '../res/drawables';
-import { WHITE_COLOR, THEME_COLOR, GRAY_COLOR, BLACK_COLOR } from '../res/colors';
+import { WHITE_COLOR, THEME_COLOR, GRAY_COLOR, BLACK_COLOR, THEME_TEXT_COLOR } from '../res/colors';
 import useThemeStore from '../../zustand/ThemeStore';
 
 const CartItem = ({ item, onIncrease, onDecrease, onDeleteItem, onPressItem }) => {
@@ -30,8 +30,8 @@ const CartItem = ({ item, onIncrease, onDecrease, onDeleteItem, onPressItem }) =
           {item.serving}
         </Text>
         <Text style={[styles.price, { color: THEME_COLOR }]}>
-  Rs.{parseInt(item.price)}
-</Text> 
+          Rs.{parseInt(item.price)}
+        </Text>
       </View>
       <View style={styles.quantityControl}>
         <TouchableOpacity
@@ -69,7 +69,7 @@ const CartItem = ({ item, onIncrease, onDecrease, onDeleteItem, onPressItem }) =
 
       <TouchableOpacity
         style={styles.deleteButton}
-         onPress={() => onDeleteItem(item.id)}
+        onPress={() => onDeleteItem(item.id)}
       >
         <Image
           style={styles.deleteIcon}
@@ -88,7 +88,8 @@ const styles = StyleSheet.create({
     padding: 12,
     alignItems: 'center',
     marginBottom: 12,
-    elevation: 5,
+    borderWidth: 2,
+    borderColor : THEME_COLOR,
     position: 'relative',
     flexWrap: 'wrap',
   },
