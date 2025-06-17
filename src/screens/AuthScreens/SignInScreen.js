@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   StyleSheet,
   View,
-   Platform,
+  Platform,
   ScrollView,
   Text,
   Image,
   TouchableOpacity,
   Pressable,
   Keyboard,
+  KeyboardAvoidingView,
+  Dimensions
 } from 'react-native';
 import { Formik } from 'formik';
 import authStore from '../../store/AuthStore'
@@ -19,8 +21,9 @@ import { THEME_TEXT_COLOR, BACK_GROUND, THEME_COLOR, WHITE_COLOR, GRAY_COLOR, BL
 import { SignInValidationSchema } from '../../utils/ValidationSchema';
 
 
-const SignInScreen = ({navigation}) => {
+const SignInScreen = ({ navigation }) => {
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const scrollViewRef = useRef(null);
   const { login, loading, error } = authStore()
 
   useEffect(() => {
@@ -45,125 +48,145 @@ const SignInScreen = ({navigation}) => {
     });
   }
 
+  const scrollToInput = (reactNode) => {
+    scrollViewRef.current?.scrollToFocusedInput(reactNode);
+  };
+
   return (
-     <View behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-   
-      <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
-        <View style={styles.redContainer}>
-          <Image
-            source={require('../../../assets/image.png')}
-            style={styles.image}
-            resizeMode="contain"
-          />
-        </View>
-
-        <View style={styles.container2}>
-          <View style={styles.cardTier1}>
-            <Text style={styles.text1}>Create your free account</Text>
-            <View style={styles.box1}>
-              <Text style={styles.text2}>Already have an account?</Text>
-              <Pressable onPress={() => { navigation.navigate('SignUp'); }}>
-                <Text style={styles.text3}>Sign Up</Text>
-              </Pressable>
-            </View>
-            {!keyboardVisible ? (
-              <TouchableOpacity
-                style={styles.touchable1}
-                onPress={() => { alert('Go to Google'); }}
-              >
-                <Image
-                  source={Google_Icon}
-                  style={styles.Googleimage}
-                />
-                <Text style={styles.text2}>Sign in with Google</Text>
-              </TouchableOpacity>
-            ) : null}
+    <View style = {styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
+      >
+        <ScrollView
+          ref={scrollViewRef}
+          contentContainerStyle={styles.scrollContainer}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={styles.redContainer}>
+            <Image
+              source={require('../../../assets/image.png')}
+              style={styles.image}
+              resizeMode="contain"
+            />
           </View>
 
-          <View style={styles.dividerContainer}>
-            <View style={styles.divider} />
-            <Text style={styles.orText}>or</Text>
-            <View style={styles.divider} />
-          </View>
-
-          <Formik initialValues={{ email: "", password: "" }}
-            validationSchema={SignInValidationSchema}
-            onSubmit={(values) => {
-              handleSignIn(values)
-            }}>
-            {({
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              values,
-              errors,
-              touched,
-            }) => (
-              <View style={styles.formContainer}>
-                <View style={styles.inputContainer}>
-
-                  <InputField
-                    label="Email"
-                    placeholder="User 's email here"
-                    value={values.email}
-                    onChangeText={handleChange("email")}
-                    onBlur={handleBlur("email")}
-                  />
-                  {touched.email && errors.email && (
-                    <Text style={styles.errorText}>{errors.email}</Text>
-                  )}
-                </View>
-                <View style={styles.inputContainer}>
-                  <InputField
-                    label="Password"
-                    placeholder="User 's password here"
-                    secureTextEntry={true}
-                    value={values.password}
-                    onChangeText={handleChange("password")}
-                    onBlur={handleBlur("password")}
-                  />
-                  {touched.password && errors.password && (
-                    <Text style={styles.errorText}>{errors.password}</Text>
-                  )}
-                </View>
-                {error?.login && (
-                  <Text style={styles.errorText}>{error.login} - Please try again</Text>
-                )}
-                <CustomButton
-                  title={"Sign In"}
-                  onPress={handleSubmit}
-                  loading={loading.login}
-                />
+          <View style={styles.container2}>
+            <View style={styles.cardTier1}>
+              <Text style={styles.text1}>Create your free account</Text>
+              <View style={styles.box1}>
+                <Text style={styles.text2}>Already have an account?</Text>
+                <Pressable onPress={() => navigation.navigate('SignUp')}>
+                  <Text style={styles.text3}>Sign Up</Text>
+                </Pressable>
               </View>
-            )}
-          </Formik>
-        </View>
-      </ScrollView>
+              {!keyboardVisible && (
+                <TouchableOpacity
+                  style={styles.touchable1}
+                  onPress={() => alert('Go to Google')}
+                >
+                  <Image
+                    source={Google_Icon}
+                    style={styles.Googleimage}
+                  />
+                  <Text style={styles.text2}>Sign in with Google</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+
+            <View style={styles.dividerContainer}>
+              <View style={styles.divider} />
+              <Text style={styles.orText}>or</Text>
+              <View style={styles.divider} />
+            </View>
+
+            <Formik
+              initialValues={{ email: "", password: "" }}
+              validationSchema={SignInValidationSchema}
+              onSubmit={handleSignIn}
+            >
+              {({
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                values,
+                errors,
+                touched,
+              }) => (
+                <View style={styles.formContainer}>
+                  <View style={styles.inputContainer}>
+                    <InputField
+                      label="Email"
+                      placeholder="User's email here"
+                      value={values.email}
+                      onChangeText={handleChange("email")}
+                      onBlur={handleBlur("email")}
+                      onFocus={(event) => {
+                        scrollToInput(event.target);
+                      }}
+                    />
+                    {touched.email && errors.email && (
+                      <Text style={styles.errorText}>{errors.email}</Text>
+                    )}
+                  </View>
+                  <View style={styles.inputContainer}>
+                    <InputField
+                      label="Password"
+                      placeholder="User's password here"
+                      secureTextEntry={true}
+                      value={values.password}
+                      onChangeText={handleChange("password")}
+                      onBlur={handleBlur("password")}
+                      onFocus={(event) => {
+                        scrollToInput(event.target);
+                      }}
+                    />
+                    {touched.password && errors.password && (
+                      <Text style={styles.errorText}>{errors.password}</Text>
+                    )}
+                  </View>
+                  {error?.login && (
+                    <Text style={styles.errorText}>{error.login} - Please try again</Text>
+                  )}
+                  <CustomButton
+                    title={"Sign In"}
+                    onPress={handleSubmit}
+                    loading={loading.login}
+                  />
+                </View>
+              )}
+            </Formik>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BACK_GROUND,
+    backgroundColor: WHITE_COLOR,
   },
   scrollContainer: {
     flexGrow: 1,
-    justifyContent: 'flex-end',
   },
   redContainer: {
-    flex: 3,
+    height: 250,
     backgroundColor: THEME_COLOR,
     justifyContent: 'center',
   },
   container2: {
-    flex: 3,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingHorizontal: 20,
     backgroundColor: WHITE_COLOR,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
+    paddingBottom: 20,
   },
   cardTier1: {
     width: '100%',
@@ -246,4 +269,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+
 export default SignInScreen;

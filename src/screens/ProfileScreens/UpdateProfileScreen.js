@@ -1,5 +1,5 @@
 // UpdateProfileScreen.js
-import React, { useEffect } from "react";
+import React, { useEffect , useState} from "react";
 import { View, ScrollView, StyleSheet, Text } from "react-native";
 import { TextInputProfile } from "../../components";
 import { Back_Ground, DARK_THEME_BACKGROUND } from "../../res/colors";
@@ -9,6 +9,7 @@ import useUpdateProfileStore from "../../store/UpdateProfileStore";
 
 const UpdateProfileScreen = (props) => {
   const { user, setUser } = useAuthStore();
+  const [isSavedSuccesssfully , setIsSavedSuccessfully ] = useState(false);
   const { navigation, route } = props;
   const { darkMode } = useThemeStore();
   const showEditIcon = route?.params?.showEditIcon ?? true;
@@ -23,7 +24,6 @@ const UpdateProfileScreen = (props) => {
     getUserData
   } = useUpdateProfileStore();
 
-  // Initialize user data when component mounts
   useEffect(() => {
     if (user) {
       initializeUserData(user);
@@ -51,11 +51,14 @@ const UpdateProfileScreen = (props) => {
       const result = await updateProfile(updatePayload);
       
       if (result.success && setUser) {
-        // Update local user state with new data
         await setUser({ 
           ...user, 
           ...updatePayload 
         });
+        setIsSavedSuccessfully(true)
+        setTimeout(() => {
+          setIsSavedSuccessfully(false)
+        },2000)
       }
     } catch (error) {
       console.error('Update failed:', error);
@@ -79,10 +82,7 @@ const UpdateProfileScreen = (props) => {
         <TextInputProfile
           showEditIcon={showEditIcon}
           showButton={true}
-          firstname={currentUserData?.firstname || ""}
-          lastname={currentUserData?.lastname || ""}
-          phone={currentUserData?.phone || ""}
-          address={currentUserData?.address || ""}
+          user = {user}
           onSave={handleUpdateProfile}
           isUpdating={isUpdating}
         />

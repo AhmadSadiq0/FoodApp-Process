@@ -1,6 +1,6 @@
 import axios from "axios";
 const axiosInstance = axios.create({
-    baseURL: 'http://192.168.1.131:8000',
+    baseURL: 'https://foodapp-process-backend.onrender.com',
     headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',

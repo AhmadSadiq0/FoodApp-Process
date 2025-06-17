@@ -60,20 +60,31 @@ const OrdersScreen = () => {
     deliveredOn: new Date(order.updatedAt).toLocaleString(),
   });
 
-  const sections = [
-    {
+  const inProgressOrders = userOrders
+    .filter(order => ["pending", "preparing", "out_for_delivery", "confirmed", "ready"].includes(order.status))
+    .map(transformOrder);
+
+  const orderHistory = userOrders
+    .filter(order => ["delivered", "cancelled"].includes(order.status))
+    .map(transformOrder);
+
+  const sections = [];
+
+  if (inProgressOrders.length > 0) {
+    sections.push({
       title: "In Progress Orders",
-      data: userOrders
-        .filter(order => ["pending", "preparing", "out_for_delivery", "confirmed", "ready"].includes(order.status))
-        .map(transformOrder),
-    },
-    {
+      data: inProgressOrders,
+    });
+  }
+
+  if (orderHistory.length > 0) {
+    sections.push({
       title: "Orders History",
-      data: userOrders
-        .filter(order => ["delivered", "cancelled"].includes(order.status))
-        .map(transformOrder),
-    },
-  ];
+      data: orderHistory,
+    });
+  }
+
+
 
   return (
     <View style={styles.container}>

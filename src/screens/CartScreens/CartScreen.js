@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Back_Ground,
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
     paddingTop: 50,
   },
   containerDark: {
@@ -418,9 +418,9 @@ const styles = StyleSheet.create({
   },
   extrasContainer: {
     marginTop: 16,
-    padding: 16,
+    padding : 10,
     borderRadius: 12,
-    marginBottom: 20,
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: GRAY_COLOR,
     backgroundColor: LIGHT_THEME_BACKGROUND,

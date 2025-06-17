@@ -19,15 +19,18 @@ import CustomButton from "../../components/CustomButtom";
 //Icon
 import { Google_Icon } from "../../res/drawables";
 //colors
-import { THEME_TEXT_COLOR, GRAY_COLOR, BLACK_COLOR, WHITE_COLOR, THEME_COLOR } from "../../res/colors";
+import { THEME_TEXT_COLOR, GRAY_COLOR, BLACK_COLOR, WHITE_COLOR, THEME_COLOR, SUCCESS_COLOR } from "../../res/colors";
 //store
 import authStore from '../../store/AuthStore'
 //validationSchema
 import { SignUpValidationSchema } from "../../utils/ValidationSchema";
 
-const SignUpScreen = ({navigation}) => {
+const SignUpScreen = ({ navigation }) => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  const {signup} = authStore()
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const { signup } = authStore();
+
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -37,152 +40,173 @@ const SignUpScreen = ({navigation}) => {
       "keyboardDidHide",
       () => setKeyboardVisible(false)
     );
-   
+
     return () => {
       keyboardDidHideListener.remove();
       keyboardDidShowListener.remove();
     };
   }, []);
+
   const goToNextScreen = () => {
     navigation.navigate('SignIn');
   };
 
   const handleSignUp = async (values) => {
-    console.log('Sign Up Values:', values);
-  
+    setSuccessMessage('');
+    setErrorMessage('');
+
     try {
-      const response = await signup(values);
-      console.log('Signup Response:', response); 
-  
+      const response = await signup({
+        role: "user",
+        address: "" ,
+        email: values.email,
+        firstname: "App",
+        lastname: "User",
+        password: values.password,
+        phone: "" ,
+        profileImage: "" ,
+        username: values.username
+      });
+
       if (response.success) {
-        alert('Account created successfully! Please sign in.');
-        navigation.navigate('SignIn');
+        setSuccessMessage('Account created successfully! Please sign in.');
+        setTimeout(() => {
+          navigation.navigate('SignIn');
+          setSuccessMessage('')
+        }, 2000);
       } else {
-        console.log('Full Response:', response);
-        if (response.status === 422) {
-          alert('Invalid input. Please check all fields.');
+        if (response.status == 422) {
+          setErrorMessage('Invalid input. Please check all fields.');
         } else {
-          alert(response.message || 'Signup failed. Please try again.');
+          setErrorMessage(response.message || 'Signup failed. Please try again.');
         }
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 2000)
       }
     } catch (error) {
       console.error('Signup Error:', error);
+      setErrorMessage('An unexpected error occurred. Please try again later.');
     }
   };
-  
+
   return (
-    <KeyboardAvoidingView 
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <ScrollView
-        contentContainerStyle={styles.scrollContainer}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
+    <View style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
       >
-        <View style={styles.redContainer}>
-          <Image
-            source={require("../../../assets/image.png")} 
-            style={styles.image}
-            resizeMode="contain"
-          />
-        </View>
-        <View style={styles.container2}>
-          <View style={styles.cardTier1}>
-            <Text style={styles.text1}>Create your free account</Text>
-            <View style={styles.box1}>
-              <Text style={styles.text2}>Already have an account?</Text>
-              <Pressable onPress={goToNextScreen}>
-                <Text style={styles.text3}>Sign In</Text>
-              </Pressable>
-            </View>
-            {!isKeyboardVisible ? (
-              <TouchableOpacity
-                style={styles.touchable1}
-                onPress={() => alert("Go to Google")}
-              >
-                <Image source={Google_Icon} style={styles.Googleimage} />
-                <Text style={styles.text2}>Sign up with Google</Text>
-              </TouchableOpacity>
-            ) : null}
+        <ScrollView
+          contentContainerStyle={styles.scrollContainer}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.redContainer}>
+            <Image
+              source={require("../../../assets/image.png")}
+              style={styles.image}
+              resizeMode="contain"
+            />
           </View>
-
-          <View style={styles.dividerContainer}>
-            <View style={styles.divider} />
-            <Text style={styles.orText}>or</Text>
-            <View style={styles.divider} />
-          </View>
-          <View style={styles.formContainer}>
-            <Formik
-              initialValues={{ username: '', email: '', password: '' }}
-              validationSchema={SignUpValidationSchema}
-              onSubmit={async (values) => {
-                await handleSignUp({
-                  ...values,
-                  address: "",
-                  firstname: "New Test",
-                  lastname: "User",
-                  paymentMethod: {},
-                  phone: "",
-                  profileImage: "",
-                  role: "user"
-                });
-              }}
-            >
-              {({
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                values,
-                errors,
-                touched,
-              }) => (
-                <>
-                  <InputField
-                    label="Full Name"
-                    placeholder="User's full name here"
-                    value={values.username}
-                    onChangeText={handleChange('username')}
-                    onBlur={handleBlur('username')}
-                    error={touched.username && errors.username}
-                  />
-                  {touched.username && errors.username && (
-                    <Text style={styles.errorText}>{errors.username}</Text>
-                  )}
-                  <InputField
-                    label="Email"
-                    placeholder="User's email here"
-                    value={values.email}
-                    onChangeText={handleChange('email')}
-                    onBlur={handleBlur('email')}
-                    error={touched.email && errors.email}
-                  />
-                  {touched.email && errors.email && (
-                    <Text style={styles.errorText}>{errors.email}</Text>
-                  )}
-
-                  <InputField
-                    label="Password"
-                    placeholder="User's password here"
-                    secureTextEntry={true}
-                    value={values.password}
-                    onChangeText={handleChange("password")}
-                    onBlur={handleBlur("password")}
-                  />
-                  {touched.password && errors.password && (
-                    <Text style={styles.errorText}>{errors.password}</Text>
-                  )}
-                  <CustomButton
-                    title="Sign Up"
-                    onPress={handleSubmit}
-                  />
-                </>
+          <View style={styles.container2}>
+            <View style={styles.cardTier1}>
+              <Text style={styles.text1}>Create your free account</Text>
+              <View style={styles.box1}>
+                <Text style={styles.text2}>Already have an account?</Text>
+                <Pressable onPress={goToNextScreen}>
+                  <Text style={styles.text3}>Sign In</Text>
+                </Pressable>
+              </View>
+              {!isKeyboardVisible && (
+                <TouchableOpacity
+                  style={styles.touchable1}
+                  onPress={() => alert("Go to Google")}
+                >
+                  <Image source={Google_Icon} style={styles.Googleimage} />
+                  <Text style={styles.text2}>Sign up with Google</Text>
+                </TouchableOpacity>
               )}
-            </Formik>
+            </View>
+
+            <View style={styles.dividerContainer}>
+              <View style={styles.divider} />
+              <Text style={styles.orText}>or</Text>
+              <View style={styles.divider} />
+            </View>
+            <View style={styles.formContainer}>
+              <Formik
+                initialValues={{ username: '', email: '', password: '' }}
+                validationSchema={SignUpValidationSchema}
+                onSubmit={handleSignUp}
+              >
+                {({
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  values,
+                  errors,
+                  touched,
+                  isSubmitting
+                }) => (
+                  <>
+                    <InputField
+                      label="Full Name"
+                      placeholder="User's full name here"
+                      value={values.username}
+                      onChangeText={handleChange('username')}
+                      onBlur={handleBlur('username')}
+                      error={touched.username && errors.username}
+                    />
+                    {touched.username && errors.username && (
+                      <Text style={styles.errorText}>{errors.username}</Text>
+                    )}
+
+                    <InputField
+                      label="Email"
+                      placeholder="User's email here"
+                      value={values.email}
+                      onChangeText={handleChange('email')}
+                      onBlur={handleBlur('email')}
+                      error={touched.email && errors.email}
+                    />
+                    {touched.email && errors.email && (
+                      <Text style={styles.errorText}>{errors.email}</Text>
+                    )}
+
+                    <InputField
+                      label="Password"
+                      placeholder="User's password here"
+                      secureTextEntry={true}
+                      value={values.password}
+                      onChangeText={handleChange("password")}
+                      onBlur={handleBlur("password")}
+                      error={touched.password && errors.password}
+                    />
+                    {touched.password && errors.password && (
+                      <Text style={styles.errorText}>{errors.password}</Text>
+                    )}
+
+                    {/* Success/Error Messages */}
+                    {successMessage ? (
+                      <Text style={styles.successText}>{successMessage}</Text>
+                    ) : errorMessage ? (
+                      <Text style={styles.errorMessageText}>{errorMessage}</Text>
+                    ) : null}
+
+                    <CustomButton
+                      title={"Sign Up"}
+                      onPress={handleSubmit}
+                      disabled={isSubmitting}
+                      loading={isSubmitting}
+                    />
+                  </>
+                )}
+              </Formik>
+            </View>
           </View>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   );
 };
 
@@ -203,9 +227,10 @@ const styles = StyleSheet.create({
   container2: {
     flex: 1,
     backgroundColor: WHITE_COLOR,
+    alignItems: "center",
+    paddingHorizontal: 20,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    paddingHorizontal: 20,
     paddingTop: 20,
   },
   cardTier1: {
@@ -222,7 +247,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
     fontWeight: "bold",
-    color: BLACK_COLOR,  
+    color: BLACK_COLOR,
   },
   box1: {
     flexDirection: "row",
@@ -232,19 +257,19 @@ const styles = StyleSheet.create({
   text2: {
     fontSize: 14,
     fontWeight: "bold",
-    color: BLACK_COLOR, 
+    color: BLACK_COLOR,
   },
   text3: {
     fontSize: 14,
     fontWeight: "bold",
-    color: THEME_COLOR,  
+    color: THEME_COLOR,
     marginLeft: 10,
   },
   touchable1: {
     width: "100%",
     height: 50,
     borderWidth: 1,
-    borderColor: GRAY_COLOR,  
+    borderColor: GRAY_COLOR,
     flexDirection: "row",
     borderRadius: 25,
     marginVertical: 10,
@@ -266,12 +291,12 @@ const styles = StyleSheet.create({
   divider: {
     flex: 1,
     height: 1,
-    backgroundColor: BLACK_COLOR, 
+    backgroundColor: BLACK_COLOR,
   },
   orText: {
     marginHorizontal: 10,
     fontSize: 16,
-    color: BLACK_COLOR,  
+    color: BLACK_COLOR,
     textAlign: "center",
   },
   image: {
@@ -283,7 +308,21 @@ const styles = StyleSheet.create({
     color: THEME_COLOR,
     fontSize: 12,
     marginBottom: 12,
-    alignSelf :"start",
+    alignSelf: "flex-start",
+  },
+  successText: {
+    color: SUCCESS_COLOR,
+    fontSize: 14,
+    marginBottom: 15,
+    textAlign: "center",
+    paddingHorizontal: 10,
+  },
+  errorMessageText: {
+    color: THEME_COLOR,
+    fontSize: 14,
+    marginBottom: 15,
+    textAlign: "center",
+    paddingHorizontal: 10,
   },
 });
 
