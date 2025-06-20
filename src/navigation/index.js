@@ -291,14 +291,18 @@ const BottomTabStack = () => (
           </View>
         ),
       }}
+        listeners={({ navigation }) => ({
+          tabPress: () => {
+            // Reset the Profile stack when tab is pressed
+            navigation.navigate('Profile');
+          },
+        })}
     />
   </Tab.Navigator>
 );
-
 // Main Navigation Component
 const Navigation = () => {
   const { user , isHydrated } = authStore();
-
   if(!isHydrated){
     return(
       <SplashScreen/>

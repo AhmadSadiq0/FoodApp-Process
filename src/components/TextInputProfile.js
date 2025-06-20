@@ -4,6 +4,7 @@ import CustomButton from "./CustomButtom";
 import useThemeStore from "../../zustand/ThemeStore";
 import { GRAY_COLOR, WHITE_COLOR, THEME_COLOR, THEME_TEXT_COLOR, BLACK_COLOR, GREEN_COLOR } from "../res/colors";
 import { IMAGE28, CHECK_ICON } from "../res/drawables";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EditableField = ({ label, value, fieldName, onFieldChange, keyboardType, darkMode }) => {
   const [text, setText] = useState(value);
@@ -17,6 +18,9 @@ const EditableField = ({ label, value, fieldName, onFieldChange, keyboardType, d
     setText(newValue);
     onFieldChange(fieldName, newValue);
   };
+
+
+  
 
   return (
     <View
@@ -72,10 +76,27 @@ const TextInputProfile = ({
   const [hasChanges, setHasChanges] = useState(false);
   const [changedFields, setChangedFields] = useState({});
 
+  // Load from AsyncStorage on mount
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const stored = await AsyncStorage.getItem('profileData');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          setFormData({ ...initialData, ...parsed });
+        } else {
+          setFormData(initialData);
+        }
+      } catch (e) {
+        setFormData(initialData);
+      }
+    };
+    loadProfile();
+  }, [initialData]);
+
   const handleFieldChange = (field, value) => {
     setFormData(prev => {
       const newData = { ...prev, [field]: value };
-      
       if (value !== initialData[field]) {
         setChangedFields(prev => ({ ...prev, [field]: value }));
       } else {
@@ -85,7 +106,6 @@ const TextInputProfile = ({
           return updated;
         });
       }
-      
       return newData;
     });
   };
@@ -93,6 +113,19 @@ const TextInputProfile = ({
   useEffect(() => {
     setHasChanges(Object.keys(changedFields).length > 0);
   }, [changedFields]);
+
+  // Update button click handler
+  const handleSave = async () => {
+    try {
+      // Save to AsyncStorage
+      const updatedData = { ...formData, ...changedFields };
+      await AsyncStorage.setItem('profileData', JSON.stringify(updatedData));
+      if (onSave) onSave(changedFields);
+      setChangedFields({});
+    } catch (e) {
+      // handle error if needed
+    }
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR }]}>
@@ -133,7 +166,7 @@ const TextInputProfile = ({
         <View style={styles.buttonContainer}>
           <CustomButton
             title="Update Profile"
-            onPress={() => onSave(changedFields)}
+            onPress={handleSave}
             loading={isUpdating}
             textStyle={{ color: WHITE_COLOR }}
             buttonStyle={{ backgroundColor: THEME_COLOR }}

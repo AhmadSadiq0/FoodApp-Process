@@ -83,31 +83,30 @@ const MenuScreen = ({ navigation }) => {
 
   return (
     <View style={[styles.container, darkMode && styles.darkContainer]}>
-      <ScrollView showsVerticalScrollIndicator={false}>
       {!categorized_loading && (
-    <Text style={styles.category}>Category</Text>
-  )}
-        <FlatList
-          data={filteredData}
-          ListHeaderComponent={
-            <View style={[styles.header, darkMode && styles.headerDark]}>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.categoryScrollContainer}
-              >
-                <CategoryList
-                  selectedCategory={selectedCategory}
-                  onSelectCategory={setSelectedCategory}
-                />
-              </ScrollView>
-            </View>
-          }
-          renderItem={renderDatalist}
-          keyExtractor={(item) => item?.categoryId?.toString() || Math.random().toString()}
-          ListEmptyComponent={renderEmptyComponent}
-        />
-      </ScrollView>
+        <Text style={styles.category}>Category</Text>
+      )}
+      <FlatList
+        data={filteredData}
+        ListHeaderComponent={
+          <View style={[styles.header, darkMode && styles.headerDark]}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.categoryScrollContainer}
+            >
+              <CategoryList
+                selectedCategory={selectedCategory}
+                onSelectCategory={setSelectedCategory}
+              />
+            </ScrollView>
+          </View>
+        }
+        renderItem={renderDatalist}
+        keyExtractor={(item) => item?.categoryId?.toString() || Math.random().toString()}
+        ListEmptyComponent={renderEmptyComponent}
+        contentContainerStyle={{ paddingBottom: 20, flexGrow: 1 }}
+      />
     </View>
   );
 };
@@ -117,7 +116,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Back_Ground,
-    alignItems: 'center'
+   // alignItems: 'center'
   },
   darkContainer: {
     backgroundColor: BLACK_COLOR,

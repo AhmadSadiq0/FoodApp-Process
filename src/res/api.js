@@ -8,7 +8,6 @@ export const URL_TO_FETCH_USER_DATA = `${BASE_URL}/users/getUserData`;
 //export const URL_TO_UPDATE_USER_DATA = `${BASE_URL}/users/updateUserData`;
 export const URL_TO_VALIDATE_TOKEN = `${BASE_URL}/users/token/valid`;
 export const URL_TO_REFRESH_TOKEN = `${BASE_URL}/users/refresh-token`
-
 //items endpoint
 export const URL_TO_GET_ITEMS = `${BASE_URL}/items/getItems`;
 export const URL_TO_CREATE_ITEM = `${BASE_URL}/items/createItem`;

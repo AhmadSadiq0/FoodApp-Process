@@ -4,6 +4,7 @@ import {
     View,
     Text,
     Image,
+    ActivityIndicator,
     TouchableOpacity,
 } from 'react-native';
 //colors
@@ -23,58 +24,79 @@ import CustomButton from '../../components/CustomButtom';
 //RawBottomSheet
 import RBSheet from 'react-native-raw-bottom-sheet';
 import useNotificationStore from '../../store/NotificationStore';
+
 const NotificationsScreen = ({ navigation }) => {
-    const { notifications, fetchNotifications, unreadCount } = useNotificationStore();
-    const [cartItems, setCartItems] = useState([
-        // {
-        //     id: 1, title: 'Your order has been confirmed!',
-        //     message: "There is no one who loves pain itself who seeks after it and wants to have it simply because it is pain.",
-        //     subtitle: 'Order Id:',
-        //     code: 'AK-141124-DC807',
-        //     date: '14/11/24',
-        //     time: '11:08 PM',
-        //     image: PIZZAIMAGE,
-        //     active: false
-        // },
-        // {
-        //     id: 2, title: 'Welcome to Ahmad’s Kitchen!',
-        //     message: "There is no one who loves pain itself who seeks after it and wants to have it simply because it is pain.",
-        //     subtitle: 'Enjoy your favourite meals at home!!!',
-        //     date: '14/11/24',
-        //     time: '11:08 PM',
-        //     image: PIZZAIMAGE,
-        //     active: false
-        // },
-    ]);
+    const { notifications, fetchNotifications, unreadCount, loading } = useNotificationStore();
+    const [selectedNotification, setSelectedNotification] = useState(null);
     const refRBSheet = useRef(null);
+
     useEffect(() => {
         fetchNotifications();
-        console.log('Notifications:', notifications);
-      }, []);
+    }, []);
+
+    useEffect(() => {
+        console.log('Raw notifications from store:', notifications);
+        console.log('Transformed notifications:', transformedNotifications);
+    }, [notifications]);
+
+    // Transform API notifications to UI format
+    const transformedNotifications = notifications.map((notification, index) => {
+        const recipient = notification.recipients && notification.recipients[0];
+        const date = new Date(notification.createdAt);
+        const formattedDate = date.toLocaleDateString('en-GB');
+        const formattedTime = date.toLocaleTimeString('en-US', { 
+            hour: '2-digit', 
+            minute: '2-digit',
+            hour12: true 
+        });
+
+        return {
+            id: notification._id,
+            title: notification.type === 'order-update' ? 'Order Update' : 'Notification',
+            message: notification.description,
+            subtitle: 'Order Id:',
+            code: notification.description.match(/#([A-Z0-9]+)/)?.[1] || 'N/A',
+            date: formattedDate,
+            time: formattedTime,
+            image: PIZZAIMAGE,
+            active: false,
+            seen: recipient ? recipient.seen : false
+        };
+    });
+
     const handlePressItem = (id) => {
-        const updatedItems = cartItems.map((item) =>
+        const updatedItems = transformedNotifications.map((item) =>
             item.id === id ? { ...item, active: !item.active } : { ...item, active: false }
         );
-        setCartItems(updatedItems);
-
+        
         const isActive = updatedItems.find(item => item.id === id && item.active);
         if (isActive) {
+            const selectedItem = updatedItems.find(item => item.id === id);
+            setSelectedNotification(selectedItem);
             refRBSheet.current?.open();
         }
     };
 
-    const activeItem = cartItems.find((item) => item.active);
+    if (loading) {
+        return (
+            <View style={styles.container}>
+                   <ActivityIndicator size="large" color={THEME_COLOR} />
+                {/* <Text style={styles.emptyCartText}>Loading notifications...</Text> */}
+            </View>
+        );
+    }
 
-    if (cartItems.length === 0) {
+    if (transformedNotifications.length === 0) {
         return (
             <View style={styles.container}>
                 <Text style={styles.emptyCartText}>Your Notifications is empty</Text>
             </View>
         );
     } 
+
     return (
         <View style={styles.container}>
-            {cartItems.map((item) => (
+            {transformedNotifications.map((item) => (
                 <CartItem key={item.id} item={item} onPressItem={handlePressItem} />
             ))} 
             <RBSheet
@@ -94,14 +116,14 @@ const NotificationsScreen = ({ navigation }) => {
                     enabled: false,
                 }}
             >
-                {activeItem && (
+                {selectedNotification && (
                     <View style={styles.summaryCard}>
-                        <Text style={styles.summaryText}>{activeItem.title}</Text>
+                        <Text style={styles.summaryText}>{selectedNotification.title}</Text>
                         <View style={styles.OrderId}>
-                            <Text style={styles.summaryText2}>{activeItem.subtitle}</Text>
-                            <Text style={styles.codeText}>{activeItem.code}</Text>
+                            <Text style={styles.summaryText2}>{selectedNotification.subtitle}</Text>
+                            <Text style={styles.codeText}>{selectedNotification.code}</Text>
                         </View>
-                        <Text style={styles.messageText}>{activeItem.message}</Text>
+                        <Text style={styles.messageText}>{selectedNotification.message}</Text>
                         <View style={styles.customButton}>
                             <CustomButton title={'Go Back'} textStyle={{ color: WHITE_COLOR }} onPress={() => navigation.goBack()} />
                         </View>
@@ -133,16 +155,18 @@ const CartItem = ({ item, onPressItem }) => {
             </View>
             <View style={styles.cartItemActions}>
                 <View
-                    style={[styles.circle, item.active && { backgroundColor: Green_Color }]}
+                    style={[styles.circle, !item.seen && { backgroundColor: Green_Color }]}
                 />
             </View>
         </TouchableOpacity>
     );
 };
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
+        //padding: 16,
+        paddingTop:30,
         backgroundColor: Back_Ground,
      
     },
