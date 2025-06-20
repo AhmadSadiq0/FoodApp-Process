@@ -1,13 +1,13 @@
 
 import { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
-import { Frown } from 'lucide-react-native';
+import { View, Text, StyleSheet, Animated , Image } from 'react-native';
+import { SAD_ICON } from '../../res/drawables';
 import { THEME_COLOR, WHITE_COLOR, INPUT_BACK_COLOR, BLACK_COLOR } from '../../res/colors';
 import { CustomButton } from '../../components';
 import useThemeStore from '../../../zustand/ThemeStore';
 
 const EmptyCart = ({ navigation }) => {
-  const { darkMode } = useThemeStore(); 
+  const { darkMode } = useThemeStore();
   const bounceAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -35,11 +35,7 @@ const EmptyCart = ({ navigation }) => {
           { transform: [{ translateY: bounceAnim }] },
         ]}
       >
-        <Frown
-          size={120}
-          color={THEME_COLOR} 
-          strokeWidth={1.5}
-        />
+        <Image source={SAD_ICON} style={styles.Image}/>
       </Animated.View>
 
       <Text style={[styles.title, darkMode && styles.darkText]}>Your cart is empty</Text>
@@ -64,10 +60,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
-     backgroundColor: INPUT_BACK_COLOR,  
   },
   darkContainer: {
-    backgroundColor: BLACK_COLOR,  // Dark background
+    backgroundColor: BLACK_COLOR, 
   },
   iconContainer: {
     alignItems: 'center',
@@ -98,13 +93,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   darkText: {
-    color: WHITE_COLOR, 
+    color: WHITE_COLOR,
   },
   button: {
     marginTop: 24,
     backgroundColor: THEME_COLOR,
     borderRadius: 8,
   },
+  Image: {
+    width: 120,
+    height: 120,
+    resizeMode: "contain",
+  }
 });
 
 export default EmptyCart;

@@ -46,3 +46,6 @@ export const URL_TO_GET_NOTIFICATIONS = `${BASE_URL}/notifications/get`;
 export const URL_TO_UPDATE_NOTIFICATION = `${BASE_URL}/notifications/update`;
 export const URL_TO_DELETE_NOTIFICATION = `${BASE_URL}/notifications/delete`;
 export const URL_TO_MARK_NOTIFICATION_AS_READ = `${BASE_URL}/notifications/mark-as-read`;
+
+// New URL for saving the Expo push token
+export const URL_TO_SAVE_EXPO_PUSH_TOKEN = `${BASE_URL}/save-token`;

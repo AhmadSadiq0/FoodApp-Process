@@ -28,17 +28,17 @@
     "plugins": [
       "expo-localization"
     ],
-    "extra": {
-      "eas": {
-        "projectId": "d33cf888-53dd-4b30-b69d-f8c7e824aadf"
-      }
-    },
     "owner": "hassnainpro",
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
       "url": "https://u.expo.dev/d33cf888-53dd-4b30-b69d-f8c7e824aadf"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "62e6c1c5-0ace-452c-976b-d3fe5648d493"
+      }
     }
   }
 }

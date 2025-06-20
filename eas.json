@@ -3,13 +3,20 @@
     "version": ">= 3.0.0"
   },
   "build": {
-    "preview": {
-      "channel": "preview",
-      "developmentClient": true,
-      "distribution": "internal"
+     "preview": {
+      "android": {
+        "buildType": "apk"
+      }
     },
     "production": {
       "channel": "production"
+    },
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
     }
   }
 }

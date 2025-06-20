@@ -5,6 +5,7 @@ import {
   SectionList,
   Text,
   Pressable,
+  Image
 } from "react-native";
 //color
 import {
@@ -22,7 +23,7 @@ import {
 import RBOrderSheet from "./RBOrderSheet";
 //zustand
 import useThemeStore from "../../zustand/ThemeStore";
-import { Frown } from "lucide-react-native";
+import { SAD_ICON } from "../res/drawables";
 
 
 
@@ -60,11 +61,7 @@ const OrderList = ({ sections: initialSections, refreshControl }) => {
       {
         sections.length == 0 && (
           <View style={styles.emptyContainer}>
-            <Frown
-              size={150}
-              color={THEME_COLOR}
-              strokeWidth={1.5}
-            />
+            <Image source={SAD_ICON} style = {styles.Image} />
             <Text style={[styles.emptyText, { color: darkMode ? DARK_THEME_TEXT_COLOR : THEME_COLOR }]}>
               You have no orders yet
             </Text>
@@ -208,6 +205,11 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize : 14,
+  },
+  Image : {
+    width : 120,
+    height : 120,
+    resizeMode : "contain"
   }
 });
 

@@ -9,7 +9,8 @@ import {
     URL_TO_GET_NOTIFICATIONS,
     URL_TO_UPDATE_NOTIFICATION,
     URL_TO_DELETE_NOTIFICATION,
-    URL_TO_MARK_NOTIFICATION_AS_READ
+    URL_TO_MARK_NOTIFICATION_AS_READ,
+    URL_TO_SAVE_EXPO_PUSH_TOKEN
   } from "../res/api";
   
   // Create a new notification
@@ -156,10 +157,37 @@ import {
     }
   };
   
+  // Save Expo push token for user
+  const saveExpoPushTokenService = async (token) => {
+    try {
+      const response = await postRequest(URL_TO_SAVE_EXPO_PUSH_TOKEN, { token });
+      if (response.status || response.success) {
+        return {
+          success: true,
+          data: response.data,
+          message: response.msg || 'Token saved successfully.'
+        };
+      } else {
+        return {
+          success: false,
+          data: null,
+          message: response.msg || 'Failed to save token.'
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        data: null,
+        message: error.message || 'Failed to save token.'
+      };
+    }
+  };
+  
   export {
     createNotificationService,
     fetchNotificationsService,
     updateNotificationService,
     deleteNotificationService,
-    markNotificationAsReadService
+    markNotificationAsReadService,
+    saveExpoPushTokenService
   };

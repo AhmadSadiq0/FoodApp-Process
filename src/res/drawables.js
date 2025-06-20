@@ -39,3 +39,6 @@ export const SECONDARY_PROFILE_AVATAR = require(`${PATH}/icons/profileAvatar.png
 //utils Icon
 export const BACK_ICON  = require(`${PATH}/icons/backIcon.png`)
 export const CHEVRON_ICON = require(`${PATH}/icons/ChevronRightIcon1.png`)
+//empty Screen Icons
+export const SAD_ICON = require(`${PATH}/icons/sad_emoji.png`)
+
