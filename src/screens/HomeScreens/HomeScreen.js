@@ -16,7 +16,7 @@ import useSearchStore from "../../store/SearchStore";
 import useThemeStore from "../../../zustand/ThemeStore";
 // Colors
 import { WHITE_COLOR, Back_Ground, BLACK_COLOR, THEME_COLOR } from "../../res/colors";
-// Screens
+// Screensz
 
 const HomeScreen = ({ navigation }) => {
   const { darkMode } = useThemeStore();
@@ -87,18 +87,14 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={[styles.mainContainer, darkMode && styles.mainContainerDark]}>
-      <ScrollView 
-        showsVerticalScrollIndicator={false}
+      <FlatList
+        data={filteredData}
+        renderItem={renderDatalist}
+        keyExtractor={(item) => item?.categoryId.toString()}
+        ListEmptyComponent={homeSectionItemsLoading ? renderLoading : renderEmpty}
+        contentContainerStyle={{ paddingBottom: 20, flexGrow: 1 }}
         style={darkMode && styles.scrollViewDark}
-      >
-        <FlatList
-          data={filteredData}
-          renderItem={renderDatalist}
-          keyExtractor={(item) => item?.categoryId.toString()}
-          ListEmptyComponent={homeSectionItemsLoading ? renderLoading : renderEmpty}
-          contentContainerStyle={styles.contentContainer}
-        />
-      </ScrollView>
+      />
     </View>
   );
 };
@@ -127,7 +123,7 @@ const styles = StyleSheet.create({
     flex: 1, 
     justifyContent: "center", 
     alignItems: "center", 
-    height: 300
+   // height: 300
   },
   emptyContainer: {
     flex: 1, 

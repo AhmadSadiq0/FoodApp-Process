@@ -52,17 +52,17 @@ import {
       const response = await getRequest(`${URL_TO_GET_NOTIFICATIONS}`);
      console.log('Notifications response:', response);
       
-      if (response.status) {
+      if (response.status && response.data.status) {
         return {
           success: true,
-          data: response.data,
-          message: response.msg || 'Notifications fetched successfully.'
+          data: response.data.data,
+          message: response.data.msg || 'Notifications fetched successfully.'
         };
       } else {
         return {
           success: false,
           data: [],
-          message: response.msg || 'Failed to fetch notifications.'
+          message: response.data?.msg || 'Failed to fetch notifications.'
         };
       }
     } catch (error) {

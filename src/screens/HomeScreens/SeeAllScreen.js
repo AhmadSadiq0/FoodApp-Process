@@ -6,10 +6,11 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import BurgerCardHorizantol from "../../components/BurgerCardHorizantol";
 // Stores
 import useItemStore from "../../store/ItemStore";
+import useThemeStore from "../../../zustand/ThemeStore";
 // Images
 import { ARROW_ICON, BACK_ICON } from "../../res/drawables";
 // Colors
-import { THEME_COLOR, Back_Ground } from "../../res/colors";
+import { THEME_COLOR, Back_Ground, WHITE_COLOR, BLACK_COLOR } from "../../res/colors";
 import ImageButton from "../../components/ImageButton";
 
 const SeeAllScreen = ({ navigation }) => {
@@ -17,6 +18,7 @@ const SeeAllScreen = ({ navigation }) => {
   const { categoryId, title, isHome = true } = route.params;
   const { categorized_items, homeSectionItems } = useItemStore();
   const [filteredItems, setFilteredItems] = useState([]);
+  const { darkMode } = useThemeStore();
 
   useEffect(() => {
     const category = isHome ? homeSectionItems.find(item => item.categoryId == categoryId) : categorized_items.find(item => item.categoryId == categoryId);
@@ -42,10 +44,10 @@ const SeeAllScreen = ({ navigation }) => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, darkMode && styles.containerDark]}>
       <View style={styles.headerRow}>
-        <ImageButton imageSource={BACK_ICON} onPress={() => navigation.goBack()} />
-        <Text style={styles.title}>{title}</Text>
+        <ImageButton imageSource={BACK_ICON} onPress={() => navigation.goBack()} /> 
+        <Text style={[styles.title, darkMode && styles.titleDark]}>{title}</Text>
       </View>
 
       {filteredItems.length > 0 ? (
@@ -66,12 +68,14 @@ const SeeAllScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
     backgroundColor: Back_Ground,
+  },
+  containerDark: {
+    backgroundColor: BLACK_COLOR,
   },
   headerRow: {
     marginTop: 35,
-    paddingHorizontal : 15,
+    paddingHorizontal: 15,
     paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
@@ -88,8 +92,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '500',
     color: THEME_COLOR,
-    // fontStyle: "italic",
     bottom: 2
+  },
+  titleDark: {
+    color: WHITE_COLOR,
   },
 });
 

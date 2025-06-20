@@ -48,9 +48,14 @@ const useNotificationStore = create(
         try {
           const response = await fetchNotificationsService(userId);
           if (response.success) {
-            const unreadCount = response.data.filter(n => !n.seen).length;
+            const notifications = response.data || [];
+            const unreadCount = notifications.reduce((count, notification) => {
+              const recipient = notification.recipients && notification.recipients[0];
+              return count + (recipient && !recipient.seen ? 1 : 0);
+            }, 0);
+            
             set({ 
-              notifications: response.data.data,
+              notifications: notifications,
               unreadCount,
               loading: false 
             });
