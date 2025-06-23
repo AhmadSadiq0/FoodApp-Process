@@ -19,7 +19,6 @@ import useAuthStore from '../../store/AuthStore';
 // Colors
 import { WHITE_COLOR, Back_Ground, BLACK_COLOR, THEME_COLOR } from "../../res/colors";
 import * as Notifications from 'expo-notifications';
-import Constants from 'expo-constants';
 // Screensz
 
 const HomeScreen = ({ navigation }) => {
@@ -42,12 +41,10 @@ const HomeScreen = ({ navigation }) => {
     fetchBranches();
   }, [selectedBranch]);
 
-  // Register for push notifications and save token
   useEffect(() => {
     const registerForPushNotificationsAsync = async () => {
       if (!user || expoPushToken) return;
       let token;
-      if (Constants.isDevice) {
         const { status: existingStatus } = await Notifications.getPermissionsAsync();
         let finalStatus = existingStatus;
         if (existingStatus !== 'granted') {
@@ -63,9 +60,6 @@ const HomeScreen = ({ navigation }) => {
           await saveExpoPushToken(token);
           console.log("token is" , token)
         }
-      } else {
-        alert('Must use physical device for Push Notifications');
-      }
     };
     registerForPushNotificationsAsync();
   }, [user]);
