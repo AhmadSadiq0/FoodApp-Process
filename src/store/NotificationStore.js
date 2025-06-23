@@ -7,12 +7,14 @@ import {
     fetchNotificationsService,
     updateNotificationService,
     deleteNotificationService,
+    saveExpoPushTokenService,
    } from '../services/NotificationService';
 const initialState = {
   notifications: [],
   unreadCount: 0,
   loading: false,
   error: null,
+  expoPushToken: null,
 };
 
 const useNotificationStore = create(
@@ -139,6 +141,25 @@ const useNotificationStore = create(
 
       // Reset entire store to initial state
       reset: () => set(initialState),
+
+      // Save Expo push token
+      saveExpoPushToken: async (token) => {
+        set({ loading: true, error: null });
+        try {
+          const response = await saveExpoPushTokenService(token);
+          console.log('Save Expo push token response:', response);
+          if (response.success) {
+            set({ expoPushToken: token, loading: false });
+            return { success: true };
+          } else {
+            set({ loading: false, error: response.message });
+            return { success: false, error: response.message };
+          }
+        } catch (error) {
+          set({ loading: false, error: error.message });
+          return { success: false, error: error.message };
+        }
+      },
     }),
     {
       name: 'notification-storage',

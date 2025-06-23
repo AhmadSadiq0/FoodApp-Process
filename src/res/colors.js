@@ -1,7 +1,7 @@
 // Guides:
 //This file defines color constants or themes for the application.
 
- export const THEME_COLOR = '#FE8C00';
+export const THEME_COLOR = '#FE8C00';
 //export const THEME_COLOR = '#8B1E3F';
 export const LIGHT_THEME_COLOR = "#ffecd2";
 export const THEME_TEXT_COLOR = '#371F76';
