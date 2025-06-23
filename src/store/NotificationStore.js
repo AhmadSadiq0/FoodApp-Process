@@ -147,6 +147,7 @@ const useNotificationStore = create(
         set({ loading: true, error: null });
         try {
           const response = await saveExpoPushTokenService(token);
+          console.log('Save Expo push token response:', response);
           if (response.success) {
             set({ expoPushToken: token, loading: false });
             return { success: true };

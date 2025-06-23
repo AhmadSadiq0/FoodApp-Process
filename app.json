@@ -20,13 +20,26 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "notifications": {
+        "icon": "./assets/icon.png",
+        "color": "#FE8C00"
+      },
+      "googleServicesFile": "./google-services.json",
       "package": "com.hassnainpro.FoodAppProcess"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-localization"
+      "expo-localization",
+      [
+      "expo-notifications",
+      {
+        "icon": "./assets/icon.png",
+        "color": "#FE8C00",
+        "mode": "foreground"
+      }
+    ]
     ],
     "owner": "hassnainpro",
     "runtimeVersion": {

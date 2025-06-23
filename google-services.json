@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "272996422919",
+    "project_id": "fos-app-3f14e",
+    "storage_bucket": "fos-app-3f14e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272996422919:android:ee4e660f98bd0a34b361a2",
+        "android_client_info": {
+          "package_name": "com.hassnainpro.FoodAppProcess"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH9H2S-05oQGbdqL1gwyiHUCdKM3tDoxs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
-import { 
-  StyleSheet, 
-  View, 
-  FlatList, 
-  Text, 
-  ScrollView, 
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  Text,
+  ScrollView,
   ActivityIndicator
 } from "react-native";
 // Components
@@ -24,42 +24,49 @@ import * as Notifications from 'expo-notifications';
 const HomeScreen = ({ navigation }) => {
   const { darkMode } = useThemeStore();
   const { searchQuery } = useSearchStore();
-  const { 
-    fetchHomeSectionItems, 
-    homeSectionItems, 
-    homeSectionItemsLoading, 
-    homeSectionItemsError 
+  const {
+    fetchHomeSectionItems,
+    homeSectionItems,
+    homeSectionItemsLoading,
+    homeSectionItemsError
   } = useItemStore();
-  const { fetchBranches,selectedBranch } = useBranchStore();
+  const { fetchBranches, selectedBranch } = useBranchStore();
   const { saveExpoPushToken, expoPushToken } = useNotificationStore();
   const { user } = useAuthStore();
 
-  useEffect(() => { 
+  useEffect(() => {
     if (selectedBranch) {
-      fetchHomeSectionItems(selectedBranch._id);  
+      fetchHomeSectionItems(selectedBranch._id);
     }
     fetchBranches();
   }, [selectedBranch]);
 
   useEffect(() => {
     const registerForPushNotificationsAsync = async () => {
-      if (!user || expoPushToken) return;
+      console.log("before")
+      if (!user) return;
+      console.log("after")
       let token;
-        const { status: existingStatus } = await Notifications.getPermissionsAsync();
-        let finalStatus = existingStatus;
-        if (existingStatus !== 'granted') {
-          const { status } = await Notifications.requestPermissionsAsync();
-          finalStatus = status;
-        }
-        if (finalStatus !== 'granted') {
-          alert('Failed to get push token for push notification!');
-          return;
-        }
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        console.log('Failed to get push token for push notification!');
+        return;
+      }
+      try {
         token = (await Notifications.getExpoPushTokenAsync()).data;
-        if (token) {
+        if (token != expoPushToken) {
           await saveExpoPushToken(token);
-          console.log("token is" , token)
+          console.log("token is", token)
         }
+      } catch (error) {
+        console.log(error)
+      }
+
     };
     registerForPushNotificationsAsync();
   }, [user]);
@@ -67,7 +74,7 @@ const HomeScreen = ({ navigation }) => {
   const filteredData = homeSectionItems
     .map(category => ({
       ...category,
-      items: category.items.filter(item => 
+      items: category.items.filter(item =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
     }))
@@ -78,7 +85,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const handleSeeMorePress = (title, categoryId) => {
-    navigation.navigate('SeeAll', { title, categoryId , isHome : true });
+    navigation.navigate('SeeAll', { title, categoryId, isHome: true });
   };
 
   const renderDatalist = ({ item, index }) => {
@@ -92,7 +99,7 @@ const HomeScreen = ({ navigation }) => {
         data={item.items}
         onAddToCart={handleAddToCart}
         darkMode={darkMode}
-        isLastArray={isLastArray}  
+        isLastArray={isLastArray}
       />
     );
   };
@@ -130,7 +137,7 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    paddingTop : 15,
+    paddingTop: 15,
     backgroundColor: Back_Ground,
   },
   mainContainerDark: {
@@ -148,14 +155,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   loadingContainer: {
-    flex: 1, 
-    justifyContent: "center", 
-    alignItems: "center", 
-   // height: 300
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    // height: 300
   },
   emptyContainer: {
-    flex: 1, 
-    justifyContent: "center", 
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center"
   }
 });

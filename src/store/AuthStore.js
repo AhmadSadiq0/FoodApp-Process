@@ -50,7 +50,7 @@ const useAuthStore = create(
           const res = await signInService(payload);
           
           if (!res.success) {
-            throw new Error(res.message || 'Login failed');
+            throw new Error(res.status == 400 ? 'Email or password is incorrect' : res.message || 'Login failed');
           }
 
           setAuthTokenInAxios(res.data.data.accessToken);
