@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Animated, Easing, ScrollView } from "react-native";
+import { StyleSheet, Text, View, Animated, Easing, FlatList } from "react-native";
 import { THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR } from "../res/colors";
 import useThemeStore from "../../zustand/ThemeStore";
 import CustomButton from "./CustomButtom";
@@ -9,7 +9,6 @@ const SummaryCard = ({ selectedItems, selectedExtras, subtotal, onCheckout }) =>
   const { darkMode } = useThemeStore();
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const slideAnim = React.useRef(new Animated.Value(50)).current;
-
 
   React.useEffect(() => {
     Animated.parallel([
@@ -27,6 +26,59 @@ const SummaryCard = ({ selectedItems, selectedExtras, subtotal, onCheckout }) =>
     ]).start();
   }, []);
 
+  // Combine all data for FlatList
+  const renderData = [
+    {
+      type: 'header',
+      title: `Items (${selectedItems.length})`,
+      data: selectedItems
+    },
+    ...(selectedExtras.length > 0 ? [{
+      type: 'header',
+      title: `Extras (${selectedExtras.length})`,
+      data: selectedExtras
+    }] : []),
+    {
+      type: 'footer',
+      subtotal: subtotal
+    }
+  ];
+
+  const renderItem = ({ item }) => {
+    if (item.type === 'header') {
+      return (
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, darkMode && styles.sectionTitleDark]}>
+            {item.title}
+          </Text>
+          {item.data.map((product, index) => (
+            <View key={index} style={styles.itemRow}>
+              <Text style={[styles.itemText, darkMode && styles.itemTextDark]}>
+                {product.quantity}x {product.name}
+              </Text>
+              <Text style={styles.priceText}>
+                Rs. {(product.price * product.quantity).toFixed(2)}
+              </Text>
+            </View>
+          ))}
+        </View>
+      );
+    } else if (item.type === 'footer') {
+      return (
+        <View style={styles.totalSection}>
+          <View style={styles.divider} />
+          <View style={styles.totalRow}>
+            <Text style={[styles.totalLabel, darkMode && styles.totalLabelDark]}>
+              Subtotal
+            </Text>
+            <Text style={styles.totalAmount}>Rs. {item.subtotal.toFixed(2)}</Text>
+          </View>
+        </View>
+      );
+    }
+    return null;
+  };
+
   return (
     <Animated.View 
       style={[
@@ -34,7 +86,7 @@ const SummaryCard = ({ selectedItems, selectedExtras, subtotal, onCheckout }) =>
         darkMode && styles.summaryCardDark,
         { 
           opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }] 
+          transform: [{ translateY: slideAnim }],
         }
       ]}
     >
@@ -48,65 +100,28 @@ const SummaryCard = ({ selectedItems, selectedExtras, subtotal, onCheckout }) =>
           Order Summary
         </Text>
       </View>
-      <View style={{ height: 320 }}>
-      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-      {/* Items Breakdown */}
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, darkMode && styles.sectionTitleDark]}>
-          Items ({selectedItems.length})
-        </Text>
-        {selectedItems.map((item, index) => (
-          <View key={index} style={styles.itemRow}>
-            <Text style={[styles.itemText, darkMode && styles.itemTextDark]}>
-              {item.quantity}x {item.name}
-            </Text>
-            <Text style={styles.priceText}>
-              Rs. {(item.price * item.quantity).toFixed(2)}
-            </Text>
-          </View>
-        ))}
-      </View>
-      {/* Extras Breakdown */}
-      {selectedExtras.length > 0 && (
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, darkMode && styles.sectionTitleDark]}>
-            Extras ({selectedExtras.length})
-          </Text>
-          {selectedExtras.map((extra, index) => (
-            <View key={index} style={styles.itemRow}>
-              <Text style={[styles.itemText, darkMode && styles.itemTextDark]}>
-                {extra.quantity}x {extra.name}
-              </Text>
-              <Text style={styles.priceText}>
-                Rs. {(extra.price * extra.quantity).toFixed(2)}
-              </Text>
-            </View>
-          ))}
-        </View>
-      )}
-
-      {/* Total Section */}
-      <View style={styles.totalSection}>
-        <View style={styles.divider} />
-        <View style={styles.totalRow}>
-          <Text style={[styles.totalLabel, darkMode && styles.totalLabelDark]}>
-            Subtotal
-          </Text>
-          <Text style={styles.totalAmount}>Rs. {subtotal.toFixed(2)}</Text>
-        </View>
-      </View>
-      </ScrollView>
+      
+      <View style={{ height: 170 }}>
+        <FlatList
+          data={renderData}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContainer}
+        />
       </View>
 
       {/* Checkout Button */}
-      <CustomButton
-        title="Proceed to Checkout"
-        textStyle={styles.checkoutText}
-        buttonStyle={styles.checkoutButton}
-        onPress={onCheckout}
-        icon={<MaterialIcons name="arrow-forward" size={20} color={WHITE_COLOR} />}
-        iconRight
-      />
+      <View style={styles.checkoutButtonContainer}>
+        <CustomButton
+          title="Proceed to Checkout"
+          textStyle={styles.checkoutText}
+          buttonStyle={styles.checkoutButton}
+          onPress={onCheckout}
+          icon={<MaterialIcons name="arrow-forward" size={20} color={WHITE_COLOR} />}
+          iconRight
+        />
+      </View>
     </Animated.View>
   );
 };
@@ -138,11 +153,8 @@ const styles = StyleSheet.create({
   section: {
     marginBottom: 16,
   },
-  scrollContainer : {
-
-  },
-  sectionHeader: {
-    marginBottom: 12,
+  listContainer: {
+    paddingBottom: 10,
   },
   sectionTitle: {
     fontSize: 16,
@@ -172,7 +184,6 @@ const styles = StyleSheet.create({
     color: THEME_COLOR,
   },
   totalSection: {
-    marginTop: 16,
     marginBottom: 24,
   },
   divider: {
@@ -208,6 +219,9 @@ const styles = StyleSheet.create({
     color: WHITE_COLOR,
     fontSize: 16,
     fontWeight: "600",
+  },
+  checkoutButtonContainer: {
+    alignItems: "center",
   },
 });
 

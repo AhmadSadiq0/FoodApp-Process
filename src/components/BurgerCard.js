@@ -14,6 +14,7 @@ import {
   BLACK_COLOR,
   WHITE_COLOR,
   Back_Ground,
+  DARK_THEME_BACKGROUND,
 } from "../res/colors";
 import useThemeStore from "../../zustand/ThemeStore";
 
@@ -23,7 +24,7 @@ const BurgerCard = (props) => {
   const { name, description, price, image, onAdd } = props;
   const { darkMode } = useThemeStore();
   const textColor = darkMode ? WHITE_COLOR : THEME_TEXT_COLOR;
-  const cardColor = darkMode ? BLACK_COLOR : WHITE_COLOR;
+  const cardColor = darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR;
 
   return (
     <TouchableOpacity 
@@ -70,13 +71,14 @@ const BurgerCard = (props) => {
   );
 };
 
-const CARD_WIDTH = 180;
-const CARD_HEIGHT = 260;
+// const CARD_WIDTH = 180;
+// const CARD_HEIGHT = 260;
 
 const styles = StyleSheet.create({
   card: {
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
+    left:8,
+    width: 180,
+    height: 260,
     marginHorizontal: 10,
     borderRadius: 18,
     shadowColor: "#000",
@@ -84,6 +86,8 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 4,
     overflow: "hidden",
+    borderWidth:2,
+   borderColor:"#e0e0e0",
   },
   image: {
     width: "100%",

@@ -50,7 +50,7 @@ import {
   // Fetch all notifications for a user
   const fetchNotificationsService = async () => {
     try {
-      const response = await getRequest(`${URL_TO_GET_NOTIFICATIONS}`);
+      const response = await getRequest(URL_TO_GET_NOTIFICATIONS);
      console.log('Notifications response:', response);
       
       if (response.status && response.data.status) {

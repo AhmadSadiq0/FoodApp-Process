@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import BurgerCard from "./BurgerCard";
 import BurgerCardHorizantol from "./BurgerCardHorizantol"; // Importing your horizontal card component
-import { THEME_COLOR, Back_Ground, WHITE_COLOR, BLACK_COLOR } from "../res/colors";
+import { THEME_COLOR, Back_Ground, WHITE_COLOR, BLACK_COLOR, DARK_THEME_BACKGROUND } from "../res/colors";
 import useThemeStore from "../../zustand/ThemeStore";
 
 const ITEM_WIDTH = 150 + 14;
@@ -66,6 +66,7 @@ const Datalist = (props) => {
         showsHorizontalScrollIndicator={false}
         renderItem={renderItem}
         contentContainerStyle={styles.list}
+         showsVerticalScrollIndicator={false}
       />
     </View>
   );

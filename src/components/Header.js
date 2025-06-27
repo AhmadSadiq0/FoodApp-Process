@@ -170,14 +170,15 @@ const Header = (props) => {
 const styles = StyleSheet.create({
   // Light mode styles
   mainContainer: {
-    width: '100%'
+    width: '100%',
+   // paddingTop: 15,
   },
   container: {
     width: "100%",
     padding: 20,
     paddingBottom: 0,
     alignItems: "center",
-    paddingTop: 30,
+    //paddingTop: 30,
     backgroundColor: Back_Ground
   },
   profileContainer: {
@@ -346,4 +347,5 @@ const styles = StyleSheet.create({
     backgroundColor: THEME_TEXT_COLOR,
   },
 });
+
 export default Header;

@@ -11,7 +11,8 @@ import {
   DARK_GRAY,
   LIGHT_GRAY,
   ERROR_COLOR,
-  RED_COLOR
+  RED_COLOR,
+  DARK_THEME_BACKGROUND
 } from "../res/colors";
 import useThemeStore from "../../zustand/ThemeStore";
 
@@ -89,7 +90,7 @@ const PaymentComponent = React.forwardRef(({
           </Text>
           <Text style={[
             styles.optionSubtext,
-            finalDarkMode && styles.optionSubtextDark,
+            finalDarkMode ? { color: WHITE_COLOR } : {},
             selectedMethod?.name === item.name && styles.selectedSubtext
           ]}>
             {item.description || 'No additional fees'}
@@ -128,11 +129,16 @@ const PaymentComponent = React.forwardRef(({
           value={name}
           onChangeText={handleNameChange}
           placeholder="Enter name"
-          placeholderTextColor={finalDarkMode ? LIGHT_GRAY : GRAY_COLOR}
+          placeholderTextColor={finalDarkMode ? WHITE_COLOR : THEME_TEXT_COLOR}
           onBlur={validateName}
         />
         {nameError ? (
-          <Text style={styles.errorText}>{nameError}</Text>
+          <Text style={[
+  styles.errorText,
+  finalDarkMode && { color: WHITE_COLOR }
+]}>
+  {nameError}
+</Text>
         ) : null}
       </View>
       
@@ -142,6 +148,7 @@ const PaymentComponent = React.forwardRef(({
         renderItem={renderItem}
         keyExtractor={(item) => item.name}
         contentContainerStyle={styles.listContent}
+        
       />
     </View>
   );
@@ -183,7 +190,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   optionDark: {
-    backgroundColor: BLACK_COLOR,
+    backgroundColor: DARK_THEME_BACKGROUND,
     shadowColor: '#444',
   },
   selectedOption: {
@@ -255,7 +262,7 @@ const styles = StyleSheet.create({
     borderColor: THEME_COLOR,
   },
   nameInputDark: {
-     backgroundColor: '#2A2A2A',
+     backgroundColor: DARK_THEME_BACKGROUND,
     color: WHITE_COLOR,
   },
   errorInput: {
@@ -263,7 +270,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   errorText: {
-    color: RED_COLOR,
+     color: RED_COLOR,
     fontSize: 12,
     marginTop: 4,
   },

@@ -45,10 +45,50 @@ const useNotificationStore = create(
       },
 
       // Fetch all notifications for a user
-      fetchNotifications: async (userId) => {
+
+      // fetchNotifications: async () => {
+      //   set({ loading: true, error: null });
+      //   try {
+      //     const response = await fetchNotificationsService();
+      //     if (response.success) {
+      //       const notifications = response.data || [];
+      //       const unreadCount = notifications.reduce((count, notification) => {
+      //         const recipient = notification.recipients && notification.recipients[0];
+      //         return count + (recipient && !recipient.seen ? 1 : 0);
+      //       }, 0);
+            
+      //       set({ 
+      //         notifications: notifications,
+      //         unreadCount,
+      //         loading: false 
+      //       });
+      //     } else {
+      //       set({ 
+      //         notifications: [],
+      //         unreadCount: 0,
+      //         loading: false,
+      //         error: response.message 
+      //       });
+      //     }
+      //   } catch (error) {
+      //     set({ 
+      //       notifications: [],
+      //       unreadCount: 0,
+      //       loading: false,
+      //       error: error.message 
+      //     });
+      //   }
+      // },
+       // Fetch all notifications for a user
+      fetchNotifications: async (forceRefresh = false) => {
+        // If we already have notifications and not forcing refresh, don't show loading
+        if (get().notifications.length > 0 && !forceRefresh) {
+          return;
+        }
+
         set({ loading: true, error: null });
         try {
-          const response = await fetchNotificationsService(userId);
+          const response = await fetchNotificationsService();
           if (response.success) {
             const notifications = response.data || [];
             const unreadCount = notifications.reduce((count, notification) => {
@@ -63,16 +103,12 @@ const useNotificationStore = create(
             });
           } else {
             set({ 
-              notifications: [],
-              unreadCount: 0,
               loading: false,
               error: response.message 
             });
           }
         } catch (error) {
           set({ 
-            notifications: [],
-            unreadCount: 0,
             loading: false,
             error: error.message 
           });

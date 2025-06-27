@@ -3,7 +3,7 @@ import { StyleSheet, View, ActivityIndicator, Text, RefreshControl, StatusBar } 
 // Components
 import { OrderList } from "../../components";
 // Colors
-import { Back_Ground, THEME_COLOR, DARK_THEME_BACKGROUND } from "../../res/colors";
+import { Back_Ground, THEME_COLOR, DARK_THEME_BACKGROUND, BLACK_COLOR } from "../../res/colors";
 // Global State
 import useAuthStore from "../../store/AuthStore";
 import useUserOrderStore from "../../store/UserStore";
@@ -36,7 +36,7 @@ const OrdersScreen = () => {
 
   if (userOrders_loading && !refreshing) {
     return (
-      <View style={[styles.container, styles.center, { backgroundColor: darkMode ? DARK_THEME_BACKGROUND : Back_Ground }]}>
+      <View style={[styles.container, styles.center, { backgroundColor: darkMode ? BLACK_COLOR : Back_Ground }]}>
         <ActivityIndicator size="large" color={THEME_COLOR} />
       </View>
     );
@@ -44,7 +44,7 @@ const OrdersScreen = () => {
 
   if (userOrders_error) {
     return (
-      <View style={[styles.container, styles.center, { backgroundColor: darkMode ? DARK_THEME_BACKGROUND : Back_Ground }]}>
+      <View style={[styles.container, styles.center, { backgroundColor: darkMode ? BLACK_COLOR : Back_Ground }]}>
         <Text>Error loading orders: {userOrders_error}</Text>
       </View>
     );

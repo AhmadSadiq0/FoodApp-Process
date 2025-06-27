@@ -9,6 +9,7 @@ import {
   BLACK_COLOR,
   LIGHT_GRAY,
   DARK_GRAY,
+  DARK_THEME_BACKGROUND,
 } from "../res/colors";
 import useThemeStore from "../../zustand/ThemeStore";
 
@@ -32,16 +33,19 @@ const ConfirmOrderSummary = (props) => {
   const { darkMode: themeDarkMode } = useThemeStore();
   const finalDarkMode = darkMode || themeDarkMode;
 
-  const renderItemRow = (item, isExtra = false) => (
-    <View key={item._id} style={styles.itemRow}>
-      <Text style={[styles.itemText, finalDarkMode && styles.itemTextDark]}>
-        {item.quantity}x {item.name}
-      </Text>
-      <Text style={styles.itemPrice}>
-        Rs. {(item.price * item.quantity).toFixed(2)}
-      </Text>
-    </View>
-  );
+ const renderItemRow = (item, isExtra = false) => (
+  <View 
+    key={`${item._id || item.id || item.name}-${isExtra ? 'extra' : 'item'}`} 
+    style={styles.itemRow}
+  >
+    <Text style={[styles.itemText, finalDarkMode && styles.itemTextDark]}>
+      {item.quantity}x {item.name}
+    </Text>
+    <Text style={styles.itemPrice}>
+      Rs. {(item.price * item.quantity).toFixed(2)}
+    </Text>
+  </View>
+);
   const handleConfirmationPress = () => {
     if (orderType === 'delivery') {
       // Show alert only for delivery
@@ -53,19 +57,15 @@ const ConfirmOrderSummary = (props) => {
       if (
         !deliveryAddress?.street ||
         !deliveryAddress?.city ||
-        !deliveryAddress?.phone ||
-        !deliveryAddress?.instructions
+        !deliveryAddress?.phone
       ) {
-        alert('please save your address before confirming your order.');
+       // alert('please save your address before confirming your order.');
         return;
       }
     }
 
     onButtonPressed();
   };
-
-
-
   return (
     <ScrollView
       style={[styles.container, finalDarkMode && styles.containerDark]}
@@ -175,7 +175,7 @@ const ConfirmOrderSummary = (props) => {
 
       {/* Confirm Button */}
       <CustomButton
-        title="Confirm Orderr"
+        title="Confirm Order"
         textStyle={styles.buttonText}
         buttonStyle={[styles.button, isButtonDisabled && styles.disabledButton]}
         //onPress={onButtonPressed}
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   containerDark: {
-    backgroundColor: BLACK_COLOR,
+    backgroundColor: DARK_THEME_BACKGROUND,
   },
   scrollContent: {
     paddingBottom: 20,
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
   priceValue: {
     fontSize: 14,
     fontWeight: '500',
-    color: THEME_TEXT_COLOR,
+    color: THEME_COLOR,
   },
   totalRow: {
     marginTop: 10,

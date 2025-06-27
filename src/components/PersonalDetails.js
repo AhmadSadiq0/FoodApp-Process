@@ -13,6 +13,9 @@ import { CHEVRON_ICON } from '../res/drawables';
 import CustomButton from './CustomButtom';
 import useThemeStore from '../../zustand/ThemeStore';
 import useAuthStore from '../store/AuthStore';
+import TextInputProfile from './TextInputProfile';
+import useUpdateProfileStore from '../store/UpdateProfileStore';
+
 const items = [
   { name: 'Settings', screen: 'Settings' },
  // { name: 'Language', screen: 'LanguageSettings' },
@@ -22,11 +25,13 @@ const items = [
 const PersonalDetails = () => {
   const navigation = useNavigation();
   const { darkMode } = useThemeStore();
-  const { logout } = useAuthStore();
+  const { logout,user } = useAuthStore();
+  const { getUserData } = useUpdateProfileStore();
 
   const handleLogout = () => {
     logout();
   };
+
   return (
     <View style={[styles.wrapper, darkMode && styles.wrapperDark]}>
       <View style={[styles.card, darkMode && styles.cardDark]}>
@@ -53,8 +58,16 @@ const PersonalDetails = () => {
       </View>
 
       <View style={styles.logoutContainer}>
-      <CustomButton title="Logout" onPress={handleLogout} />
+        <CustomButton title="Logout" onPress={handleLogout} />
       </View>
+{/* 
+      <TextInputProfile
+        showEditIcon={showEditIcon}
+        showButton={true}
+        user={currentUserData}
+        onSave={handleUpdateProfile}
+        isUpdating={isUpdating}
+      /> */}
     </View>
   );
 };

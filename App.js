@@ -1,6 +1,9 @@
 import { useEffect } from "react";
+import { StyleSheet , View } from "react-native";
 import Navigation from "./src/navigation";
 import * as Notifications from 'expo-notifications';
+import { StatusBar } from "expo-status-bar";
+import { Back_Ground } from "./src/res/colors";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -13,6 +16,16 @@ Notifications.setNotificationHandler({
 
 export default function App() {
   return (
+    <View style={styles.container}>
+      <StatusBar style="light" backgroundColor={Back_Ground}/>
      <Navigation/> 
+     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+ //..  paddingTop:30,
+  },
+});

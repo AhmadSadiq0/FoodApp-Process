@@ -8,7 +8,7 @@ import {
 } from '../services/AuthServices';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { setAuthTokenInAxios } from '../utils/ManageAxios';
+import { removeAuthTokenFromAxios , setAuthTokenInAxios } from '../utils/ManageAxios';
 
 const initialState = {
   user: null,
@@ -61,6 +61,8 @@ const useAuthStore = create(
             throw new Error(userResponse.message || 'Failed to fetch user data');
           }
 
+          console.log("setting up user data" , userResponse.data.data)
+
           set({
             user: userResponse.data.data,
             loading: { ...get().loading, login: false },
@@ -107,7 +109,7 @@ const useAuthStore = create(
 
           set({ user: userResponse.data.data });
         } catch (error) {
-          set({ user: null, userTokensData: null });
+          set({ user: null, userTokensData: null,loading: initialState.loading });
           setAuthTokenInAxios(null);
         } finally {
           if (!silent) set({ loading: { ...get().loading, refresh: false } });
@@ -123,6 +125,7 @@ const useAuthStore = create(
           error: initialState.error
         });
         setAuthTokenInAxios(null);
+        removeAuthTokenFromAxios()
       },
 
       setHydrated: () => set({ isHydrated: true })
@@ -132,6 +135,7 @@ const useAuthStore = create(
       storage: createJSONStorage(() => AsyncStorage),
       onRehydrateStorage: () => async (state) => {
         state.isHydrated = false;
+        state.loading = initialState.loading;
         if (state.user && state.userTokensData) {
           setAuthTokenInAxios(state.userTokensData.accessToken);
           await state.refreshAccessToken(true); 

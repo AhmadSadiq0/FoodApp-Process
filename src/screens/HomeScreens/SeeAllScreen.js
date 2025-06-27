@@ -69,13 +69,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Back_Ground,
+   paddingTop: 15,
+    paddingHorizontal: 10,
   },
   containerDark: {
     backgroundColor: BLACK_COLOR,
   },
   headerRow: {
-    marginTop: 35,
-    paddingHorizontal: 15,
+   // paddingHorizontal: 15,
     paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',

@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { THEME_COLOR, WHITE_COLOR, GRAY_COLOR, LIGHT_GRAY, BLACK_COLOR } from '../res/colors';
+import { THEME_COLOR, WHITE_COLOR, GRAY_COLOR, LIGHT_GRAY, BLACK_COLOR, DARK_THEME_BACKGROUND } from '../res/colors';
 import QuantitySelector from './QuantitySelector';
 import useExtraStore from '../store/ExtrasStore';
 
@@ -12,7 +11,7 @@ const ExtrasItem = ({ extras, darkMode }) => {
   if (!extras?.length) return null;
 
   return (
-    <View style={styles.section}>
+    <View style={[styles.section, { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR }]}>
       <View style={styles.sectionHeader}>
         <Text style={[styles.sectionTitle, { color: darkMode ? WHITE_COLOR : THEME_COLOR }]}>
           Available Extras
@@ -32,12 +31,12 @@ const ExtrasItem = ({ extras, darkMode }) => {
             <View key={extra._id} style={[
               styles.extraItemContainer,
               isSelected && styles.extraItemSelected,
-              darkMode && styles.extraItemDark,
+              darkMode ? { backgroundColor: DARK_THEME_BACKGROUND, borderColor: GRAY_COLOR } : {},
             ]}>
               <TouchableOpacity 
                 activeOpacity={0.8}
                 onPress={() => toggleExtra(extra)}
-                style={styles.extraContent}
+                style={[styles.extraContent, darkMode ? { backgroundColor: DARK_THEME_BACKGROUND, borderRadius: 12, padding: 8 } : {}]}
               >
                 <Image 
                   source={{ uri: extra.image }} 
@@ -54,7 +53,7 @@ const ExtrasItem = ({ extras, darkMode }) => {
 
                 <Text style={[
                   styles.extraPrice,
-                  { color: THEME_COLOR }
+                  { color: darkMode ? WHITE_COLOR : THEME_COLOR }
                 ]}>
                   Rs. {extra.price.toFixed(0)}
                 </Text>

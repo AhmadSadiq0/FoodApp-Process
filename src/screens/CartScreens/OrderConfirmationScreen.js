@@ -3,7 +3,7 @@ import { StyleSheet, View, ScrollView, Alert, Text } from "react-native";
 import { Confirm_Order } from "../../res/drawables";
 import { ConfirmOrderSummary, DeliveryAddress, PaymentComponent, Header1, OrderTypeSelector, CustomButton } from "../../components";
 import { IMAGE25 } from "../../res/drawables";
-import { Back_Ground, WHITE_COLOR, BLACK_COLOR, THEME_COLOR } from "../../res/colors";
+import { Back_Ground, WHITE_COLOR, BLACK_COLOR, THEME_COLOR, DARK_THEME_BACKGROUND } from "../../res/colors";
 import useThemeStore from "../../../zustand/ThemeStore";
 import RBSheet from "react-native-raw-bottom-sheet";
 import useAuthStore from "../../store/AuthStore";
@@ -21,7 +21,7 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
   const { darkMode } = useThemeStore();
 
   const { selectedBranch } = useBranchStore();
-  const { createOrder, orders_loading, orders_error } = useOrderStore();
+   const { createOrder, orders_loading, orders_error } = useOrderStore();
   const { clearCart } = useCartStore();
 
   const [name, setName] = useState("")
@@ -114,7 +114,7 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
   const handleConfirmOrder = async () => {
     const isNameValid = paymentRef.current?.validateName?.();
     if (!isNameValid) {
-      Alert.alert("Validation Error", "Please enter your name");
+      Alert.alert("Validation Error", "The name is required to confirm the order.");
       return;
     }
 
@@ -182,13 +182,19 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
 
       <RBSheet
         ref={sheetRef}
-        height={550}
+        height={490}
         draggable={true}
         customStyles={{
           container: {
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
-            backgroundColor: darkMode ? '#1E1E1E' : WHITE_COLOR,
+            backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR,
+               ...(darkMode && { 
+                      borderTopWidth: 3,
+                      borderLeftWidth: 3,
+                      borderRightWidth: 3,
+                      borderColor: THEME_COLOR, 
+                    }),
           },
         }}
       >
@@ -218,8 +224,10 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
          )
        }
        <CustomButton
-         title="Confirm Order"
+         title="Confirm Orderr"
          onPress={() => sheetRef.current.open()}
+         buttonStyle={darkMode ? { backgroundColor: BLACK_COLOR } : {}}
+         textStyle={darkMode ? { color: WHITE_COLOR } : {}}
        />
      </View>
       )}
@@ -239,15 +247,15 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 16,
-    backgroundColor: 'rgba(255,255,255,0.9)',
+    // position: 'absolute',
+    // bottom: 0,
+    // left: 0,
+    // right: 0,
+    // padding: 16,
+   // backgroundColor: 'rgba(255,255,255,0.9)',
   },
   footerDark: {
-    backgroundColor: 'rgba(30,30,30,0.9)',
+    backgroundColor: BLACK_COLOR,
   },
   confirmButtonTextDark: {
     color: '#DDD',

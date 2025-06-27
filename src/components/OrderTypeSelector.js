@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     marginTop : 25
   },
   containerDark: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: BLACK_COLOR,
     shadowColor: '#444',
   },
   title: {

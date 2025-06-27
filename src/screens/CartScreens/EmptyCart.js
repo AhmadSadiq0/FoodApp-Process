@@ -1,7 +1,7 @@
 
 import { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated , Image } from 'react-native';
-import { SAD_ICON } from '../../res/drawables';
+import { SAD_ICON2 } from '../../res/drawables';
 import { THEME_COLOR, WHITE_COLOR, INPUT_BACK_COLOR, BLACK_COLOR } from '../../res/colors';
 import { CustomButton } from '../../components';
 import useThemeStore from '../../../zustand/ThemeStore';
@@ -35,7 +35,7 @@ const EmptyCart = ({ navigation }) => {
           { transform: [{ translateY: bounceAnim }] },
         ]}
       >
-        <Image source={SAD_ICON} style={styles.Image}/>
+        <Image source={SAD_ICON2} style={styles.Image}/>
       </Animated.View>
 
       <Text style={[styles.title, darkMode && styles.darkText]}>Your cart is empty</Text>
@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     resizeMode: "contain",
+    tintColor: THEME_COLOR,
   }
 });
 

@@ -66,8 +66,12 @@ const RBDelivered = ({ sheetRef, selectedOrder }) => {
       customStyles={{
         container: {
           ...dynamicStyles.container,
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
+         ...(darkMode && { // Only apply these borders when darkMode is true
+        borderTopWidth: 3,
+        borderLeftWidth: 3,
+        borderRightWidth: 3,
+        borderColor: THEME_COLOR, // Use white border in dark mode
+      }),
         },
         wrapper: {
           backgroundColor: "transparent",

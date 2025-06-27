@@ -5,7 +5,7 @@ import { CustomButton } from "../../components";
 //State Manage
 import useThemeStore from "../../../zustand/ThemeStore";
 //colors
-import { THEME_COLOR, GRAY_COLOR, WHITE_COLOR, THEME_TEXT_COLOR, Back_Ground, BLACK_COLOR, DARK_THEME_TEXT_COLOR } from "../../res/colors";
+import { THEME_COLOR, GRAY_COLOR, WHITE_COLOR, THEME_TEXT_COLOR, Back_Ground, BLACK_COLOR, DARK_THEME_TEXT_COLOR, DARK_THEME_BACKGROUND } from "../../res/colors";
 
 const SettingScreen = () => {
   const { darkMode, toggleDarkMode } = useThemeStore();
@@ -22,7 +22,7 @@ const SettingScreen = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: tempDarkMode ? BLACK_COLOR : Back_Ground }]}>
-      <View style={[styles.toggleContainer, { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR }]}>
+      <View style={[styles.toggleContainer, { backgroundColor: darkMode ? DARK_THEME_BACKGROUND: WHITE_COLOR }]}>
         <Text style={[styles.label, { color: dynamicTextColor }]}>Dark Mode</Text>
         <Switch
           trackColor={{ false: GRAY_COLOR, true: THEME_COLOR }}

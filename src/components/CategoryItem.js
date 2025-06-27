@@ -26,7 +26,7 @@ const CategoryItem = (props) => {
       <View style={styles.imageWrapper}>
         
         <Image
-          source={{ uri: item.image }}
+          source={item.image && typeof(item.image) == 'string' ? { uri: item.image } : item.image}
           style={styles.image}
           resizeMode="cover"
         />
