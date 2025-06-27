@@ -45,9 +45,8 @@ const CategoryList = ({ selectedCategory, onSelectCategory }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 16,
-    justifyContent: "center",
-    alignSelf: "center",
+    flex : 1,
+    paddingVertical: 16
   },
 });
 

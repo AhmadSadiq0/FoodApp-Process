@@ -224,9 +224,9 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
          )
        }
        <CustomButton
-         title="Confirm Orderr"
+         title="Confirm Order"
          onPress={() => sheetRef.current.open()}
-         buttonStyle={darkMode ? { backgroundColor: BLACK_COLOR } : {}}
+         style={darkMode ? { backgroundColor: BLACK_COLOR } : { width : '80%' }}
          textStyle={darkMode ? { color: WHITE_COLOR } : {}}
        />
      </View>

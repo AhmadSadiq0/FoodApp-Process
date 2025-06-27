@@ -26,20 +26,20 @@ const SignInScreen = ({navigation}) => {
   const { login, loading: { login: loginLoading }, error } = authStore();
 
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => setKeyboardVisible(true)
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => setKeyboardVisible(false)
-    );
-    return () => {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
-    };
-  }, []);
+  // useEffect(() => {
+  //   const keyboardDidShowListener = Keyboard.addListener(
+  //     'keyboardDidShow',
+  //     () => setKeyboardVisible(true)
+  //   );
+  //   const keyboardDidHideListener = Keyboard.addListener(
+  //     'keyboardDidHide',
+  //     () => setKeyboardVisible(false)
+  //   );
+  //   return () => {
+  //     keyboardDidHideListener.remove();
+  //     keyboardDidShowListener.remove();
+  //   };
+  // }, []);
 
   const handleSignIn = async (values) => {
     await login({
@@ -50,7 +50,7 @@ const SignInScreen = ({navigation}) => {
 
   return (
     <KeyboardAvoidingView 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} 
       style={styles.container}
     >
       <ScrollView 
@@ -75,18 +75,21 @@ const SignInScreen = ({navigation}) => {
                 <Text style={styles.text3}>Sign Up</Text>
               </Pressable>
             </View>
-            {!keyboardVisible ? (
-              <TouchableOpacity
-                style={styles.touchable1}
-                onPress={() => { alert('Go to Google'); }}
-              >
-                <Image
-                  source={Google_Icon}
-                  style={styles.Googleimage}
-                />
-                <Text style={styles.text2}>Sign In with Google</Text>
-              </TouchableOpacity>
-            ) : null}
+            <TouchableOpacity
+            style={[
+              styles.touchable1,
+              { 
+                opacity: keyboardVisible ? 0 : 1,
+                height: keyboardVisible ? 0 : 50,
+                marginVertical: keyboardVisible ? 0 : 10
+              }
+            ]}
+            disabled={keyboardVisible}
+            onPress={() => alert('Go to Google')}
+          >
+            <Image source={Google_Icon} style={styles.Googleimage} />
+            <Text style={styles.text2}>Sign In with Google</Text>
+          </TouchableOpacity>
           </View>
 
           <View style={styles.dividerContainer}>
@@ -155,7 +158,7 @@ const SignInScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BACK_GROUND,
+    backgroundColor: WHITE_COLOR,
   },
   scrollContainer: {
     flexGrow: 1,
@@ -174,6 +177,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE_COLOR,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
+    paddingBottom: Platform.OS === 'android' ? 25 : 0
   },
   cardTier1: {
     width: '100%',

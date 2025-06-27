@@ -53,19 +53,19 @@ const OrdersScreen = () => {
   // Transform the API data into the format your component expects
   const transformOrder = (order) => ({
     ...order,
-    orderId: order.orderNumber,
-    itemName: order.items.map(item => item.name).join(", "),
-    price: `Rs. ${order.totalAmount.toFixed(2)}/-`,
-    status: order.status,
-    deliveredOn: new Date(order.updatedAt).toLocaleString(),
+    orderId: order?.orderNumber || "Unknown",
+    itemName: order?.items?.map(item => item.name).join(", "),
+    price: `Rs. ${order?.totalAmount?.toFixed(2)}/-`,
+    status: order?.status || "pending",
+    deliveredOn: new Date(order?.updatedAt).toLocaleString(),
   });
 
   const inProgressOrders = userOrders
-    .filter(order => ["pending", "preparing", "out_for_delivery", "confirmed", "ready"].includes(order.status))
+    .filter(order => ["pending", "preparing", "out_for_delivery", "confirmed", "ready"].includes(order?.status || "pending"))
     .map(transformOrder);
 
   const orderHistory = userOrders
-    .filter(order => ["delivered", "cancelled"].includes(order.status))
+    .filter(order => ["delivered", "cancelled"].includes(order?.status || "pending"))
     .map(transformOrder);
 
   const sections = [];

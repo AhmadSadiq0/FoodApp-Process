@@ -7,15 +7,15 @@ import {
   ScrollView,
   TouchableOpacity,
   Animated,
-   Platform,
+  Platform,
 } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { BURGERIMG, BACK_ICON } from "../../res/drawables";
 import {
   THEME_COLOR,
   WHITE_COLOR,
-GRAY_COLOR,
-INPUT_BACK_COLOR,
+  GRAY_COLOR,
+  INPUT_BACK_COLOR,
   BLACK_COLOR,
   LIGHT_GRAY,
   THEME_TEXT_COLOR,
@@ -49,11 +49,11 @@ const ItemDetailScreen = ({ navigation, route }) => {
   const { selectedBranch } = useBranchStore();
   const successSheetRef = useRef();
   const checkmarkScale = useRef(new Animated.Value(0)).current;
-  const { 
-    selectedExtras, 
-    toggleExtra, 
+  const {
+    selectedExtras,
+    toggleExtra,
     updateExtraQuantity,
-    clearSelectedExtras 
+    clearSelectedExtras
   } = useExtraStore();
 
   useEffect(() => {
@@ -67,19 +67,19 @@ const ItemDetailScreen = ({ navigation, route }) => {
   }, [selectedExtras]);
 
   useEffect(() => {
-      clearSelectedExtras();
+    clearSelectedExtras();
   }, []);
 
   const handleViewCart = () => {
     successSheetRef.current.close();
-    navigation.navigate('Main', { 
+    navigation.navigate('Main', {
       screen: 'Cart',
-      params: { 
-        screen: 'Cart' 
+      params: {
+        screen: 'Cart'
       }
     });
   };
- 
+
   const getSelectedVariant = () => variants.find(v => v.name === selectedSize) || variants[0];
   const getAdjustedPrice = () => {
     const variant = getSelectedVariant();
@@ -88,7 +88,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
 
     return variant ? ((variant.price + toppingsPrice + extrasPrice) * quantity).toFixed(2) : 0;
   };
-  
+
   const handleSizeSelection = (size) => {
     setSelectedSize(size);
   };
@@ -137,15 +137,15 @@ const ItemDetailScreen = ({ navigation, route }) => {
       image,
       price: getAdjustedPrice(),
       size: variant.name,
-      variant : getSelectedVariant(),
+      variant: getSelectedVariant(),
       quantity,
       toppings: selectedToppings,
-      extras: selectedExtras.map(extra => ({ 
+      extras: selectedExtras.map(extra => ({
         ...extra,
-        quantity: extra.quantity || 1 
+        quantity: extra.quantity || 1
       })),
-      categoryId : item.categoryId._id,
-      categoryName : item.categoryName,
+      categoryId: item.categoryId._id,
+      categoryName: item.categoryName,
       specifications: variant.specifications,
       serving: `${variant.name} size`,
       itemId: item._id,
@@ -169,7 +169,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
         </View>
         <View style={[
           styles.nutritionContainer,
-          { 
+          {
             backgroundColor: darkMode ? DARK_THEME_BACKGROUND : INPUT_BACK_COLOR,
             borderColor: darkMode ? GRAY_COLOR : LIGHT_GRAY
           }
@@ -242,18 +242,18 @@ const ItemDetailScreen = ({ navigation, route }) => {
         </View>
 
         <View style={styles.contentContainer}>
-             <View style={styles.header}>
+          <View style={styles.header}>
             <Text style={[styles.name, { color: darkMode ? WHITE_COLOR : BLACK_COLOR }]}>
               {name}
-            </Text> 
-             <Text style={[styles.price, { color: THEME_COLOR }]}>
+            </Text>
+            <Text style={[styles.price, { color: THEME_COLOR }]}>
               Rs. {getSelectedVariant()?.price || 0}
             </Text>
-          </View> 
-           <Text style={[styles.description, { color: darkMode ? GRAY_COLOR : THEME_TEXT_COLOR }]}>
+          </View>
+          <Text style={[styles.description, { color: darkMode ? GRAY_COLOR : THEME_TEXT_COLOR }]}>
             {description}
           </Text>
-          
+
           {variants?.length > 0 && (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
@@ -269,11 +269,11 @@ const ItemDetailScreen = ({ navigation, route }) => {
                       styles.sizeOption,
                       selectedSize === variant.name && styles.sizeOptionSelected,
                       {
-                        backgroundColor: selectedSize === variant.name 
-                          ? THEME_COLOR 
+                        backgroundColor: selectedSize === variant.name
+                          ? THEME_COLOR
                           : (darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR),
-                        borderColor: selectedSize === variant.name 
-                          ? THEME_COLOR 
+                        borderColor: selectedSize === variant.name
+                          ? THEME_COLOR
                           : (darkMode ? GRAY_COLOR : LIGHT_GRAY)
                       }
                     ]}
@@ -282,16 +282,16 @@ const ItemDetailScreen = ({ navigation, route }) => {
                   >
                     <Text style={[
                       styles.sizeLabel,
-                      { 
-                        color: selectedSize === variant.name ? WHITE_COLOR : (darkMode ? WHITE_COLOR : BLACK_COLOR) 
+                      {
+                        color: selectedSize === variant.name ? WHITE_COLOR : (darkMode ? WHITE_COLOR : BLACK_COLOR)
                       }
                     ]}>
                       {variant.name}
                     </Text>
                     <Text style={[
                       styles.sizePrice,
-                      { 
-                        color: selectedSize === variant.name ? WHITE_COLOR : (darkMode ? GRAY_COLOR : THEME_TEXT_COLOR) 
+                      {
+                        color: selectedSize === variant.name ? WHITE_COLOR : (darkMode ? GRAY_COLOR : THEME_TEXT_COLOR)
                       }
                     ]}>
                       Rs. {variant.price}
@@ -313,23 +313,22 @@ const ItemDetailScreen = ({ navigation, route }) => {
         backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
         borderTopColor: darkMode ? GRAY_COLOR : LIGHT_GRAY
       }]}>
-        <View style={styles.footerContent}> 
-          <QuantitySelector
+        <View style={styles.footerContent}>
+          <View style = {{flex : 1, flexDirection : 'column' , gap : 10}}>
+
+          <View style={styles.priceSummary}>
+            <Text style={[styles.totalPrice, { color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR }]}>
+              Total Rs. {getAdjustedPrice()}
+            </Text>
+          </View>
+           <QuantitySelector
             quantity={quantity}
             onIncrement={handleIncrement}
             onDecrement={handleDecrement}
             darkMode={darkMode}
           />
-          
-          <View style={styles.priceSummary}>
-            <Text style={[styles.totalLabel, { color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR }]}>
-              Total
-            </Text>
-            <Text style={[styles.totalPrice, { color: THEME_COLOR }]}>
-              Rs. {getAdjustedPrice()}
-            </Text>
           </View>
-          
+
           <CustomButton
             title="Add to Cart"
             onPress={handleAddCart}
@@ -348,15 +347,15 @@ const ItemDetailScreen = ({ navigation, route }) => {
           container: [
             styles.successSheet,
             {
-              backgroundColor: darkMode ?  DARK_THEME_BACKGROUND : WHITE_COLOR,
+              backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR,
               borderTopLeftRadius: 24,
               borderTopRightRadius: 24,
- ...(darkMode && { 
-        borderTopWidth: 3,
-        borderLeftWidth: 3,
-        borderRightWidth: 3,
-        borderColor: THEME_COLOR, 
-      }),
+              ...(darkMode && {
+                borderTopWidth: 3,
+                borderLeftWidth: 3,
+                borderRightWidth: 3,
+                borderColor: THEME_COLOR,
+              }),
             }
           ],
           draggableIcon: {
@@ -402,7 +401,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE_COLOR,
   },
   scrollContent: {
-    paddingBottom: 100, 
+    paddingBottom: 100,
   },
   imageContainer: {
     height: 250,
@@ -474,7 +473,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 5,
     minWidth: 100,
-    backgroundColor:THEME_COLOR,
+    backgroundColor: THEME_COLOR,
   },
   sizeOptionSelected: {
     borderColor: THEME_COLOR,
@@ -489,7 +488,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 3,
   },
-  
+
   toppingsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -501,7 +500,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 15,
-     paddingBottom: Platform.OS === 'ios' ? 25 : 20,
+    paddingBottom: Platform.OS === 'ios' ? 25 : 20,
     paddingBottom: 20,
     borderTopWidth: 1,
   },
@@ -511,8 +510,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   priceSummary: {
-    flex: 1,
-    marginHorizontal: 15,
+    flex: 1
   },
   totalLabel: {
     fontSize: 12,
@@ -521,6 +519,7 @@ const styles = StyleSheet.create({
   totalPrice: {
     fontSize: 18,
     fontWeight: 'bold',
+    alignSelf : 'flex-start'
   },
   addToCartButton: {
     flex: 1,
@@ -563,7 +562,7 @@ const styles = StyleSheet.create({
   viewCartText: {
     fontSize: 14,
   },
- 
+
 });
 
 export default ItemDetailScreen; 
