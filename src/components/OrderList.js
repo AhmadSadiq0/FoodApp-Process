@@ -23,9 +23,7 @@ import {
 import RBOrderSheet from "./RBOrderSheet";
 //zustand
 import useThemeStore from "../../zustand/ThemeStore";
-import { SAD_ICON } from "../res/drawables";
-
-
+import {SAD_ICON2 } from "../res/drawables";
 
 const OrderList = ({ sections: initialSections, refreshControl }) => {
   const { darkMode } = useThemeStore();
@@ -57,13 +55,22 @@ const OrderList = ({ sections: initialSections, refreshControl }) => {
     </Text>
   );
   return (
-    <View style={[styles.container, { backgroundColor: darkMode ? DARK_THEME_BACKGROUND : Back_Ground }]}>
+    <View style={[styles.container, { backgroundColor: darkMode ? BLACK_COLOR : Back_Ground }]}>
       {
         sections.length == 0 && (
           <View style={styles.emptyContainer}>
-            <Image source={SAD_ICON} style = {styles.Image} />
-            <Text style={[styles.emptyText, { color: darkMode ? DARK_THEME_TEXT_COLOR : THEME_COLOR }]}>
-              You have no orders yet
+            <Image source={SAD_ICON2} style={styles.Image} />
+            <Text style={[
+              styles.emptyText,
+              {
+                color: darkMode ? DARK_THEME_TEXT_COLOR : THEME_COLOR,
+                fontWeight: 'bold',
+                fontSize: 18,
+                marginTop: 22,
+                textAlign: 'center',
+              },
+            ]}>
+              You have no orders yet.
             </Text>
           </View>
         )
@@ -97,7 +104,7 @@ const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
         {
           borderColor: isSelected ? THEME_COLOR : GRAY_COLOR,
           borderWidth: isSelected ? 2 : 1,
-          backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR,
+          backgroundColor: darkMode ? DARK_THEME_BACKGROUND: WHITE_COLOR,
         },
       ]}
     >
@@ -111,7 +118,7 @@ const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
         <Text style={[styles.price, { color: darkMode ? THEME_COLOR : THEME_COLOR }]}>
           {order.price}
         </Text>
-      </View>
+       </View>
       <View style={styles.statusContainer}>
         <Text
           style={[
@@ -132,7 +139,7 @@ const OrderCard = ({ order, onPress, isSelected, darkMode }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 25
+    //paddingTop: 25
   },
   sectionListContainer: {
     paddingHorizontal: 16,
@@ -201,15 +208,19 @@ const styles = StyleSheet.create({
   emptyContainer: {
     flex: 1,
     alignSelf: 'center',
-    justifyContent: 'flex-end'
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
   },
   emptyText: {
-    fontSize : 14,
+    fontSize: 14,
+    // fontWeight and fontSize will be overridden inline for bold and larger text
   },
   Image : {
     width : 120,
     height : 120,
-    resizeMode : "contain"
+    resizeMode : "contain",
+    tintColor: THEME_COLOR,
   }
 });
 

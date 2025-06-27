@@ -170,7 +170,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
         <View style={[
           styles.nutritionContainer,
           { 
-            backgroundColor: darkMode ? BLACK_COLOR : INPUT_BACK_COLOR,
+            backgroundColor: darkMode ? DARK_THEME_BACKGROUND : INPUT_BACK_COLOR,
             borderColor: darkMode ? GRAY_COLOR : LIGHT_GRAY
           }
         ]}>
@@ -220,7 +220,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
   return (
     <>
       <ScrollView
-        style={[styles.container, { backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR }]}
+        style={[styles.container, { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR }]}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
@@ -271,7 +271,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
                       {
                         backgroundColor: selectedSize === variant.name 
                           ? THEME_COLOR 
-                          : (darkMode ? BLACK_COLOR : WHITE_COLOR),
+                          : (darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR),
                         borderColor: selectedSize === variant.name 
                           ? THEME_COLOR 
                           : (darkMode ? GRAY_COLOR : LIGHT_GRAY)
@@ -348,9 +348,15 @@ const ItemDetailScreen = ({ navigation, route }) => {
           container: [
             styles.successSheet,
             {
-              backgroundColor: darkMode ?  BLACK_COLOR : WHITE_COLOR,
+              backgroundColor: darkMode ?  DARK_THEME_BACKGROUND : WHITE_COLOR,
               borderTopLeftRadius: 24,
-              borderTopRightRadius: 24
+              borderTopRightRadius: 24,
+ ...(darkMode && { 
+        borderTopWidth: 3,
+        borderLeftWidth: 3,
+        borderRightWidth: 3,
+        borderColor: THEME_COLOR, 
+      }),
             }
           ],
           draggableIcon: {
@@ -370,7 +376,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
               style={styles.lottieCheckmark}
             />
           </Animated.View>
-          <Text style={[styles.successTitle, { color: darkMode ? WHITE_COLOR : BLACK_COLOR }]}>
+          <Text style={[styles.successTitle, { color: darkMode ? WHITE_COLOR : DARK_THEME_BACKGROUND }]}>
             Added to Your Cart!
           </Text>
           <Text style={[styles.successMessage, { color: darkMode ? GRAY_COLOR : THEME_TEXT_COLOR }]}>

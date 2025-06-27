@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { THEME_COLOR, WHITE_COLOR, BLACK_COLOR, LIGHT_GRAY, GRAY_COLOR } from '../res/colors';
+import { THEME_COLOR, WHITE_COLOR, BLACK_COLOR, LIGHT_GRAY, GRAY_COLOR, DARK_THEME_BACKGROUND } from '../res/colors';
 
 const ToppingItem = ({ topping, isSelected, darkMode, onToggle, fullWidth }) => (
   <TouchableOpacity
@@ -10,7 +10,7 @@ const ToppingItem = ({ topping, isSelected, darkMode, onToggle, fullWidth }) => 
       isSelected && styles.toppingItemSelected,
       fullWidth && styles.fullWidthTopping,
       {
-        backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : WHITE_COLOR,
+        backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR,
         borderColor: isSelected ? THEME_COLOR : (darkMode ? GRAY_COLOR : LIGHT_GRAY),
       }
     ]}

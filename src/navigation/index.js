@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Image, StyleSheet, Pressable,Platform  } from 'react-native';
+import { Text, View, Image, StyleSheet, Pressable, Platform, Keyboard } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -112,42 +112,29 @@ const MenuStack = () => {
 // Cart Stack
 const CartStack = () => {
   const { user } = authStore();
-   const {items} =useCartStore();
+  const {items} = useCartStore();
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen
-            name="Cart"
-            component={CartScreen}
-            options={({ navigation }) => ({
-              // header: () => (
-              //   <Header
-              //     navigation={navigation}
-              //     user={user}
-              //     showBellIcon={false}
-              //   />
-              // ),
-              headerShown: false,
-            })}
-          />
-          <Stack.Screen name="CheckOut" component={CheckOutScreen} />
-          <Stack.Screen
-            name="ConfirmOrder"
-            component={OrderConfirmationScreen}
-            options={{
-              // header: () => (
-              //   <Header1
-              //     title="Order Confirmation"
-              //     discountIcon={false}
-              //     style={styles.header}
-              //   />
-              // ),
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen name="ConfirmedOrder" component={ConfirmedOrder} />
+      <Stack.Screen
+        name="Cart"
+        component={CartScreen}
+        options={({ navigation }) => ({
+          headerShown: false,
+        })}
+      />
+      <Stack.Screen name="CheckOut" component={CheckOutScreen} />
+      <Stack.Screen
+        name="ConfirmOrder"
+        component={OrderConfirmationScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen name="ConfirmedOrder" component={ConfirmedOrder} />
     </Stack.Navigator>
   );
 };
+
 // Orders Stack
 const OrdersStack = () => {
   const { user } = authStore();
@@ -157,17 +144,6 @@ const OrdersStack = () => {
         name="Orders"
         component={OrdersScreen}
         options={{
-          // header: () => (
-          //   <Header
-          //     title="My Orders"
-          //     Welcomermsg=""
-          //     showSearch={false}
-          //     containerStyle={{ height: 190 }}
-          //     textContainer={{ marginTop: 0 }}
-          //     user={user}
-          //     showBellIcon={false}
-          //   />
-          // ),
           headerShown: false,
         }}
       />
@@ -184,7 +160,6 @@ const ProfileStack = () => (
       name="Settings"
       component={SettingsScreen}
       options={({ navigation }) => ({ 
-      //   header: () => <Header1 discountIcon={null} title="Settings" />,
         headerShown: false,
       })}
     />
@@ -192,123 +167,152 @@ const ProfileStack = () => (
       name="LanguageSettings"
       component={LanguageSettingsScreen}
       options={{
-      //   header: () => <Header1 discountIcon={null} title="Language Settings" />,
         headerShown: false,
       }}
     />
   </Stack.Navigator>
 );
 
-// Bottom Tab Navigator
-const BottomTabStack = () => (
-  <Tab.Navigator
-    initialRouteName="Home"
-    screenOptions={{
-      tabBarStyle: {
-        backgroundColor: THEME_COLOR,
-         height: Platform.OS === 'ios' ? 80 : 60,
-      },
-      tabBarLabelStyle: {
-        fontSize: 12,
-        fontWeight: 'bold',
-      },
-      headerPressColor: 'transparent',
-      tabBarButton: (props) => (
-        <Pressable
-          {...props}
-          android_ripple={{ borderless: false, color: 'transparent' }}
-          style={({ pressed }) => [props.style, { opacity: pressed ? 0.7 : 1 }]}
-        />
-      ),
-    }}
-  >
-    <Tab.Screen
-      name="Home"
-      component={HomeStack}
-      options={{
-        tabBarLabel: ({ focused }) =>
-          focused ? <Text style={styles.text}>Home</Text> : null,
-        headerShown: false,
-        tabBarIcon: ({ focused }) => (
-          <View style={focused ? styles.activeTab : styles.inactiveTab}>
-            <Image style={styles.image} source={HOME_ICON} />
-          </View>
+// Bottom Tab Navigator with Keyboard Handling
+const BottomTabStack = () => {
+  const [keyboardVisible, setKeyboardVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  return (
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: THEME_COLOR,
+          height: Platform.OS === 'ios' ? 80 : 60,
+          display: keyboardVisible ? 'none' : 'flex',
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: 'bold',
+        },
+        headerPressColor: 'transparent',
+        tabBarButton: (props) => (
+          <Pressable
+            {...props}
+            android_ripple={{ borderless: false, color: 'transparent' }}
+            style={({ pressed }) => [props.style, { opacity: pressed ? 0.7 : 1 }]}
+          />
         ),
       }}
-    />
-    <Tab.Screen
-      name="Menu"
-      component={MenuStack}
-      options={{
-        tabBarLabel: ({ focused }) =>
-          focused ? <Text style={styles.text}>Menu</Text> : null,
-        headerShown: false,
-        tabBarIcon: ({ focused }) => (
-          <View style={focused ? styles.activeTab : styles.inactiveTab}>
-            <Image style={styles.image} source={MENU_ICON} />
-          </View>
-        ),
-      }}
-    />
-    <Tab.Screen
-      name="Cart"
-      component={CartStack}
-      options={{
-        tabBarLabel: ({ focused }) =>
-          focused ? <Text style={styles.text}>Cart</Text> : null,
-        headerShown: false,
-        tabBarIcon: ({ focused }) => (
-          <View style={focused ? styles.activeTab : styles.inactiveTab}>
-            <Image style={styles.image} source={CART_ICON} />
-          </View>
-        ),
-      }}
-    />
-    <Tab.Screen
-      name="Orders"
-      component={OrdersStack}
-      options={{
-        tabBarLabel: ({ focused }) =>
-          focused ? <Text style={styles.text}>Orders</Text> : null,
-        headerShown: false,
-        tabBarIcon: ({ focused }) => (
-          <View style={focused ? styles.activeTab : styles.inactiveTab}>
-            <Image style={styles.image} source={ORDERS_ICON} />
-          </View>
-        ),
-      }}
-    />
-    <Tab.Screen
-      name="Profile"
-      component={ProfileStack}
-      options={{
-        tabBarLabel: ({ focused }) =>
-          focused ? <Text style={styles.text}>Profile</Text> : null,
-        headerShown: false,
-        tabBarIcon: ({ focused }) => (
-          <View style={focused ? styles.activeTab : styles.inactiveTab}>
-            <Image style={styles.image} source={PROFILE_ICON} />
-          </View>
-        ),
-      }}
+    >
+      <Tab.Screen
+        name="Home"
+        component={HomeStack}
+        options={{
+          tabBarLabel: ({ focused }) =>
+            focused ? <Text style={styles.text}>Home</Text> : null,
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <View style={focused ? styles.activeTab : styles.inactiveTab}>
+              <Image style={styles.image} source={HOME_ICON} />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Menu"
+        component={MenuStack}
+        options={{
+          tabBarLabel: ({ focused }) =>
+            focused ? <Text style={styles.text}>Menu</Text> : null,
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <View style={focused ? styles.activeTab : styles.inactiveTab}>
+              <Image style={styles.image} source={MENU_ICON} />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Cart"
+        component={CartStack}
+        options={{
+          tabBarLabel: ({ focused }) =>
+            focused ? <Text style={styles.text}>Cart</Text> : null,
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <View style={focused ? styles.activeTab : styles.inactiveTab}>
+              <Image style={styles.image} source={CART_ICON} />
+            </View>
+          ),
+        }}
         listeners={({ navigation }) => ({
-          tabPress: () => {
-            // Reset the Profile stack when tab is pressed
-            navigation.navigate('Profile');
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate('Cart', { screen: 'Cart' });
           },
         })}
-    />
-  </Tab.Navigator>
-);
+      />
+      <Tab.Screen
+        name="Order"
+        component={OrdersStack}
+        options={{
+          tabBarLabel: ({ focused }) =>
+            focused ? <Text style={styles.text}>Orders</Text> : null,
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <View style={focused ? styles.activeTab : styles.inactiveTab}>
+              <Image style={styles.image} source={ORDERS_ICON} />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileStack}
+        options={{
+          tabBarLabel: ({ focused }) =>
+            focused ? <Text style={styles.text}>Profile</Text> : null,
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <View style={focused ? styles.activeTab : styles.inactiveTab}>
+              <Image style={styles.image} source={PROFILE_ICON} />
+            </View>
+          ),
+        }}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate('Profile', { screen: 'Profile' });
+          },
+        })}
+      />
+    </Tab.Navigator>
+  );
+};
+
 // Main Navigation Component
 const Navigation = () => {
-  const { user , isHydrated } = authStore();
-  if(!isHydrated){
-    return(
-      <SplashScreen/>
-    )
-  }
+  const { user, isHydrated } = authStore();
 
+  if (!isHydrated) {
+    return <SplashScreen />;
+  }
   return (
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
@@ -319,7 +323,6 @@ const Navigation = () => {
               name="Notifications"
               component={NotificationsScreen}
               options={{
-                // header: () => <Header1 discountIcon={null} title="Notifications" />,
                 headerShown: false,
               }}
             />
@@ -344,7 +347,7 @@ const styles = StyleSheet.create({
   inactiveTab: {
     height: 40,
     width: 40,
-    marginTop : 5,
+    marginTop: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -352,7 +355,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     resizeMode: 'contain',
-    tintColor : WHITE_COLOR
+    tintColor: WHITE_COLOR,
   },
   text: {
     fontSize: 10,

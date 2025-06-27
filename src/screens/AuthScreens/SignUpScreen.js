@@ -89,7 +89,6 @@ const SignUpScreen = ({ navigation }) => {
       setErrorMessage('An unexpected error occurred. Please try again later.');
     }
   };
-
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView

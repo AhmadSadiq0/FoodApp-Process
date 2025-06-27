@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const axiosInstance = axios.create({
     baseURL: 'https://foodapp-process-backend.onrender.com',
     headers: {
@@ -7,8 +8,16 @@ const axiosInstance = axios.create({
         'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
     },
 });
+
+let interceptorId = null;
+
 export const setAuthTokenInAxios = (token) => {
-    axiosInstance.interceptors.request.use(
+    // Remove existing interceptor if already set
+    if (interceptorId !== null) {
+        axiosInstance.interceptors.request.eject(interceptorId);
+    }
+
+    interceptorId = axiosInstance.interceptors.request.use(
         (config) => {
             if (token) {
                 config.headers.Authorization = `Bearer ${token}`;
@@ -22,4 +31,13 @@ export const setAuthTokenInAxios = (token) => {
         }
     );
 };
+
+export const removeAuthTokenFromAxios = () => {
+    if (interceptorId !== null) {
+        axiosInstance.interceptors.request.eject(interceptorId);
+        interceptorId = null;
+        console.log("Authorization token removed from axiosInstance");
+    }
+};
+
 export default axiosInstance;

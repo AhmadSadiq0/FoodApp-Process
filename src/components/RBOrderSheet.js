@@ -13,6 +13,7 @@ import {
   BLACK_COLOR,
   DARK_GREEN,
   THEME_TEXT_COLOR,
+  DARK_THEME_BACKGROUND,
 } from "../res/colors";
 import CustomButton from "./CustomButtom";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -81,7 +82,7 @@ const RBOrderSheet = ({ sheetRef, selectedOrder }) => {
     Object.keys(statusConfig).indexOf(status);
 
   const dynamicStyles = {
-    container: { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR },
+    container: { backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR },
     text: { color: darkMode ? WHITE_COLOR : "#2D3748" },
     label: { color: darkMode ? WHITE_COLOR : THEME_COLOR },
     card: { backgroundColor: darkMode ? DARK_BACKGROUND : "#F7FAFC" },
@@ -127,9 +128,14 @@ const RBOrderSheet = ({ sheetRef, selectedOrder }) => {
               )}
             </Text>
             {statusEntry && (
-              <Text style={[styles.statusTime, { color: THEME_TEXT_COLOR }]}>
-                {new Date(statusEntry.timestamp).toLocaleString()}
-              </Text>
+              <Text
+  style={[
+    styles.statusTime,
+    { color: darkMode ? WHITE_COLOR : BLACK_COLOR }
+  ]}
+>
+  {new Date(statusEntry.timestamp).toLocaleString()}
+</Text>
             )}
           </View>
         </View>
@@ -153,12 +159,12 @@ const RBOrderSheet = ({ sheetRef, selectedOrder }) => {
         <Text style={[styles.itemPrice, dynamicStyles.text]}>
           Rs. {item.totalPrice.toFixed(2)}
         </Text>
-        <Text style={styles.itemQuantity}>x{item.quantity}</Text>
+        <Text style={[styles.itemQuantity,{color : darkMode ? WHITE_COLOR : THEME_COLOR}]}>x{item.quantity}</Text>
       </View>
       {item.variant && (
-        <Text style={[styles.itemVariant, { color: THEME_TEXT_COLOR }]}>
-          Variant: {item.variant.name}
-        </Text>
+        <Text style={[styles.itemVariant, { color: darkMode ? WHITE_COLOR : THEME_COLOR }]}>
+  Variant: {item.variant.name}
+</Text>
       )}
     </View>
   );
@@ -172,13 +178,12 @@ const RBOrderSheet = ({ sheetRef, selectedOrder }) => {
         </Text>
       </View>
       <View style={styles.extraDetails}>
-        <Text style={[styles.extraQuantity, { color: THEME_TEXT_COLOR }]}>
+        <Text style={[styles.extraQuantity, { color: Green_Color}]}>
           {item.quantity} x Rs. {item.price.toFixed(2)}
         </Text>
       </View>
     </View>
   );
-
 
   return (
     <RBSheet
@@ -190,6 +195,12 @@ const RBOrderSheet = ({ sheetRef, selectedOrder }) => {
           ...dynamicStyles.container,
           borderTopLeftRadius: 24,
           borderTopRightRadius: 24,
+           ...(darkMode && { 
+                  borderTopWidth: 3,
+                  borderLeftWidth: 3,
+                  borderRightWidth: 3,
+                  borderColor: THEME_COLOR, 
+                }),
         },
         draggableIcon: { backgroundColor: GRAY_COLOR, width: 40 },
       }}

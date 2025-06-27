@@ -22,7 +22,9 @@ import { SignInValidationSchema } from '../../utils/ValidationSchema';
 
 const SignInScreen = ({navigation}) => {
   const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const { login, loading, error } = authStore()
+  // const { login, loading, error } = authStore()
+  const { login, loading: { login: loginLoading }, error } = authStore();
+
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -139,7 +141,8 @@ const SignInScreen = ({navigation}) => {
                 <CustomButton
                   title={"Sign In"}
                   onPress={handleSubmit}
-                  loading={loading.login}
+                  // loading={loading.login}
+                   loading={loginLoading}
                 />
               </View>
             )}

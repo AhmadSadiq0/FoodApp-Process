@@ -2,7 +2,6 @@
 // This file manages exporting image assets as constants and other drawable resources.
 
 const PATH = '../../assets'
-
 //Navigation Icons
 export const HOME_ICON = require(`${PATH}/icons/homeIcon.png`);
 export const MENU_ICON = require(`${PATH}/icons/menuIcon.png`);
@@ -39,6 +38,7 @@ export const SECONDARY_PROFILE_AVATAR = require(`${PATH}/icons/profileAvatar.png
 //utils Icon
 export const BACK_ICON  = require(`${PATH}/icons/backIcon.png`)
 export const CHEVRON_ICON = require(`${PATH}/icons/ChevronRightIcon1.png`)
-//empty Screen Icons
 export const SAD_ICON = require(`${PATH}/icons/sad_emoji.png`)
-
+export const TEAR_ICON =require(`${PATH}/icons/TearIcon.png`)
+export const FOOD_DOME_ICON = require(`${PATH}/icons/AllItem1.png`)
+export const SAD_ICON2= require(`${PATH}/icons/SadIcon2.png`)

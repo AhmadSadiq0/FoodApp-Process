@@ -14,6 +14,7 @@ import {
   BLACK_COLOR,
   WHITE_COLOR,
   Back_Ground,
+  DARK_THEME_BACKGROUND,
 } from "../res/colors";
 import useThemeStore from "../../zustand/ThemeStore";
 
@@ -23,7 +24,7 @@ const BurgerCardHorizantol = (props) => {
   const { name, price, image, onAdd, description } = props
   const { darkMode } = useThemeStore();
 
-  const backgroundColor = darkMode ? "rgba(20, 20, 20, 0.7)" : WHITE_COLOR;
+  const backgroundColor = darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR;
   const textColor = darkMode ? WHITE_COLOR : BLACK_COLOR;
 
   return (

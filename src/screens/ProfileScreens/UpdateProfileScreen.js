@@ -1,8 +1,8 @@
 // UpdateProfileScreen.js
 import React, { useEffect , useState} from "react";
-import { View, ScrollView, StyleSheet, Text } from "react-native";
+import { View, ScrollView, StyleSheet, Text, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { TextInputProfile } from "../../components";
-import { Back_Ground, DARK_THEME_BACKGROUND } from "../../res/colors";
+import { Back_Ground, BLACK_COLOR, DARK_THEME_BACKGROUND } from "../../res/colors";
 import useThemeStore from "../../../zustand/ThemeStore";
 import useAuthStore from "../../store/AuthStore";
 import useUpdateProfileStore from "../../store/UpdateProfileStore";
@@ -34,7 +34,7 @@ const UpdateProfileScreen = (props) => {
     if (message) {
       const timer = setTimeout(() => {
         clearMessage();
-      }, 3000);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [message, clearMessage]);
@@ -66,7 +66,7 @@ const UpdateProfileScreen = (props) => {
   };
 
   const containerStyle = darkMode
-    ? { backgroundColor: DARK_THEME_BACKGROUND }
+    ? { backgroundColor: BLACK_COLOR }
     : { backgroundColor: Back_Ground };
 
   // Get the current user data from the store

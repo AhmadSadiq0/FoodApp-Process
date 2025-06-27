@@ -4,6 +4,7 @@ import { FlatList, StyleSheet } from "react-native";
 import useThemeStore from "../../zustand/ThemeStore";
 import useCategoryStore from "../store/CategoryStore";
 import { CustomLoadingIndicator, CustomErrorText , CategoryItem} from "../components";
+import  FOOD_DOME_ICON  from "../res/drawables";
 
 const CategoryList = ({ selectedCategory, onSelectCategory }) => {
   const { darkMode } = useThemeStore();
@@ -19,7 +20,7 @@ const CategoryList = ({ selectedCategory, onSelectCategory }) => {
   const allCategory = {
     _id: "all",
     name: "All",
-    image: "https://cdn-icons-png.flaticon.com/512/32/32195.png",
+    image: require("../../assets/icons/AllItem1.png")
   };
 
   const updatedCategories = [allCategory, ...categories];

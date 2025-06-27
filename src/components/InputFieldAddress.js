@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { LIGHT_GRAY, DARK_GRAY , THEME_TEXT_COLOR , WHITE_COLOR, THEME_COLOR} from '../res/colors';
+import { LIGHT_GRAY, DARK_GRAY , THEME_TEXT_COLOR , WHITE_COLOR, THEME_COLOR, BLACK_COLOR} from '../res/colors';
 
 
 const InputFieldAddress = ({ label, value, onChange, error, darkMode, ...props }) => (
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
       },
       inputDark: {
-        backgroundColor: '#2A2A2A',
+        backgroundColor: BLACK_COLOR,
         color: WHITE_COLOR,
       },
       errorInput: {

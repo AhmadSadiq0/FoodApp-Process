@@ -17,13 +17,14 @@ import useThemeStore from "../../../zustand/ThemeStore";
 import useNotificationStore from '../../store/NotificationStore';
 import useAuthStore from '../../store/AuthStore';
 // Colors
-import { WHITE_COLOR, Back_Ground, BLACK_COLOR, THEME_COLOR } from "../../res/colors";
+import { WHITE_COLOR, Back_Ground, BLACK_COLOR, THEME_COLOR, GRAY_COLOR } from "../../res/colors";
 import * as Notifications from 'expo-notifications';
-// Screensz
-
+// Screens
 const HomeScreen = ({ navigation }) => {
   const { darkMode } = useThemeStore();
   const { searchQuery } = useSearchStore();
+  const { saveExpoPushToken , expoPushToken } = useNotificationStore();
+  const { user } = useAuthStore();
   const {
     fetchHomeSectionItems,
     homeSectionItems,
@@ -31,14 +32,26 @@ const HomeScreen = ({ navigation }) => {
     homeSectionItemsError
   } = useItemStore();
   const { fetchBranches, selectedBranch } = useBranchStore();
-  const { saveExpoPushToken, expoPushToken } = useNotificationStore();
-  const { user } = useAuthStore();
+  const isFirstMount = useRef(true);
+  const prevBranchRef = useRef(selectedBranch?._id);
 
   useEffect(() => {
-    if (selectedBranch) {
-      fetchHomeSectionItems(selectedBranch._id);
+    // Fetch branches only on first mount
+    if (isFirstMount.current) {
+      fetchBranches();
+      isFirstMount.current = false;
     }
-    fetchBranches();
+
+    // Only fetch items if:
+    // 1. We have a selected branch AND
+    // 2. Either:
+    //    a. We have no items yet OR
+    //    b. The branch has changed
+    if (selectedBranch?._id && 
+       (homeSectionItems.length === 0 || prevBranchRef.current !== selectedBranch._id)) {
+      fetchHomeSectionItems(selectedBranch._id);
+      prevBranchRef.current = selectedBranch._id;
+    }
   }, [selectedBranch]);
 
   useEffect(() => {
@@ -83,7 +96,6 @@ const HomeScreen = ({ navigation }) => {
   const handleAddToCart = (burger) => {
     navigation.navigate('itemDetail', { item: burger });
   };
-
   const handleSeeMorePress = (title, categoryId) => {
     navigation.navigate('SeeAll', { title, categoryId, isHome: true });
   };
@@ -100,6 +112,7 @@ const HomeScreen = ({ navigation }) => {
         onAddToCart={handleAddToCart}
         darkMode={darkMode}
         isLastArray={isLastArray}
+        textColor={darkMode ? GRAY_COLOR : BLACK_COLOR}
       />
     );
   };
@@ -114,7 +127,7 @@ const HomeScreen = ({ navigation }) => {
   // Render error or empty state
   const renderEmpty = () => (
     <View style={styles.centerContainer}>
-      <Text style={{ color: darkMode ? WHITE_COLOR : BLACK_COLOR }}>
+      <Text style={{ color: darkMode ? GRAY_COLOR : BLACK_COLOR }}>
         {homeSectionItemsError || "No items found"}
       </Text>
     </View>
@@ -128,6 +141,7 @@ const HomeScreen = ({ navigation }) => {
         keyExtractor={(item) => item?.categoryId.toString()}
         ListEmptyComponent={homeSectionItemsLoading ? renderLoading : renderEmpty}
         contentContainerStyle={{ paddingBottom: 20, flexGrow: 1 }}
+         showsVerticalScrollIndicator={false}
         style={darkMode && styles.scrollViewDark}
       />
     </View>

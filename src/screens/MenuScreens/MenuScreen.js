@@ -1,5 +1,5 @@
 // /screens/MenuScreen/MenuScreen.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   StyleSheet,
@@ -14,7 +14,6 @@ import {
   BLACK_COLOR,
 } from "../../res/colors";
 
-
 import useThemeStore from "../../../zustand/ThemeStore";
 import useSearchStore from "../../store/SearchStore";
 import useItemStore from "../../store/ItemStore";
@@ -26,34 +25,57 @@ import { CustomErrorText, CustomLoadingIndicator, Datalist, CategoryList } from 
 const MenuScreen = ({ navigation }) => {
   const { darkMode } = useThemeStore();
   const { searchQuery } = useSearchStore();
+
   const {
     categorized_items = [],
     categorized_loading,
     categorized_error,
     fetchItemsByBranch,
   } = useItemStore();
-  const { fetchCategories } = useCategoryStore();
+  const { fetchCategories, categories = [] } = useCategoryStore();
   const { selectedBranch } = useBranchStore();
 
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const isFirstMount = useRef(true);
+  const prevBranchRef = useRef(selectedBranch?._id);
+  const hasCategoriesRef = useRef(false);
 
   useEffect(() => {
-    fetchItemsByBranch(selectedBranch._id);
-    fetchCategories(selectedBranch._id);
-  }, [selectedBranch]);
+    if (selectedBranch?._id && (isFirstMount.current || prevBranchRef.current !== selectedBranch._id)) {
+      // Fetch items only if needed
+      if (categorized_items.length === 0 || prevBranchRef.current !== selectedBranch._id) {
+        fetchItemsByBranch(selectedBranch._id);
+      }
+      
+      // Fetch categories only if we don't have them or branch changed
+      if (categories.length === 0 || prevBranchRef.current !== selectedBranch._id) {
+        fetchCategories(selectedBranch._id);
+      }
+      
+      prevBranchRef.current = selectedBranch._id;
+      isFirstMount.current = false;
+    }
+  }, [selectedBranch, categories.length]);
 
-  const filteredData =
-    selectedCategory === "all"
-      ? categorized_items
-      : categorized_items
-        .filter((cat) => cat.categoryId === selectedCategory)
-        .map((cat) => ({
-          ...cat,
-          items: cat.items.filter((item) =>
-            item.name.toLowerCase().includes(searchQuery.toLowerCase())
-          ),
-        }))
-        .filter((cat) => cat.items.length > 0);
+  // Update hasCategoriesRef when categories change
+  useEffect(() => {
+    if (categories.length > 0) {
+      hasCategoriesRef.current = true;
+    }
+  }, [categories]);
+
+  // Update the filteredData logic in MenuScreen.js
+const filteredData = categorized_items
+  .map(category => ({
+    ...category,
+    items: category.items.filter(item =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  }))
+  .filter(category => 
+    (selectedCategory === "all" || category.categoryId === selectedCategory) && 
+    category.items.length > 0
+  );
 
   const handleAddToCart = (item) => {
     navigation.navigate("itemDetail", { item });
@@ -83,12 +105,14 @@ const MenuScreen = ({ navigation }) => {
 
   return (
     <View style={[styles.container, darkMode && styles.darkContainer]}>
-      {!categorized_loading && (
-        <Text style={styles.category}>Category</Text>
-      )}
       <FlatList
         data={filteredData}
+         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
+      <View>
+    {!categorized_loading && (
+      <Text style={styles.category}>Category</Text>
+    )}
           <View style={[styles.header, darkMode && styles.headerDark]}>
             <ScrollView
               horizontal
@@ -101,16 +125,18 @@ const MenuScreen = ({ navigation }) => {
               />
             </ScrollView>
           </View>
+          </View>
         }
         renderItem={renderDatalist}
         keyExtractor={(item) => item?.categoryId?.toString() || Math.random().toString()}
         ListEmptyComponent={renderEmptyComponent}
         contentContainerStyle={{ paddingBottom: 20, flexGrow: 1 }}
       />
+      
     </View>
+    
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -125,6 +151,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingVertical: 16,
     backgroundColor: Back_Ground,
+     alignItems: 'center'
   },
   headerDark: {
     backgroundColor: BLACK_COLOR,
@@ -133,6 +160,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   category: {
+    paddingTop:10,
     fontSize: 20,
     fontWeight: "500",
     color: THEME_COLOR,
