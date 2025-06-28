@@ -1,0 +1,207 @@
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { 
+    markNotificationAsReadService,
+    createNotificationService,
+    fetchNotificationsService,
+    updateNotificationService,
+    deleteNotificationService,
+    saveExpoPushTokenService,
+   } from '../services/NotificationService';
+const initialState = {
+  notifications: [],
+  unreadCount: 0,
+  loading: false,
+  error: null,
+  expoPushToken: null,
+};
+
+const useNotificationStore = create(
+  persist(
+    (set, get) => ({
+      ...initialState,
+      // Create a new notification
+      createNotification: async (notificationData) => {
+        set({ loading: true, error: null });
+        try {
+            console.log('Creating notification:', notificationData);
+          const response = await createNotificationService(notificationData);
+          if (response.success) {
+            set((state) => ({
+              notifications: [response.data, ...state.notifications],
+              unreadCount: state.unreadCount + 1,
+              loading: false
+            }));
+            return { success: true, data: response.data };
+          } else {
+            set({ loading: false, error: response.message });
+            return { success: false, error: response.message };
+          }
+        } catch (error) {
+          set({ loading: false, error: error.message });
+          return { success: false, error: error.message };
+        }
+      },
+
+      // Fetch all notifications for a user
+
+      // fetchNotifications: async () => {
+      //   set({ loading: true, error: null });
+      //   try {
+      //     const response = await fetchNotificationsService();
+      //     if (response.success) {
+      //       const notifications = response.data || [];
+      //       const unreadCount = notifications.reduce((count, notification) => {
+      //         const recipient = notification.recipients && notification.recipients[0];
+      //         return count + (recipient && !recipient.seen ? 1 : 0);
+      //       }, 0);
+            
+      //       set({ 
+      //         notifications: notifications,
+      //         unreadCount,
+      //         loading: false 
+      //       });
+      //     } else {
+      //       set({ 
+      //         notifications: [],
+      //         unreadCount: 0,
+      //         loading: false,
+      //         error: response.message 
+      //       });
+      //     }
+      //   } catch (error) {
+      //     set({ 
+      //       notifications: [],
+      //       unreadCount: 0,
+      //       loading: false,
+      //       error: error.message 
+      //     });
+      //   }
+      // },
+       // Fetch all notifications for a user
+      fetchNotifications: async (forceRefresh = false) => {
+        // If we already have notifications and not forcing refresh, don't show loading
+        if (get().notifications.length > 0 && !forceRefresh) {
+          return;
+        }
+
+        set({ loading: true, error: null });
+        try {
+          const response = await fetchNotificationsService();
+          if (response.success) {
+            const notifications = response.data || [];
+            const unreadCount = notifications.reduce((count, notification) => {
+              const recipient = notification.recipients && notification.recipients[0];
+              return count + (recipient && !recipient.seen ? 1 : 0);
+            }, 0);
+            
+            set({ 
+              notifications: notifications,
+              unreadCount,
+              loading: false 
+            });
+          } else {
+            set({ 
+              loading: false,
+              error: response.message 
+            });
+          }
+        } catch (error) {
+          set({ 
+            loading: false,
+            error: error.message 
+          });
+        }
+      },
+
+      // Mark notification as read
+      markNotificationAsRead: async (notificationId, userId) => {
+        set({ loading: true, error: null });
+        try {
+          const response = await markNotificationAsReadService(notificationId, userId);
+          if (response.success) {
+            set((state) => ({
+              notifications: state.notifications.map(notification => 
+                notification._id === notificationId 
+                  ? { ...notification, seen: true } 
+                  : notification
+              ),
+              unreadCount: Math.max(0, state.unreadCount - 1),
+              loading: false
+            }));
+            return { success: true, data: response.data };
+          } else {
+            set({ loading: false, error: response.message });
+            return { success: false, error: response.message };
+          }
+        } catch (error) {
+          set({ loading: false, error: error.message });
+          return { success: false, error: error.message };
+        }
+      },
+
+      // Delete a notification
+      deleteNotification: async (notificationId) => {
+        set({ loading: true, error: null });
+        try {
+          const response = await deleteNotificationService(notificationId);
+          if (response.success) {
+            set((state) => {
+              const notificationToDelete = state.notifications.find(n => n._id === notificationId);
+              const wasUnread = notificationToDelete ? !notificationToDelete.seen : false;
+              
+              return {
+                notifications: state.notifications.filter(n => n._id !== notificationId),
+                unreadCount: wasUnread ? Math.max(0, state.unreadCount - 1) : state.unreadCount,
+                loading: false
+              };
+            });
+            return { success: true };
+          } else {
+            set({ loading: false, error: response.message });
+            return { success: false, error: response.message };
+          }
+        } catch (error) {
+          set({ loading: false, error: error.message });
+          return { success: false, error: error.message };
+        }
+      },
+
+      // Clear all notifications
+      clearNotifications: () => set({ 
+        notifications: [],
+        unreadCount: 0,
+        error: null 
+      }),
+
+      // Reset entire store to initial state
+      reset: () => set(initialState),
+
+      // Save Expo push token
+      saveExpoPushToken: async (token) => {
+        set({ loading: true, error: null });
+        try {
+          const response = await saveExpoPushTokenService(token);
+          console.log('Save Expo push token response:', response);
+          if (response.success) {
+            set({ expoPushToken: token, loading: false });
+            return { success: true };
+          } else {
+            set({ loading: false, error: response.message });
+            return { success: false, error: response.message };
+          }
+        } catch (error) {
+          set({ loading: false, error: error.message });
+          return { success: false, error: error.message };
+        }
+      },
+    }),
+    {
+      name: 'notification-storage',
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+);
+
+export default useNotificationStore;

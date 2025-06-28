@@ -2,13 +2,13 @@
 //Each screen is typically a component responsible for rendering a specific part of the app's layout.
 
 import HomeScreen from "./HomeScreen";
-import OffersScreen from "./OffersScreen";
+import SeeAllScreen from "./SeeAllScreen";
 import DealsScreen from "./DealsScreen";
-import DiscountsScreen from "./DiscountsScreen";
+import ItemDetailScreen from "./ItemDetailScreen";
 
 export {
     DealsScreen,
-    DiscountsScreen,
+    ItemDetailScreen,
     HomeScreen,
-    OffersScreen
+    SeeAllScreen,
 };
