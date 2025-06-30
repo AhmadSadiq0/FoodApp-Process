@@ -23,11 +23,12 @@ const styles = StyleSheet.create({
     backgroundColor: THEME_COLOR,
     padding: 8,
     borderRadius: 37.5,
-    marginVertical: 10,
+    margin: 10,
     borderColor: THEME_COLOR,
     borderWidth: 2,
     width: "100%",
     alignItems: "center",
+    alignSelf : 'center'
   },
   buttonText: {
     color: WHITE_COLOR,

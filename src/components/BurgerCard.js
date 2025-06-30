@@ -56,7 +56,7 @@ const BurgerCard = (props) => {
           <Text style={[styles.price, { color: THEME_COLOR }]}>
             Rs. {price}/-
           </Text>
-          <TouchableOpacity 
+          {/* <TouchableOpacity 
             style={styles.addButton} 
             onPress={(e) => {
               e.stopPropagation(); 
@@ -64,7 +64,7 @@ const BurgerCard = (props) => {
             }}
           >
             <Text style={styles.addText}>+</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </TouchableOpacity>

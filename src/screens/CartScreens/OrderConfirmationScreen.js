@@ -21,16 +21,16 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
   const { darkMode } = useThemeStore();
 
   const { selectedBranch } = useBranchStore();
-   const { createOrder, orders_loading, orders_error } = useOrderStore();
+  const { createOrder, orders_loading, orders_error } = useOrderStore();
   const { clearCart } = useCartStore();
 
   const [name, setName] = useState("")
   const [selectedPayment, setSelectedPayment] = useState(null);
-  const [orderType, setOrderType] = useState("dine_in");
+  const [orderType, setOrderType] = useState("delivery");
   const [address, setAddress] = useState({
     street: "",
     city: "",
-    phone : "",
+    phone: "",
     instructions: ""
   });
   const [isFormValid, setIsFormValid] = useState(false);
@@ -153,6 +153,8 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
         {orderType === 'delivery' && (
           <DeliveryAddress
             onAddressChange={setAddress}
+            address={address}
+            
           />
         )}
 
@@ -189,12 +191,12 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
             backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR,
-               ...(darkMode && { 
-                      borderTopWidth: 3,
-                      borderLeftWidth: 3,
-                      borderRightWidth: 3,
-                      borderColor: THEME_COLOR, 
-                    }),
+            ...(darkMode && {
+              borderTopWidth: 3,
+              borderLeftWidth: 3,
+              borderRightWidth: 3,
+              borderColor: THEME_COLOR,
+            }),
           },
         }}
       >
@@ -216,20 +218,31 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
         />
       </RBSheet>
 
-      {orderType && selectedPayment && (
-       <View style={[styles.footer, darkMode && styles.footerDark]}>
-       {
-         orders_error && (
-           <Text style={{ color: 'red' }}>{orders_error}</Text>
-         )
-       }
-       <CustomButton
-         title="Confirm Orderr"
-         onPress={() => sheetRef.current.open()}
-         buttonStyle={darkMode ? { backgroundColor: BLACK_COLOR } : {}}
-         textStyle={darkMode ? { color: WHITE_COLOR } : {}}
-       />
-     </View>
+      {orderType && selectedPayment && name && (
+        <View style={[styles.footer, darkMode && styles.footerDark]}>
+          {
+            orders_error && (
+              <Text style={{ color: 'red' }}>{orders_error}</Text>
+            )
+          }
+          {orderType && selectedPayment && name && (
+            orderType !== "delivery" ||
+            (address?.street?.trim() && address?.city?.trim() && address?.phone?.trim())
+          ) && (
+              <View style={[styles.footer, darkMode && styles.footerDark]}>
+                {orders_error && (
+                  <Text style={{ color: 'red' }}>{orders_error}</Text>
+                )}
+                <CustomButton
+                  title="Confirm Order"
+                  onPress={() => sheetRef.current.open()}
+                  style={darkMode ? { backgroundColor: BLACK_COLOR } : { width: '80%' }}
+                  textStyle={darkMode ? { color: WHITE_COLOR } : {}}
+                />
+              </View>
+            )}
+
+        </View>
       )}
     </View>
   );
@@ -252,7 +265,7 @@ const styles = StyleSheet.create({
     // left: 0,
     // right: 0,
     // padding: 16,
-   // backgroundColor: 'rgba(255,255,255,0.9)',
+    // backgroundColor: 'rgba(255,255,255,0.9)',
   },
   footerDark: {
     backgroundColor: BLACK_COLOR,

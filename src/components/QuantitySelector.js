@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     height: 32,
     borderRadius: 8,
     overflow: 'hidden',
+    width : '80%'
   },
   button: {
     width: 32,

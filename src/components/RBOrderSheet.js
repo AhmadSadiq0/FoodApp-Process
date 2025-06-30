@@ -14,6 +14,7 @@ import {
   DARK_GREEN,
   THEME_TEXT_COLOR,
   DARK_THEME_BACKGROUND,
+  DARK_THEME_TEXT_COLOR,
 } from "../res/colors";
 import CustomButton from "./CustomButtom";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -365,7 +366,7 @@ const styles = StyleSheet.create({
   },
   currentBadge: {
     fontSize: 12,
-    color: GRAY_COLOR,
+    color: THEME_TEXT_COLOR,
     fontWeight: '300',
   },
   timelineConnector: {
