@@ -6,7 +6,7 @@ import InputFieldAddress from "./InputFieldAddress";
 import useThemeStore from "../../zustand/ThemeStore";
 import CustomErrorText from "./CustomErrorText";
 
-const DeliveryComponent = ({ onAddressChange }) => {
+const DeliveryComponent = ({ onAddressChange , address : ParentAddress }) => {
   const { darkMode } = useThemeStore();
   const [isEditing, setIsEditing] = useState(false);
   const [hasAddress, setHasAddress] = useState(false);
@@ -43,6 +43,12 @@ const DeliveryComponent = ({ onAddressChange }) => {
     setAddress(prev => ({ ...prev, [field]: value }));
     setErrors(prev => ({ ...prev, [field]: "" }));
   };
+
+  useEffect(() => {
+    if (ParentAddress) {
+      setAddress(ParentAddress);
+    }
+  }, [ParentAddress]);
 
   // Changed: Created a renderItem function for FlatList
   const renderContent = () => {

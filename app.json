@@ -33,20 +33,20 @@
     "plugins": [
       "expo-localization",
       [
-      "expo-notifications",
-      {
-        "icon": "./assets/icon.png",
-        "color": "#FE8C00",
-        "mode": "foreground"
-      }
-    ]
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#FE8C00",
+          "mode": "foreground"
+        }
+      ]
     ],
     "owner": "hassnainpro",
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/d33cf888-53dd-4b30-b69d-f8c7e824aadf"
+      "url": "https://u.expo.dev/62e6c1c5-0ace-452c-976b-d3fe5648d493"
     },
     "extra": {
       "eas": {

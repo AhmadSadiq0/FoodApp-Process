@@ -5,9 +5,9 @@ import { Ionicons } from '@expo/vector-icons';
 
 const OrderTypeSelector = ({ selectedType, onSelect, darkMode }) => {
   const options = [
+    { id: 'delivery', icon: 'car', label: 'Delivery' },
     { id: 'dine_in', icon: 'restaurant', label: 'Dine In' },
     { id: 'pickup', icon: 'walk', label: 'Pickup' },
-    { id: 'delivery', icon: 'car', label: 'Delivery' },
   ];
   const handleSelect = (type) => {
     onSelect(type, type === 'dine_in' || type === 'pickup');

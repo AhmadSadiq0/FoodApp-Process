@@ -49,9 +49,9 @@ const BurgerCardHorizantol = (props) => {
           <View style={styles.priceTag}>
             <Text style={styles.priceText}>Rs. {price}/-</Text>
           </View>
-          <TouchableOpacity style={styles.addBtn} onPress={onAdd}>
+          {/* <TouchableOpacity style={styles.addBtn} onPress={onAdd}>
             <Text style={styles.addBtnText}>+ Add</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </TouchableOpacity>
