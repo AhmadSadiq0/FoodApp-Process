@@ -143,7 +143,7 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
     }
 
     return (
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         <OrderTypeSelector
           selectedType={orderType}
           onSelect={setOrderType}
@@ -182,8 +182,6 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 80}
     >
       <View style={[styles.container, darkMode && styles.containerDark]}>
         {renderContent()}

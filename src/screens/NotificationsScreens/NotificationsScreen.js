@@ -13,15 +13,12 @@ import {
     THEME_TEXT_COLOR,
     WHITE_COLOR,
     THEME_COLOR,
-    GRAY_COLOR,
     BLACK_COLOR,
     Green_Color,
     Back_Ground,
 } from '../../res/colors';
 //Images
-import { SAD_ICON, NOTIFICATION_ICON, BACK_ICON, SAD_ICON2 } from '../../res/drawables';
-//Button
-import CustomButton from '../../components/CustomButtom';
+import { NOTIFICATION_ICON, BACK_ICON, SAD_ICON2 } from '../../res/drawables';
 //RawBottomSheet
 import RBSheet from 'react-native-raw-bottom-sheet';
 //Store
@@ -33,40 +30,49 @@ import ImageButton from '../../components/ImageButton';
 import useThemeStore from '../../../zustand/ThemeStore';
 
 const NotificationsScreen = ({ navigation }) => {
-    const { notifications, fetchNotifications, unreadCount, loading, markAllAsRead } = useNotificationStore();
-    const { darkMode } = useThemeStore(); // Get dark mode state
-    const { user, isHydrated } = useAuthStore(); // Get current user and hydration status from AuthStore
+    const { notifications, fetchNotifications, unreadCount, loading, markNotificationAsRead } = useNotificationStore();
+    const { darkMode } = useThemeStore();
+    const { user, isHydrated } = useAuthStore();
     const currentUserId = user?._id;
-    console.log("Current user ID from AuthStore:", currentUserId);
     const [selectedNotification, setSelectedNotification] = useState(null);
     const refRBSheet = useRef(null);
-    const [initialLoad, setInitialLoad] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', async () => {
-            await fetchNotifications(!initialLoad);
-            await markAllAsRead();
-            await markUnseenNotificationsAsSeen();
-            if (initialLoad) setInitialLoad(false);
-        });
-        return unsubscribe;
-    }, [navigation, initialLoad, fetchNotifications, markAllAsRead]);
+        const loadNotifications = async () => {
+            await fetchNotifications();
+        };
+        loadNotifications();
+    }, []);
 
-    // Transform API notifications to UI format
+    useEffect(() => {
+        const updateUnreadCount = async () => {
+            if (!notifications || notifications.length == 0) return;
+
+            const results = await Promise.allSettled(
+                notifications.map((notification) => {
+                    const recipient = notification.recipients?.find(r => r.userId == currentUserId);
+                    if (recipient && !recipient.seen) {
+                        return markNotificationAsRead(notification._id);
+                    }
+                    return Promise.resolve({ status: 'fulfilled' });
+                })
+            );
+        };
+
+        updateUnreadCount();
+    }, []);
+
+
+
     const transformedNotifications = notifications.map((notification) => {
-        // Log the recipients to see what data we are getting
-        console.log("Processing Notification -> Recipients:", notification.recipients);
 
-        // Find the recipient object for the current user
-        const recipient = notification.recipients && notification.recipients.find(r => r.userId === currentUserId);
-        // Log recipient for debugging
-        console.log('Recipient for current user:', recipient);
+        const recipient = notification.recipients && notification.recipients.find(r => r.userId == currentUserId);
         const date = new Date(notification.createdAt);
         const formattedDate = date.toLocaleDateString('en-GB');
-        const formattedTime = date.toLocaleTimeString('en-US', { 
-            hour: '2-digit', 
+        const formattedTime = date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
             minute: '2-digit',
-            hour12: true 
+            hour12: true
         });
         return {
             id: notification._id,
@@ -78,7 +84,7 @@ const NotificationsScreen = ({ navigation }) => {
             time: formattedTime,
             image: NOTIFICATION_ICON,
             active: false,
-            seen: recipient ? recipient.seen : false // Only for current user
+            seen: recipient ? recipient.seen : false
         };
     });
 
@@ -86,7 +92,7 @@ const NotificationsScreen = ({ navigation }) => {
         const updatedItems = transformedNotifications.map((item) =>
             item.id === id ? { ...item, active: !item.active } : { ...item, active: false }
         );
-        
+
         const isActive = updatedItems.find(item => item.id === id && item.active);
         if (isActive) {
             const selectedItem = updatedItems.find(item => item.id === id);
@@ -95,12 +101,14 @@ const NotificationsScreen = ({ navigation }) => {
         }
     };
 
-    // Dynamic styles based on theme
     const dynamicStyles = {
         container: {
             backgroundColor: darkMode ? BLACK_COLOR : Back_Ground,
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center"
         },
-        cartItem: {
+        notificationItem: {
             borderColor: darkMode ? '#333' : WHITE_COLOR,
             backgroundColor: darkMode ? '#222' : WHITE_COLOR,
         },
@@ -115,10 +123,9 @@ const NotificationsScreen = ({ navigation }) => {
         }
     };
 
-    // Merge static and dynamic styles
     const getMergedStyles = (styleName) => {
         return {
-                        ...dynamicStyles[styleName],
+            ...dynamicStyles[styleName],
         };
     };
 
@@ -144,45 +151,45 @@ const NotificationsScreen = ({ navigation }) => {
     return (
         <View style={getMergedStyles('container')}>
             <View style={styles.headerRow}>
-                <ImageButton 
-                    imageSource={BACK_ICON} 
-                    onPress={() => navigation.goBack()} 
+                <ImageButton
+                    imageSource={BACK_ICON}
+                    onPress={() => navigation.goBack()}
                     tintColor={darkMode ? WHITE_COLOR : undefined}
                 />
                 <Text style={[styles.headerTitle, dynamicStyles.textColor]}>Notifications</Text>
             </View>
-            
-            <ScrollView 
-                contentContainerStyle={styles.scrollContent} 
+
+            <ScrollView
+                contentContainerStyle={styles.scrollContent}
                 showsVerticalScrollIndicator={false}
             >
                 {transformedNotifications.map((item) => (
-                    <CartItem 
-                        key={item.id} 
-                        item={item} 
+                    <NotificationItem
+                        key={item.id}
+                        item={item}
                         onPressItem={handlePressItem}
                         darkMode={darkMode}
                     />
                 ))}
             </ScrollView>
-            
+
             <RBSheet
                 ref={refRBSheet}
                 height={210}
                 draggable={true}
                 customStyles={{
-                    container: { 
+                    container: {
                         ...styles.summaryContainer,
                         backgroundColor: darkMode ? '#222' : WHITE_COLOR,
-                        borderTopLeftRadius: 28, 
-                        borderTopRightRadius: 28, 
+                        borderTopLeftRadius: 28,
+                        borderTopRightRadius: 28,
                         padding: 18,
-                         ...(darkMode && { // Only apply these borders when darkMode is true
-                                borderTopWidth: 3,
-                                borderLeftWidth: 3,
-                                borderRightWidth: 3,
-                                borderColor: THEME_COLOR, // Use white border in dark mode
-                              }),
+                        ...(darkMode && { // Only apply these borders when darkMode is true
+                            borderTopWidth: 3,
+                            borderLeftWidth: 3,
+                            borderRightWidth: 3,
+                            borderColor: THEME_COLOR, // Use white border in dark mode
+                        }),
                     },
                     wrapper: { backgroundColor: 'rgba(0,0,0,0.2)' },
                     draggableIcon: { backgroundColor: darkMode ? WHITE_COLOR : BLACK_COLOR },
@@ -211,14 +218,13 @@ const NotificationsScreen = ({ navigation }) => {
     );
 };
 
-// CartItem component with dark mode support
-const CartItem = ({ item, onPressItem, darkMode }) => {
+const NotificationItem = ({ item, onPressItem, darkMode }) => {
     return (
         <TouchableOpacity
             onPress={() => onPressItem(item.id)}
             activeOpacity={0.85}
             style={[
-                styles.cartItem,
+                styles.notificationItem,
                 {
                     borderColor: darkMode ? '#333' : WHITE_COLOR,
                     backgroundColor: darkMode ? '#222' : WHITE_COLOR,
@@ -227,13 +233,13 @@ const CartItem = ({ item, onPressItem, darkMode }) => {
                 !item.seen && styles.unreadCard,
             ]}
         >
-            <Image 
-                style={styles.cartItemImage} 
-                source={item.image} 
+            <Image
+                style={styles.notificationItemImage}
+                source={item.image}
                 tintColor={THEME_COLOR}
             />
-            <View style={styles.cartItemDetails}>
-                <Text style={[styles.cartItemName, { color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR }]}>
+            <View style={styles.notificationItemDetails}>
+                <Text style={[styles.notificationItemName, { color: darkMode ? WHITE_COLOR : THEME_TEXT_COLOR }]}>
                     {item.title}
                 </Text>
                 <View style={styles.OrderId}>
@@ -253,7 +259,7 @@ const CartItem = ({ item, onPressItem, darkMode }) => {
                     </Text>
                 </View>
             </View>
-            <View style={styles.cartItemActions}>
+            <View style={styles.notificationItemActions}>
                 {!item.seen && <View style={styles.circle} />}
             </View>
         </TouchableOpacity>
@@ -264,11 +270,10 @@ const CartItem = ({ item, onPressItem, darkMode }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    cartItem: {
+    notificationItem: {
         flexDirection: 'row',
         padding: 16,
         marginBottom: 16,
@@ -276,20 +281,19 @@ const styles = StyleSheet.create({
         borderRadius: 18,
         alignItems: 'center',
         elevation: 2,
-        margin: 2,
-        left: 10,
-        width: '94%',
+        margin: 1,
+        width: '90%',
     },
     unreadCard: {
-        // backgroundColor: '#F0FFF4', // Uncomment if you want unread cards to have different background
+
     },
-    cartItemImage: {
+    notificationItemImage: {
         width: 30,
         height: 30,
         borderRadius: 8,
         marginRight: 16,
     },
-    cartItemDetails: {
+    notificationItemDetails: {
         flex: 1,
         alignItems: 'flex-start',
         justifyContent: 'center',
@@ -319,7 +323,7 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: 8,
     },
-    cartItemName: {
+    notificationItemName: {
         fontSize: 15,
         fontWeight: 'bold',
         width: '100%',
@@ -349,7 +353,7 @@ const styles = StyleSheet.create({
         marginRight: 8,
         textAlign: 'left',
     },
-    cartItemActions: {
+    notificationItemActions: {
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'flex-end',
