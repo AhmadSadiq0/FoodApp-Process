@@ -235,7 +235,7 @@ const ItemDetailScreen = ({ navigation, route }) => {
             onPress={() => navigation.goBack()}
             buttonStyle={[
               styles.backButton,
-              { backgroundColor: darkMode ? LIGHT_THEME_BACKGROUND : LIGHT_THEME_BACKGROUND }
+              { backgroundColor: darkMode ? BLACK_COLOR : WHITE_COLOR }
             ]}
             imageStyle={{ tintColor: THEME_COLOR }}
           />

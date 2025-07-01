@@ -23,6 +23,7 @@ import useSearchStore from "../store/SearchStore";
 import useBranchStore from "../store/BranchStore";
 import useThemeStore from "../../zustand/ThemeStore";
 import { NOTIFICATION_ICON, Search_Icon, LOCATION_ICON, SECONDARY_PROFILE_AVATAR } from "../res/drawables";
+import useNotificationStore from "../store/NotificationStore";
 
 const BranchDropdown = ({ darkMode }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -36,9 +37,9 @@ const BranchDropdown = ({ darkMode }) => {
       >
         <Text style={[styles.branchName, darkMode && styles.darkText]}>Branch</Text>
         <View style={styles.branchButtonContent}>
-          <Image 
-            source={LOCATION_ICON} 
-            style={[styles.locationIcon, darkMode && styles.darkIcon]} 
+          <Image
+            source={LOCATION_ICON}
+            style={[styles.locationIcon, darkMode && styles.darkIcon]}
           />
           <Text style={[styles.branchText, darkMode && styles.darkText]}>
             {selectedBranch?.location || "Select Branch"}
@@ -95,6 +96,7 @@ const BranchDropdown = ({ darkMode }) => {
 const Header = (props) => {
   const { darkMode } = useThemeStore();
   const { selectedBranch, setSelectedBranch, fetchBranches, branches } = useBranchStore();
+  const { unreadCount } = useNotificationStore()
   const { searchQuery, setSearchQuery } = useSearchStore();
 
   useEffect(() => {
@@ -112,7 +114,7 @@ const Header = (props) => {
   } = props;
 
   const handleSearch = (query) => {
-    setSearchQuery(query); 
+    setSearchQuery(query);
   };
 
   return (
@@ -120,22 +122,29 @@ const Header = (props) => {
       <View style={[styles.container, containerStyle, darkMode && styles.darkContainer]}>
         <View style={styles.profileContainer}>
           <View style={styles.profileFirstContainer}>
-            <Image 
-              source={user?.image ? { uri: user.image } : SECONDARY_PROFILE_AVATAR} 
-              style={[styles.image, darkMode && styles.darkImageBorder]} 
+            <Image
+              source={user?.image ? { uri: user.image } : SECONDARY_PROFILE_AVATAR}
+              style={[styles.image, darkMode && styles.darkImageBorder]}
             />
             <BranchDropdown darkMode={darkMode} />
           </View>
-          
+
           {showBellIcon && (
             <View style={styles.bellContainer}>
               <TouchableOpacity onPress={() => navigation.navigate("Notifications")}>
-                <Image 
-                  source={NOTIFICATION_ICON} 
-                  style={[styles.bellIcon, darkMode && styles.darkIcon]} 
+                <Image
+                  source={NOTIFICATION_ICON}
+                  style={[styles.bellIcon, darkMode && styles.darkIcon]}
                 />
               </TouchableOpacity>
-              <View style={styles.notificationBadge} />
+
+              {
+                unreadCount && unreadCount > 0 &&
+                <View style={styles.notificationBadge}>
+                  <Text style={styles.notificationCount}>{unreadCount ? unreadCount : 0}</Text>
+                </View>
+              }
+
             </View>
           )}
         </View>
@@ -149,9 +158,9 @@ const Header = (props) => {
 
         {showSearch && (
           <View style={[styles.searchContainer, darkMode && styles.darkSearchContainer]}>
-            <Image 
-              source={Search_Icon} 
-              style={[styles.searchIcon, darkMode && styles.darkSearchIcon]} 
+            <Image
+              source={Search_Icon}
+              style={[styles.searchIcon, darkMode && styles.darkSearchIcon]}
             />
             <TextInput
               style={[styles.searchBar, darkMode && styles.darkSearchBar]}
@@ -171,14 +180,14 @@ const styles = StyleSheet.create({
   // Light mode styles
   mainContainer: {
     width: '100%',
-   // paddingTop: 15,
+    // paddingTop: 15,
   },
   container: {
     width: "100%",
-    padding: 20,
+    paddingHorizontal: 20,
     paddingBottom: 0,
     alignItems: "center",
-    //paddingTop: 30,
+    paddingTop: 5,
     backgroundColor: Back_Ground
   },
   profileContainer: {
@@ -224,13 +233,19 @@ const styles = StyleSheet.create({
     tintColor: THEME_TEXT_COLOR
   },
   notificationBadge: {
-    width: 5,
-    height: 5,
-    borderRadius: 5,
+    width: 20,
+    height: 20,
+    borderRadius: 30,
     backgroundColor: THEME_COLOR,
     position: "absolute",
-    right: 0,
-    top: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: -8,
+    top: -7,
+  },
+  notificationCount: {
+    fontSize: 10,
+    color: WHITE_COLOR
   },
   searchContainer: {
     width: "100%",

@@ -131,9 +131,12 @@ import {
   };
   
   // Mark notification as read
-  const markNotificationAsReadService = async (notificationId, userId) => {
+  const markNotificationAsReadService = async (notificationId) => {
     try {
-      const response = await putRequest(`${URL_TO_MARK_NOTIFICATION_AS_READ}/${notificationId}`, { userId });
+      const response = await putRequest(URL_TO_UPDATE_NOTIFICATION , { 
+        notificationId : notificationId,
+        status : "seen"
+       });
   
       if (response.status) {
         return {
