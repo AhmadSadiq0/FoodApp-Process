@@ -7,7 +7,6 @@ import {
   THEME_COLOR,
   THEME_TEXT_COLOR,
   WHITE_COLOR,
-  BLACK_COLOR,
   DARK_GRAY,
   LIGHT_GRAY,
   ERROR_COLOR,
@@ -22,7 +21,7 @@ const PaymentComponent = React.forwardRef(({
   selectedMethod,
   themeColor = THEME_COLOR,
   darkMode = false,
-  autoSelectFirst = false,
+  autoSelectFirst = true,
   name,
   setName,
   onNameChange,
@@ -115,7 +114,6 @@ const PaymentComponent = React.forwardRef(({
       <Text style={[styles.title, finalDarkMode && styles.titleDark]}>
         Select Payment Method
       </Text>
-
       <View style={styles.nameInputContainer}>
         <Text style={[styles.inputLabel, finalDarkMode && styles.inputLabelDark]}>
           Your Name on Order

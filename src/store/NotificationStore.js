@@ -141,6 +141,53 @@ const useNotificationStore = create(
         }
       },
 
+      markAllAsRead: async () => {
+        const { notifications } = get();
+        const unreadNotifications = notifications.filter(
+          (n) => n.recipients && n.recipients.some((r) => !r.seen)
+        );
+    
+        if (unreadNotifications.length === 0) {
+          return { success: true };
+        }
+    
+        set({ loading: true, error: null });
+    
+        try {
+          const markAsReadPromises = unreadNotifications.map((notification) => {
+            const recipient = notification.recipients.find((r) => !r.seen);
+            if (recipient) {
+              return markNotificationAsReadService(notification._id, recipient.userId);
+            }
+            return Promise.resolve({ success: true }); // Should not happen based on filter
+          });
+    
+          const results = await Promise.all(markAsReadPromises);
+    
+          const allSuccessful = results.every((res) => res.success);
+    
+          if (allSuccessful) {
+            set((state) => ({
+              notifications: state.notifications.map((n) => ({
+                ...n,
+                recipients: n.recipients.map((r) => ({ ...r, seen: true })),
+              })),
+              unreadCount: 0,
+              loading: false,
+            }));
+            return { success: true };
+          } else {
+            // If some failed, fetch from server to get consistent state
+            get().fetchNotifications(true);
+            return { success: false, error: "Some notifications could not be marked as read." };
+          }
+        } catch (error) {
+          set({ loading: false, error: error.message });
+          get().fetchNotifications(true); // fetch fresh data in case of error
+          return { success: false, error: error.message };
+        }
+      },
+
       // Delete a notification
       deleteNotification: async (notificationId) => {
         set({ loading: true, error: null });

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { StyleSheet, View, ScrollView, Alert, Text } from "react-native";
+import { StyleSheet, View, ScrollView, Alert, Text, KeyboardAvoidingView, Platform } from "react-native";
 import { Confirm_Order } from "../../res/drawables";
 import { ConfirmOrderSummary, DeliveryAddress, PaymentComponent, Header1, OrderTypeSelector, CustomButton } from "../../components";
 import { IMAGE25 } from "../../res/drawables";
@@ -150,14 +150,6 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
           darkMode={darkMode}
         />
 
-        {orderType === 'delivery' && (
-          <DeliveryAddress
-            onAddressChange={setAddress}
-            address={address}
-            
-          />
-        )}
-
         <PaymentComponent
           ref={paymentRef}
           name={name}
@@ -173,78 +165,93 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
           themeColor={THEME_COLOR}
           darkMode={darkMode}
         />
+          {orderType === 'delivery' && (
+          <DeliveryAddress
+            onAddressChange={setAddress}
+            address={address}
+            
+            
+          />
+        )}
+        
+
       </ScrollView>
     );
   };
 
   return (
-    <View style={[styles.container, darkMode && styles.containerDark]}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 80}
+    >
+      <View style={[styles.container, darkMode && styles.containerDark]}>
+        {renderContent()}
 
-      {renderContent()}
+        <RBSheet
+          ref={sheetRef}
+          height={490}
+          draggable={true}
+          customStyles={{
+            container: {
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR,
+              ...(darkMode && {
+                borderTopWidth: 3,
+                borderLeftWidth: 3,
+                borderRightWidth: 3,
+                borderColor: THEME_COLOR,
+              }),
+            },
+          }}
+        >
+          <ConfirmOrderSummary
+            sheetRef={sheetRef}
+            selectedItems={selectedItems}
+            selectedExtras={selectedExtras}
+            subtotal={subtotal}
+            tax={tax}
+            deliveryFee={deliveryFee}
+            totalAmount={totalAmount}
+            paymentMethod={selectedPayment}
+            orderType={orderType}
+            deliveryAddress={address}
+            onButtonPressed={handleConfirmOrder}
+            isButtonDisabled={!isFormValid}
+            darkMode={darkMode}
+            loading={orders_loading}
+          />
+        </RBSheet>
 
-      <RBSheet
-        ref={sheetRef}
-        height={490}
-        draggable={true}
-        customStyles={{
-          container: {
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
-            backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR,
-            ...(darkMode && {
-              borderTopWidth: 3,
-              borderLeftWidth: 3,
-              borderRightWidth: 3,
-              borderColor: THEME_COLOR,
-            }),
-          },
-        }}
-      >
-        <ConfirmOrderSummary
-          sheetRef={sheetRef}
-          selectedItems={selectedItems}
-          selectedExtras={selectedExtras}
-          subtotal={subtotal}
-          tax={tax}
-          deliveryFee={deliveryFee}
-          totalAmount={totalAmount}
-          paymentMethod={selectedPayment}
-          orderType={orderType}
-          deliveryAddress={address}
-          onButtonPressed={handleConfirmOrder}
-          isButtonDisabled={!isFormValid}
-          darkMode={darkMode}
-          loading={orders_loading}
-        />
-      </RBSheet>
+        {orderType && selectedPayment && name && (
+          <View style={[styles.footer, darkMode && styles.footerDark]}>
+            {
+              orders_error && (
+                <Text style={{ color: 'red' }}>{orders_error}</Text>
+              )
+            }
+            {orderType && selectedPayment && name && (
+              orderType !== "delivery" ||
+              (address?.street?.trim() && address?.city?.trim() && address?.phone?.trim())
+            ) && (
+                <View style={[styles.footer, darkMode && styles.footerDark]}>
+                  {orders_error && (
+                    <Text style={{ color: 'red' }}>{orders_error}</Text>
+                  )}
+                  <CustomButton
+                    title="Confirm Order"
+                    onPress={() => sheetRef.current.open()}
+                    style={darkMode ? { backgroundColor: THEME_COLOR,width: '90%' } : { width: '80%' }}
+                    textStyle={darkMode ? { color: WHITE_COLOR } : {}}
+                  />
+                </View>
+              )}
 
-      {orderType && selectedPayment && name && (
-        <View style={[styles.footer, darkMode && styles.footerDark]}>
-          {
-            orders_error && (
-              <Text style={{ color: 'red' }}>{orders_error}</Text>
-            )
-          }
-          {orderType && selectedPayment && name && (
-            orderType !== "delivery" ||
-            (address?.street?.trim() && address?.city?.trim() && address?.phone?.trim())
-          ) && (
-              <View style={[styles.footer, darkMode && styles.footerDark]}>
-                {orders_error && (
-                  <Text style={{ color: 'red' }}>{orders_error}</Text>
-                )}
-                <CustomButton
-                  title="Confirm Order"
-                  onPress={() => sheetRef.current.open()}
-                  style={darkMode ? { backgroundColor: BLACK_COLOR } : { width: '80%' }}
-                  textStyle={darkMode ? { color: WHITE_COLOR } : {}}
-                />
-              </View>
-            )}
-
-        </View>
-      )}
-    </View>
+          </View>
+        )}
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
