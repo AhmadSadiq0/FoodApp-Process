@@ -68,9 +68,9 @@ const SummaryCard = ({ selectedItems, selectedExtras, subtotal, onCheckout }) =>
               </Text>
             )}
             {
-              product.toppings.length > 0 && (
+              product.toppings && product.toppings.length > 0 && (
                 <Text style={[styles.itemVariant, { color: darkMode ? WHITE_COLOR : THEME_COLOR }]}>
-                  Toppings {" - > "}{product.toppings.map(topping => topping.name).join(', ')}
+                  Toppings {" : "}{product.toppings.map(topping => topping.name).join(', ')}
                 </Text>
               )
             }

@@ -16,7 +16,6 @@ const DeliveryComponent = ({ onAddressChange , address : ParentAddress }) => {
     phone: "",
     instructions: ""
   });
-
   const [errors, setErrors] = useState({});
 
   useEffect(() => {

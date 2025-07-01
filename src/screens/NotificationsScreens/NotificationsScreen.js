@@ -26,29 +26,41 @@ import CustomButton from '../../components/CustomButtom';
 import RBSheet from 'react-native-raw-bottom-sheet';
 //Store
 import useNotificationStore from '../../store/NotificationStore';
+import useAuthStore from '../../store/AuthStore';
 // Button
 import ImageButton from '../../components/ImageButton';
 // Theme Store
 import useThemeStore from '../../../zustand/ThemeStore';
 
 const NotificationsScreen = ({ navigation }) => {
-    const { notifications, fetchNotifications, unreadCount, loading } = useNotificationStore();
+    const { notifications, fetchNotifications, unreadCount, loading, markAllAsRead } = useNotificationStore();
     const { darkMode } = useThemeStore(); // Get dark mode state
+    const { user, isHydrated } = useAuthStore(); // Get current user and hydration status from AuthStore
+    const currentUserId = user?._id;
+    console.log("Current user ID from AuthStore:", currentUserId);
     const [selectedNotification, setSelectedNotification] = useState(null);
     const refRBSheet = useRef(null);
     const [initialLoad, setInitialLoad] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            fetchNotifications(!initialLoad);
+        const unsubscribe = navigation.addListener('focus', async () => {
+            await fetchNotifications(!initialLoad);
+            await markAllAsRead();
+            await markUnseenNotificationsAsSeen();
             if (initialLoad) setInitialLoad(false);
         });
         return unsubscribe;
-    }, [navigation, initialLoad]);
+    }, [navigation, initialLoad, fetchNotifications, markAllAsRead]);
 
     // Transform API notifications to UI format
     const transformedNotifications = notifications.map((notification) => {
-        const recipient = notification.recipients && notification.recipients[0];
+        // Log the recipients to see what data we are getting
+        console.log("Processing Notification -> Recipients:", notification.recipients);
+
+        // Find the recipient object for the current user
+        const recipient = notification.recipients && notification.recipients.find(r => r.userId === currentUserId);
+        // Log recipient for debugging
+        console.log('Recipient for current user:', recipient);
         const date = new Date(notification.createdAt);
         const formattedDate = date.toLocaleDateString('en-GB');
         const formattedTime = date.toLocaleTimeString('en-US', { 
@@ -56,7 +68,6 @@ const NotificationsScreen = ({ navigation }) => {
             minute: '2-digit',
             hour12: true 
         });
-
         return {
             id: notification._id,
             title: notification.type === 'order-update' ? 'Order Update' : 'Notification',
@@ -67,7 +78,7 @@ const NotificationsScreen = ({ navigation }) => {
             time: formattedTime,
             image: NOTIFICATION_ICON,
             active: false,
-            seen: recipient ? recipient.seen : false
+            seen: recipient ? recipient.seen : false // Only for current user
         };
     });
 
@@ -107,12 +118,11 @@ const NotificationsScreen = ({ navigation }) => {
     // Merge static and dynamic styles
     const getMergedStyles = (styleName) => {
         return {
-            ...styles[styleName],
-            ...dynamicStyles[styleName],
+                        ...dynamicStyles[styleName],
         };
     };
 
-    if (loading) {
+    if (!isHydrated || loading) {
         return (
             <View style={getMergedStyles('container')}>
                 <ActivityIndicator size="large" color={THEME_COLOR} />
@@ -244,9 +254,7 @@ const CartItem = ({ item, onPressItem, darkMode }) => {
                 </View>
             </View>
             <View style={styles.cartItemActions}>
-                <View
-                    style={[styles.circle, !item.seen && { backgroundColor: Green_Color }]}
-                />
+                {!item.seen && <View style={styles.circle} />}
             </View>
         </TouchableOpacity>
     );
@@ -256,7 +264,6 @@ const CartItem = ({ item, onPressItem, darkMode }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 15,
         padding: 16,
         justifyContent: 'center',
         alignItems: 'center',
@@ -270,7 +277,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         elevation: 2,
         margin: 2,
-        width: '100%',
+        left: 10,
+        width: '94%',
     },
     unreadCard: {
         // backgroundColor: '#F0FFF4', // Uncomment if you want unread cards to have different background
@@ -351,7 +359,7 @@ const styles = StyleSheet.create({
         width: 16,
         height: 16,
         borderRadius: 8,
-        backgroundColor: GRAY_COLOR,
+        backgroundColor: Green_Color,
     },
     summaryCard: {
         paddingHorizontal: 10,
@@ -399,6 +407,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     headerRow: {
+        paddingTop: 15,
+        left: 14,
         paddingVertical: 10,
         flexDirection: 'row',
         alignItems: 'center',
