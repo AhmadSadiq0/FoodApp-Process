@@ -137,7 +137,6 @@ const CartStack = () => {
 
 // Orders Stack
 const OrdersStack = () => {
-  const { user } = authStore();
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen

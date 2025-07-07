@@ -6,7 +6,7 @@ import InputFieldAddress from "./InputFieldAddress";
 import useThemeStore from "../../zustand/ThemeStore";
 import CustomErrorText from "./CustomErrorText";
 
-const DeliveryComponent = ({ onAddressChange }) => {
+const DeliveryComponent = ({ onAddressChange, address: ParentAddress }) => {
   const { darkMode } = useThemeStore();
   const [isEditing, setIsEditing] = useState(false);
   const [hasAddress, setHasAddress] = useState(false);
@@ -16,7 +16,6 @@ const DeliveryComponent = ({ onAddressChange }) => {
     phone: "",
     instructions: ""
   });
-
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -44,21 +43,27 @@ const DeliveryComponent = ({ onAddressChange }) => {
     setErrors(prev => ({ ...prev, [field]: "" }));
   };
 
+  useEffect(() => {
+    if (ParentAddress) {
+      setAddress(ParentAddress);
+    }
+  }, [ParentAddress]);
+
   // Changed: Created a renderItem function for FlatList
   const renderContent = () => {
     if (!hasAddress && !isEditing) {
       return (
         <View style={[styles.emptyState, darkMode && styles.emptyStateDark]}>
-          <Ionicons 
-            name="alert-circle" 
-            size={40} 
-            color={THEME_COLOR} 
+          <Ionicons
+            name="alert-circle"
+            size={40}
+            color={THEME_COLOR}
             style={styles.emptyIcon}
           />
           <Text style={[styles.emptyText, darkMode && styles.emptyTextDark]}>
             Please provide address for parcel delivery
           </Text>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.addButton, darkMode && styles.addButtonDark]}
             onPress={() => setIsEditing(true)}
           >
@@ -123,14 +128,14 @@ const DeliveryComponent = ({ onAddressChange }) => {
             )}
           </View>
         )}
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.button, darkMode && styles.buttonDark]}
           onPress={isEditing ? handleSave : () => setIsEditing(true)}
         >
-          <Ionicons 
-            name={isEditing ? "checkmark-circle" : "create"} 
-            size={24} 
-            color={darkMode ? WHITE_COLOR : THEME_COLOR} 
+          <Ionicons
+            name={isEditing ? "checkmark-circle" : "create"}
+            size={24}
+            color={darkMode ? WHITE_COLOR : THEME_COLOR}
           />
           <Text style={[styles.buttonText, darkMode && styles.buttonTextDark]}>
             {isEditing ? "Save Address" : "Edit Address"}
@@ -145,21 +150,14 @@ const DeliveryComponent = ({ onAddressChange }) => {
 
   return (
     <View style={[styles.screen, darkMode && styles.screenDark]}>
-      {/* Changed: Replaced ScrollView with FlatList */}
-      <FlatList
-        data={data}
-        renderItem={() => (
-          <>
-            <View style={styles.header}>
-              <Ionicons name="location" size={24} color={THEME_COLOR} />
-              <Text style={[styles.title, darkMode && styles.titleDark]}>Delivery Address</Text>
-            </View>
-            {renderContent()}
-          </>
-        )}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.scrollContainer}
-      />
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Ionicons name="location" size={24} color={THEME_COLOR} />
+          <Text style={[styles.title, darkMode && styles.titleDark]}>Delivery Address</Text>
+        </View>
+        {renderContent()}
+      </View>
+
     </View>
   );
 };
@@ -172,7 +170,7 @@ const styles = StyleSheet.create({
   screenDark: {
     backgroundColor: BLACK_COLOR,
   },
-  scrollContainer: {
+  container: {
     padding: 16,
   },
   header: {

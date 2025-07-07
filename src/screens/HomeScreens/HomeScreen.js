@@ -19,11 +19,14 @@ import useAuthStore from '../../store/AuthStore';
 // Colors
 import { WHITE_COLOR, Back_Ground, BLACK_COLOR, THEME_COLOR, GRAY_COLOR } from "../../res/colors";
 import * as Notifications from 'expo-notifications';
-// Screens
+
+
+
+
 const HomeScreen = ({ navigation }) => {
   const { darkMode } = useThemeStore();
   const { searchQuery } = useSearchStore();
-  const { saveExpoPushToken , expoPushToken } = useNotificationStore();
+  const { saveExpoPushToken, expoPushToken, fetchNotifications } = useNotificationStore();
   const { user } = useAuthStore();
   const {
     fetchHomeSectionItems,
@@ -36,22 +39,20 @@ const HomeScreen = ({ navigation }) => {
   const prevBranchRef = useRef(selectedBranch?._id);
 
   useEffect(() => {
-    // Fetch branches only on first mount
     if (isFirstMount.current) {
       fetchBranches();
       isFirstMount.current = false;
     }
-
-    // Only fetch items if:
-    // 1. We have a selected branch AND
-    // 2. Either:
-    //    a. We have no items yet OR
-    //    b. The branch has changed
-    if (selectedBranch?._id && 
-       (homeSectionItems.length === 0 || prevBranchRef.current !== selectedBranch._id)) {
+    if (selectedBranch?._id &&
+      (homeSectionItems.length === 0 || prevBranchRef.current !== selectedBranch._id)) {
       fetchHomeSectionItems(selectedBranch._id);
       prevBranchRef.current = selectedBranch._id;
     }
+      const loadNotifications = async () => {
+        await fetchNotifications();
+      };
+      loadNotifications();
+
   }, [selectedBranch]);
 
   useEffect(() => {
@@ -124,7 +125,6 @@ const HomeScreen = ({ navigation }) => {
     </View>
   );
 
-  // Render error or empty state
   const renderEmpty = () => (
     <View style={styles.centerContainer}>
       <Text style={{ color: darkMode ? GRAY_COLOR : BLACK_COLOR }}>
@@ -141,7 +141,7 @@ const HomeScreen = ({ navigation }) => {
         keyExtractor={(item) => item?.categoryId.toString()}
         ListEmptyComponent={homeSectionItemsLoading ? renderLoading : renderEmpty}
         contentContainerStyle={{ paddingBottom: 20, flexGrow: 1 }}
-         showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         style={darkMode && styles.scrollViewDark}
       />
     </View>

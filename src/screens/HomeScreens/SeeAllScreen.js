@@ -12,7 +12,6 @@ import { ARROW_ICON, BACK_ICON } from "../../res/drawables";
 // Colors
 import { THEME_COLOR, Back_Ground, WHITE_COLOR, BLACK_COLOR } from "../../res/colors";
 import ImageButton from "../../components/ImageButton";
-
 const SeeAllScreen = ({ navigation }) => {
   const route = useRoute();
   const { categoryId, title, isHome = true } = route.params;
@@ -69,7 +68,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Back_Ground,
-   paddingTop: 15,
+   paddingTop: 10,
     paddingHorizontal: 10,
   },
   containerDark: {

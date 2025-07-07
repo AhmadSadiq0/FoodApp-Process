@@ -384,7 +384,7 @@ const CartScreen = ({ navigation }) => {
       )}
       <RBSheet
         ref={summarySheetRef}
-        height={340}
+        height={400}
         draggable={true}
         customStyles={{
           container: [

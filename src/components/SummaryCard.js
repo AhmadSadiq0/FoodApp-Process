@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useEffect}from "react";
 import { StyleSheet, Text, View, Animated, Easing, FlatList } from "react-native";
 import { THEME_COLOR, THEME_TEXT_COLOR, WHITE_COLOR } from "../res/colors";
 import useThemeStore from "../../zustand/ThemeStore";
@@ -10,7 +10,7 @@ const SummaryCard = ({ selectedItems, selectedExtras, subtotal, onCheckout }) =>
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const slideAnim = React.useRef(new Animated.Value(50)).current;
 
-  React.useEffect(() => {
+  useEffect(() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -24,6 +24,7 @@ const SummaryCard = ({ selectedItems, selectedExtras, subtotal, onCheckout }) =>
         useNativeDriver: true,
       }),
     ]).start();
+    console.log(selectedItems)
   }, []);
 
   // Combine all data for FlatList
@@ -52,13 +53,27 @@ const SummaryCard = ({ selectedItems, selectedExtras, subtotal, onCheckout }) =>
             {item.title}
           </Text>
           {item.data.map((product, index) => (
-            <View key={index} style={styles.itemRow}>
+            <View  key={index} style = {styles.itemContainer} >
+            <View style={styles.itemRow}>
               <Text style={[styles.itemText, darkMode && styles.itemTextDark]}>
                 {product.quantity}x {product.name}
               </Text>
               <Text style={styles.priceText}>
                 Rs. {(product.price * product.quantity).toFixed(2)}
               </Text>
+            </View>
+            {product.variant && (
+              <Text style={[styles.itemVariant, { color: darkMode ? WHITE_COLOR : THEME_COLOR }]}>
+                Variant: {product.variant.name}
+              </Text>
+            )}
+            {
+              product.toppings && product.toppings.length > 0 && (
+                <Text style={[styles.itemVariant, { color: darkMode ? WHITE_COLOR : THEME_COLOR }]}>
+                  Toppings {" : "}{product.toppings.map(topping => topping.name).join(', ')}
+                </Text>
+              )
+            }
             </View>
           ))}
         </View>
@@ -101,7 +116,7 @@ const SummaryCard = ({ selectedItems, selectedExtras, subtotal, onCheckout }) =>
         </Text>
       </View>
       
-      <View style={{ height: 170 }}>
+      <View style={{ maxHeight : 230 }}>
         <FlatList
           data={renderData}
           renderItem={renderItem}
@@ -165,11 +180,14 @@ const styles = StyleSheet.create({
   sectionTitleDark: {
     color: WHITE_COLOR,
   },
+  itemContainer : {
+    marginBottom : 12
+  },
   itemRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 8,
-    paddingVertical: 4,
+    marginBottom: 4,
+    paddingVertical: 1,
   },
   itemText: {
     fontSize: 15,
@@ -223,6 +241,15 @@ const styles = StyleSheet.create({
   checkoutButtonContainer: {
     alignItems: "center",
   },
+  itemVariant : {
+    fontSize : 12,
+    color : THEME_TEXT_COLOR,
+  },
+  toppingText : {
+    fontSize : 14,
+    color : THEME_TEXT_COLOR,
+    fontWeight : "400"
+  }
 });
 
 export default SummaryCard;

@@ -1,5 +1,17 @@
 import React, { useState, useRef, useEffect } from "react";
-import { StyleSheet, View, ScrollView, Alert, Text } from "react-native";
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Alert,
+  Text,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
+  TextInput,
+  TouchableOpacity
+} from "react-native";
 import { Confirm_Order } from "../../res/drawables";
 import { ConfirmOrderSummary, DeliveryAddress, PaymentComponent, Header1, OrderTypeSelector, CustomButton } from "../../components";
 import { IMAGE25 } from "../../res/drawables";
@@ -11,7 +23,6 @@ import useBranchStore from "../../store/BranchStore";
 import useOrderStore from "../../store/OrderStore";
 import useCartStore from "../../store/CartStore";
 
-
 const paymentMethods = [
   { name: "Cash on Delivery", image: IMAGE25 },
 ];
@@ -19,24 +30,24 @@ const paymentMethods = [
 const OrderConfirmationScreen = ({ route, navigation }) => {
   const { selectedItems = [], selectedExtras = [], subtotal = 0 } = route.params || {};
   const { darkMode } = useThemeStore();
-
   const { selectedBranch } = useBranchStore();
-   const { createOrder, orders_loading, orders_error } = useOrderStore();
+  const { createOrder, orders_loading, orders_error } = useOrderStore();
   const { clearCart } = useCartStore();
 
-  const [name, setName] = useState("")
+  const [name, setName] = useState("");
   const [selectedPayment, setSelectedPayment] = useState(null);
-  const [orderType, setOrderType] = useState("dine_in");
+  const [orderType, setOrderType] = useState("delivery");
   const [address, setAddress] = useState({
     street: "",
     city: "",
-    phone : "",
+    phone: "",
     instructions: ""
   });
   const [isFormValid, setIsFormValid] = useState(false);
-  const [error, setError] = useState(null)
+  const [error, setError] = useState(null);
   const sheetRef = useRef(null);
   const paymentRef = useRef(null);
+  const scrollViewRef = useRef(null);
 
   const tax = subtotal * 0.08;
   const deliveryFee = orderType === 'delivery' ? 2.99 : 0;
@@ -46,21 +57,22 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
     let valid = false;
     if (orderType) {
       if (orderType === 'delivery') {
-        valid = selectedPayment !== null && address !== null;
+        valid = selectedPayment !== null && 
+                address.street.trim() !== "" && 
+                address.city.trim() !== "" && 
+                address.phone.trim() !== "";
       } else {
         valid = selectedPayment !== null;
       }
     }
     setIsFormValid(valid);
-  }, [orderType, selectedPayment, address]);
+  }, [orderType, selectedPayment, address, name]);
 
   const handlePaymentSelection = (paymentMethod) => {
     setSelectedPayment(paymentMethod);
   };
 
   const buildOrderPayload = () => {
-
-
     const items = selectedItems.map(item => ({
       itemId: item.itemId,
       name: item.name,
@@ -112,25 +124,27 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
   };
 
   const handleConfirmOrder = async () => {
-    const isNameValid = paymentRef.current?.validateName?.();
-    if (!isNameValid) {
-      Alert.alert("Validation Error", "The name is required to confirm the order.");
+    if (!name.trim()) {
+      Alert.alert("Validation Error", "Please enter your name");
+      return;
+    }
+
+    if (orderType === 'delivery' && (!address.street.trim() || !address.city.trim() || !address.phone.trim())) {
+      Alert.alert("Validation Error", "Please fill all address fields");
       return;
     }
 
     const orderPayload = buildOrderPayload();
-    if (!orderPayload) return;
     const res = await createOrder(orderPayload);
+    
     if (res.success) {
-      sheetRef.current.close();
+      sheetRef.current?.close();
       clearCart();
       navigation.navigate("ConfirmedOrder", { orderPayload });
     } else {
-      setError(res.message)
+      setError(res.message);
     }
-
   };
-
 
   const renderContent = () => {
     if (!orderType) {
@@ -143,95 +157,112 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
     }
 
     return (
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView
+        ref={scrollViewRef}
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
         <OrderTypeSelector
           selectedType={orderType}
           onSelect={setOrderType}
           darkMode={darkMode}
         />
 
-        {orderType === 'delivery' && (
-          <DeliveryAddress
-            onAddressChange={setAddress}
-          />
-        )}
-
         <PaymentComponent
           ref={paymentRef}
           name={name}
           setName={setName}
-          paymentMethods={[
-            {
-              name: "Cash",
-              description: "Pay when you receive your order"
-            },
-          ]}
+          paymentMethods={paymentMethods}
           onSelectPayment={handlePaymentSelection}
           selectedMethod={selectedPayment}
           themeColor={THEME_COLOR}
           darkMode={darkMode}
         />
+
+        {orderType === 'delivery' && (
+          <DeliveryAddress
+            onAddressChange={setAddress}
+            address={address}
+            scrollToInput={(yPosition) => {
+              scrollViewRef.current?.scrollTo({ y: yPosition, animated: true });
+            }}
+            darkMode={darkMode}
+          />
+        )}
       </ScrollView>
     );
   };
 
   return (
-    <View style={[styles.container, darkMode && styles.containerDark]}>
-
-      {renderContent()}
-
-      <RBSheet
-        ref={sheetRef}
-        height={490}
-        draggable={true}
-        customStyles={{
-          container: {
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
-            backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR,
-               ...(darkMode && { 
-                      borderTopWidth: 3,
-                      borderLeftWidth: 3,
-                      borderRightWidth: 3,
-                      borderColor: THEME_COLOR, 
-                    }),
-          },
-        }}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 30}
       >
-        <ConfirmOrderSummary
-          sheetRef={sheetRef}
-          selectedItems={selectedItems}
-          selectedExtras={selectedExtras}
-          subtotal={subtotal}
-          tax={tax}
-          deliveryFee={deliveryFee}
-          totalAmount={totalAmount}
-          paymentMethod={selectedPayment}
-          orderType={orderType}
-          deliveryAddress={address}
-          onButtonPressed={handleConfirmOrder}
-          isButtonDisabled={!isFormValid}
-          darkMode={darkMode}
-          loading={orders_loading}
-        />
-      </RBSheet>
+        <View style={[styles.container, darkMode && styles.containerDark]}>
+          {renderContent()}
 
-      {orderType && selectedPayment && (
-       <View style={[styles.footer, darkMode && styles.footerDark]}>
-       {
-         orders_error && (
-           <Text style={{ color: 'red' }}>{orders_error}</Text>
-         )
-       }
-       <CustomButton
-         title="Confirm Order"
-         onPress={() => sheetRef.current.open()}
-         style={darkMode ? { backgroundColor: BLACK_COLOR } : { width : '80%' }}
-         textStyle={darkMode ? { color: WHITE_COLOR } : {}}
-       />
-     </View>
-      )}
-    </View>
+          <RBSheet
+            ref={sheetRef}
+            height={490}
+            draggable={true}
+            customStyles={{
+              container: {
+                borderTopLeftRadius: 20,
+                borderTopRightRadius: 20,
+                backgroundColor: darkMode ? DARK_THEME_BACKGROUND : WHITE_COLOR,
+                ...(darkMode && {
+                  borderTopWidth: 3,
+                  borderLeftWidth: 3,
+                  borderRightWidth: 3,
+                  borderColor: THEME_COLOR,
+                }),
+              },
+            }}
+          >
+            <ConfirmOrderSummary
+              sheetRef={sheetRef}
+              selectedItems={selectedItems}
+              selectedExtras={selectedExtras}
+              subtotal={subtotal}
+              tax={tax}
+              deliveryFee={deliveryFee}
+              totalAmount={totalAmount}
+              paymentMethod={selectedPayment}
+              orderType={orderType}
+              deliveryAddress={address}
+              onButtonPressed={handleConfirmOrder}
+              isButtonDisabled={!isFormValid}
+              darkMode={darkMode}
+              loading={orders_loading}
+            />
+          </RBSheet>
+
+          {(orderType && selectedPayment && name) && (
+            (orderType !== "delivery" || 
+            (address?.street?.trim() && address?.city?.trim() && address?.phone?.trim())) && (
+              <View style={[styles.footer, darkMode && styles.footerDark]}>
+                {orders_error && (
+                  <Text style={{ color: 'red', marginBottom: 10 }}>{orders_error}</Text>
+                )}
+                <CustomButton
+                  title="Confirm Order"
+                  onPress={() => sheetRef.current?.open()}
+                  style={[
+                    styles.confirmButton,
+                    darkMode && { backgroundColor: THEME_COLOR }
+                  ]}
+                  textStyle={darkMode ? { color: WHITE_COLOR } : {}}
+                  disabled={!isFormValid}
+                />
+              </View>
+            )
+          )}
+        </View>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -244,21 +275,33 @@ const styles = StyleSheet.create({
     backgroundColor: BLACK_COLOR,
   },
   scrollContainer: {
+    flexGrow: 1,
     paddingBottom: 100,
+    paddingHorizontal: 16,
   },
   footer: {
-    // position: 'absolute',
-    // bottom: 0,
-    // left: 0,
-    // right: 0,
-    // padding: 16,
-   // backgroundColor: 'rgba(255,255,255,0.9)',
+    padding: 16,
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
   },
   footerDark: {
-    backgroundColor: BLACK_COLOR,
+    backgroundColor: DARK_THEME_BACKGROUND,
+    borderTopColor: THEME_COLOR,
   },
-  confirmButtonTextDark: {
-    color: '#DDD',
+  confirmButton: {
+    width: '100%',
+    borderRadius: 8,
+    paddingVertical: 14,
+  },
+  input: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    backgroundColor: WHITE_COLOR,
   },
 });
 
