@@ -3,7 +3,8 @@ import Constants from "expo-constants";
 import Navigation from "./src/navigation";
 import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
-import { Back_Ground, THEME_COLOR } from "./src/res/colors";
+import { Back_Ground, BLACK_COLOR, THEME_COLOR } from "./src/res/colors";
+import useThemeStore from "./zustand/ThemeStore";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -15,9 +16,16 @@ Notifications.setNotificationHandler({
 });
 
 export default function App() {
+  const { darkMode } = useThemeStore();
   return (
-    <View style={styles.container}>
-      <StatusBar style="dark" backgroundColor={THEME_COLOR} />
+     <View style={[
+      styles.container,
+      { 
+        paddingTop: darkMode ? 25 : Constants.statusBarHeight - 18,
+        backgroundColor: darkMode ? BLACK_COLOR : Back_Ground
+      }
+    ]}>
+      <StatusBar style={darkMode ? 'light' : 'dark'} backgroundColor={THEME_COLOR} />
       <Navigation />
     </View>
   );
@@ -26,7 +34,5 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: Back_Ground,
   },
 });

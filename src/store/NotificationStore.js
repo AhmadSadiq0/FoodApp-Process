@@ -81,6 +81,7 @@ const useNotificationStore = create((set, get) => ({
       markNotificationAsRead: async (notificationId) => {
         try {
           const response = await markNotificationAsReadService(notificationId);
+          console.log('Mark notification as read service response:', response);
           if (response.success) {
             set((state) => ({
               unreadCount: Math.max(0, state.unreadCount - 1),
