@@ -125,7 +125,6 @@ const HomeScreen = ({ navigation }) => {
     </View>
   );
 
-  // Render error or empty state
   const renderEmpty = () => (
     <View style={styles.centerContainer}>
       <Text style={{ color: darkMode ? GRAY_COLOR : BLACK_COLOR }}>
