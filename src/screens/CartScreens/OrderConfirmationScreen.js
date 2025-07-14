@@ -24,7 +24,7 @@ import useOrderStore from "../../store/OrderStore";
 import useCartStore from "../../store/CartStore";
 
 const paymentMethods = [
-  { name: "Cash on Delivery", image: IMAGE25 },
+  { name: "Cash on Delivery", value : "cash" , image: IMAGE25 },
 ];
 
 const OrderConfirmationScreen = ({ route, navigation }) => {
@@ -57,10 +57,10 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
     let valid = false;
     if (orderType) {
       if (orderType === 'delivery') {
-        valid = selectedPayment !== null && 
-                address.street.trim() !== "" && 
-                address.city.trim() !== "" && 
-                address.phone.trim() !== "";
+        valid = selectedPayment !== null &&
+          address.street.trim() !== "" &&
+          address.city.trim() !== "" &&
+          address.phone.trim() !== "";
       } else {
         valid = selectedPayment !== null;
       }
@@ -76,54 +76,77 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
     const items = selectedItems.map(item => ({
       itemId: item.itemId,
       name: item.name,
-      categoryId: item?.categoryId,
-      categoryName: item?.categoryName,
-      variant: item.variant,
+      categoryId: item.categoryId,
+      categoryName: item.categoryName,
+      variant: {
+        _id: item.variant?._id,
+        name: item.variant.name,
+        price: item.variant.price,
+        specifications: item.variant?.specifications?.map(spec => ({
+          _id: spec._id,
+          key: spec.key,
+          value: spec.value
+        })) || [],
+        toppings: item.variant?.toppings?.map(topping => ({
+          _id: topping._id,
+          name: topping.name,
+          price: topping.price
+        })) || []
+      },
       quantity: item.quantity,
-      unitPrice: item?.variant?.price,
-      totalPrice: item?.variant?.price * item?.quantity
+      unitPrice: item.variant.price,
+      totalPrice: item.variant.price * item.quantity,
+      notes: item.notes || ''
     }));
 
     const extras = selectedExtras.map(extra => ({
       extraId: extra._id,
       name: extra.name,
-      quantity: extra.quantity,
-      price: extra.price
+      price: extra.price,
+      quantity: extra.quantity
     }));
 
     const payload = {
       orderType,
+      customerName: name,
       items,
       extras,
-      customerName: name,
       branchId: selectedBranch?._id,
       payment: {
-        method: selectedPayment.name.toLowerCase(),
+        method: selectedPayment?.value.toLowerCase(),
         status: 'pending',
-        amount: totalAmount
+        amount: totalAmount,
+        transactionId: '',
+        paidAt: undefined
       },
       subtotal,
       tax,
       deliveryFee,
       discount: 0,
       totalAmount,
+      notes: ''
     };
 
     if (orderType === 'delivery' && address) {
       payload.delivery = {
         address: {
           street: address.street,
-          city: address.city,
+          city: address.city
         },
         contactNumber: address.phone,
-        deliveryInstructions: address.instructions
+        deliveryInstructions: address.instructions || '',
+        estimatedDeliveryTime: undefined,
+        actualDeliveryTime: undefined
       };
     }
 
     return payload;
   };
 
+
+
   const handleConfirmOrder = async () => {
+    console.log("Order Payload ===> ", JSON.stringify(buildOrderPayload(), null, 2));
     if (!name.trim()) {
       Alert.alert("Validation Error", "Please enter your name");
       return;
@@ -136,7 +159,7 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
 
     const orderPayload = buildOrderPayload();
     const res = await createOrder(orderPayload);
-    
+
     if (res.success) {
       sheetRef.current?.close();
       clearCart();
@@ -241,8 +264,8 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
           </RBSheet>
 
           {(orderType && selectedPayment && name) && (
-            (orderType !== "delivery" || 
-            (address?.street?.trim() && address?.city?.trim() && address?.phone?.trim())) && (
+            (orderType !== "delivery" ||
+              (address?.street?.trim() && address?.city?.trim() && address?.phone?.trim())) && (
               <View style={[styles.footer, darkMode && styles.footerDark]}>
                 {orders_error && (
                   <Text style={{ color: 'red', marginBottom: 10 }}>{orders_error}</Text>
@@ -277,7 +300,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     paddingBottom: 100,
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
   },
   footer: {
     padding: 16,
@@ -291,8 +314,7 @@ const styles = StyleSheet.create({
   },
   confirmButton: {
     width: '100%',
-    borderRadius: 8,
-    paddingVertical: 14,
+    paddingVertical: 10,
   },
   input: {
     height: 50,

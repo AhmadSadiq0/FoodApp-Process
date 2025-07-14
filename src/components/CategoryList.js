@@ -36,8 +36,8 @@ const CategoryList = ({ selectedCategory, onSelectCategory }) => {
         />
       )}
       keyExtractor={(item) => item._id}
+      horizontal
       contentContainerStyle={styles.container}
-      numColumns={3}
       showsVerticalScrollIndicator={false}
     />
   );
@@ -46,7 +46,7 @@ const CategoryList = ({ selectedCategory, onSelectCategory }) => {
 const styles = StyleSheet.create({
   container: {
     flex : 1,
-    paddingVertical: 16
+    paddingVertical: 6
   },
 });
 

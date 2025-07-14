@@ -46,12 +46,12 @@ const MenuScreen = ({ navigation }) => {
       if (categorized_items.length === 0 || prevBranchRef.current !== selectedBranch._id) {
         fetchItemsByBranch(selectedBranch._id);
       }
-      
+
       // Fetch categories only if we don't have them or branch changed
       if (categories.length === 0 || prevBranchRef.current !== selectedBranch._id) {
         fetchCategories(selectedBranch._id);
       }
-      
+
       prevBranchRef.current = selectedBranch._id;
       isFirstMount.current = false;
     }
@@ -65,17 +65,17 @@ const MenuScreen = ({ navigation }) => {
   }, [categories]);
 
   // Update the filteredData logic in MenuScreen.js
-const filteredData = categorized_items
-  .map(category => ({
-    ...category,
-    items: category.items.filter(item =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  }))
-  .filter(category => 
-    (selectedCategory === "all" || category.categoryId === selectedCategory) && 
-    category.items.length > 0
-  );
+  const filteredData = categorized_items
+    .map(category => ({
+      ...category,
+      items: category.items.filter(item =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    }))
+    .filter(category =>
+      (selectedCategory === "all" || category.categoryId === selectedCategory) &&
+      category.items.length > 0
+    );
 
   const handleAddToCart = (item) => {
     navigation.navigate("itemDetail", { item });
@@ -107,24 +107,24 @@ const filteredData = categorized_items
     <View style={[styles.container, darkMode && styles.darkContainer]}>
       <FlatList
         data={filteredData}
-         showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-      <View>
-    {!categorized_loading && (
-      <Text style={styles.category}>Category</Text>
-    )}
-          <View style={[styles.header, darkMode && styles.headerDark]}>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.categoryScrollContainer}
-            >
-              <CategoryList
-                selectedCategory={selectedCategory}
-                onSelectCategory={setSelectedCategory}
-              />
-            </ScrollView>
-          </View>
+          <View>
+            {!categorized_loading && (
+              <Text style={styles.category}>Category</Text>
+            )}
+            <View style={[styles.header, darkMode && styles.headerDark]}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.categoryScrollContainer}
+              >
+                <CategoryList
+                  selectedCategory={selectedCategory}
+                  onSelectCategory={setSelectedCategory}
+                />
+              </ScrollView>
+            </View>
           </View>
         }
         renderItem={renderDatalist}
@@ -132,9 +132,9 @@ const filteredData = categorized_items
         ListEmptyComponent={renderEmptyComponent}
         contentContainerStyle={{ paddingBottom: 20, flexGrow: 1 }}
       />
-      
+
     </View>
-    
+
   );
 };
 
@@ -142,30 +142,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Back_Ground,
-   // alignItems: 'center'
+    // alignItems: 'center'
   },
   darkContainer: {
     backgroundColor: BLACK_COLOR,
   },
   header: {
     width: "100%",
-    paddingVertical: 16,
     backgroundColor: Back_Ground,
-     alignItems: 'center'
+    alignItems: 'center'
   },
   headerDark: {
     backgroundColor: BLACK_COLOR,
   },
   categoryScrollContainer: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 6,
   },
   category: {
-    paddingTop:10,
+    paddingTop: 10,
     fontSize: 20,
     fontWeight: "500",
     color: THEME_COLOR,
     paddingHorizontal: 16,
-    alignSelf : 'flex-start'
+    alignSelf: 'flex-start'
   },
 });
 export default MenuScreen;

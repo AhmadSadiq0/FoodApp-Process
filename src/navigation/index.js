@@ -202,7 +202,7 @@ const BottomTabStack = () => {
       screenOptions={{
         tabBarStyle: {
           backgroundColor: THEME_COLOR,
-          height: Platform.OS === 'ios' ? 80 : 60,
+          height: Platform.OS === 'ios' ? 65 : 60,
           display: keyboardVisible ? 'none' : 'flex',
         },
         tabBarLabelStyle: {
