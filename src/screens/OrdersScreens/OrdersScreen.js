@@ -85,11 +85,10 @@ const OrdersScreen = () => {
   }
 
 
-
   return (
     <View style={styles.container}>
       <StatusBar
-        // barStyle={darkMode ? 'light-content' : 'dark-content'}
+         barStyle={darkMode ? 'light-content' : 'dark-content'}
         backgroundColor={darkMode ? DARK_THEME_BACKGROUND : Back_Ground}
       />
       <OrderList

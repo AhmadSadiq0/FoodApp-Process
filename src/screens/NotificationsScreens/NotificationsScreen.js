@@ -63,7 +63,6 @@ const NotificationsScreen = ({ navigation }) => {
     }, []);
 
 
-
     const transformedNotifications = notifications.map((notification) => {
 
         const recipient = notification.recipients && notification.recipients.find(r => r.userId == currentUserId);
@@ -338,7 +337,7 @@ const styles = StyleSheet.create({
     },
     codeText: {
         fontSize: 13,
-        color: THEME_COLOR,
+        color: WHITE_COLOR,
         textAlign: 'center',
         alignSelf: 'center',
     },

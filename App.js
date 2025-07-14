@@ -21,7 +21,7 @@ export default function App() {
      <View style={[
       styles.container,
       { 
-        paddingTop: darkMode ? 25 : Constants.statusBarHeight - 18,
+        paddingTop: darkMode ? 25 : Constants.statusBarHeight,
         backgroundColor: darkMode ? BLACK_COLOR : Back_Ground
       }
     ]}>
