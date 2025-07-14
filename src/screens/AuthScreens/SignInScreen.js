@@ -75,7 +75,7 @@ const SignInScreen = ({navigation}) => {
                 <Text style={styles.text3}>Sign Up</Text>
               </Pressable>
             </View>
-            <TouchableOpacity
+            {/* <TouchableOpacity
             style={[
               styles.touchable1,
               { 
@@ -89,7 +89,7 @@ const SignInScreen = ({navigation}) => {
           >
             <Image source={Google_Icon} style={styles.Googleimage} />
             <Text style={styles.text2}>Sign In with Google</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           </View>
 
           <View style={styles.dividerContainer}>

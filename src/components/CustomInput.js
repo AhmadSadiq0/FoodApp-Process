@@ -72,7 +72,7 @@ const InputField = (props) => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    marginVertical: 7,
+    marginVertical: 10,
     width: "100%", 
   }, 
   inputWrapper: {

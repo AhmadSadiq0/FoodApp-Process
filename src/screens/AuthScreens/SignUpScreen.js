@@ -57,17 +57,17 @@ const SignUpScreen = ({ navigation }) => {
 
     try {
       const response = await signup({
-        role: "user",
-        address: "" ,
+        username: values.username,
         email: values.email,
+        password: values.password,
         firstname: "App",
         lastname: "User",
-        password: values.password,
         phone: "" ,
-        profileImage: "" ,
-        username: values.username
+        address: "" ,
+        profileImage: "",
+        role: "user",
       });
-
+      console.log(response)
       if (response.success) {
         setSuccessMessage('Account created successfully! Please sign in.');
         setTimeout(() => {
@@ -116,7 +116,7 @@ const SignUpScreen = ({ navigation }) => {
                   <Text style={styles.text3}>Sign In</Text>
                 </Pressable>
               </View>
-              {!isKeyboardVisible && (
+              {/* {!isKeyboardVisible && (
                 <TouchableOpacity
                   style={styles.touchable1}
                   onPress={() => alert("Go to Google")}
@@ -124,7 +124,7 @@ const SignUpScreen = ({ navigation }) => {
                   <Image source={Google_Icon} style={styles.Googleimage} />
                   <Text style={styles.text2}>Sign up with Google</Text>
                 </TouchableOpacity>
-              )}
+              )} */}
             </View>
 
             <View style={styles.dividerContainer}>

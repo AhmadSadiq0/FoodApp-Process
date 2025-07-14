@@ -1,6 +1,6 @@
 // User-Auth API URLs:
  const BASE_URL  = 'https://foodapp-process-backend.onrender.com';
-//const BASE_URL  = 'http://192.168.62.21:8000';
+// const BASE_URL  = 'http://192.168.1.60:8000';
 
 
 //Auth Endpoints
