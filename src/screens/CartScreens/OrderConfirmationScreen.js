@@ -181,10 +181,10 @@ const OrderConfirmationScreen = ({ route, navigation }) => {
 
     return (
       <ScrollView
-        ref={scrollViewRef}
+        // ref={scrollViewRef}
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
+        // keyboardShouldPersistTaps="handled"
       >
         <OrderTypeSelector
           selectedType={orderType}

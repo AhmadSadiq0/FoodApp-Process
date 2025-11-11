@@ -42,3 +42,5 @@ export const SAD_ICON = require(`${PATH}/icons/sad_emoji.png`)
 export const TEAR_ICON =require(`${PATH}/icons/TearIcon.png`)
 export const FOOD_DOME_ICON = require(`${PATH}/icons/AllItem1.png`)
 export const SAD_ICON2= require(`${PATH}/icons/SadIcon2.png`)
+
+export const PROCESS_LOGO = require(`${PATH}/processLogo.png`);
