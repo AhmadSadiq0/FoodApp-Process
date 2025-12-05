@@ -116,7 +116,7 @@ const PaymentComponent = React.forwardRef(({
       </Text>
       <View style={styles.nameInputContainer}>
         <Text style={[styles.inputLabel, finalDarkMode && styles.inputLabelDark]}>
-          Your Name on Order
+          Your Name on Orderr
         </Text>
         <TextInput
           style={[

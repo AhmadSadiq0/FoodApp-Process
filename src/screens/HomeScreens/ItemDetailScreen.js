@@ -20,8 +20,6 @@ import {
   LIGHT_GRAY,
   THEME_TEXT_COLOR,
   DARK_THEME_BACKGROUND,
-  LIGHT_THEME_BACKGROUND,
-  LIGHT_THEME_COLOR
 } from "../../res/colors";
 import QuantitySelector from "../../components/QuantitySelector";
 import useExtraStore from "../../store/ExtrasStore";
@@ -566,3 +564,4 @@ const styles = StyleSheet.create({
 });
 
 export default ItemDetailScreen; 
+

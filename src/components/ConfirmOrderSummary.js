@@ -175,7 +175,7 @@ const ConfirmOrderSummary = (props) => {
 
       {/* Confirm Button */}
       <CustomButton
-        title="Confirm Order"
+        title="Confirm Orderr"
         textStyle={styles.buttonText}
         buttonStyle={[styles.button, isButtonDisabled && styles.disabledButton]}
         //onPress={onButtonPressed}

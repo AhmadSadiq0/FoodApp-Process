@@ -132,6 +132,7 @@ const useOrderStore = create(
       clearSelectedOrder: () => set({ selectedOrder: null }),
       clearOrders: () => set({ orders: [], selectedOrder: null, orders_error: null }),
       resetStore: () => set(initialState),
+      setOrdersLoading: (loading) => set({ orders_loading: loading }),
     }),
     {
       name: 'order-storage',

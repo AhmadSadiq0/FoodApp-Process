@@ -19,13 +19,10 @@ import { Google_Icon } from '../../res/drawables';
 import { THEME_TEXT_COLOR, BACK_GROUND, THEME_COLOR, WHITE_COLOR, GRAY_COLOR, BLACK_COLOR } from '../../res/colors';
 import { SignInValidationSchema } from '../../utils/ValidationSchema';
 
-
-const SignInScreen = ({navigation}) => {
+   const SignInScreen = ({navigation}) => {
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   // const { login, loading, error } = authStore()
   const { login, loading: { login: loginLoading }, error } = authStore();
-
-
   // useEffect(() => {
   //   const keyboardDidShowListener = Keyboard.addListener(
   //     'keyboardDidShow',

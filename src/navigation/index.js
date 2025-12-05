@@ -48,7 +48,6 @@ import Header from '../components/Header';
 
 // Store
 import authStore from '../store/AuthStore';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import SplashScreen from '../screens/SplashScreen/SplashScreen';
 import EmptyCart from '../screens/CartScreens/EmptyCart';
 import useCartStore from '../store/CartStore';

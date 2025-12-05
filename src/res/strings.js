@@ -2,3 +2,54 @@
 
 //This file stores localized strings for the application, such as text contents and labels.
 
+
+// {
+//   "name": "foodapp-process",
+//   "version": "1.0.0",
+//   "main": "index.js",
+//   "scripts": {
+//     "start": "expo start",
+//     "android": "expo start --android",
+//     "ios": "expo start --ios",
+//     "web": "expo start --web"
+//   },
+//   "dependencies": {
+//     "@expo/metro-runtime": "~5.0.4",
+//     "@react-native-async-storage/async-storage": "2.1.2",
+//     "@react-native-community/blur": "^4.4.1",
+//     "@react-native-picker/picker": "2.11.0",
+//     "@react-navigation/bottom-tabs": "^7.0.12",
+//     "@react-navigation/native": "^7.0.7",
+//     "@react-navigation/native-stack": "^7.1.8",
+//     "axios": "^1.7.9",
+//     "expo": "53.0.12",
+//     "expo-constants": "~17.1.6",
+//     "expo-dev-client": "~5.2.0",
+//     "expo-localization": "~16.1.5",
+//     "expo-notifications": "^0.31.3",
+//     "expo-status-bar": "~2.2.3",
+//     "expo-updates": "^0.28.14",
+//     "formik": "^2.4.6",
+//     "i18n-js": "^4.5.1",
+//     "i18next": "^25.1.2",
+//     "lottie-react-native": "7.2.2",
+//     "lottie-web": "^5.13.0",
+//     "react": "19.0.0",
+//     "react-dom": "19.0.0",
+//     "react-i18next": "^15.5.1",
+//     "react-native": "0.79.3",
+//     "react-native-dropdown-select-list": "^2.0.5",
+//     "react-native-keyboard-aware-scroll-view": "^0.9.5",
+//     "react-native-raw-bottom-sheet": "^3.0.0",
+//     "react-native-safe-area-context": "5.4.0",
+//     "react-native-screens": "~4.11.1",
+//     "react-native-svg": "15.11.2",
+//     "react-native-web": "^0.20.0",
+//     "yup": "^1.4.0",
+//     "zustand": "^5.0.3"
+//   },
+//   "devDependencies": {
+//     "@babel/core": "^7.26.0"
+//   },
+//   "private": true
+// }
