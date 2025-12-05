@@ -201,12 +201,14 @@ const BottomTabStack = () => {
       screenOptions={{
         tabBarStyle: {
           backgroundColor: THEME_COLOR,
-          height: Platform.OS === 'ios' ? 65 : 60,
+          height: Platform.OS === 'ios' ? 80 : 65,
+          paddingBottom: Platform.OS === 'ios' ? 5 : 8,
+          paddingTop: 5,
           display: keyboardVisible ? 'none' : 'flex',
         },
         tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: 'bold',
+          fontSize: 11,
+          marginTop: 2,
         },
         headerPressColor: 'transparent',
         tabBarButton: (props) => (
@@ -341,11 +343,12 @@ const styles = StyleSheet.create({
     width: 40,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 0,
   },
   inactiveTab: {
     height: 40,
     width: 40,
-    marginTop: 5,
+    marginTop: 0,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -356,8 +359,10 @@ const styles = StyleSheet.create({
     tintColor: WHITE_COLOR,
   },
   text: {
-    fontSize: 10,
+    fontSize: 11,
     color: WHITE_COLOR,
+    fontWeight: 'bold',
+    marginTop: 2,
   },
   header: {
     // Add any header styles if needed
