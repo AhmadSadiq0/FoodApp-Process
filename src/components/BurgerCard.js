@@ -37,8 +37,8 @@ const BurgerCard = (props) => {
     >
       <Image
         source={image ? { uri: image } : BURGERIMG}
-        style={styles.image}
-        resizeMode="cover"
+        style={[styles.image, { backgroundColor: cardColor }]}
+        resizeMode="contain"
       />
 
       <View style={styles.content}>
@@ -76,7 +76,6 @@ const BurgerCard = (props) => {
 
 const styles = StyleSheet.create({
   card: {
-    left:8,
     width: 180,
     height: 260,
     marginHorizontal: 10,

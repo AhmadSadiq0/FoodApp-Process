@@ -5,7 +5,7 @@ import BurgerCardHorizantol from "./BurgerCardHorizantol"; // Importing your hor
 import { THEME_COLOR, Back_Ground, WHITE_COLOR, BLACK_COLOR, DARK_THEME_BACKGROUND } from "../res/colors";
 import useThemeStore from "../../zustand/ThemeStore";
 
-const ITEM_WIDTH = 150 + 14;
+const ITEM_WIDTH = 180 + 20;
 
 const Datalist = (props) => {
   const { title, seeMoreText, onSeeMorePress, data, onAddToCart, navigation , isLastArray } = props;
@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
     width: ITEM_WIDTH,
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal : 18,
     marginBottom : 10
   },
   lastcardContainer : {

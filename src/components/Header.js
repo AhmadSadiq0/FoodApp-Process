@@ -139,9 +139,9 @@ const Header = (props) => {
               </TouchableOpacity>
 
               {
-                unreadCount && unreadCount > 0 &&
+                unreadCount > 0 &&
                 <View style={styles.notificationBadge}>
-                  <Text style={styles.notificationCount}>{unreadCount ? unreadCount : 0}</Text>
+                  <Text style={styles.notificationCount}>{unreadCount}</Text>
                 </View>
               }
 

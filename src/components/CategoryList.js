@@ -3,7 +3,9 @@ import React from "react";
 import { FlatList, StyleSheet } from "react-native";
 import useThemeStore from "../../zustand/ThemeStore";
 import useCategoryStore from "../store/CategoryStore";
-import { CustomLoadingIndicator, CustomErrorText , CategoryItem} from "../components";
+import CustomLoadingIndicator from "./CustomLoadingIndicator";
+import CustomErrorText from "./CustomErrorText";
+import CategoryItem from "./CategoryItem";
 import  FOOD_DOME_ICON  from "../res/drawables";
 
 const CategoryList = ({ selectedCategory, onSelectCategory }) => {
